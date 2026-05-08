@@ -1,0 +1,11 @@
+:root {
+  --rlp-red: #EA002A;
+  --rlp-black: #000000;
+  --rlp-white: #FFFFFF;
+  /* secondary palette */
+  --rlp-taupe: #...;
+  --rlp-stone: #...;
+  /* fonts */
+  --font-print: 'Helvetica Neue LT Pro', Arial, sans-serif;
+  --font-digital: 'Roboto', Arial, sans-serif;
+}
