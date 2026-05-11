@@ -1,6 +1,6 @@
 /* =========================================================
    Royal LePage Solutions - Custom Header
-   v1004 - Logo enlarged to 130px, header sized to accommodate
+   v1005 - Fixed header size on scroll (no shrink), logo at 130px
    ========================================================= */
 
 :root {
@@ -92,7 +92,7 @@ body.rls-header-ready:not(.rls-has-hero) {
   font-family: var(--rls-sans);
   background: var(--rls-black);
   color: var(--rls-white);
-  transition: background-color 0.35s ease, padding 0.3s ease, box-shadow 0.35s ease;
+  transition: background-color 0.35s ease, box-shadow 0.35s ease;
   pointer-events: auto !important;
 }
 
@@ -113,6 +113,7 @@ body.rls-has-hero #rls-header.is-transparent {
 
 /* ─────────────────────────────────────────────────────────
    4) Header inner layout - centered logo, right-aligned controls
+   - Fixed height: does NOT shrink on scroll
    ───────────────────────────────────────────────────────── */
 #rls-header .rls-header-inner {
   max-width: 1440px;
@@ -123,17 +124,10 @@ body.rls-has-hero #rls-header.is-transparent {
   align-items: center;
   justify-content: flex-end;
   position: relative;
-  transition: height 0.3s ease;
-}
-
-#rls-header.is-scrolled .rls-header-inner {
-  height: calc(var(--rls-header-h) - 40px);
 }
 
 /* ─────────────────────────────────────────────────────────
-   5) Logo - absolutely centered, reversed (white/red on black)
-   - 130px tall on desktop (matches header h ~160px with breathing room)
-   - shrinks proportionally on scroll
+   5) Logo - absolutely centered, fixed size on scroll
    ───────────────────────────────────────────────────────── */
 #rls-header .rls-logo {
   position: absolute;
@@ -155,11 +149,6 @@ body.rls-has-hero #rls-header.is-transparent {
   height: 130px;
   width: auto;
   display: block;
-  transition: height 0.3s ease;
-}
-
-#rls-header.is-scrolled .rls-logo img {
-  height: 90px;
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -566,11 +555,7 @@ body.rls-has-hero #rls-header.is-transparent {
     padding: 0 1.75rem;
     height: var(--rls-header-h-tablet);
   }
-  #rls-header.is-scrolled .rls-header-inner {
-    height: calc(var(--rls-header-h-tablet) - 30px);
-  }
   #rls-header .rls-logo img { height: 105px; }
-  #rls-header.is-scrolled .rls-logo img { height: 75px; }
 }
 
 @media (max-width: 768px) {
@@ -595,7 +580,6 @@ body.rls-has-hero #rls-header.is-transparent {
     height: var(--rls-header-h-mobile);
   }
   #rls-header .rls-logo img { height: 72px; }
-  #rls-header.is-scrolled .rls-logo img { height: 60px; }
   #rls-header .rls-phone { display: none; }
   #rls-header .rls-header-right { gap: 0.75rem; }
   #rls-header .rls-hamburger { width: 42px; height: 42px; }
