@@ -1,1 +1,619 @@
+/* =========================================================
+   Royal LePage Solutions - Custom Header
+   v1001 - Initial build
+   - Brand compliant: Black, Red, White, Warm Grey palette
+   - No blue, gold, or yellow (prohibited per RLP brand guide)
+   - Approved Google font: Raleway (no italics)
+   - Smart transparent-over-hero behavior
+   - Tap-to-reveal submenu pattern on mobile
+   ========================================================= */
 
+:root {
+  --rls-red:        #EA002A;
+  --rls-red-dk:     #C20023;
+  --rls-black:      #000000;
+  --rls-white:      #FFFFFF;
+  --rls-dark-grey:  #2A2A2A;
+  --rls-warm-grey:  #6B6660;
+  --rls-light-grey: #E8E6E3;
+  --rls-stone:      #D8D3CB;
+  --rls-taupe:      #B8AC9C;
+
+  --rls-header-h:        110px;
+  --rls-header-h-tablet: 90px;
+  --rls-header-h-mobile: 76px;
+
+  --rls-sans: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+}
+
+/* ─────────────────────────────────────────────────────────
+   0) Reset / page baseline
+   ───────────────────────────────────────────────────────── */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.rls-menu-open {
+  overflow: hidden !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   1) Hide BoldTrail's native header ONLY after ours injects
+   ───────────────────────────────────────────────────────── */
+body.has-rls-header #header,
+body.has-rls-header div#header,
+body.has-rls-header .site-header,
+body.has-rls-header .kv-header,
+body.has-rls-header #quick-search,
+body.has-rls-header #fixed-header-spacer,
+body.has-rls-header .page-wrapper > #header {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+}
+
+body.has-rls-header #fixed-header-spacer,
+body.has-rls-header .header-spacer,
+body.has-rls-header .sticky-spacer,
+body.has-rls-header .kv-sticky-spacer {
+  position: static !important;
+  z-index: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   2) Reserve header space (when not in hero mode)
+   ───────────────────────────────────────────────────────── */
+body.rls-header-ready:not(.rls-has-hero) {
+  padding-top: var(--rls-header-h) !important;
+}
+
+@media (max-width: 1024px) {
+  body.rls-header-ready:not(.rls-has-hero) {
+    padding-top: var(--rls-header-h-tablet) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  body.rls-header-ready:not(.rls-has-hero) {
+    padding-top: var(--rls-header-h-mobile) !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   3) Header container
+   ───────────────────────────────────────────────────────── */
+#rls-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 9999 !important;
+  font-family: var(--rls-sans);
+  background: var(--rls-black);
+  color: var(--rls-white);
+  transition: background-color 0.35s ease, padding 0.3s ease, box-shadow 0.35s ease;
+  pointer-events: auto !important;
+}
+
+#rls-header * {
+  pointer-events: auto !important;
+}
+
+/* Transparent mode when over a hero, before scroll */
+body.rls-has-hero #rls-header.is-transparent {
+  background: transparent;
+  box-shadow: none;
+}
+
+#rls-header.is-scrolled {
+  background: var(--rls-black);
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* ─────────────────────────────────────────────────────────
+   4) Header inner layout
+   ───────────────────────────────────────────────────────── */
+#rls-header .rls-header-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+  height: var(--rls-header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  transition: height 0.3s ease;
+}
+
+#rls-header.is-scrolled .rls-header-inner {
+  height: calc(var(--rls-header-h) - 20px);
+}
+
+/* ─────────────────────────────────────────────────────────
+   5) Logo (left)
+   ───────────────────────────────────────────────────────── */
+#rls-header .rls-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  line-height: 1;
+  transition: opacity 0.25s ease;
+}
+
+#rls-header .rls-logo:hover {
+  opacity: 0.85;
+}
+
+/* Text placeholder (replace with <img> when logo file is ready) */
+#rls-header .rls-logo-text {
+  font-family: var(--rls-sans);
+  font-weight: 300;
+  font-size: 1.4rem;
+  letter-spacing: 0.04em;
+  color: var(--rls-white);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+#rls-header .rls-logo-text strong {
+  font-weight: 600;
+  color: var(--rls-red);
+}
+
+#rls-header .rls-logo img {
+  height: 64px;
+  width: auto;
+  display: block;
+  transition: height 0.3s ease;
+}
+
+#rls-header.is-scrolled .rls-logo img {
+  height: 52px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   6) Header right (phone + hamburger)
+   ───────────────────────────────────────────────────────── */
+#rls-header .rls-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+#rls-header .rls-phone {
+  text-decoration: none;
+  color: var(--rls-white);
+  font-family: var(--rls-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  transition: color 0.25s ease;
+  white-space: nowrap;
+}
+
+#rls-header .rls-phone:hover {
+  color: var(--rls-red);
+}
+
+/* Hamburger button */
+#rls-header .rls-hamburger {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 2px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+#rls-header .rls-hamburger:hover {
+  background: var(--rls-red);
+  border-color: var(--rls-red);
+}
+
+#rls-header .rls-hamburger:focus {
+  outline: 2px solid var(--rls-red);
+  outline-offset: 2px;
+}
+
+#rls-header .rls-hamburger-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 22px;
+}
+
+#rls-header .rls-hamburger-lines span {
+  display: block;
+  height: 1.5px;
+  background: var(--rls-white);
+  border-radius: 1px;
+  transition: width 0.35s ease;
+}
+
+#rls-header .rls-hamburger-lines span:nth-child(1) { width: 100%; }
+#rls-header .rls-hamburger-lines span:nth-child(2) { width: 65%; align-self: flex-end; }
+
+/* ─────────────────────────────────────────────────────────
+   7) Slide-out menu overlay
+   ───────────────────────────────────────────────────────── */
+#rls-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+  z-index: 9998;
+}
+
+#rls-menu-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ─────────────────────────────────────────────────────────
+   8) Slide-out menu (from right)
+   ───────────────────────────────────────────────────────── */
+#rls-slide-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: min(720px, 100vw);
+  background: var(--rls-black);
+  transform: translateX(100%);
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 10000;
+  overflow-y: auto;
+  box-shadow: -4px 0 30px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+}
+
+#rls-slide-menu.is-open {
+  transform: translateX(0);
+}
+
+/* Subtle red accent at top edge */
+#rls-slide-menu::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--rls-red);
+}
+
+/* Close button */
+#rls-slide-menu .rls-menu-close {
+  position: absolute;
+  top: 1.75rem;
+  right: 2rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--rls-white);
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  z-index: 2;
+}
+
+#rls-slide-menu .rls-menu-close:hover {
+  background: var(--rls-red);
+  border-color: var(--rls-red);
+  transform: rotate(90deg);
+}
+
+#rls-slide-menu .rls-menu-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   9) Menu content layout
+   ───────────────────────────────────────────────────────── */
+#rls-slide-menu .rls-menu-inner {
+  padding: 5rem 3.5rem 2rem;
+  flex: 1;
+}
+
+#rls-slide-menu .rls-menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem 3rem;
+}
+
+#rls-slide-menu .rls-menu-col h3 {
+  font-family: var(--rls-sans);
+  color: var(--rls-white);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+#rls-slide-menu .rls-menu-col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+#rls-slide-menu .rls-menu-col a,
+#rls-slide-menu .rls-menu-col button {
+  font-family: var(--rls-sans);
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  padding: 0.5rem 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  transition: color 0.25s ease, padding-left 0.25s ease;
+}
+
+#rls-slide-menu .rls-menu-col a::before,
+#rls-slide-menu .rls-menu-col button::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--rls-red);
+  transition: width 0.25s ease;
+  transform: translateY(-50%);
+}
+
+#rls-slide-menu .rls-menu-col a:hover,
+#rls-slide-menu .rls-menu-col button:hover {
+  color: var(--rls-red);
+  padding-left: 1.25rem;
+}
+
+#rls-slide-menu .rls-menu-col a:hover::before,
+#rls-slide-menu .rls-menu-col button:hover::before {
+  width: 0.85rem;
+}
+
+/* Submenu indicator arrow */
+#rls-slide-menu .rls-submenu-arrow {
+  font-size: 1.1rem;
+  font-weight: 300;
+  opacity: 0.6;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+#rls-slide-menu .rls-menu-col button:hover .rls-submenu-arrow {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+/* ─────────────────────────────────────────────────────────
+   10) Contact strip at bottom of slide-out
+   ───────────────────────────────────────────────────────── */
+#rls-slide-menu .rls-menu-contact {
+  background: var(--rls-red);
+  color: var(--rls-white);
+  padding: 2rem 3.5rem;
+  font-family: var(--rls-sans);
+}
+
+#rls-slide-menu .rls-menu-contact .rls-contact-brand {
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-bottom: 1.25rem;
+}
+
+#rls-slide-menu .rls-menu-contact a,
+#rls-slide-menu .rls-menu-contact span {
+  color: var(--rls-white);
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  line-height: 1.55;
+  transition: opacity 0.25s ease;
+}
+
+#rls-slide-menu .rls-menu-contact a:hover {
+  opacity: 0.78;
+}
+
+#rls-slide-menu .rls-contact-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+#rls-slide-menu .rls-contact-row svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-top: 4px;
+  opacity: 0.9;
+}
+
+/* ─────────────────────────────────────────────────────────
+   11) Mobile submenu panel (slides in over main menu)
+   ───────────────────────────────────────────────────────── */
+#rls-slide-menu .rls-submenu-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--rls-black);
+  padding: 5rem 3.5rem 2rem;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.77, 0, 0.175, 1);
+  overflow-y: auto;
+  z-index: 3;
+  display: none;
+}
+
+#rls-slide-menu .rls-submenu-panel.is-open {
+  transform: translateX(0);
+  display: block;
+}
+
+#rls-slide-menu .rls-submenu-back {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--rls-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.25s ease;
+}
+
+#rls-slide-menu .rls-submenu-back:hover {
+  color: var(--rls-red);
+}
+
+#rls-slide-menu .rls-submenu-back::before {
+  content: '←';
+  font-size: 1.1rem;
+}
+
+#rls-slide-menu .rls-submenu-title {
+  font-family: var(--rls-sans);
+  color: var(--rls-white);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+#rls-slide-menu .rls-submenu-panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+#rls-slide-menu .rls-submenu-panel a {
+  font-family: var(--rls-sans);
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  padding: 0.6rem 0;
+  display: block;
+  transition: color 0.25s ease, padding-left 0.25s ease;
+  position: relative;
+}
+
+#rls-slide-menu .rls-submenu-panel a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--rls-red);
+  transition: width 0.25s ease;
+  transform: translateY(-50%);
+}
+
+#rls-slide-menu .rls-submenu-panel a:hover {
+  color: var(--rls-red);
+  padding-left: 1.25rem;
+}
+
+#rls-slide-menu .rls-submenu-panel a:hover::before {
+  width: 0.85rem;
+}
+
+/* ─────────────────────────────────────────────────────────
+   12) Responsive
+   ───────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  #rls-header .rls-header-inner {
+    padding: 0 1.75rem;
+    height: var(--rls-header-h-tablet);
+  }
+  #rls-header.is-scrolled .rls-header-inner {
+    height: calc(var(--rls-header-h-tablet) - 14px);
+  }
+  #rls-header .rls-logo img { height: 54px; }
+  #rls-header.is-scrolled .rls-logo img { height: 44px; }
+  #rls-header .rls-logo-text { font-size: 1.2rem; }
+}
+
+@media (max-width: 768px) {
+  #rls-slide-menu .rls-menu-inner {
+    padding: 4.5rem 2rem 1.5rem;
+  }
+  #rls-slide-menu .rls-menu-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  #rls-slide-menu .rls-menu-contact {
+    padding: 1.75rem 2rem;
+  }
+  #rls-slide-menu .rls-submenu-panel {
+    padding: 4.5rem 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  #rls-header .rls-header-inner {
+    padding: 0 1.25rem;
+    height: var(--rls-header-h-mobile);
+  }
+  #rls-header .rls-logo img { height: 44px; }
+  #rls-header.is-scrolled .rls-logo img { height: 38px; }
+  #rls-header .rls-logo-text { font-size: 1rem; }
+  #rls-header .rls-phone { display: none; }
+  #rls-header .rls-header-right { gap: 0.75rem; }
+  #rls-header .rls-hamburger { width: 42px; height: 42px; }
+}
