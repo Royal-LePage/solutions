@@ -1,6 +1,6 @@
 /* =========================================================
    Royal LePage Solutions - Custom Header
-   v1005 - Fixed header size on scroll (no shrink), logo at 130px
+   v1006 - Added Deposit Instructions button
    ========================================================= */
 
 :root {
@@ -112,8 +112,7 @@ body.rls-has-hero #rls-header.is-transparent {
 }
 
 /* ─────────────────────────────────────────────────────────
-   4) Header inner layout - centered logo, right-aligned controls
-   - Fixed height: does NOT shrink on scroll
+   4) Header inner layout
    ───────────────────────────────────────────────────────── */
 #rls-header .rls-header-inner {
   max-width: 1440px;
@@ -127,7 +126,7 @@ body.rls-has-hero #rls-header.is-transparent {
 }
 
 /* ─────────────────────────────────────────────────────────
-   5) Logo - absolutely centered, fixed size on scroll
+   5) Logo - absolutely centered
    ───────────────────────────────────────────────────────── */
 #rls-header .rls-logo {
   position: absolute;
@@ -152,12 +151,39 @@ body.rls-has-hero #rls-header.is-transparent {
 }
 
 /* ─────────────────────────────────────────────────────────
-   6) Header right (phone + hamburger)
+   6) Header right (deposit button + phone + hamburger)
    ───────────────────────────────────────────────────────── */
 #rls-header .rls-header-right {
   display: flex;
   align-items: center;
-  gap: 1.75rem;
+  gap: 1.25rem;
+}
+
+/* Deposit Instructions button — white outlined */
+#rls-header .rls-deposit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: var(--rls-white);
+  font-family: var(--rls-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.4rem;
+  border-radius: 2px;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+#rls-header .rls-deposit-btn:hover {
+  background: var(--rls-red);
+  border-color: var(--rls-red);
+  color: var(--rls-white);
 }
 
 #rls-header .rls-phone {
@@ -550,12 +576,22 @@ body.rls-has-hero #rls-header.is-transparent {
 /* ─────────────────────────────────────────────────────────
    12) Responsive
    ───────────────────────────────────────────────────────── */
+@media (max-width: 1200px) {
+  #rls-header .rls-deposit-btn {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    padding: 0.75rem 1.1rem;
+  }
+}
+
 @media (max-width: 1024px) {
   #rls-header .rls-header-inner {
     padding: 0 1.75rem;
     height: var(--rls-header-h-tablet);
   }
   #rls-header .rls-logo img { height: 105px; }
+  #rls-header .rls-header-right { gap: 0.85rem; }
+  #rls-header .rls-phone { display: none; }
 }
 
 @media (max-width: 768px) {
@@ -572,15 +608,25 @@ body.rls-has-hero #rls-header.is-transparent {
   #rls-slide-menu .rls-submenu-panel {
     padding: 4.5rem 2rem 1.5rem;
   }
+  #rls-header .rls-deposit-btn {
+    font-size: 0.65rem;
+    padding: 0.6rem 0.85rem;
+    letter-spacing: 0.12em;
+  }
 }
 
 @media (max-width: 600px) {
   #rls-header .rls-header-inner {
-    padding: 0 1.25rem;
+    padding: 0 1rem;
     height: var(--rls-header-h-mobile);
   }
   #rls-header .rls-logo img { height: 72px; }
-  #rls-header .rls-phone { display: none; }
-  #rls-header .rls-header-right { gap: 0.75rem; }
+  #rls-header .rls-header-right { gap: 0.5rem; }
   #rls-header .rls-hamburger { width: 42px; height: 42px; }
+  /* Hide deposit button text on very small screens — could replace with icon if desired */
+  #rls-header .rls-deposit-btn {
+    font-size: 0.6rem;
+    padding: 0.55rem 0.7rem;
+    letter-spacing: 0.1em;
+  }
 }
