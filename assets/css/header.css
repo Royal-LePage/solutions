@@ -1,6 +1,6 @@
 /* =========================================================
    Royal LePage Solutions - Custom Header
-   v1001 - Initial build
+   v1002 - Logo wired up (black-on-white logo with safety area)
    - Brand compliant: Black, Red, White, Warm Grey palette
    - No blue, gold, or yellow (prohibited per RLP brand guide)
    - Approved Google font: Raleway (no italics)
@@ -136,7 +136,9 @@ body.rls-has-hero #rls-header.is-transparent {
 }
 
 /* ─────────────────────────────────────────────────────────
-   5) Logo (left)
+   5) Logo (left) — uses official RLP Solutions logo
+   - Logo is black on white, so we keep it on a white field
+     (its required safety area) for visibility on black header
    ───────────────────────────────────────────────────────── */
 #rls-header .rls-logo {
   display: flex;
@@ -150,26 +152,12 @@ body.rls-has-hero #rls-header.is-transparent {
   opacity: 0.85;
 }
 
-/* Text placeholder (replace with <img> when logo file is ready) */
-#rls-header .rls-logo-text {
-  font-family: var(--rls-sans);
-  font-weight: 300;
-  font-size: 1.4rem;
-  letter-spacing: 0.04em;
-  color: var(--rls-white);
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-#rls-header .rls-logo-text strong {
-  font-weight: 600;
-  color: var(--rls-red);
-}
-
 #rls-header .rls-logo img {
   height: 64px;
   width: auto;
   display: block;
+  background: var(--rls-white);
+  padding: 8px 14px;
   transition: height 0.3s ease;
 }
 
@@ -586,7 +574,6 @@ body.rls-has-hero #rls-header.is-transparent {
   }
   #rls-header .rls-logo img { height: 54px; }
   #rls-header.is-scrolled .rls-logo img { height: 44px; }
-  #rls-header .rls-logo-text { font-size: 1.2rem; }
 }
 
 @media (max-width: 768px) {
@@ -610,9 +597,8 @@ body.rls-has-hero #rls-header.is-transparent {
     padding: 0 1.25rem;
     height: var(--rls-header-h-mobile);
   }
-  #rls-header .rls-logo img { height: 44px; }
+  #rls-header .rls-logo img { height: 44px; padding: 6px 10px; }
   #rls-header.is-scrolled .rls-logo img { height: 38px; }
-  #rls-header .rls-logo-text { font-size: 1rem; }
   #rls-header .rls-phone { display: none; }
   #rls-header .rls-header-right { gap: 0.75rem; }
   #rls-header .rls-hamburger { width: 42px; height: 42px; }
