@@ -1,6 +1,6 @@
 /* =========================================================
    Royal LePage Solutions - Custom Header
-   v1002 - Logo wired up (black-on-white logo with safety area)
+   v1003 - Centered logo (reversed white/red logo on black)
    - Brand compliant: Black, Red, White, Warm Grey palette
    - No blue, gold, or yellow (prohibited per RLP brand guide)
    - Approved Google font: Raleway (no italics)
@@ -117,7 +117,7 @@ body.rls-has-hero #rls-header.is-transparent {
 }
 
 /* ─────────────────────────────────────────────────────────
-   4) Header inner layout
+   4) Header inner layout - centered logo, right-aligned controls
    ───────────────────────────────────────────────────────── */
 #rls-header .rls-header-inner {
   max-width: 1440px;
@@ -126,8 +126,8 @@ body.rls-has-hero #rls-header.is-transparent {
   height: var(--rls-header-h);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
+  justify-content: flex-end;
+  position: relative;
   transition: height 0.3s ease;
 }
 
@@ -136,11 +136,13 @@ body.rls-has-hero #rls-header.is-transparent {
 }
 
 /* ─────────────────────────────────────────────────────────
-   5) Logo (left) — uses official RLP Solutions logo
-   - Logo is black on white, so we keep it on a white field
-     (its required safety area) for visibility on black header
+   5) Logo - absolutely centered, reversed (white/red on black)
    ───────────────────────────────────────────────────────── */
 #rls-header .rls-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -153,16 +155,14 @@ body.rls-has-hero #rls-header.is-transparent {
 }
 
 #rls-header .rls-logo img {
-  height: 64px;
+  height: 70px;
   width: auto;
   display: block;
-  background: var(--rls-white);
-  padding: 8px 14px;
   transition: height 0.3s ease;
 }
 
 #rls-header.is-scrolled .rls-logo img {
-  height: 52px;
+  height: 56px;
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -572,8 +572,8 @@ body.rls-has-hero #rls-header.is-transparent {
   #rls-header.is-scrolled .rls-header-inner {
     height: calc(var(--rls-header-h-tablet) - 14px);
   }
-  #rls-header .rls-logo img { height: 54px; }
-  #rls-header.is-scrolled .rls-logo img { height: 44px; }
+  #rls-header .rls-logo img { height: 58px; }
+  #rls-header.is-scrolled .rls-logo img { height: 48px; }
 }
 
 @media (max-width: 768px) {
@@ -597,8 +597,8 @@ body.rls-has-hero #rls-header.is-transparent {
     padding: 0 1.25rem;
     height: var(--rls-header-h-mobile);
   }
-  #rls-header .rls-logo img { height: 44px; padding: 6px 10px; }
-  #rls-header.is-scrolled .rls-logo img { height: 38px; }
+  #rls-header .rls-logo img { height: 46px; }
+  #rls-header.is-scrolled .rls-logo img { height: 40px; }
   #rls-header .rls-phone { display: none; }
   #rls-header .rls-header-right { gap: 0.75rem; }
   #rls-header .rls-hamburger { width: 42px; height: 42px; }
