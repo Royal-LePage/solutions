@@ -1,21 +1,27 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
-   v1006 - Deposit button + updated URLs from spreadsheet
+   v1007 - Absolute logo URL for cross-site use (Bold Trail + GitHub)
    ========================================================= */
 
-console.log('RLS HEADER JS LOADED v1006');
+console.log('RLS HEADER JS LOADED v1007');
 
 (function () {
-  const VERSION = '1006';
+  const VERSION = '1007';
+
+  // Base URL where logo and other assets live
+  // Update this if you move the repo or set up the subdomain later
+  const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
+
   const DEPOSIT_URL = 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust';
-  const DEPOSIT_INSTRUCTIONS_URL = 'deposits/'; // Relative for GitHub Pages testing
+  const DEPOSIT_INSTRUCTIONS_URL = ASSET_BASE + '/deposits/';
+  const LOGO_URL = ASSET_BASE + '/assets/images/Solutions%20Logo%20Script_White%20%2B%20Red.png';
 
   /* ─── Header markup ─── */
   function buildHeaderHTML() {
     return `
       <div class="rls-header-inner">
         <a href="https://www.rlpsolutions.ca/" class="rls-logo" aria-label="Royal LePage Solutions Home">
-          <img src="assets/images/Solutions Logo Script_White + Red.png" alt="Royal LePage Solutions">
+          <img src="${LOGO_URL}" alt="Royal LePage Solutions">
         </a>
 
         <div class="rls-header-right">
@@ -118,7 +124,6 @@ console.log('RLS HEADER JS LOADED v1006');
   function ensureInjected() {
     document.body.classList.add('has-rls-header');
 
-    // Header
     let header = document.getElementById('rls-header');
     if (!header) {
       header = document.createElement('header');
@@ -129,7 +134,6 @@ console.log('RLS HEADER JS LOADED v1006');
       header.innerHTML = buildHeaderHTML();
     }
 
-    // Overlay
     let overlay = document.getElementById('rls-menu-overlay');
     if (!overlay) {
       overlay = document.createElement('div');
@@ -137,7 +141,6 @@ console.log('RLS HEADER JS LOADED v1006');
       document.body.appendChild(overlay);
     }
 
-    // Slide-out menu
     let menu = document.getElementById('rls-slide-menu');
     if (!menu) {
       menu = document.createElement('aside');
@@ -159,7 +162,6 @@ console.log('RLS HEADER JS LOADED v1006');
     console.log('[RLS Header] Injected + bound OK - v' + VERSION);
   }
 
-  /* ─── Hero detection ─── */
   function detectHero(header) {
     const hero = document.querySelector('.rls-hero');
     if (hero) {
@@ -171,7 +173,6 @@ console.log('RLS HEADER JS LOADED v1006');
     }
   }
 
-  /* ─── Behavior bindings ─── */
   function bindHeaderBehavior(header, menu, overlay) {
     if (header.dataset.rlsBound === '1') return;
     header.dataset.rlsBound = '1';
