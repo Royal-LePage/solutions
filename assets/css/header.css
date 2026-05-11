@@ -1,11 +1,6 @@
 /* =========================================================
    Royal LePage Solutions - Custom Header
-   v1003 - Centered logo (reversed white/red logo on black)
-   - Brand compliant: Black, Red, White, Warm Grey palette
-   - No blue, gold, or yellow (prohibited per RLP brand guide)
-   - Approved Google font: Raleway (no italics)
-   - Smart transparent-over-hero behavior
-   - Tap-to-reveal submenu pattern on mobile
+   v1004 - Logo enlarged to 130px, header sized to accommodate
    ========================================================= */
 
 :root {
@@ -19,9 +14,9 @@
   --rls-stone:      #D8D3CB;
   --rls-taupe:      #B8AC9C;
 
-  --rls-header-h:        110px;
-  --rls-header-h-tablet: 90px;
-  --rls-header-h-mobile: 76px;
+  --rls-header-h:        160px;
+  --rls-header-h-tablet: 130px;
+  --rls-header-h-mobile: 96px;
 
   --rls-sans: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
 }
@@ -132,11 +127,13 @@ body.rls-has-hero #rls-header.is-transparent {
 }
 
 #rls-header.is-scrolled .rls-header-inner {
-  height: calc(var(--rls-header-h) - 20px);
+  height: calc(var(--rls-header-h) - 40px);
 }
 
 /* ─────────────────────────────────────────────────────────
    5) Logo - absolutely centered, reversed (white/red on black)
+   - 130px tall on desktop (matches header h ~160px with breathing room)
+   - shrinks proportionally on scroll
    ───────────────────────────────────────────────────────── */
 #rls-header .rls-logo {
   position: absolute;
@@ -155,14 +152,14 @@ body.rls-has-hero #rls-header.is-transparent {
 }
 
 #rls-header .rls-logo img {
-  height: 70px;
+  height: 130px;
   width: auto;
   display: block;
   transition: height 0.3s ease;
 }
 
 #rls-header.is-scrolled .rls-logo img {
-  height: 56px;
+  height: 90px;
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -570,10 +567,10 @@ body.rls-has-hero #rls-header.is-transparent {
     height: var(--rls-header-h-tablet);
   }
   #rls-header.is-scrolled .rls-header-inner {
-    height: calc(var(--rls-header-h-tablet) - 14px);
+    height: calc(var(--rls-header-h-tablet) - 30px);
   }
-  #rls-header .rls-logo img { height: 58px; }
-  #rls-header.is-scrolled .rls-logo img { height: 48px; }
+  #rls-header .rls-logo img { height: 105px; }
+  #rls-header.is-scrolled .rls-logo img { height: 75px; }
 }
 
 @media (max-width: 768px) {
@@ -597,8 +594,8 @@ body.rls-has-hero #rls-header.is-transparent {
     padding: 0 1.25rem;
     height: var(--rls-header-h-mobile);
   }
-  #rls-header .rls-logo img { height: 46px; }
-  #rls-header.is-scrolled .rls-logo img { height: 40px; }
+  #rls-header .rls-logo img { height: 72px; }
+  #rls-header.is-scrolled .rls-logo img { height: 60px; }
   #rls-header .rls-phone { display: none; }
   #rls-header .rls-header-right { gap: 0.75rem; }
   #rls-header .rls-hamburger { width: 42px; height: 42px; }
