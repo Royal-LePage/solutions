@@ -1,15 +1,14 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
-   v1007 - Absolute logo URL for cross-site use (Bold Trail + GitHub)
+   v1008 - Detect Bold Trail .cover-image hero for transparency
    ========================================================= */
 
-console.log('RLS HEADER JS LOADED v1007');
+console.log('RLS HEADER JS LOADED v1008');
 
 (function () {
-  const VERSION = '1007';
+  const VERSION = '1008';
 
   // Base URL where logo and other assets live
-  // Update this if you move the repo or set up the subdomain later
   const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
 
   const DEPOSIT_URL = 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust';
@@ -162,8 +161,15 @@ console.log('RLS HEADER JS LOADED v1007');
     console.log('[RLS Header] Injected + bound OK - v' + VERSION);
   }
 
+  /* ─── Hero detection ───
+     Detects custom .rls-hero (your GitHub pages) OR Bold Trail's .cover-image
+     If a hero is found, header goes transparent until scrolled
+  */
   function detectHero(header) {
-    const hero = document.querySelector('.rls-hero');
+    const customHero = document.querySelector('.rls-hero');
+    const boldTrailHero = document.querySelector('.cover-image, .cover-overlay');
+    const hero = customHero || boldTrailHero;
+
     if (hero) {
       document.body.classList.add('rls-has-hero');
       header.classList.add('is-transparent');
@@ -173,6 +179,7 @@ console.log('RLS HEADER JS LOADED v1007');
     }
   }
 
+  /* ─── Behavior bindings ─── */
   function bindHeaderBehavior(header, menu, overlay) {
     if (header.dataset.rlsBound === '1') return;
     header.dataset.rlsBound = '1';
