@@ -1,19 +1,19 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
-   v1002 - Logo wired up
+   v1003 - Centered reversed logo
    ========================================================= */
 
-console.log('RLS HEADER JS LOADED v1002');
+console.log('RLS HEADER JS LOADED v1003');
 
 (function () {
-  const VERSION = '1002';
+  const VERSION = '1003';
 
   /* ─── Header markup ─── */
   function buildHeaderHTML() {
     return `
       <div class="rls-header-inner">
         <a href="https://royallepagesolutions.com/" class="rls-logo" aria-label="Royal LePage Solutions Home">
-          <img src="assets/images/Solutions Logo Script_Black + Red Horizontal.jpg" alt="Royal LePage Solutions">
+          <img src="assets/images/Solutions Logo Script_White + Red.png" alt="Royal LePage Solutions">
         </a>
 
         <div class="rls-header-right">
