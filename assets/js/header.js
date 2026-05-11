@@ -1,22 +1,25 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
-   v1003 - Centered reversed logo
+   v1006 - Deposit button + updated URLs from spreadsheet
    ========================================================= */
 
-console.log('RLS HEADER JS LOADED v1003');
+console.log('RLS HEADER JS LOADED v1006');
 
 (function () {
-  const VERSION = '1003';
+  const VERSION = '1006';
+  const DEPOSIT_URL = 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust';
+  const DEPOSIT_INSTRUCTIONS_URL = 'deposits/'; // Relative for GitHub Pages testing
 
   /* ─── Header markup ─── */
   function buildHeaderHTML() {
     return `
       <div class="rls-header-inner">
-        <a href="https://royallepagesolutions.com/" class="rls-logo" aria-label="Royal LePage Solutions Home">
+        <a href="https://www.rlpsolutions.ca/" class="rls-logo" aria-label="Royal LePage Solutions Home">
           <img src="assets/images/Solutions Logo Script_White + Red.png" alt="Royal LePage Solutions">
         </a>
 
         <div class="rls-header-right">
+          <a class="rls-deposit-btn" href="${DEPOSIT_URL}">Deposit Instructions</a>
           <a class="rls-phone" href="tel:4032525900">403.252.5900</a>
           <button class="rls-hamburger" id="rls-hamburger" aria-label="Open menu" aria-expanded="false" type="button">
             <span class="rls-hamburger-lines">
@@ -46,10 +49,11 @@ console.log('RLS HEADER JS LOADED v1003');
           <div class="rls-menu-col">
             <h3>The Brokerage</h3>
             <ul>
-              <li><a href="about/">About Us</a></li>
-              <li><a href="https://royallepagesolutions.com/agents.php">Our Agents</a></li>
-              <li><a href="https://royallepagesolutions.com/joinus">Join Us / Careers</a></li>
-              <li><a href="https://royallepagesolutions.com/contact">Contact</a></li>
+              <li><a href="https://solutions-calgary.royallepage.ca/resources/about-us">About Us</a></li>
+              <li><a href="https://www.rlpsolutions.ca/agents.php">Meet Our Team</a></li>
+              <li><a href="https://solutions-calgary.royallepage.ca/resources/join-us">Join Us / Careers</a></li>
+              <li><a href="${DEPOSIT_INSTRUCTIONS_URL}">Deposit Instructions</a></li>
+              <li><a href="https://solutions-calgary.royallepage.ca/contact.php">Contact</a></li>
             </ul>
           </div>
 
@@ -57,27 +61,20 @@ console.log('RLS HEADER JS LOADED v1003');
           <div class="rls-menu-col">
             <h3>Search &amp; Services</h3>
             <ul>
-              <li><a href="https://royallepagesolutions.com/search">Search Listings</a></li>
-              <li><a href="https://royallepagesolutions.com/featured">Featured Properties</a></li>
-              <li><a href="https://royallepagesolutions.com/buy">Buying</a></li>
-              <li><a href="https://royallepagesolutions.com/sell">Selling</a></li>
-              <li><a href="https://royallepagesolutions.com/home-valuation">Home Valuation</a></li>
+              <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1&rtype=map">Search Listings</a></li>
+              <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1#rslt">Our Listings</a></li>
+              <li><a href="https://www.rlpsolutions.ca/resources/buying-a-home">Buying</a></li>
+              <li><a href="https://www.rlpsolutions.ca/seller/valuation/">Selling</a></li>
+              <li><a href="https://solutions-calgary.royallepage.ca/finance.php">Finance</a></li>
             </ul>
           </div>
 
-          <!-- Column 3: COMMERCIAL & MARKET -->
+          <!-- Column 3: ROYAL LEPAGE -->
           <div class="rls-menu-col">
-            <h3>Commercial &amp; Market</h3>
+            <h3>Royal LePage</h3>
             <ul>
-              <li><a href="https://royallepagesolutions.com/commercial">Commercial Listings</a></li>
-              <li><a href="commercial/vacancy/">Commercial Vacancy Report</a></li>
-              <li><a href="market-reports/">Market Reports</a></li>
-              <li>
-                <button class="rls-submenu-trigger" data-submenu="communities" type="button">
-                  <span>Calgary Communities</span>
-                  <span class="rls-submenu-arrow">›</span>
-                </button>
-              </li>
+              <li><a href="https://solutions-calgary.royallepage.ca/resources/about-royal-lepage">About Royal LePage</a></li>
+              <li><a href="https://solutions-calgary.royallepage.ca/resources/royal-lepage-shelter-foundation">Shelter Foundation</a></li>
             </ul>
           </div>
 
@@ -85,30 +82,14 @@ console.log('RLS HEADER JS LOADED v1003');
           <div class="rls-menu-col">
             <h3>Connect</h3>
             <ul>
-              <li><a href="https://royallepagesolutions.com/contact">Contact Us</a></li>
-              <li><a href="https://royallepagesolutions.com/newsletter">Newsletter</a></li>
-              <li><a href="https://royallepagesolutions.com/blog">Blog</a></li>
+              <li><a href="https://solutions-calgary.royallepage.ca/contact.php">Contact Us</a></li>
+              <li><a href="https://www.facebook.com/RLPSolutions" target="_blank" rel="noopener">Facebook</a></li>
+              <li><a href="http://www.instagram.com/royallepagesolutions" target="_blank" rel="noopener">Instagram</a></li>
+              <li><a href="http://www.linkedin.com/company/royal-lepage-solutions" target="_blank" rel="noopener">LinkedIn</a></li>
             </ul>
           </div>
 
         </div>
-      </div>
-
-      <!-- Submenu: Calgary Communities -->
-      <div class="rls-submenu-panel" id="rls-submenu-communities" aria-hidden="true">
-        <button class="rls-submenu-back" data-submenu-back="communities" type="button">Back</button>
-        <h3 class="rls-submenu-title">Calgary Communities</h3>
-        <ul>
-          <li><a href="calgary/">Calgary (All)</a></li>
-          <li><a href="calgary/city-center/">City Center</a></li>
-          <li><a href="calgary/north/">North</a></li>
-          <li><a href="calgary/north-east/">North East</a></li>
-          <li><a href="calgary/north-west/">North West</a></li>
-          <li><a href="calgary/south/">South</a></li>
-          <li><a href="calgary/south-east/">South East</a></li>
-          <li><a href="calgary/east/">East</a></li>
-          <li><a href="calgary/west/">West</a></li>
-        </ul>
       </div>
 
       <!-- Contact strip -->
@@ -178,7 +159,7 @@ console.log('RLS HEADER JS LOADED v1003');
     console.log('[RLS Header] Injected + bound OK - v' + VERSION);
   }
 
-  /* ─── Hero detection: transparent over hero only ─── */
+  /* ─── Hero detection ─── */
   function detectHero(header) {
     const hero = document.querySelector('.rls-hero');
     if (hero) {
@@ -214,7 +195,6 @@ console.log('RLS HEADER JS LOADED v1003');
       document.body.classList.remove('rls-menu-open');
       hamburger.setAttribute('aria-expanded', 'false');
       menu.setAttribute('aria-hidden', 'true');
-      // Close any open submenu panels
       menu.querySelectorAll('.rls-submenu-panel').forEach(p => {
         p.classList.remove('is-open');
         p.setAttribute('aria-hidden', 'true');
@@ -229,7 +209,6 @@ console.log('RLS HEADER JS LOADED v1003');
       if (e.key === 'Escape' && menu.classList.contains('is-open')) closeMenu();
     });
 
-    // Submenu triggers
     menu.querySelectorAll('.rls-submenu-trigger').forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -242,7 +221,6 @@ console.log('RLS HEADER JS LOADED v1003');
       });
     });
 
-    // Submenu back buttons
     menu.querySelectorAll('[data-submenu-back]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const id = btn.getAttribute('data-submenu-back');
@@ -254,12 +232,10 @@ console.log('RLS HEADER JS LOADED v1003');
       });
     });
 
-    // Close menu when any link is clicked
     menu.addEventListener('click', (e) => {
       if (e.target.closest('a')) closeMenu();
     });
 
-    // Scroll state for header
     function handleScroll() {
       if (window.scrollY > 40) {
         header.classList.add('is-scrolled');
@@ -271,10 +247,8 @@ console.log('RLS HEADER JS LOADED v1003');
     handleScroll();
   }
 
-  /* ─── Init ─── */
   function run() {
     ensureInjected();
-    // Safety re-runs in case Bold Trail re-renders
     setTimeout(ensureInjected, 500);
     setTimeout(ensureInjected, 1500);
   }
