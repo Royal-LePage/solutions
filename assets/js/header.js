@@ -1,23 +1,19 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
-   v1001 - Initial build
+   v1002 - Logo wired up
    ========================================================= */
 
-console.log('RLS HEADER JS LOADED v1001');
+console.log('RLS HEADER JS LOADED v1002');
 
 (function () {
-  const VERSION = '1001';
+  const VERSION = '1002';
 
   /* ─── Header markup ─── */
   function buildHeaderHTML() {
     return `
       <div class="rls-header-inner">
         <a href="https://royallepagesolutions.com/" class="rls-logo" aria-label="Royal LePage Solutions Home">
-          <!-- TODO: Replace this text placeholder with the official RLP Solutions logo file -->
-          <span class="rls-logo-text">Royal <strong>LePage</strong> Solutions</span>
-          <!-- When ready, use:
-          <img src="https://info.royallepagesolutions.com/photos/brand/rls-logo-white.png" alt="Royal LePage Solutions">
-          -->
+          <img src="assets/images/Solutions Logo Script_Black + Red Horizontal.jpg" alt="Royal LePage Solutions">
         </a>
 
         <div class="rls-header-right">
@@ -50,7 +46,7 @@ console.log('RLS HEADER JS LOADED v1001');
           <div class="rls-menu-col">
             <h3>The Brokerage</h3>
             <ul>
-              <li><a href="https://info.royallepagesolutions.com/about/">About Us</a></li>
+              <li><a href="about/">About Us</a></li>
               <li><a href="https://royallepagesolutions.com/agents.php">Our Agents</a></li>
               <li><a href="https://royallepagesolutions.com/joinus">Join Us / Careers</a></li>
               <li><a href="https://royallepagesolutions.com/contact">Contact</a></li>
@@ -59,7 +55,7 @@ console.log('RLS HEADER JS LOADED v1001');
 
           <!-- Column 2: SEARCH & SERVICES -->
           <div class="rls-menu-col">
-            <h3>Search & Services</h3>
+            <h3>Search &amp; Services</h3>
             <ul>
               <li><a href="https://royallepagesolutions.com/search">Search Listings</a></li>
               <li><a href="https://royallepagesolutions.com/featured">Featured Properties</a></li>
@@ -71,11 +67,11 @@ console.log('RLS HEADER JS LOADED v1001');
 
           <!-- Column 3: COMMERCIAL & MARKET -->
           <div class="rls-menu-col">
-            <h3>Commercial & Market</h3>
+            <h3>Commercial &amp; Market</h3>
             <ul>
               <li><a href="https://royallepagesolutions.com/commercial">Commercial Listings</a></li>
-              <li><a href="https://info.royallepagesolutions.com/commercial/vacancy/">Commercial Vacancy Report</a></li>
-              <li><a href="https://info.royallepagesolutions.com/market-reports/">Market Reports</a></li>
+              <li><a href="commercial/vacancy/">Commercial Vacancy Report</a></li>
+              <li><a href="market-reports/">Market Reports</a></li>
               <li>
                 <button class="rls-submenu-trigger" data-submenu="communities" type="button">
                   <span>Calgary Communities</span>
@@ -103,15 +99,15 @@ console.log('RLS HEADER JS LOADED v1001');
         <button class="rls-submenu-back" data-submenu-back="communities" type="button">Back</button>
         <h3 class="rls-submenu-title">Calgary Communities</h3>
         <ul>
-          <li><a href="https://info.royallepagesolutions.com/calgary/">Calgary (All)</a></li>
-          <li><a href="https://info.royallepagesolutions.com/calgary/city-center/">City Center</a></li>
-          <li><a href="https://info.royallepagesolutions.com/calgary/north/">North</a></li>
-          <li><a href="https://info.royallepagesolutions.com/calgary/north-east/">North East</a></li>
-          <li><a href="https://info.royallepagesolutions.com/calgary/north-west/">North West</a></li>
-          <li><a href="https://info.royallepagesolutions.com/calgary/south/">South</a></li>
-          <li><a href="https://info.royallepagesolutions.com/calgary/south-east/">South East</a></li>
-          <li><a href="https://info.royallepagesolutions.com/calgary/east/">East</a></li>
-          <li><a href="https://info.royallepagesolutions.com/calgary/west/">West</a></li>
+          <li><a href="calgary/">Calgary (All)</a></li>
+          <li><a href="calgary/city-center/">City Center</a></li>
+          <li><a href="calgary/north/">North</a></li>
+          <li><a href="calgary/north-east/">North East</a></li>
+          <li><a href="calgary/north-west/">North West</a></li>
+          <li><a href="calgary/south/">South</a></li>
+          <li><a href="calgary/south-east/">South East</a></li>
+          <li><a href="calgary/east/">East</a></li>
+          <li><a href="calgary/west/">West</a></li>
         </ul>
       </div>
 
