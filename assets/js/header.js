@@ -1,12 +1,12 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
-   v1008 - Detect Bold Trail .cover-image hero for transparency
+   v1009 - Always solid black header (no transparent mode)
    ========================================================= */
 
-console.log('RLS HEADER JS LOADED v1008');
+console.log('RLS HEADER JS LOADED v1009');
 
 (function () {
-  const VERSION = '1008';
+  const VERSION = '1009';
 
   // Base URL where logo and other assets live
   const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
@@ -152,31 +152,12 @@ console.log('RLS HEADER JS LOADED v1008');
     }
 
     bindHeaderBehavior(header, menu, overlay);
-    detectHero(header);
 
     requestAnimationFrame(() => {
       document.body.classList.add('rls-header-ready');
     });
 
     console.log('[RLS Header] Injected + bound OK - v' + VERSION);
-  }
-
-  /* ─── Hero detection ───
-     Detects custom .rls-hero (your GitHub pages) OR Bold Trail's .cover-image
-     If a hero is found, header goes transparent until scrolled
-  */
-  function detectHero(header) {
-    const customHero = document.querySelector('.rls-hero');
-    const boldTrailHero = document.querySelector('.cover-image, .cover-overlay');
-    const hero = customHero || boldTrailHero;
-
-    if (hero) {
-      document.body.classList.add('rls-has-hero');
-      header.classList.add('is-transparent');
-    } else {
-      document.body.classList.remove('rls-has-hero');
-      header.classList.remove('is-transparent');
-    }
   }
 
   /* ─── Behavior bindings ─── */
@@ -243,16 +224,6 @@ console.log('RLS HEADER JS LOADED v1008');
     menu.addEventListener('click', (e) => {
       if (e.target.closest('a')) closeMenu();
     });
-
-    function handleScroll() {
-      if (window.scrollY > 40) {
-        header.classList.add('is-scrolled');
-      } else {
-        header.classList.remove('is-scrolled');
-      }
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
   }
 
   function run() {
