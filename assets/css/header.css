@@ -1,7 +1,7 @@
 /* =========================================================
    Royal LePage Solutions - Custom Header
-   v1009 - Added subpage fix for #listings-map (search results
-           page red filter bar was being cut off behind header)
+   v1010 - Increased subpage #listings-map padding to 60px/40px
+           so the red filter bar subtitle isn't clipped by header
    ========================================================= */
 
 :root {
@@ -89,12 +89,12 @@ body.rls-header-ready:not(.rls-has-hero) {
        fixed header.
    ───────────────────────────────────────────────────────── */
 body.rls-header-ready:not(.rls-has-hero) #listings-map {
-  padding-top: 30px !important;
+  padding-top: 60px !important;
 }
 
 @media (max-width: 768px) {
   body.rls-header-ready:not(.rls-has-hero) #listings-map {
-    padding-top: 20px !important;
+    padding-top: 40px !important;
   }
 }
 
