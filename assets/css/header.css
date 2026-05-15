@@ -1,6 +1,7 @@
 /* =========================================================
    Royal LePage Solutions - Custom Header
-   v1006 - Added Deposit Instructions button
+   v1009 - Added subpage fix for #listings-map (search results
+           page red filter bar was being cut off behind header)
    ========================================================= */
 
 :root {
@@ -76,6 +77,24 @@ body.rls-header-ready:not(.rls-has-hero) {
 @media (max-width: 600px) {
   body.rls-header-ready:not(.rls-has-hero) {
     padding-top: var(--rls-header-h-mobile) !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   2b) Map/search results pages — push the full-bleed
+       map+results layout below the fixed header.
+       BoldTrail's #listings-map breaks out of the body's
+       padded area, so it needs its own offset to keep the
+       red filter bar / pagination from sliding under the
+       fixed header.
+   ───────────────────────────────────────────────────────── */
+body.rls-header-ready:not(.rls-has-hero) #listings-map {
+  padding-top: 30px !important;
+}
+
+@media (max-width: 768px) {
+  body.rls-header-ready:not(.rls-has-hero) #listings-map {
+    padding-top: 20px !important;
   }
 }
 
