@@ -1,15 +1,15 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
-   v1009 - Always solid black header (no transparent mode)
+   v1010 - Updated ASSET_BASE to info.royallepagesolutions.com
    ========================================================= */
 
-console.log('RLS HEADER JS LOADED v1009');
+console.log('RLS HEADER JS LOADED v1010');
 
 (function () {
-  const VERSION = '1009';
+  const VERSION = '1010';
 
   // Base URL where logo and other assets live
-  const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
+  const ASSET_BASE = 'https://info.royallepagesolutions.com';
 
   const DEPOSIT_URL = 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust';
   const DEPOSIT_INSTRUCTIONS_URL = ASSET_BASE + '/deposits/';
