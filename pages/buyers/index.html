@@ -1,1 +1,646 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Buyer Resources | Royal LePage Solutions</title>
+<meta name="description" content="Buying a home in 8 simple steps. Expert guidance from Royal LePage Solutions REALTORS® to help you find the right home at the best possible price.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Royal LePage Brand Tokens ---------- */
+  :root {
+    --rlp-black: #000000;
+    --rlp-red: #EA002A;
+    --rlp-white: #FFFFFF;
+    --rlp-taupe: #B8A99A;
+    --rlp-stone: #D9D2C7;
+    --rlp-light-grey: #F2F2F2;
+    --rlp-warm-grey: #8A8278;
+    --rlp-dark-grey: #333333;
 
+    --font-body: 'Roboto', Arial, sans-serif;
+
+    --max-width: 1200px;
+    --content-width: 880px;
+  }
+
+  /* ---------- Reset & Base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--rlp-black);
+    background: var(--rlp-white);
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: var(--rlp-red); text-decoration: none; transition: color 0.2s ease; }
+  a:hover { color: var(--rlp-black); }
+
+  /* ---------- Top Bar ---------- */
+  .topbar {
+    background: var(--rlp-black);
+    color: var(--rlp-white);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  .topbar-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 10px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .topbar a { color: var(--rlp-white); }
+  .topbar a:hover { color: var(--rlp-red); }
+  .topbar-right { display: flex; gap: 24px; align-items: center; }
+
+  /* ---------- Header ---------- */
+  header.site-header {
+    background: var(--rlp-white);
+    border-bottom: 1px solid var(--rlp-light-grey);
+    padding: 24px;
+  }
+  .header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .logo {
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: var(--rlp-black);
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .logo .accent { color: var(--rlp-red); }
+  .logo small {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: 400;
+    color: var(--rlp-warm-grey);
+    margin-top: 4px;
+  }
+  nav.primary ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  nav.primary a {
+    color: var(--rlp-black);
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
+  nav.primary a:hover { color: var(--rlp-red); }
+  nav.primary a.active { color: var(--rlp-red); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    background:
+      linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.45)),
+      linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+    color: var(--rlp-white);
+    padding: 100px 24px 110px;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--rlp-red);
+  }
+  .hero-inner {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .hero .eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rlp-red);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--rlp-red);
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0 0 24px;
+    letter-spacing: -0.5px;
+  }
+  .hero p.lead {
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 1.6;
+    margin: 0 0 16px;
+    max-width: 720px;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  /* ---------- Intro Section ---------- */
+  .intro {
+    background: var(--rlp-white);
+    padding: 72px 24px 24px;
+  }
+  .intro-inner {
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+  .intro h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    margin: 0 0 20px;
+    line-height: 1.3;
+  }
+  .intro p { margin: 0 0 16px; color: var(--rlp-dark-grey); }
+
+  /* ---------- Accordion / Steps ---------- */
+  .steps {
+    padding: 32px 24px 72px;
+    background: var(--rlp-white);
+  }
+  .steps-inner {
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+  .step {
+    border-bottom: 1px solid #e5e5e5;
+  }
+  .step:first-child { border-top: 1px solid #e5e5e5; }
+  .step summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 24px 0;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--rlp-black);
+    transition: color 0.2s ease;
+  }
+  .step summary::-webkit-details-marker { display: none; }
+  .step summary:hover { color: var(--rlp-red); }
+  .step summary:hover .step-num { background: var(--rlp-red); color: var(--rlp-white); }
+  .step-num {
+    flex: 0 0 auto;
+    width: 48px;
+    height: 48px;
+    border: 2px solid var(--rlp-black);
+    color: var(--rlp-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    transition: all 0.25s ease;
+  }
+  .step-title {
+    flex: 1;
+    letter-spacing: 0.2px;
+  }
+  .step-icon {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+  .step-icon::before,
+  .step-icon::after {
+    content: "";
+    position: absolute;
+    background: var(--rlp-black);
+    top: 50%;
+    left: 50%;
+    transition: all 0.3s ease;
+  }
+  .step-icon::before {
+    width: 14px;
+    height: 2px;
+    transform: translate(-50%, -50%);
+  }
+  .step-icon::after {
+    width: 2px;
+    height: 14px;
+    transform: translate(-50%, -50%);
+  }
+  .step[open] .step-num {
+    background: var(--rlp-red);
+    color: var(--rlp-white);
+    border-color: var(--rlp-red);
+  }
+  .step[open] summary { color: var(--rlp-red); }
+  .step[open] .step-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+    opacity: 0;
+  }
+  .step[open] .step-icon::before { background: var(--rlp-red); }
+  .step-content {
+    padding: 0 0 32px 72px;
+    color: var(--rlp-dark-grey);
+    animation: fadeIn 0.35s ease;
+  }
+  .step-content p { margin: 0 0 16px; }
+  .step-content ul {
+    margin: 0 0 20px;
+    padding-left: 20px;
+  }
+  .step-content li {
+    margin-bottom: 12px;
+    line-height: 1.65;
+  }
+  .step-content em { color: var(--rlp-black); font-style: italic; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- CTA Section ---------- */
+  .cta {
+    background: var(--rlp-black);
+    color: var(--rlp-white);
+    padding: 80px 24px;
+    text-align: center;
+  }
+  .cta-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .cta h2 {
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    margin: 0 0 16px;
+    line-height: 1.2;
+  }
+  .cta p {
+    font-size: 18px;
+    font-weight: 300;
+    margin: 0 0 32px;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .btn {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--rlp-red);
+    color: var(--rlp-white);
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.25s ease;
+    border: 2px solid var(--rlp-red);
+  }
+  .btn:hover {
+    background: var(--rlp-white);
+    color: var(--rlp-black);
+    border-color: var(--rlp-white);
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    background: var(--rlp-white);
+    padding: 56px 24px 24px;
+    border-top: 4px solid var(--rlp-red);
+  }
+  .footer-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  .footer-col h4 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0 0 16px;
+    color: var(--rlp-black);
+  }
+  .footer-col p, .footer-col a {
+    font-size: 14px;
+    color: var(--rlp-dark-grey);
+    line-height: 1.7;
+    margin: 0 0 6px;
+  }
+  .footer-col a:hover { color: var(--rlp-red); }
+  .footer-bottom {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid var(--rlp-light-grey);
+    font-size: 12px;
+    color: var(--rlp-warm-grey);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-bottom .disclaimer {
+    max-width: 720px;
+    line-height: 1.6;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 768px) {
+    .hero { padding: 64px 20px 72px; }
+    .step summary { gap: 16px; padding: 20px 0; font-size: 16px; }
+    .step-num { width: 40px; height: 40px; font-size: 14px; }
+    .step-content { padding-left: 56px; }
+    nav.primary ul { gap: 16px; }
+    nav.primary a { font-size: 12px; }
+  }
+  @media (max-width: 480px) {
+    .step-content { padding-left: 0; padding-top: 8px; }
+    .topbar-right { font-size: 12px; gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-left">Royal LePage Solutions &mdash; Calgary &middot; Canmore &middot; Okotoks</div>
+    <div class="topbar-right">
+      <a href="tel:+14032525900">+1 (403) 252-5900</a>
+      <a href="mailto:solutionssouth@royallepage.ca">solutionssouth@royallepage.ca</a>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      ROYAL LE<span class="accent">PAGE</span><sup style="font-size:10px; vertical-align:super;">&reg;</sup>
+      <small>SOLUTIONS</small>
+    </div>
+    <nav class="primary" aria-label="Primary">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Listings</a></li>
+        <li><a href="#">Our Agents</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#" class="active">Buyers</a></li>
+        <li><a href="#">Sellers</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Buyer Resources</span>
+    <h1>You've made the decision. You're ready to buy. Now what?</h1>
+    <p class="lead">Buying a home can be a bit overwhelming. There's so much to think about and do. So, it's important that you have someone you can trust to make the process as smooth as possible and offer expert advice.</p>
+  </div>
+</section>
+
+<!-- Intro -->
+<section class="intro">
+  <div class="intro-inner">
+    <h2>Eight simple steps to your new home.</h2>
+    <p>It's all about helping you find the right home in the right neighbourhood at the best possible price. Below, you'll find it all outlined in eight simple steps &mdash; from deciding to buy through moving day.</p>
+  </div>
+</section>
+
+<!-- Steps Accordion -->
+<section class="steps">
+  <div class="steps-inner">
+
+    <!-- Step 1 -->
+    <details class="step">
+      <summary>
+        <span class="step-num">01</span>
+        <span class="step-title">Deciding to Buy</span>
+        <span class="step-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="step-content">
+        <p>To buy a home, you need to be prepared and we are here to help you. Here are a few things to consider:</p>
+        <ul>
+          <li><strong>Define your needs and wants</strong> &mdash; make a list of the things you simply can't live without, like the number of bedrooms and bathrooms your family needs, proximity to schools and work, or storage needs. Then list some nice-to-haves: maybe a pool or deck, finished basement or mudroom. This will help you further down the road when you start looking at homes.</li>
+          <li><strong>Brush up on types of home ownership</strong> &mdash; make sure you know the difference between freehold (it's all yours), condo (you take care of the inside and pay fees to an association to look after the common areas and maintenance) and co-op (similar to condos but instead of "owning" your unit, you buy shares in the whole building and pay maintenance and repair fees).</li>
+          <li><strong>Understand market conditions</strong> &mdash; supply and demand can change from neighbourhood to neighbourhood, region to region. So, getting to know the market can help you get more bang for your buck. And so can your Real Estate agent.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- Step 2 -->
+    <details class="step">
+      <summary>
+        <span class="step-num">02</span>
+        <span class="step-title">Choosing an Agent</span>
+        <span class="step-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="step-content">
+        <p>Buying a home is personal and emotional. So the relationship with your real estate agent has to be built on expertise, trust and mutual respect. After all, they will be acting as your eyes, ears and voice throughout the process. They have a fiduciary duty to act in your best interests, to be completely transparent and accountable to you.</p>
+        <p>Here's what a Royal LePage<sup>&reg;</sup> agent will do:</p>
+        <ul>
+          <li>Educate you about the current market conditions</li>
+          <li>Discuss and analyze your wants and needs against your budget</li>
+          <li>Guide you to homes that fit your criteria</li>
+          <li>Coordinate the work of other professionals you'll need during the process</li>
+          <li>Negotiate with the seller on your behalf</li>
+          <li>Make sure all the required paperwork is fully completed, accurate and that deadlines are met</li>
+          <li>Work with you to resolve any challenges that may arise</li>
+        </ul>
+        <p>And while your agent will likely be a great source of advice on financing, it is ultimately your responsibility to understand and secure it. So, let's move on to financing&hellip;</p>
+      </div>
+    </details>
+
+    <!-- Step 3 -->
+    <details class="step">
+      <summary>
+        <span class="step-num">03</span>
+        <span class="step-title">Understanding Financing</span>
+        <span class="step-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="step-content">
+        <p>Like many things in life, planning ahead is the key to success. So, you should know the price range you can afford before you start shopping. Here are a few things to keep in mind:</p>
+        <ul>
+          <li><strong>Down payment</strong> &mdash; this is usually the percentage of the total cost of a home that you'll need to pay. The more money you put down, the more money you'll save on monthly payments and, in the long run, interest paid.</li>
+          <li><strong>Knowing what you can afford</strong> &mdash; how much house you can afford comes down to 3 factors: your monthly mortgage payment, your down payment and the amortization period or length of time it will take to pay off the loan.</li>
+          <li><strong>Getting pre-approved</strong> &mdash; this will really help you figure out what you can spend on a home because you'll know before you start shopping. And you'll be protected against rising interest rates as well.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- Step 4 -->
+    <details class="step">
+      <summary>
+        <span class="step-num">04</span>
+        <span class="step-title">Finding the Right Home to Buy</span>
+        <span class="step-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="step-content">
+        <p>So now it's time to get out there and find your dream home. Most people start off by having a neighbourhood in mind but a great agent may suggest options that you may not have thought of. Here are some considerations as you set out to house hunt:</p>
+        <ul>
+          <li><strong>Choosing the right neighbourhood</strong> &mdash; Do you need to be close to schools, public transit, highways or where you work? Those can be huge factors when choosing an area to live. And let's not forget proximity to other amenities like parks, grocery stores, doctors and recreational centres. Drive around and check out the appearance of other homes in the area. Are they well taken care of? Of course, your agent will be able to inform you of property values in the area and how they've changed over the years.</li>
+          <li><strong>House hunting</strong> &mdash; the hunt can be a lot of work but it can also be a lot of fun. So when you visit homes, go with a partner &mdash; spouse, parent, friend &mdash; because two sets of eyes are better than one. Don't be shy about asking some tough questions regarding the home. Take some pictures or video on your smartphone so you can reference it later. And remember that checklist you made? It will come in handy now.</li>
+          <li><strong>View open houses with open eyes</strong> &mdash; curb appeal is one thing but try not to focus on the bells and whistles. Keep a lookout for things like doors and windows (are they new/old?), water leaks, squeaky floors, soggy areas around the yard that indicate poor drainage and could lead to a wet basement, missing shingles, lighting, etc. You'll be getting a home inspection later, but it doesn't hurt to start with your own observations.</li>
+        </ul>
+        <p>And when you finally find the home you can see yourself living in, it's time for the next step&hellip;</p>
+      </div>
+    </details>
+
+    <!-- Step 5 -->
+    <details class="step">
+      <summary>
+        <span class="step-num">05</span>
+        <span class="step-title">Making an Offer on a Home</span>
+        <span class="step-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="step-content">
+        <p>You've fallen in love. But it's important that you don't let your emotions get the better of you when making an offer. Remember, real estate is an investment. Fortunately, your real estate agent is there to help you put together an Offer to Purchase and discuss all the details. Here are a few things you should know:</p>
+        <ul>
+          <li><strong>Not all offers are the same</strong> &mdash; the main factors on most offers will include price, deposit, terms (which includes financing details), conditions, specific items that are included or not with the home and the closing date. From there, you can decide to make a "firm" offer which means that you're willing to buy the home exactly as it is. Or, you could make the offer "conditional" on things like a home inspection, approval of financing or the sale of your existing home.</li>
+          <li><strong>Negotiating may come into play</strong> &mdash; the seller will either accept your offer, reject it or make a counter offer based on things like price, closing date or other conditions. While receiving a counter offer may be unsettling, know that your real estate agent has plenty of experience to help you. Some good tips for negotiating are: making sure what you're asking for is fair and equitable; be polite and collaborative; hold fast to your "needs" and be flexible on your "wants"; and know when to walk away no matter how hard that may be.</li>
+        </ul>
+        <p>After agreeing on terms and signing the offer, it's time for the next step&hellip;</p>
+      </div>
+    </details>
+
+    <!-- Step 6 -->
+    <details class="step">
+      <summary>
+        <span class="step-num">06</span>
+        <span class="step-title">What to do Before Buying a House</span>
+        <span class="step-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="step-content">
+        <p>In addition to your real estate agent, you will now need to bring in a few pros to help get you to the finish line and make sure the investment you're about to make is sound. Your real estate agent can put you in touch with these people and make recommendations. Here are a couple of key people you should be talking to:</p>
+        <ul>
+          <li><strong>A home inspector</strong> &mdash; an absolute must in saving you from some unpleasant surprises later on. A home inspector will check your property for any structural damage; perform a thorough examination of the heating and cooling system, plumbing and electrical systems, the roof, attic, walls, ceilings, floors, windows, doors, foundation, basement and more; then prepare a complete written report detailing all their findings.</li>
+          <li><strong>A legal professional</strong> &mdash; when it comes to complex legal documents, it takes a lawyer experienced in Canadian real estate law to help make sure that you and your investment are protected. A real estate lawyer will review the agreement of purchase and sale, do a property title search, check that your home complies with current building and zoning codes, ensure utilities and property taxes are paid up, review the mortgage agreement, and get all the paperwork ready for closing.</li>
+        </ul>
+        <p>You're almost in the home stretch now. Just a couple more steps&hellip;</p>
+      </div>
+    </details>
+
+    <!-- Step 7 -->
+    <details class="step">
+      <summary>
+        <span class="step-num">07</span>
+        <span class="step-title">Closing on a Home</span>
+        <span class="step-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="step-content">
+        <p>Closing day is the day you officially take ownership of your new home. It's an exciting time for sure. But there are a couple of details you need to keep in mind before you get handed the keys:</p>
+        <ul>
+          <li><strong>Closing costs</strong> &mdash; these fees need to be paid by or on the closing day and include mortgage application fees, inspections, legal fees, insurance, registration and more.</li>
+        </ul>
+        <p>All these costs might make your head spin. But you can take solace in the fact that your real estate agent will be a great help in managing all of this and get you to your last step&hellip;</p>
+      </div>
+    </details>
+
+    <!-- Step 8 -->
+    <details class="step">
+      <summary>
+        <span class="step-num">08</span>
+        <span class="step-title">Home Moving Tips</span>
+        <span class="step-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="step-content">
+        <p>The day has arrived. And there will be as much excitement as there will be sore backs. But you can take the pain out of moving day by planning ahead. Here are some tips for a smooth move:</p>
+        <ul>
+          <li>Make a moving checklist that details a plan for things that need to be done weeks before you move all the way up to moving day itself.</li>
+          <li>Plan for packing by clearly labeling boxes with the rooms they are to go to. You might even want to provide a small floor plan for the movers so they know exactly where to take them.</li>
+          <li>Make sure you get competitive quotes from reliable moving companies. Or, to save money, find out how much it would cost to hire a moving van yourself (and bribe your friends to help you).</li>
+          <li>If you own your current home, cancel your cable and utilities and transfer any rented appliances (like water heater or furnace) to the new homeowners. While you're at it, make sure to have the gas, electricity, cable and phone hooked up at your new home.</li>
+          <li>Inform your key contacts &mdash; work, Canada Post, doctors, friends, pharmacy, etc. &mdash; of your change of address.</li>
+          <li>If you have children, make sure you talk to them and explain why you're moving and reassure them that the friends they've made can continue to be their friends. Ask for their opinion too on things like what colour to paint their rooms. Try and make it exciting for them.</li>
+          <li>On moving day, plan an easy meal like picking up some take-out. Moving is stressful enough without having to cook.</li>
+        </ul>
+        <p><em>Congratulations. You're all moved in. Welcome home!</em></p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner">
+    <h2>Ready to take the first step?</h2>
+    <p>Connect with a Royal LePage Solutions REALTOR<sup>&reg;</sup> today. We'll help you navigate every step of the journey to your new home.</p>
+    <a href="#" class="btn">Connect with a REALTOR<sup style="font-size:9px;">&reg;</sup></a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col">
+      <div class="logo" style="margin-bottom: 16px;">
+        ROYAL LE<span class="accent">PAGE</span><sup style="font-size:10px;">&reg;</sup>
+        <small>SOLUTIONS</small>
+      </div>
+      <p>Proudly Canadian. Serving Calgary, Canmore and Okotoks with expert real estate guidance since day one.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Head Office</h4>
+      <p><strong>Royal LePage Solutions South</strong></p>
+      <p>205&ndash;264 Midpark Way SE<br>Calgary, Alberta, T2X 1J6</p>
+      <p><a href="tel:+14032525900">(403) 252-5900</a></p>
+      <p><a href="mailto:solutionssouth@royallepage.ca">solutionssouth@royallepage.ca</a></p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <p><a href="#">Listings</a></p>
+      <p><a href="#">Our Agents</a></p>
+      <p><a href="#">Buyers</a></p>
+      <p><a href="#">Sellers</a></p>
+      <p><a href="#">Commercial</a></p>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <p><a href="#">Facebook</a></p>
+      <p><a href="#">Instagram</a></p>
+      <p><a href="#">LinkedIn</a></p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>&copy; 2026 Royal LePage Solutions. All Rights Reserved.</div>
+    <div class="disclaimer">Royal LePage<sup>&reg;</sup> is a registered trademark of Royal Bank of Canada and is used under licence by Bridgemarq Real Estate Services<sup>&reg;</sup>. Each office is independently owned and operated.</div>
+  </div>
+</footer>
+
+</body>
+</html>
