@@ -1,14 +1,14 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
-   v1010 - Reconciled all menu links to info.royallepagesolutions.com
+   v1011 - Reconciled all menu links to info.royallepagesolutions.com
            pages; added Commercial Listings + Find an Agent under
-           Search & Services
+           Search & Services; moved Commercial Listings under Our Listings
    ========================================================= */
 
-console.log('RLS HEADER JS LOADED v1010');
+console.log('RLS HEADER JS LOADED v1011');
 
 (function () {
-  const VERSION = '1010';
+  const VERSION = '1011';
 
   // Base URL where logo and other assets live
   const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
@@ -70,10 +70,10 @@ console.log('RLS HEADER JS LOADED v1010');
             <ul>
               <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1&rtype=map">Search Listings</a></li>
               <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1#rslt">Our Listings</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/commercial/">Commercial Listings</a></li>
               <li><a href="https://info.royallepagesolutions.com/pages/buyers/">Buying</a></li>
               <li><a href="https://info.royallepagesolutions.com/pages/seller/">Selling</a></li>
               <li><a href="https://info.royallepagesolutions.com/pages/finance/">Finance</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/commercial/">Commercial Listings</a></li>
               <li><a href="https://info.royallepagesolutions.com/pages/lead/">Find an Agent</a></li>
             </ul>
           </div>
