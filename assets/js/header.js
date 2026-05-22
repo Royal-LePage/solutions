@@ -1,12 +1,14 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
-   v1009 - Always solid black header (no transparent mode)
+   v1010 - Reconciled all menu links to info.royallepagesolutions.com
+           pages; added Commercial Listings + Find an Agent under
+           Search & Services
    ========================================================= */
 
-console.log('RLS HEADER JS LOADED v1009');
+console.log('RLS HEADER JS LOADED v1010');
 
 (function () {
-  const VERSION = '1009';
+  const VERSION = '1010';
 
   // Base URL where logo and other assets live
   const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
@@ -54,11 +56,11 @@ console.log('RLS HEADER JS LOADED v1009');
           <div class="rls-menu-col">
             <h3>The Brokerage</h3>
             <ul>
-              <li><a href="https://solutions-calgary.royallepage.ca/resources/about-us">About Us</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/about-us/">About Us</a></li>
               <li><a href="https://www.rlpsolutions.ca/agents.php">Meet Our Team</a></li>
-              <li><a href="https://solutions-calgary.royallepage.ca/resources/join-us">Join Us / Careers</a></li>
-              <li><a href="${DEPOSIT_INSTRUCTIONS_URL}">Deposit Instructions</a></li>
-              <li><a href="https://solutions-calgary.royallepage.ca/contact.php">Contact</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/join-us/">Join Us / Careers</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/deposit/">Deposit Instructions</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact</a></li>
             </ul>
           </div>
 
@@ -68,9 +70,11 @@ console.log('RLS HEADER JS LOADED v1009');
             <ul>
               <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1&rtype=map">Search Listings</a></li>
               <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1#rslt">Our Listings</a></li>
-              <li><a href="https://www.rlpsolutions.ca/resources/buying-a-home">Buying</a></li>
-              <li><a href="https://www.rlpsolutions.ca/seller/valuation/">Selling</a></li>
-              <li><a href="https://solutions-calgary.royallepage.ca/finance.php">Finance</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/buyers/">Buying</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/seller/">Selling</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/finance/">Finance</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/commercial/">Commercial Listings</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/lead/">Find an Agent</a></li>
             </ul>
           </div>
 
@@ -78,8 +82,8 @@ console.log('RLS HEADER JS LOADED v1009');
           <div class="rls-menu-col">
             <h3>Royal LePage</h3>
             <ul>
-              <li><a href="https://solutions-calgary.royallepage.ca/resources/about-royal-lepage">About Royal LePage</a></li>
-              <li><a href="https://solutions-calgary.royallepage.ca/resources/royal-lepage-shelter-foundation">Shelter Foundation</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/about-rlp/">About Royal LePage</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/shelter/">Shelter Foundation</a></li>
             </ul>
           </div>
 
@@ -87,7 +91,7 @@ console.log('RLS HEADER JS LOADED v1009');
           <div class="rls-menu-col">
             <h3>Connect</h3>
             <ul>
-              <li><a href="https://solutions-calgary.royallepage.ca/contact.php">Contact Us</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact Us</a></li>
               <li><a href="https://www.facebook.com/RLPSolutions" target="_blank" rel="noopener">Facebook</a></li>
               <li><a href="http://www.instagram.com/royallepagesolutions" target="_blank" rel="noopener">Instagram</a></li>
               <li><a href="http://www.linkedin.com/company/royal-lepage-solutions" target="_blank" rel="noopener">LinkedIn</a></li>
