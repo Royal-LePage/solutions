@@ -1,1 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — Royal LePage Solutions</title>
+  <meta name="description" content="Get in touch with Royal LePage Solutions. Tell us about your real estate goals — buying, selling, or both — and we'll connect you with the right advisor.">
 
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Header CSS -->
+  <link rel="stylesheet" href="../../assets/css/header.css?v=1010">
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="../../assets/css/styles.css?v=1001">
+  <!-- Header JS (injects header markup) -->
+  <script defer src="../../assets/js/header.js?v=1009"></script>
+
+  <!-- Contact-page-specific styles -->
+  <style>
+    /* ─── Contact page layout ─── */
+    .rls-contact-hero {
+      position: relative;
+      background: var(--rls-black);
+      color: var(--rls-white);
+      padding: 12rem 0 6rem;
+      text-align: center;
+      overflow: hidden;
+    }
+    .rls-contact-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at top, rgba(234, 0, 42, 0.15), transparent 60%),
+        linear-gradient(180deg, var(--rls-black), var(--rls-dark-grey));
+      z-index: 0;
+    }
+    .rls-contact-hero > * {
+      position: relative;
+      z-index: 1;
+    }
+    .rls-contact-hero .rls-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 1.25rem;
+    }
+    .rls-contact-hero h1 {
+      color: var(--rls-white);
+      max-width: 18ch;
+      margin: 0 auto 1.5rem;
+    }
+    .rls-contact-hero h1 .accent {
+      color: var(--rls-red);
+      font-weight: 400;
+    }
+    .rls-contact-hero p {
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 560px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+    }
+
+    /* ─── Form layout ─── */
+    .rls-form-section {
+      padding: 5rem 0;
+      background: var(--rls-white);
+    }
+    .rls-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .rls-form-aside h2 {
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-weight: 300;
+      margin-bottom: 1.25rem;
+    }
+    .rls-form-aside p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .rls-form-aside .rls-divider {
+      display: block;
+      width: 48px;
+      height: 2px;
+      background: var(--rls-red);
+      margin: 1.5rem 0 1.75rem;
+    }
+    .rls-contact-list {
+      list-style: none;
+      padding: 0;
+      margin: 2rem 0 0;
+    }
+    .rls-contact-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      font-size: 0.95rem;
+      color: var(--rls-dark-grey);
+    }
+    .rls-contact-list li svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 4px;
+      color: var(--rls-red);
+    }
+    .rls-contact-list a {
+      color: var(--rls-dark-grey);
+    }
+    .rls-contact-list a:hover {
+      color: var(--rls-red);
+    }
+
+    /* ─── Form fields ─── */
+    .rls-lead-form .rls-field {
+      margin-bottom: 1.25rem;
+    }
+    .rls-lead-form .rls-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .rls-lead-form label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rls-dark-grey);
+      margin-bottom: 0.4rem;
+    }
+    .rls-lead-form label .req {
+      color: var(--rls-red);
+      margin-left: 2px;
+    }
+    .rls-lead-form input[type="text"],
+    .rls-lead-form input[type="email"],
+    .rls-lead-form input[type="tel"],
+    .rls-lead-form select,
+    .rls-lead-form textarea {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      font-family: var(--rls-sans);
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--rls-dark-grey);
+      background: var(--rls-white);
+      border: 1px solid var(--rls-light-grey);
+      border-radius: 2px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .rls-lead-form input:focus,
+    .rls-lead-form select:focus,
+    .rls-lead-form textarea:focus {
+      outline: none;
+      border-color: var(--rls-red);
+      box-shadow: 0 0 0 3px rgba(234, 0, 42, 0.1);
+    }
+    .rls-lead-form textarea {
+      resize: vertical;
+      min-height: 120px;
+      font-family: var(--rls-sans);
+    }
+    .rls-lead-form select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+
+    /* Honeypot — visually hidden but in DOM for bots */
+    .rls-honeypot {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    /* Consent block */
+    .rls-consent {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 1rem;
+      background: var(--rls-light-grey);
+      border-radius: 2px;
+      margin: 0.5rem 0 1.5rem;
+    }
+    .rls-consent input[type="checkbox"] {
+      flex-shrink: 0;
+      margin-top: 4px;
+      width: 16px;
+      height: 16px;
+      accent-color: var(--rls-red);
+      cursor: pointer;
+    }
+    .rls-consent label {
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      text-transform: none;
+      color: var(--rls-warm-grey);
+      margin: 0;
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    /* Submit & status */
+    .rls-form-submit-row {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .rls-lead-form button[type="submit"] {
+      background: var(--rls-red);
+      color: var(--rls-white);
+      font-family: var(--rls-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 1.1rem 2.5rem;
+      border: 1px solid var(--rls-red);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background-color 0.25s ease, border-color 0.25s ease, opacity 0.2s ease;
+      align-self: flex-start;
+    }
+    .rls-lead-form button[type="submit"]:hover:not(:disabled) {
+      background: var(--rls-red-dk);
+      border-color: var(--rls-red-dk);
+    }
+    .rls-lead-form button[type="submit"]:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .rls-form-status {
+      font-size: 0.9rem;
+      margin: 0;
+      min-height: 1.4em;
+    }
+    .rls-form-status.is-success {
+      color: #1a7f3c;
+    }
+    .rls-form-status.is-error {
+      color: var(--rls-red);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .rls-form-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .rls-lead-form .rls-row-2 {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .rls-lead-form .rls-row-2 .rls-field {
+        margin-bottom: 1.25rem;
+      }
+      .rls-contact-hero {
+        padding: 9rem 0 4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="rls-contact-hero">
+    <div class="rls-eyebrow">Get in touch</div>
+    <h1>Let's start your <span class="accent">next move.</span></h1>
+    <p>Tell us a bit about what you're looking for and we'll connect you with an advisor who knows the area.</p>
+  </section>
+
+  <!-- Form -->
+  <section class="rls-form-section">
+    <div class="rls-container">
+      <div class="rls-form-grid">
+
+        <!-- Left: Contact info -->
+        <aside class="rls-form-aside">
+          <h2>Reach out directly</h2>
+          <span class="rls-divider" aria-hidden="true"></span>
+          <p>Prefer to call or visit our office? We're here Monday through Friday and available by appointment on weekends.</p>
+
+          <ul class="rls-contact-list">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              <a href="tel:4032525900">403.252.5900</a>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              <span>205&ndash;264 Midpark Way SE<br>Calgary, AB T2X 1J6</span>
+            </li>
+          </ul>
+        </aside>
+
+        <!-- Right: Lead form -->
+        <div>
+          <form id="rls-lead-form" class="rls-lead-form" novalidate>
+
+            <div class="rls-row-2">
+              <div class="rls-field">
+                <label for="first_name">First name <span class="req">*</span></label>
+                <input id="first_name" name="first_name" type="text" autocomplete="given-name" required>
+              </div>
+              <div class="rls-field">
+                <label for="last_name">Last name <span class="req">*</span></label>
+                <input id="last_name" name="last_name" type="text" autocomplete="family-name" required>
+              </div>
+            </div>
+
+            <div class="rls-row-2">
+              <div class="rls-field">
+                <label for="email">Email <span class="req">*</span></label>
+                <input id="email" name="email" type="email" autocomplete="email" required>
+              </div>
+              <div class="rls-field">
+                <label for="phone">Phone</label>
+                <input id="phone" name="phone" type="tel" autocomplete="tel">
+              </div>
+            </div>
+
+            <div class="rls-row-2">
+              <div class="rls-field">
+                <label for="intent">I'm looking to</label>
+                <select id="intent" name="intent">
+                  <option value="">Select…</option>
+                  <option>Buy</option>
+                  <option>Sell</option>
+                  <option>Both</option>
+                  <option>Invest</option>
+                  <option>Rent</option>
+                  <option>Just exploring</option>
+                </select>
+              </div>
+              <div class="rls-field">
+  <label for="community">Area of interest</label>
+  <select id="community" name="community">
+    <option value="">Select…</option>
+    <option>Calgary</option>
+    <option>Calgary City Centre</option>
+    <option>Calgary East</option>
+    <option>Calgary West</option>
+    <option>Calgary North</option>
+    <option>Calgary North West</option>
+    <option>Calgary North East</option>
+    <option>Calgary South</option>
+    <option>Calgary South East</option>
+    <option>Okotoks</option>
+    <option>Canmore / Banff</option>
+    <option>Chestermere</option>
+    <option>Airdrie</option>
+    <option>Other</option>
+  </select>
+</div>
+            </div>
+
+            <div class="rls-row-2">
+              <div class="rls-field">
+                <label for="property_type">Property type</label>
+                <select id="property_type" name="property_type">
+                  <option value="">Select…</option>
+                  <option>Single family</option>
+                  <option>Condo / Apartment</option>
+                  <option>Townhouse</option>
+                  <option>Acreage / Rural</option>
+                  <option>Land</option>
+                  <option>Commercial</option>
+                  <option>Not sure yet</option>
+                </select>
+              </div>
+              <div class="rls-field">
+                <label for="timeline">Timeline</label>
+                <select id="timeline" name="timeline">
+                  <option value="">Select…</option>
+                  <option>Within 30 days</option>
+                  <option>1–3 months</option>
+                  <option>3–6 months</option>
+                  <option>6–12 months</option>
+                  <option>Just researching</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="rls-field">
+              <label for="budget">Budget range</label>
+              <select id="budget" name="budget">
+                <option value="">Select…</option>
+                <option>Under $400,000</option>
+                <option>$400,000 – $600,000</option>
+                <option>$600,000 – $800,000</option>
+                <option>$800,000 – $1,000,000</option>
+                <option>$1,000,000 – $1,500,000</option>
+                <option>$1,500,000 – $2,000,000</option>
+                <option>Over $2,000,000</option>
+                <option>Prefer not to say</option>
+              </select>
+            </div>
+
+            <div class="rls-field">
+              <label for="message">Anything else we should know?</label>
+              <textarea id="message" name="message" rows="4" placeholder="Tell us about your goals, must-haves, or any questions you have."></textarea>
+            </div>
+
+            <!-- Honeypot for bots -->
+            <div class="rls-honeypot" aria-hidden="true">
+              <label for="website">Leave this field blank</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="rls-consent">
+              <input id="consent" name="consent" type="checkbox" required>
+              <label for="consent">
+                I consent to being contacted by Royal LePage Solutions about my real estate inquiry by phone, email, or text. I understand I can withdraw consent at any time.
+              </label>
+            </div>
+
+            <div class="rls-form-submit-row">
+              <button type="submit">Send Inquiry</button>
+              <p class="rls-form-status" role="status" aria-live="polite"></p>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Form submission script -->
+  <script>
+    (function () {
+      const WORKER_URL = 'https://bluebird-lead-proxy.kyleduiker-d45.workers.dev';
+      const form = document.getElementById('rls-lead-form');
+      const status = form.querySelector('.rls-form-status');
+      const button = form.querySelector('button[type="submit"]');
+
+      function setStatus(message, type) {
+        status.textContent = message;
+        status.classList.remove('is-success', 'is-error');
+        if (type) status.classList.add('is-' + type);
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        setStatus('Sending…', null);
+        button.disabled = true;
+
+        const fd = new FormData(form);
+
+        // Build tags array for Bluebird routing
+        const tags = ['Brokerage Website'];
+        const intent = fd.get('intent');
+        const community = fd.get('community');
+        const propertyType = fd.get('property_type');
+        const budget = fd.get('budget');
+        const timeline = fd.get('timeline');
+        if (intent) tags.push(intent);
+        if (community) tags.push(community);
+        if (propertyType) tags.push(propertyType);
+
+        // Compose the message body sent to Bluebird
+        const messageLines = [];
+        if (propertyType) messageLines.push('Property type: ' + propertyType);
+        if (budget) messageLines.push('Budget: ' + budget);
+        if (timeline) messageLines.push('Timeline: ' + timeline);
+        const userMessage = (fd.get('message') || '').toString().trim();
+        if (userMessage) {
+          if (messageLines.length) messageLines.push('');
+          messageLines.push(userMessage);
+        }
+
+        const firstName = (fd.get('first_name') || '').toString().trim();
+        const lastName = (fd.get('last_name') || '').toString().trim();
+        const fullName = (firstName + ' ' + lastName).trim();
+
+        const payload = {
+          name: fullName,
+          email: (fd.get('email') || '').toString().trim(),
+          phone: (fd.get('phone') || '').toString().trim(),
+          message: messageLines.join('\n'),
+          community: community || '',
+          intent: intent || '',
+          tags: tags,
+          website: (fd.get('website') || '').toString(), // honeypot
+          page_url: window.location.href
+        };
+
+        try {
+          const r = await fetch(WORKER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!r.ok) throw new Error('Submit failed');
+          setStatus("Thanks — we've received your inquiry and will be in touch shortly.", 'success');
+          form.reset();
+        } catch (err) {
+          setStatus('Something went wrong. Please call us at 403.252.5900 or email info@rlpsolutions.ca.', 'error');
+          console.error(err);
+        } finally {
+          button.disabled = false;
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
