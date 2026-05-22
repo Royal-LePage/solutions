@@ -1,646 +1,1270 @@
 <!DOCTYPE html>
-<html lang="en-CA">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Buyer Resources | Royal LePage Solutions</title>
-<meta name="description" content="Buying a home in 8 simple steps. Expert guidance from Royal LePage Solutions REALTORS® to help you find the right home at the best possible price.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-<style>
-  /* ---------- Royal LePage Brand Tokens ---------- */
-  :root {
-    --rlp-black: #000000;
-    --rlp-red: #EA002A;
-    --rlp-white: #FFFFFF;
-    --rlp-taupe: #B8A99A;
-    --rlp-stone: #D9D2C7;
-    --rlp-light-grey: #F2F2F2;
-    --rlp-warm-grey: #8A8278;
-    --rlp-dark-grey: #333333;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Calgary Buyer's Guide — Royal LePage Solutions</title>
+  <meta name="description" content="A simple, step-by-step home buying guide for Calgary and Alberta: budgeting, first-time buyer programs, offers, inspections, closing costs, and a land titles fee calculator.">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Header CSS -->
+  <link rel="stylesheet" href="../../assets/css/header.css?v=1010">
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="../../assets/css/styles.css?v=1001">
+  <!-- Header JS (injects header markup) -->
+  <script defer src="../../assets/js/header.js?v=1009"></script>
+  <!-- Page-specific styles -->
+  <style>
+    /* ============================================================
+       Calgary Buyer's Guide — circular infographic version
+       Plain-language content. Brand tokens (--rls-*) from header/site CSS.
+       Palette = RLP-approved primary + permitted secondary tones.
+       ============================================================ */
+    :root{
+      --bg-display: 'Cormorant Garamond', Georgia, serif;
+      --bg-soft:    #f5f4f2;
+      --bg-muted:   #8a8a8a;
+      --bg-line:    #e3e1dd;
+      --bg-flag:    #fff4f5;
+    }
 
-    --font-body: 'Roboto', Arial, sans-serif;
+    .bg-wrap{
+      max-width: var(--rls-max-width, 1200px);
+      margin: 0 auto;
+      padding: 0 2.5rem;
+    }
+    .bg-eyebrow{
+      font-size:.72rem; letter-spacing:.28em; text-transform:uppercase;
+      color:var(--bg-muted); font-weight:500;
+    }
+    .bg-h2{
+      font-family:var(--bg-display);
+      font-weight:500;
+      font-size:clamp(1.9rem,3.6vw,2.7rem);
+      line-height:1.12;
+      color:var(--rls-black,#000);
+      margin:0 0 .35em;
+    }
+    .bg-h3{
+      font-family:var(--rls-sans);
+      font-weight:600; font-size:1.06rem; letter-spacing:.02em;
+      color:var(--rls-black,#000);
+      margin:1.8rem 0 .6rem;
+    }
+    .bg-rule{ width:54px; height:1px; background:var(--bg-muted); margin:16px 0 24px; }
+    .bg-p{ color:var(--rls-warm-grey,#6B6660); margin:0 0 1rem; }
+    .bg-p:last-child{ margin-bottom:0; }
+    .bg-list{ color:var(--rls-warm-grey,#6B6660); margin:0 0 1rem 1.1rem; padding:0; }
+    .bg-list li{ margin-bottom:.5rem; }
 
-    --max-width: 1200px;
-    --content-width: 880px;
-  }
+    /* ── Hero ── */
+    .bg-hero{
+      position:relative;
+      min-height:clamp(300px,38vw,440px);
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; text-align:center;
+      background:
+        linear-gradient(rgba(15,15,15,.62),rgba(15,15,15,.62)),
+        url('https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+    }
+    .bg-hero-inner{ max-width:760px; padding:0 1.5rem; }
+    .bg-hero .bg-eyebrow{ color:rgba(255,255,255,.78); }
+    .bg-hero h1{
+      font-family:var(--bg-display);
+      font-weight:500; font-size:clamp(2.4rem,5.5vw,4.2rem);
+      letter-spacing:.02em; color:#fff;
+      margin:.4rem 0 .6rem; line-height:1.04;
+    }
+    .bg-hero p{ color:rgba(255,255,255,.85); font-size:1.05rem; margin:0; }
 
-  /* ---------- Reset & Base ---------- */
-  *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    font-family: var(--font-body);
-    font-weight: 400;
-    font-size: 17px;
-    line-height: 1.65;
-    color: var(--rlp-black);
-    background: var(--rlp-white);
-    -webkit-font-smoothing: antialiased;
-  }
-  img { max-width: 100%; height: auto; display: block; }
-  a { color: var(--rlp-red); text-decoration: none; transition: color 0.2s ease; }
-  a:hover { color: var(--rlp-black); }
+    /* ── Infographic section ── */
+    .bg-info-section{ padding:clamp(48px,7vw,86px) 0; text-align:center; }
+    .bg-info-section .bg-eyebrow{ display:block; }
+    .bg-info-section .bg-h2{ margin-top:.4rem; }
+    .bg-info-intro{
+      max-width:640px; margin:0 auto 2.4rem;
+      color:var(--rls-warm-grey,#6B6660); font-size:1rem;
+    }
 
-  /* ---------- Top Bar ---------- */
-  .topbar {
-    background: var(--rlp-black);
-    color: var(--rlp-white);
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-  }
-  .topbar-inner {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 10px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .topbar a { color: var(--rlp-white); }
-  .topbar a:hover { color: var(--rlp-red); }
-  .topbar-right { display: flex; gap: 24px; align-items: center; }
+    /* ── Circular infographic ── */
+    .bg-wheel-area{
+      display:flex; align-items:center; justify-content:center;
+      gap:clamp(8px,1.5vw,26px);
+    }
+    .bg-wheel{
+      position:relative; flex:0 0 auto;
+      width:clamp(280px,34vw,420px);
+      height:clamp(280px,34vw,420px);
+    }
+    .bg-wheel svg{ width:100%; height:100%; display:block; }
+    .bg-seg{ cursor:pointer; transition:opacity .2s; }
+    .bg-seg:hover{ opacity:.85; }
+    .bg-seg:focus{ outline:none; }
+    .bg-seg-num{
+      font-family:var(--rls-sans);
+      font-weight:700; font-size:13px;
+      pointer-events:none; user-select:none;
+    }
+    .bg-seg-badge{ pointer-events:none; }
+    .bg-hub-text{
+      font-family:var(--rls-sans);
+      fill:var(--rls-black,#000);
+      pointer-events:none; user-select:none;
+    }
+    .bg-seg.is-active .bg-seg-arc{
+      stroke:var(--rls-black,#000); stroke-width:3;
+    }
 
-  /* ---------- Header ---------- */
-  header.site-header {
-    background: var(--rlp-white);
-    border-bottom: 1px solid var(--rlp-light-grey);
-    padding: 24px;
-  }
-  .header-inner {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 24px;
-  }
-  .logo {
-    font-weight: 900;
-    font-size: 22px;
-    letter-spacing: 1px;
-    color: var(--rlp-black);
-    text-transform: uppercase;
-    line-height: 1.1;
-  }
-  .logo .accent { color: var(--rlp-red); }
-  .logo small {
-    display: block;
-    font-size: 11px;
-    letter-spacing: 3px;
-    font-weight: 400;
-    color: var(--rlp-warm-grey);
-    margin-top: 4px;
-  }
-  nav.primary ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 28px;
-    flex-wrap: wrap;
-  }
-  nav.primary a {
-    color: var(--rlp-black);
-    text-transform: uppercase;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 1px;
-  }
-  nav.primary a:hover { color: var(--rlp-red); }
-  nav.primary a.active { color: var(--rlp-red); }
+    /* ── Side callout columns ── */
+    .bg-callouts{
+      display:flex; flex-direction:column;
+      gap:10px; flex:1 1 0; min-width:0;
+      max-width:340px;
+    }
+    .bg-callout{
+      display:flex; align-items:center; gap:12px;
+      border:2px solid var(--bg-line);
+      border-radius:30px;
+      background:#fff; padding:12px 16px;
+      cursor:pointer;
+      transition:border-color .2s, box-shadow .2s, transform .15s;
+      width:100%; font-family:var(--rls-sans);
+    }
+    .bg-callout:hover{
+      box-shadow:0 6px 18px rgba(0,0,0,.08);
+      transform:translateY(-1px);
+    }
+    .bg-callout.is-active{
+      border-color:var(--rls-red,#EA002A);
+      box-shadow:0 6px 20px rgba(234,0,42,.14);
+    }
+    .bg-callout-icon{
+      flex:0 0 auto; width:34px; height:34px;
+      display:flex; align-items:center; justify-content:center;
+      color:var(--rls-red,#EA002A);
+    }
+    .bg-callout-icon svg{ width:26px; height:26px; }
+    .bg-callout-body{ flex:1 1 auto; min-width:0; }
+    .bg-callout-body h4{
+      margin:0; font-size:.8rem; font-weight:700;
+      letter-spacing:.04em; text-transform:uppercase;
+      color:var(--rls-black,#000); line-height:1.25;
+    }
+    .bg-callout-body p{
+      margin:.15rem 0 0; font-size:.76rem;
+      color:var(--rls-warm-grey,#6B6660); line-height:1.4;
+    }
+    .bg-callout-step{
+      flex:0 0 auto; font-family:var(--bg-display);
+      font-size:1.3rem; font-weight:600;
+      color:var(--bg-line);
+    }
+    .bg-callout.is-active .bg-callout-step{ color:var(--rls-red,#EA002A); }
+    .bg-col-right .bg-callout{ flex-direction:row; text-align:left; }
+    .bg-col-left .bg-callout{ flex-direction:row-reverse; text-align:right; }
 
-  /* ---------- Hero ---------- */
-  .hero {
-    position: relative;
-    background:
-      linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.45)),
-      linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-    color: var(--rlp-white);
-    padding: 100px 24px 110px;
-    overflow: hidden;
-  }
-  .hero::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 6px;
-    background: var(--rlp-red);
-  }
-  .hero-inner {
-    max-width: var(--content-width);
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
-  }
-  .hero .eyebrow {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--rlp-red);
-    margin-bottom: 24px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--rlp-red);
-  }
-  .hero h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 700;
-    line-height: 1.15;
-    margin: 0 0 24px;
-    letter-spacing: -0.5px;
-  }
-  .hero p.lead {
-    font-size: 19px;
-    font-weight: 300;
-    line-height: 1.6;
-    margin: 0 0 16px;
-    max-width: 720px;
-    color: rgba(255, 255, 255, 0.92);
-  }
+    /* ── Detail panel ── */
+    .bg-detail-section{ padding-bottom:clamp(50px,7vw,90px); }
+    .bg-detail{
+      background:#fff;
+      border:1px solid var(--bg-line);
+      border-top:4px solid var(--rls-red,#EA002A);
+      border-radius:0 0 6px 6px;
+      padding:clamp(28px,4vw,48px);
+      scroll-margin-top:190px;
+    }
+    .bg-detail-head{
+      display:flex; align-items:center; gap:18px;
+      margin-bottom:.4rem;
+    }
+    .bg-detail-badge{
+      flex:0 0 auto;
+      width:58px; height:58px; border-radius:50%;
+      background:var(--rls-red,#EA002A); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-family:var(--bg-display); font-size:1.7rem; font-weight:600;
+    }
+    .bg-detail-panel{ display:none; }
+    .bg-detail-panel.is-shown{ display:block; }
 
-  /* ---------- Intro Section ---------- */
-  .intro {
-    background: var(--rlp-white);
-    padding: 72px 24px 24px;
-  }
-  .intro-inner {
-    max-width: var(--content-width);
-    margin: 0 auto;
-  }
-  .intro h2 {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 700;
-    margin: 0 0 20px;
-    line-height: 1.3;
-  }
-  .intro p { margin: 0 0 16px; color: var(--rlp-dark-grey); }
+    .bg-detail-nav{
+      display:flex; justify-content:space-between;
+      gap:14px; margin-top:2rem;
+      border-top:1px solid var(--bg-line); padding-top:1.4rem;
+    }
+    .bg-nav-btn{
+      background:none; border:0; cursor:pointer;
+      font-family:var(--rls-sans);
+      display:flex; flex-direction:column; gap:2px;
+      transition:color .2s;
+    }
+    .bg-nav-btn:hover:not(:disabled) strong{ color:var(--rls-red,#EA002A); }
+    .bg-nav-btn:disabled{ opacity:.35; cursor:default; }
+    .bg-nav-btn .bg-nav-label{
+      font-size:.66rem; letter-spacing:.16em; text-transform:uppercase;
+      color:var(--bg-muted);
+    }
+    .bg-nav-btn.bg-nav-next{ text-align:right; align-items:flex-end; }
+    .bg-nav-btn strong{
+      font-weight:600; color:var(--rls-black,#000);
+      font-size:.92rem; transition:color .2s;
+    }
 
-  /* ---------- Accordion / Steps ---------- */
-  .steps {
-    padding: 32px 24px 72px;
-    background: var(--rlp-white);
-  }
-  .steps-inner {
-    max-width: var(--content-width);
-    margin: 0 auto;
-  }
-  .step {
-    border-bottom: 1px solid #e5e5e5;
-  }
-  .step:first-child { border-top: 1px solid #e5e5e5; }
-  .step summary {
-    list-style: none;
-    cursor: pointer;
-    padding: 24px 0;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    font-weight: 500;
-    font-size: 18px;
-    color: var(--rlp-black);
-    transition: color 0.2s ease;
-  }
-  .step summary::-webkit-details-marker { display: none; }
-  .step summary:hover { color: var(--rlp-red); }
-  .step summary:hover .step-num { background: var(--rlp-red); color: var(--rlp-white); }
-  .step-num {
-    flex: 0 0 auto;
-    width: 48px;
-    height: 48px;
-    border: 2px solid var(--rlp-black);
-    color: var(--rlp-black);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 16px;
-    transition: all 0.25s ease;
-  }
-  .step-title {
-    flex: 1;
-    letter-spacing: 0.2px;
-  }
-  .step-icon {
-    flex: 0 0 auto;
-    width: 24px;
-    height: 24px;
-    position: relative;
-    transition: transform 0.3s ease;
-  }
-  .step-icon::before,
-  .step-icon::after {
-    content: "";
-    position: absolute;
-    background: var(--rlp-black);
-    top: 50%;
-    left: 50%;
-    transition: all 0.3s ease;
-  }
-  .step-icon::before {
-    width: 14px;
-    height: 2px;
-    transform: translate(-50%, -50%);
-  }
-  .step-icon::after {
-    width: 2px;
-    height: 14px;
-    transform: translate(-50%, -50%);
-  }
-  .step[open] .step-num {
-    background: var(--rlp-red);
-    color: var(--rlp-white);
-    border-color: var(--rlp-red);
-  }
-  .step[open] summary { color: var(--rlp-red); }
-  .step[open] .step-icon::after {
-    transform: translate(-50%, -50%) rotate(90deg);
-    opacity: 0;
-  }
-  .step[open] .step-icon::before { background: var(--rlp-red); }
-  .step-content {
-    padding: 0 0 32px 72px;
-    color: var(--rlp-dark-grey);
-    animation: fadeIn 0.35s ease;
-  }
-  .step-content p { margin: 0 0 16px; }
-  .step-content ul {
-    margin: 0 0 20px;
-    padding-left: 20px;
-  }
-  .step-content li {
-    margin-bottom: 12px;
-    line-height: 1.65;
-  }
-  .step-content em { color: var(--rlp-black); font-style: italic; }
+    /* ── Alberta callout box ── */
+    .bg-flag{
+      background:var(--bg-flag);
+      border-left:3px solid var(--rls-red,#EA002A);
+      padding:22px 26px; margin:1.6rem 0;
+      border-radius:0 4px 4px 0;
+    }
+    .bg-flag-title{
+      font-weight:700; font-size:.78rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--rls-red,#EA002A);
+      margin-bottom:.5rem;
+    }
+    .bg-flag p{ color:var(--rls-dark-grey,#2A2A2A); margin:0 0 .6rem; font-size:.96rem; }
+    .bg-flag p:last-child{ margin-bottom:0; }
+    .bg-flag .bg-list{ color:var(--rls-dark-grey,#2A2A2A); margin-bottom:.6rem; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-4px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    .bg-note{
+      background:var(--bg-soft); padding:20px 24px;
+      margin:1.4rem 0; border-radius:4px;
+      font-size:.94rem; color:var(--rls-dark-grey,#2A2A2A);
+    }
+    .bg-note strong{ color:var(--rls-black,#000); }
+    .bg-note p{ margin:0; }
 
-  /* ---------- CTA Section ---------- */
-  .cta {
-    background: var(--rlp-black);
-    color: var(--rlp-white);
-    padding: 80px 24px;
-    text-align: center;
-  }
-  .cta-inner {
-    max-width: 720px;
-    margin: 0 auto;
-  }
-  .cta h2 {
-    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-    font-weight: 700;
-    margin: 0 0 16px;
-    line-height: 1.2;
-  }
-  .cta p {
-    font-size: 18px;
-    font-weight: 300;
-    margin: 0 0 32px;
-    color: rgba(255, 255, 255, 0.85);
-  }
-  .btn {
-    display: inline-block;
-    padding: 16px 40px;
-    background: var(--rlp-red);
-    color: var(--rlp-white);
-    font-weight: 500;
-    font-size: 15px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    transition: all 0.25s ease;
-    border: 2px solid var(--rlp-red);
-  }
-  .btn:hover {
-    background: var(--rlp-white);
-    color: var(--rlp-black);
-    border-color: var(--rlp-white);
-  }
+    /* ── two-column lists (needs/wants etc) ── */
+    .bg-cols{
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:1.4rem; margin:1.2rem 0;
+    }
+    .bg-col-card{
+      background:var(--bg-soft);
+      border-radius:5px; padding:20px 24px;
+    }
+    .bg-col-card h4{
+      font-family:var(--rls-sans); font-size:.82rem; font-weight:700;
+      letter-spacing:.08em; text-transform:uppercase;
+      color:var(--rls-red,#EA002A); margin:0 0 .7rem;
+    }
+    .bg-col-card ul{
+      list-style:none; margin:0; padding:0;
+      color:var(--rls-warm-grey,#6B6660); font-size:.93rem;
+    }
+    .bg-col-card li{
+      padding:.28rem 0 .28rem 1.1rem; position:relative;
+    }
+    .bg-col-card li::before{
+      content:''; position:absolute; left:0; top:.95em;
+      width:5px; height:5px; border-radius:50%;
+      background:var(--rls-red,#EA002A);
+    }
 
-  /* ---------- Footer ---------- */
-  footer {
-    background: var(--rlp-white);
-    padding: 56px 24px 24px;
-    border-top: 4px solid var(--rlp-red);
-  }
-  .footer-inner {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 40px;
-    margin-bottom: 40px;
-  }
-  .footer-col h4 {
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin: 0 0 16px;
-    color: var(--rlp-black);
-  }
-  .footer-col p, .footer-col a {
-    font-size: 14px;
-    color: var(--rlp-dark-grey);
-    line-height: 1.7;
-    margin: 0 0 6px;
-  }
-  .footer-col a:hover { color: var(--rlp-red); }
-  .footer-bottom {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding-top: 24px;
-    border-top: 1px solid var(--rlp-light-grey);
-    font-size: 12px;
-    color: var(--rlp-warm-grey);
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .footer-bottom .disclaimer {
-    max-width: 720px;
-    line-height: 1.6;
-  }
+    /* ── Tables ── */
+    .bg-table-scroll{ overflow-x:auto; margin:1.4rem 0; }
+    table.bg-table{
+      width:100%; border-collapse:collapse;
+      font-size:.92rem; min-width:460px;
+    }
+    table.bg-table th, table.bg-table td{
+      text-align:left; padding:12px 16px;
+      border-bottom:1px solid var(--bg-line); vertical-align:top;
+    }
+    table.bg-table thead th{
+      background:var(--rls-black,#000); color:#fff;
+      font-weight:600; font-size:.74rem;
+      letter-spacing:.1em; text-transform:uppercase;
+    }
+    table.bg-table tbody tr:nth-child(even){ background:var(--bg-soft); }
+    table.bg-table td:last-child{ color:var(--rls-warm-grey,#6B6660); }
 
-  /* ---------- Responsive ---------- */
-  @media (max-width: 768px) {
-    .hero { padding: 64px 20px 72px; }
-    .step summary { gap: 16px; padding: 20px 0; font-size: 16px; }
-    .step-num { width: 40px; height: 40px; font-size: 14px; }
-    .step-content { padding-left: 56px; }
-    nav.primary ul { gap: 16px; }
-    nav.primary a { font-size: 12px; }
-  }
-  @media (max-width: 480px) {
-    .step-content { padding-left: 0; padding-top: 8px; }
-    .topbar-right { font-size: 12px; gap: 14px; }
-  }
-</style>
+    /* ── Incentive cards ── */
+    .bg-incentives{
+      display:grid; grid-template-columns:repeat(2,1fr);
+      gap:18px; margin:1.6rem 0;
+    }
+    .bg-inc-card{
+      border:1px solid var(--bg-line);
+      border-top:3px solid var(--rls-red,#EA002A);
+      padding:22px 24px; border-radius:0 0 4px 4px;
+    }
+    .bg-inc-card h4{
+      font-family:var(--rls-sans); font-size:1rem; font-weight:600;
+      color:var(--rls-black,#000); margin:0 0 .3rem;
+    }
+    .bg-inc-amount{
+      font-family:var(--bg-display); font-size:1.7rem; font-weight:600;
+      color:var(--rls-red,#EA002A); line-height:1; margin-bottom:.5rem;
+    }
+    .bg-inc-card p{ font-size:.9rem; color:var(--rls-warm-grey,#6B6660); margin:0; }
+
+    /* ── Closing-cost calculator ── */
+    .bg-calc{
+      background:var(--rls-black,#000); color:#fff;
+      border-radius:6px; padding:clamp(28px,4vw,44px); margin:1.8rem 0;
+    }
+    .bg-calc h3{
+      font-family:var(--bg-display); font-weight:500; font-size:1.7rem;
+      color:#fff; margin:0 0 .3rem;
+    }
+    .bg-calc-sub{ font-size:.88rem; color:#b9b9b9; margin:0 0 1.6rem; }
+    .bg-calc-inputs{
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:20px 26px; margin-bottom:1.6rem;
+    }
+    .bg-calc-field label{
+      display:block; font-size:.72rem; letter-spacing:.16em;
+      text-transform:uppercase; color:#bdbdbd; margin-bottom:7px;
+    }
+    .bg-calc-field input{
+      width:100%; background:#1c1c1c;
+      border:1px solid #3a3a3a; border-radius:3px;
+      color:#fff; font-family:var(--rls-sans);
+      font-size:1rem; padding:11px 12px;
+    }
+    .bg-calc-field input:focus{ outline:none; border-color:var(--rls-red,#EA002A); }
+    .bg-calc-results{ border-top:1px solid #333; padding-top:1.4rem; }
+    .bg-calc-row{
+      display:flex; justify-content:space-between;
+      padding:9px 0; font-size:.94rem; border-bottom:1px solid #262626;
+    }
+    .bg-calc-row span:first-child{ color:#cfcfcf; }
+    .bg-calc-row span:last-child{ font-weight:500; }
+    .bg-calc-total{
+      display:flex; justify-content:space-between; align-items:baseline;
+      margin-top:1rem; padding-top:1rem;
+      border-top:2px solid var(--rls-red,#EA002A);
+    }
+    .bg-calc-total span:first-child{
+      font-size:.8rem; letter-spacing:.14em;
+      text-transform:uppercase; color:#fff;
+    }
+    .bg-calc-total span:last-child{
+      font-family:var(--bg-display); font-size:2.2rem; font-weight:600;
+      color:var(--rls-red,#EA002A);
+    }
+    .bg-calc-note{
+      font-size:.76rem; color:#8f8f8f;
+      margin-top:1.1rem; line-height:1.5;
+    }
+
+    /* ── Glossary accordion ── */
+    .bg-acc-item{ border-bottom:1px solid var(--bg-line); }
+    .bg-acc-q{
+      width:100%; background:var(--bg-soft); border:0; cursor:pointer;
+      display:flex; align-items:center; gap:16px;
+      padding:18px 22px; font-family:var(--rls-sans);
+      font-size:.98rem; font-weight:500; color:var(--rls-black,#000);
+      text-align:left; transition:background .2s;
+    }
+    .bg-acc-q:hover{ background:#efeeec; }
+    .bg-acc-icon{
+      font-size:1.3rem; color:var(--rls-red,#EA002A);
+      transition:transform .3s; flex-shrink:0; font-weight:300;
+    }
+    .bg-acc-item.open .bg-acc-icon{ transform:rotate(45deg); }
+    .bg-acc-a{
+      max-height:0; overflow:hidden;
+      transition:max-height .35s ease; background:var(--bg-soft);
+    }
+    .bg-acc-a p{ padding:0 22px 22px; margin:0; font-size:.93rem; color:var(--rls-warm-grey,#6B6660); }
+
+    /* ── CTA ── */
+    .bg-cta{
+      background:var(--rls-black,#000); color:#fff;
+      text-align:center; padding:clamp(60px,8vw,100px) 0;
+    }
+    .bg-cta h2{
+      font-family:var(--bg-display); font-weight:500;
+      font-size:clamp(2rem,4vw,3rem); color:#fff; margin:0 0 .6rem;
+    }
+    .bg-cta p{ color:#bdbdbd; max-width:540px; margin:0 auto 1.8rem; }
+    .bg-btn{
+      display:inline-block;
+      font-size:.78rem; letter-spacing:.2em; text-transform:uppercase;
+      padding:18px 44px; border-radius:40px;
+      background:var(--rls-red,#EA002A); color:#fff; font-weight:600;
+      border:1px solid var(--rls-red,#EA002A);
+      transition:transform .2s, background .2s;
+    }
+    .bg-btn:hover{
+      transform:translateY(-2px);
+      background:var(--rls-red-dk,#C20023); color:#fff;
+    }
+
+    /* ── Disclaimer ── */
+    .bg-disclaimer{ background:var(--bg-soft); padding:clamp(28px,4vw,40px) 0; }
+    .bg-disclaimer .bg-wrap{ font-size:.78rem; color:var(--bg-muted); line-height:1.6; }
+    .bg-disclaimer strong{ color:var(--rls-dark-grey,#2A2A2A); }
+
+    /* ── Responsive ── */
+    @media(max-width:1024px){
+      .bg-wheel-area{ flex-direction:column; }
+      .bg-callouts{
+        flex-direction:row; flex-wrap:wrap;
+        max-width:none; justify-content:center;
+      }
+      .bg-callout{ width:calc(50% - 6px); }
+      .bg-col-left .bg-callout{ flex-direction:row; text-align:left; }
+      .bg-wheel{ order:-1; }
+    }
+    @media(max-width:768px){
+      .bg-wrap{ padding:0 1.5rem; }
+      .bg-incentives{ grid-template-columns:1fr; }
+      .bg-calc-inputs{ grid-template-columns:1fr; }
+      .bg-cols{ grid-template-columns:1fr; }
+      .bg-callout{ width:100%; }
+    }
+  </style>
 </head>
 <body>
+  <!-- ─────────────────────────────────────────────
+       Header is injected automatically by header.js
+       ───────────────────────────────────────────── -->
+  <main>
 
-<!-- Top Bar -->
-<div class="topbar">
-  <div class="topbar-inner">
-    <div class="topbar-left">Royal LePage Solutions &mdash; Calgary &middot; Canmore &middot; Okotoks</div>
-    <div class="topbar-right">
-      <a href="tel:+14032525900">+1 (403) 252-5900</a>
-      <a href="mailto:solutionssouth@royallepage.ca">solutionssouth@royallepage.ca</a>
-    </div>
-  </div>
-</div>
-
-<!-- Header -->
-<header class="site-header">
-  <div class="header-inner">
-    <div class="logo">
-      ROYAL LE<span class="accent">PAGE</span><sup style="font-size:10px; vertical-align:super;">&reg;</sup>
-      <small>SOLUTIONS</small>
-    </div>
-    <nav class="primary" aria-label="Primary">
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Listings</a></li>
-        <li><a href="#">Our Agents</a></li>
-        <li><a href="#">Careers</a></li>
-        <li><a href="#" class="active">Buyers</a></li>
-        <li><a href="#">Sellers</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
-
-<!-- Hero -->
-<section class="hero">
-  <div class="hero-inner">
-    <span class="eyebrow">Buyer Resources</span>
-    <h1>You've made the decision. You're ready to buy. Now what?</h1>
-    <p class="lead">Buying a home can be a bit overwhelming. There's so much to think about and do. So, it's important that you have someone you can trust to make the process as smooth as possible and offer expert advice.</p>
-  </div>
-</section>
-
-<!-- Intro -->
-<section class="intro">
-  <div class="intro-inner">
-    <h2>Eight simple steps to your new home.</h2>
-    <p>It's all about helping you find the right home in the right neighbourhood at the best possible price. Below, you'll find it all outlined in eight simple steps &mdash; from deciding to buy through moving day.</p>
-  </div>
-</section>
-
-<!-- Steps Accordion -->
-<section class="steps">
-  <div class="steps-inner">
-
-    <!-- Step 1 -->
-    <details class="step">
-      <summary>
-        <span class="step-num">01</span>
-        <span class="step-title">Deciding to Buy</span>
-        <span class="step-icon" aria-hidden="true"></span>
-      </summary>
-      <div class="step-content">
-        <p>To buy a home, you need to be prepared and we are here to help you. Here are a few things to consider:</p>
-        <ul>
-          <li><strong>Define your needs and wants</strong> &mdash; make a list of the things you simply can't live without, like the number of bedrooms and bathrooms your family needs, proximity to schools and work, or storage needs. Then list some nice-to-haves: maybe a pool or deck, finished basement or mudroom. This will help you further down the road when you start looking at homes.</li>
-          <li><strong>Brush up on types of home ownership</strong> &mdash; make sure you know the difference between freehold (it's all yours), condo (you take care of the inside and pay fees to an association to look after the common areas and maintenance) and co-op (similar to condos but instead of "owning" your unit, you buy shares in the whole building and pay maintenance and repair fees).</li>
-          <li><strong>Understand market conditions</strong> &mdash; supply and demand can change from neighbourhood to neighbourhood, region to region. So, getting to know the market can help you get more bang for your buck. And so can your Real Estate agent.</li>
-        </ul>
+    <!-- ===================== HERO ===================== -->
+    <section class="bg-hero">
+      <div class="bg-hero-inner">
+        <span class="bg-eyebrow">Royal LePage Solutions</span>
+        <h1>Buying a Home in Alberta</h1>
+        <p>Buying a home is exciting — but it can also feel overwhelming. This
+        guide walks you through the whole process in simple terms, so you know
+        what to expect before, during, and after you buy.</p>
       </div>
-    </details>
+    </section>
 
-    <!-- Step 2 -->
-    <details class="step">
-      <summary>
-        <span class="step-num">02</span>
-        <span class="step-title">Choosing an Agent</span>
-        <span class="step-icon" aria-hidden="true"></span>
-      </summary>
-      <div class="step-content">
-        <p>Buying a home is personal and emotional. So the relationship with your real estate agent has to be built on expertise, trust and mutual respect. After all, they will be acting as your eyes, ears and voice throughout the process. They have a fiduciary duty to act in your best interests, to be completely transparent and accountable to you.</p>
-        <p>Here's what a Royal LePage<sup>&reg;</sup> agent will do:</p>
-        <ul>
-          <li>Educate you about the current market conditions</li>
-          <li>Discuss and analyze your wants and needs against your budget</li>
-          <li>Guide you to homes that fit your criteria</li>
-          <li>Coordinate the work of other professionals you'll need during the process</li>
-          <li>Negotiate with the seller on your behalf</li>
-          <li>Make sure all the required paperwork is fully completed, accurate and that deadlines are met</li>
-          <li>Work with you to resolve any challenges that may arise</li>
-        </ul>
-        <p>And while your agent will likely be a great source of advice on financing, it is ultimately your responsibility to understand and secure it. So, let's move on to financing&hellip;</p>
+    <!-- ===================== INFOGRAPHIC ===================== -->
+    <section class="bg-info-section">
+      <div class="bg-wrap">
+        <span class="bg-eyebrow">The 8-Step Journey</span>
+        <h2 class="bg-h2">Your Path to Owning a Home</h2>
+        <p class="bg-info-intro">Click any step on the wheel — or a card beside
+        it — to open that part of the guide.</p>
+
+        <div class="bg-wheel-area">
+
+          <!-- LEFT callout column: steps 1,2,3,4 -->
+          <div class="bg-callouts bg-col-left">
+            <button class="bg-callout" data-step="1">
+              <span class="bg-callout-step">01</span>
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/>
+                </svg>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Deciding to Buy</h4>
+                <p>Needs, wants &amp; choosing a location.</p>
+              </span>
+            </button>
+            <button class="bg-callout" data-step="2">
+              <span class="bg-callout-step">02</span>
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/>
+                </svg>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Choosing a REALTOR®</h4>
+                <p>How representation works in Alberta.</p>
+              </span>
+            </button>
+            <button class="bg-callout" data-step="3">
+              <span class="bg-callout-step">03</span>
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/>
+                </svg>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Understanding Your Budget</h4>
+                <p>Down payment &amp; mortgage pre-approval.</p>
+              </span>
+            </button>
+            <button class="bg-callout" data-step="4">
+              <span class="bg-callout-step">04</span>
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/><circle cx="12" cy="12" r="4"/>
+                </svg>
+              </span>
+              <span class="bg-callout-body">
+                <h4>First-Time Buyer Programs</h4>
+                <p>Federal programs that can help.</p>
+              </span>
+            </button>
+          </div>
+
+          <!-- WHEEL -->
+          <div class="bg-wheel">
+            <svg viewBox="0 0 320 320" role="img" aria-label="8-step buying journey wheel">
+              <g id="bg-ring"></g>
+              <circle cx="160" cy="160" r="84" fill="#ffffff" stroke="#e3e1dd" stroke-width="1.5"/>
+              <text class="bg-hub-text" x="160" y="142" text-anchor="middle"
+                    font-size="17" font-weight="800" letter-spacing="1">8 STEPS</text>
+              <text class="bg-hub-text" x="160" y="164" text-anchor="middle"
+                    font-size="12.5" font-weight="600" fill="#6B6660" letter-spacing="2">TO BUYING A</text>
+              <text class="bg-hub-text" x="160" y="184" text-anchor="middle"
+                    font-size="12.5" font-weight="600" fill="#6B6660" letter-spacing="1.5">HOME IN ALBERTA</text>
+            </svg>
+          </div>
+
+          <!-- RIGHT callout column: steps 5,6,7,8 -->
+          <div class="bg-callouts bg-col-right">
+            <button class="bg-callout" data-step="5">
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 3v4a1 1 0 0 0 1 1h4M7 3h8l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM9 13l2 2 4-4"/>
+                </svg>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Making an Offer</h4>
+                <p>The AREA contract, conditions &amp; deposit.</p>
+              </span>
+              <span class="bg-callout-step">05</span>
+            </button>
+            <button class="bg-callout" data-step="6">
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 11l3 3 8-8M21 12a9 9 0 1 1-6.2-8.6"/>
+                </svg>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Inspections &amp; Documents</h4>
+                <p>Home inspection, condo docs &amp; the RPR.</p>
+              </span>
+              <span class="bg-callout-step">06</span>
+            </button>
+            <button class="bg-callout" data-step="7">
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14h3"/>
+                </svg>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Closing Costs</h4>
+                <p>What to budget beyond the down payment.</p>
+              </span>
+              <span class="bg-callout-step">07</span>
+            </button>
+            <button class="bg-callout" data-step="8">
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 7h18M5 7l1 13a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1l1-13M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/>
+                </svg>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Closing &amp; Moving In</h4>
+                <p>Your lawyer, possession day &amp; the move.</p>
+              </span>
+              <span class="bg-callout-step">08</span>
+            </button>
+          </div>
+
+        </div>
       </div>
-    </details>
+    </section>
 
-    <!-- Step 3 -->
-    <details class="step">
-      <summary>
-        <span class="step-num">03</span>
-        <span class="step-title">Understanding Financing</span>
-        <span class="step-icon" aria-hidden="true"></span>
-      </summary>
-      <div class="step-content">
-        <p>Like many things in life, planning ahead is the key to success. So, you should know the price range you can afford before you start shopping. Here are a few things to keep in mind:</p>
-        <ul>
-          <li><strong>Down payment</strong> &mdash; this is usually the percentage of the total cost of a home that you'll need to pay. The more money you put down, the more money you'll save on monthly payments and, in the long run, interest paid.</li>
-          <li><strong>Knowing what you can afford</strong> &mdash; how much house you can afford comes down to 3 factors: your monthly mortgage payment, your down payment and the amortization period or length of time it will take to pay off the loan.</li>
-          <li><strong>Getting pre-approved</strong> &mdash; this will really help you figure out what you can spend on a home because you'll know before you start shopping. And you'll be protected against rising interest rates as well.</li>
-        </ul>
+    <!-- ===================== DETAIL PANEL ===================== -->
+    <section class="bg-detail-section">
+      <div class="bg-wrap">
+        <div class="bg-detail" id="bg-detail">
+
+          <!-- ===== STEP 1 — Deciding to Buy ===== -->
+          <div class="bg-detail-panel" data-panel="1">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">01</div>
+              <h2 class="bg-h2">Deciding to Buy</h2>
+            </div>
+            <div class="bg-rule"></div>
+            <p class="bg-p">Before you start looking at homes, it helps to
+            understand what you need, what you want, and what you can afford.
+            A clear picture now keeps you focused later.</p>
+
+            <h3 class="bg-h3">Think About Your Needs and Wants</h3>
+            <p class="bg-p">Start by making two lists. Needs are the things you
+            must have. Wants are the things that would be nice to have. This
+            helps you stay focused once you start viewing homes.</p>
+            <div class="bg-cols">
+              <div class="bg-col-card">
+                <h4>Needs — Must Have</h4>
+                <ul>
+                  <li>Number of bedrooms</li>
+                  <li>Number of bathrooms</li>
+                  <li>Location</li>
+                  <li>Parking</li>
+                  <li>Within budget</li>
+                  <li>School area</li>
+                  <li>Commute time</li>
+                </ul>
+              </div>
+              <div class="bg-col-card">
+                <h4>Wants — Nice to Have</h4>
+                <ul>
+                  <li>Finished basement</li>
+                  <li>Large yard</li>
+                  <li>Deck</li>
+                  <li>Garage</li>
+                  <li>Updated kitchen</li>
+                  <li>Extra storage</li>
+                </ul>
+              </div>
+            </div>
+
+            <h3 class="bg-h3">Think About Location</h3>
+            <p class="bg-p">In Calgary and Alberta, location affects both your
+            day-to-day life and the home's future resale value. Things worth
+            considering include distance to work, access to Deerfoot Trail or
+            Stoney Trail, LRT or transit access, nearby schools, parks and
+            pathways, grocery stores, community amenities, and any future
+            development planned for the area. A REALTOR® can help you compare
+            how different communities stack up.</p>
+
+            <h3 class="bg-h3">Types of Home Ownership</h3>
+            <p class="bg-p">There are a few different ways to own property in
+            Alberta:</p>
+            <ul class="bg-list">
+              <li><strong>Freehold</strong> — you own the home and the land,
+              and you're responsible for maintaining both the inside and the
+              outside. Detached homes, semi-detached homes, and some townhomes
+              are freehold.</li>
+              <li><strong>Condominium</strong> — you usually own the inside of
+              your unit and share ownership of the common areas. Monthly condo
+              fees help cover building maintenance, insurance for common areas,
+              landscaping, snow removal, and reserve fund savings. Condos
+              include apartments, townhomes, and some bare-land condos.</li>
+              <li><strong>Bare-land condominium</strong> — a type of condo
+              where you may own the lot and the home but still share
+              responsibility for common property, roads, or amenities. They're
+              common enough in Alberta that it's worth understanding them
+              before you buy.</li>
+            </ul>
+          </div>
+
+          <!-- ===== STEP 2 — Choosing a REALTOR ===== -->
+          <div class="bg-detail-panel" data-panel="2">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">02</div>
+              <h2 class="bg-h2">Choosing a REALTOR®</h2>
+            </div>
+            <div class="bg-rule"></div>
+            <p class="bg-p">A REALTOR® helps guide you through the buying
+            process. They can help you understand the market, find homes that
+            match your needs, book showings, review pricing, write offers,
+            negotiate with the seller, keep track of deadlines, and connect you
+            with mortgage brokers, lawyers, inspectors, and other
+            professionals.</p>
+
+            <h3 class="bg-h3">Working With a REALTOR® in Alberta</h3>
+            <p class="bg-p">In Alberta, real estate professionals are regulated
+            by the Real Estate Council of Alberta, known as RECA. When you work
+            with a REALTOR® as a client, you'll usually sign a written
+            agreement called a Written Service Agreement. For buyers, this is
+            often an Exclusive Buyer Representation Agreement. It explains who
+            is representing you, how long the agreement lasts, what kind of
+            property you're looking for, how your REALTOR® is paid, and what
+            happens if there's a conflict of interest.</p>
+
+            <h3 class="bg-h3">Alberta Relationship Types</h3>
+            <p class="bg-p">There are three main ways a buyer can work with a
+            real estate professional in Alberta:</p>
+            <ul class="bg-list">
+              <li><strong>Designated Agency</strong> — the most common. Your
+              specific REALTOR® represents you and acts in your best interest,
+              owing you duties like loyalty, confidentiality, full disclosure,
+              reasonable care, and proper accounting.</li>
+              <li><strong>Transaction Brokerage</strong> — this can happen when
+              the same REALTOR® is involved with both the buyer and the seller.
+              The REALTOR® can't favour either side and acts more like a
+              neutral helper. Both the buyer and seller must agree to this in
+              writing.</li>
+              <li><strong>Customer Status</strong> — you are not being
+              represented as a client. The REALTOR® can give you information,
+              but they aren't giving you full advice or acting in your best
+              interest the way they would for a client.</li>
+            </ul>
+          </div>
+
+          <!-- ===== STEP 3 — Understanding Your Budget ===== -->
+          <div class="bg-detail-panel" data-panel="3">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">03</div>
+              <h2 class="bg-h2">Understanding Your Budget</h2>
+            </div>
+            <div class="bg-rule"></div>
+            <p class="bg-p">Before you start shopping, you need to know what
+            you can afford. Your budget depends on your down payment, your
+            mortgage approval, how comfortable you are with the monthly
+            payment, property taxes, condo fees if they apply, utilities,
+            insurance, and ongoing repairs and maintenance.</p>
+
+            <h3 class="bg-h3">Minimum Down Payment in Canada</h3>
+            <div class="bg-table-scroll">
+              <table class="bg-table">
+                <thead>
+                  <tr><th>Purchase Price</th><th>Minimum Down Payment</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>First $500,000</td><td>5%</td></tr>
+                  <tr><td>$500,000 to $1,499,999</td><td>10% on the amount above $500,000</td></tr>
+                  <tr><td>$1.5 million or more</td><td>20%</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="bg-p">If you put down less than 20%, you usually need
+            mortgage default insurance. This insurance protects the lender, not
+            the buyer — but the buyer pays for it, and the cost is usually
+            added to your mortgage.</p>
+
+            <h3 class="bg-h3">Mortgage Pre-Approval</h3>
+            <p class="bg-p">A mortgage pre-approval helps you understand your
+            price range before you start making offers. A lender or mortgage
+            broker will usually review your income, employment history, credit
+            score, debt payments, down payment source, tax documents, and
+            identification. A pre-approval may also hold an interest rate for a
+            set period, often 90 to 120 days.</p>
+          </div>
+
+          <!-- ===== STEP 4 — First-Time Buyer Programs ===== -->
+          <div class="bg-detail-panel" data-panel="4">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">04</div>
+              <h2 class="bg-h2">First-Time Buyer Programs</h2>
+            </div>
+            <div class="bg-rule"></div>
+            <p class="bg-p">There are several federal programs that may help
+            first-time buyers in Alberta.</p>
+
+            <div class="bg-incentives">
+              <div class="bg-inc-card">
+                <h4>First Home Savings Account (FHSA)</h4>
+                <div class="bg-inc-amount">$40,000</div>
+                <p>Lets eligible first-time buyers save for a home. You may be
+                able to contribute up to $8,000 per year, to a $40,000 lifetime
+                total. The money can grow tax-free if it's used for a
+                qualifying home purchase.</p>
+              </div>
+              <div class="bg-inc-card">
+                <h4>RRSP Home Buyers' Plan</h4>
+                <div class="bg-inc-amount">$60,000</div>
+                <p>Lets eligible first-time buyers withdraw money from their
+                RRSP to buy a home — up to $60,000 per person, or $120,000
+                combined for a couple. This money must be repaid over time.</p>
+              </div>
+              <div class="bg-inc-card">
+                <h4>First-Time Home Buyers' Tax Credit</h4>
+                <div class="bg-inc-amount">Tax Credit</div>
+                <p>Eligible buyers may be able to claim a tax credit when they
+                buy a qualifying home, which can reduce the amount of federal
+                tax they owe.</p>
+              </div>
+              <div class="bg-inc-card">
+                <h4>GST Rebate for New Homes</h4>
+                <div class="bg-inc-amount">New Builds</div>
+                <p>Some first-time buyers purchasing new homes may qualify for
+                GST savings. This is especially worth checking if you're buying
+                a new build.</p>
+              </div>
+            </div>
+
+            <div class="bg-note">
+              <p>Because program rules can change, confirm the details with
+              your lender, accountant, lawyer, or official Government of Canada
+              sources before relying on any program.</p>
+            </div>
+
+            <h3 class="bg-h3">The Alberta Advantage: No Land Transfer Tax</h3>
+            <p class="bg-p">One major benefit of buying in Alberta is that the
+            province does not charge a provincial land transfer tax. In some
+            provinces, buyers can pay thousands of dollars in land transfer
+            taxes. In Alberta, buyers instead pay smaller Land Titles
+            registration fees, based on the purchase price and the mortgage
+            amount. This can make closing costs lower here than in provinces
+            like Ontario or British Columbia. You can estimate those fees with
+            the calculator in Step 7.</p>
+          </div>
+
+          <!-- ===== STEP 5 — Finding a Home & Making an Offer ===== -->
+          <div class="bg-detail-panel" data-panel="5">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">05</div>
+              <h2 class="bg-h2">Finding a Home &amp; Making an Offer</h2>
+            </div>
+            <div class="bg-rule"></div>
+
+            <h3 class="bg-h3">When Viewing Homes, Look At</h3>
+            <p class="bg-p">It's easy to get distracted by paint, furniture, or
+            staging. Try to focus on the things that are harder or more
+            expensive to change: the layout, size, storage, natural light,
+            parking, and yard space; the age of the windows, roof, furnace, and
+            hot water tank; any signs of water damage; the neighbouring
+            properties, noise levels, and street parking; and the condo rules,
+            if they apply.</p>
+
+            <h3 class="bg-h3">Ask Good Questions</h3>
+            <p class="bg-p">When viewing a home, ask things like: How old is
+            the roof? How old is the furnace? Have there been any water issues?
+            Are there any known defects? What's included in the sale? And for
+            condos — are there any upcoming fee increases or special
+            assessments? A good REALTOR® will help you ask the right
+            questions.</p>
+
+            <h3 class="bg-h3">Making an Offer</h3>
+            <p class="bg-p">When you find the right home, your REALTOR® helps
+            you write an offer. In Alberta, the standard form is usually the
+            AREA Residential Purchase Contract. Your offer will usually include
+            the purchase price, deposit amount, financing terms, conditions,
+            inclusions and exclusions, the possession date, and a deadline for
+            acceptance.</p>
+
+            <h3 class="bg-h3">Common Conditions</h3>
+            <p class="bg-p">A condition is something that must be satisfied
+            before the deal becomes firm. Common buyer conditions include
+            financing approval, a home inspection, a condo document review, and
+            the sale of the buyer's current home. If the buyer can't satisfy or
+            waive the conditions by the deadline, the contract may end and the
+            deposit is usually returned.</p>
+
+            <div class="bg-flag">
+              <div class="bg-flag-title">About the Deposit</div>
+              <p>In Alberta, the deposit is usually due shortly after the offer
+              is accepted. It's held in trust, often by the listing brokerage.
+              Your REALTOR® will explain the deadline and how the deposit must
+              be delivered.</p>
+            </div>
+          </div>
+
+          <!-- ===== STEP 6 — Inspections & Documents ===== -->
+          <div class="bg-detail-panel" data-panel="6">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">06</div>
+              <h2 class="bg-h2">Inspections &amp; Documents</h2>
+            </div>
+            <div class="bg-rule"></div>
+
+            <h3 class="bg-h3">Home Inspections</h3>
+            <p class="bg-p">A home inspection helps you better understand the
+            condition of the property. An inspector may look at the roof,
+            attic, foundation, plumbing, electrical, heating and cooling,
+            windows, doors, basement, exterior, drainage, and any safety
+            concerns.</p>
+            <div class="bg-flag">
+              <div class="bg-flag-title">Alberta Rule</div>
+              <p>In Alberta, home inspectors must be licensed. If your contract
+              has a property inspection condition, it should be completed by a
+              licensed home inspector.</p>
+            </div>
+
+            <h3 class="bg-h3">Condo Document Review</h3>
+            <p class="bg-p">If you're buying a condo, review the condo
+            documents carefully. This helps you understand the financial and
+            physical health of the condo corporation. Important documents may
+            include the bylaws and rules, budget, financial statements, reserve
+            fund study and plan, board and AGM meeting minutes, insurance
+            certificate, estoppel certificate, information certificate,
+            management agreements, and any special assessments.</p>
+            <p class="bg-p">A document review can help spot issues like low
+            reserve fund savings, upcoming repairs, lawsuits, large fee
+            increases, special assessments, and rental or pet restrictions.
+            This step is very important for condo buyers.</p>
+
+            <h3 class="bg-h3">Real Property Report (RPR)</h3>
+            <p class="bg-p">In Alberta, detached homes and some bare-land
+            condos often involve a Real Property Report, or RPR. It's a
+            survey-style document showing property boundaries, buildings,
+            decks, garages, fences, sheds, and any encroachments. It's often
+            paired with municipal compliance — meaning the municipality has
+            reviewed the RPR and confirmed whether the improvements meet local
+            rules. Sometimes buyers and sellers agree to use title insurance
+            instead of a current RPR; discuss that carefully with your
+            REALTOR® and lawyer.</p>
+          </div>
+
+          <!-- ===== STEP 7 — Closing Costs ===== -->
+          <div class="bg-detail-panel" data-panel="7">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">07</div>
+              <h2 class="bg-h2">Closing Costs in Alberta</h2>
+            </div>
+            <div class="bg-rule"></div>
+            <p class="bg-p">On top of your down payment, you'll need to budget
+            for closing costs. A simple rule is to set aside roughly 1.5% to 4%
+            of the purchase price, depending on the property. Your lawyer,
+            lender, and REALTOR® can help you estimate the amount more
+            accurately.</p>
+
+            <h3 class="bg-h3">Common Closing Costs</h3>
+            <div class="bg-table-scroll">
+              <table class="bg-table">
+                <thead>
+                  <tr><th>Cost</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Legal fees</td><td>Your real estate lawyer's fee for closing the deal</td></tr>
+                  <tr><td>Land Titles registration fees</td><td>Based on purchase price and mortgage amount — see the calculator below</td></tr>
+                  <tr><td>Home inspection</td><td>Recommended on most purchases</td></tr>
+                  <tr><td>Condo document review</td><td>If you're buying a condo</td></tr>
+                  <tr><td>Title insurance</td><td>Helps protect against certain title or property issues</td></tr>
+                  <tr><td>Property tax adjustment</td><td>Pro-rated between buyer and seller at closing</td></tr>
+                  <tr><td>Condo fee adjustment</td><td>Same pro-rating idea, for condo purchases</td></tr>
+                  <tr><td>Home insurance</td><td>Must be active by possession day</td></tr>
+                  <tr><td>Appraisal fee</td><td>If your lender requires one</td></tr>
+                  <tr><td>Moving costs</td><td>Movers, supplies, and time off</td></tr>
+                  <tr><td>Utility setup costs</td><td>Connecting power, gas, water, and internet</td></tr>
+                  <tr><td>GST on new homes</td><td>If you're buying a new build</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="bg-flag">
+              <div class="bg-flag-title">The Alberta Advantage</div>
+              <p>Alberta doesn't charge a provincial land transfer tax. Instead
+              of paying thousands in transfer tax like buyers in some
+              provinces, Alberta buyers pay two smaller Land Titles
+              registration fees — one for the property transfer and one for the
+              mortgage. Try the calculator below to estimate yours.</p>
+            </div>
+
+            <div class="bg-calc">
+              <h3>Land Titles Fee Calculator</h3>
+              <p class="bg-calc-sub">Estimate the two Alberta Land Titles
+              registration fees on your purchase.</p>
+              <div class="bg-calc-inputs">
+                <div class="bg-calc-field">
+                  <label for="calcPrice">Purchase Price ($)</label>
+                  <input type="number" id="calcPrice" value="550000" min="0" step="5000">
+                </div>
+                <div class="bg-calc-field">
+                  <label for="calcMortgage">Mortgage Amount ($)</label>
+                  <input type="number" id="calcMortgage" value="440000" min="0" step="5000">
+                </div>
+              </div>
+              <div class="bg-calc-results">
+                <div class="bg-calc-row">
+                  <span>Property Transfer Registration Fee</span>
+                  <span id="calcTransfer">$600</span>
+                </div>
+                <div class="bg-calc-row">
+                  <span>Mortgage Registration Fee</span>
+                  <span id="calcMtg">$490</span>
+                </div>
+                <div class="bg-calc-total">
+                  <span>Estimated Land Titles Fees</span>
+                  <span id="calcTotal">$1,090</span>
+                </div>
+              </div>
+              <p class="bg-calc-note">This is an estimate of Land Titles
+              registration fees only — it doesn't include legal fees, title
+              insurance, inspections, or tax adjustments. Fee formulas can
+              change, so confirm the exact amounts with your lawyer.</p>
+            </div>
+          </div>
+
+          <!-- ===== STEP 8 — Closing & Moving In ===== -->
+          <div class="bg-detail-panel" data-panel="8">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">08</div>
+              <h2 class="bg-h2">Closing &amp; Moving In</h2>
+            </div>
+            <div class="bg-rule"></div>
+
+            <h3 class="bg-h3">Working With a Real Estate Lawyer</h3>
+            <p class="bg-p">In Alberta, a real estate lawyer is needed to close
+            the transaction. Your lawyer reviews the closing documents,
+            transfers the title, registers the mortgage, sends the funds,
+            reviews tax adjustments, confirms the title insurance or RPR
+            details, makes sure the seller is paid, and completes the legal
+            transfer of ownership. You'll usually meet your lawyer before
+            possession day to sign the final documents.</p>
+
+            <h3 class="bg-h3">Possession Day</h3>
+            <p class="bg-p">Possession day is the day you officially get the
+            keys. It usually happens around noon, though the exact timing
+            depends on when funds are transferred and released. Before
+            possession, make sure your home insurance is active, your utilities
+            are set up, your lawyer has everything they need, your down payment
+            and closing funds are ready, and you know where and when the keys
+            will be released. Once the seller's lawyer receives the funds and
+            authorizes release, the keys can be handed to you.</p>
+
+            <h3 class="bg-h3">Moving Checklist</h3>
+            <p class="bg-p">Moving is much easier when you start early. Things
+            to take care of include:</p>
+            <ul class="bg-list">
+              <li>Book movers, and pack and label your boxes.</li>
+              <li>Change your address and forward your mail through Canada
+              Post.</li>
+              <li>Set up utilities, internet, and cable.</li>
+              <li>Update your driver's licence address and vehicle
+              registration.</li>
+              <li>Update your Alberta Health Care information.</li>
+              <li>Notify your employer, banks, and credit card companies.</li>
+              <li>Plan food and supplies for moving day.</li>
+            </ul>
+
+            <div class="bg-note">
+              <p><strong>You don't have to figure this out alone.</strong>
+              Buying a home is a major decision, but the right REALTOR® can
+              help you understand the process, avoid common mistakes, and make
+              confident decisions — from the first showing to possession
+              day.</p>
+            </div>
+          </div>
+
+          <!-- prev / next -->
+          <div class="bg-detail-nav">
+            <button class="bg-nav-btn bg-nav-prev" id="bgPrev" type="button">
+              <span class="bg-nav-label">Previous Step</span>
+              <strong id="bgPrevLabel">—</strong>
+            </button>
+            <button class="bg-nav-btn bg-nav-next" id="bgNext" type="button">
+              <span class="bg-nav-label">Next Step</span>
+              <strong id="bgNextLabel">—</strong>
+            </button>
+          </div>
+
+        </div>
       </div>
-    </details>
+    </section>
 
-    <!-- Step 4 -->
-    <details class="step">
-      <summary>
-        <span class="step-num">04</span>
-        <span class="step-title">Finding the Right Home to Buy</span>
-        <span class="step-icon" aria-hidden="true"></span>
-      </summary>
-      <div class="step-content">
-        <p>So now it's time to get out there and find your dream home. Most people start off by having a neighbourhood in mind but a great agent may suggest options that you may not have thought of. Here are some considerations as you set out to house hunt:</p>
-        <ul>
-          <li><strong>Choosing the right neighbourhood</strong> &mdash; Do you need to be close to schools, public transit, highways or where you work? Those can be huge factors when choosing an area to live. And let's not forget proximity to other amenities like parks, grocery stores, doctors and recreational centres. Drive around and check out the appearance of other homes in the area. Are they well taken care of? Of course, your agent will be able to inform you of property values in the area and how they've changed over the years.</li>
-          <li><strong>House hunting</strong> &mdash; the hunt can be a lot of work but it can also be a lot of fun. So when you visit homes, go with a partner &mdash; spouse, parent, friend &mdash; because two sets of eyes are better than one. Don't be shy about asking some tough questions regarding the home. Take some pictures or video on your smartphone so you can reference it later. And remember that checklist you made? It will come in handy now.</li>
-          <li><strong>View open houses with open eyes</strong> &mdash; curb appeal is one thing but try not to focus on the bells and whistles. Keep a lookout for things like doors and windows (are they new/old?), water leaks, squeaky floors, soggy areas around the yard that indicate poor drainage and could lead to a wet basement, missing shingles, lighting, etc. You'll be getting a home inspection later, but it doesn't hurt to start with your own observations.</li>
-        </ul>
-        <p>And when you finally find the home you can see yourself living in, it's time for the next step&hellip;</p>
+    <!-- ===================== GLOSSARY ===================== -->
+    <section class="bg-info-section" style="padding-top:0;">
+      <div class="bg-wrap" style="max-width:920px;">
+        <h2 class="bg-h2">Common Terms Buyers Should Know</h2>
+        <div class="bg-rule" style="margin-left:auto;margin-right:auto;"></div>
+        <div class="bg-acc" style="text-align:left;">
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Amortization</button>
+            <div class="bg-acc-a"><p>The total length of time it would take to pay off your mortgage if your payments stayed the same.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Mortgage Term</button>
+            <div class="bg-acc-a"><p>The length of your current mortgage agreement, such as 3 or 5 years.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Condo Fees</button>
+            <div class="bg-acc-a"><p>Monthly fees paid by condo owners to help cover shared expenses.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Reserve Fund</button>
+            <div class="bg-acc-a"><p>Money saved by a condo corporation for future repairs and replacements.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Title Insurance</button>
+            <div class="bg-acc-a"><p>Insurance that helps protect against certain title or property issues.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Real Property Report</button>
+            <div class="bg-acc-a"><p>A document that shows the property's boundaries and improvements, such as buildings, decks, and fences.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Material Latent Defect</button>
+            <div class="bg-acc-a"><p>A serious defect that may not be visible during a normal inspection and that may affect the property's value or use.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>RMS (Residential Measurement Standard)</button>
+            <div class="bg-acc-a"><p>The standard used in Alberta to measure the size of residential property, so square footage is reported consistently.</p></div>
+          </div>
+        </div>
       </div>
-    </details>
+    </section>
 
-    <!-- Step 5 -->
-    <details class="step">
-      <summary>
-        <span class="step-num">05</span>
-        <span class="step-title">Making an Offer on a Home</span>
-        <span class="step-icon" aria-hidden="true"></span>
-      </summary>
-      <div class="step-content">
-        <p>You've fallen in love. But it's important that you don't let your emotions get the better of you when making an offer. Remember, real estate is an investment. Fortunately, your real estate agent is there to help you put together an Offer to Purchase and discuss all the details. Here are a few things you should know:</p>
-        <ul>
-          <li><strong>Not all offers are the same</strong> &mdash; the main factors on most offers will include price, deposit, terms (which includes financing details), conditions, specific items that are included or not with the home and the closing date. From there, you can decide to make a "firm" offer which means that you're willing to buy the home exactly as it is. Or, you could make the offer "conditional" on things like a home inspection, approval of financing or the sale of your existing home.</li>
-          <li><strong>Negotiating may come into play</strong> &mdash; the seller will either accept your offer, reject it or make a counter offer based on things like price, closing date or other conditions. While receiving a counter offer may be unsettling, know that your real estate agent has plenty of experience to help you. Some good tips for negotiating are: making sure what you're asking for is fair and equitable; be polite and collaborative; hold fast to your "needs" and be flexible on your "wants"; and know when to walk away no matter how hard that may be.</li>
-        </ul>
-        <p>After agreeing on terms and signing the offer, it's time for the next step&hellip;</p>
+    <!-- ===================== CTA ===================== -->
+    <section class="bg-cta">
+      <div class="bg-wrap">
+        <h2>Ready to Take the First Step?</h2>
+        <p>Buying a home is a big decision — but you don't have to figure it
+        out alone. Let's talk through your plans and get you started.</p>
+        <a href="https://info.royallepagesolutions.com/pages/contact/" class="bg-btn">Book a Free Consultation</a>
       </div>
-    </details>
+    </section>
 
-    <!-- Step 6 -->
-    <details class="step">
-      <summary>
-        <span class="step-num">06</span>
-        <span class="step-title">What to do Before Buying a House</span>
-        <span class="step-icon" aria-hidden="true"></span>
-      </summary>
-      <div class="step-content">
-        <p>In addition to your real estate agent, you will now need to bring in a few pros to help get you to the finish line and make sure the investment you're about to make is sound. Your real estate agent can put you in touch with these people and make recommendations. Here are a couple of key people you should be talking to:</p>
-        <ul>
-          <li><strong>A home inspector</strong> &mdash; an absolute must in saving you from some unpleasant surprises later on. A home inspector will check your property for any structural damage; perform a thorough examination of the heating and cooling system, plumbing and electrical systems, the roof, attic, walls, ceilings, floors, windows, doors, foundation, basement and more; then prepare a complete written report detailing all their findings.</li>
-          <li><strong>A legal professional</strong> &mdash; when it comes to complex legal documents, it takes a lawyer experienced in Canadian real estate law to help make sure that you and your investment are protected. A real estate lawyer will review the agreement of purchase and sale, do a property title search, check that your home complies with current building and zoning codes, ensure utilities and property taxes are paid up, review the mortgage agreement, and get all the paperwork ready for closing.</li>
-        </ul>
-        <p>You're almost in the home stretch now. Just a couple more steps&hellip;</p>
+    <!-- ===================== DISCLAIMER ===================== -->
+    <section class="bg-disclaimer">
+      <div class="bg-wrap">
+        <p><strong>Please note:</strong> This guide is general information for
+        Alberta home buyers and is not legal, financial, or tax advice. Program
+        details, costs, fees, and government rules can change. Always confirm
+        the details with your REALTOR®, lawyer, lender, accountant, and the
+        relevant government sources before you rely on them. Royal LePage® and
+        REALTOR® are trademarks used under licence.</p>
       </div>
-    </details>
+    </section>
 
-    <!-- Step 7 -->
-    <details class="step">
-      <summary>
-        <span class="step-num">07</span>
-        <span class="step-title">Closing on a Home</span>
-        <span class="step-icon" aria-hidden="true"></span>
-      </summary>
-      <div class="step-content">
-        <p>Closing day is the day you officially take ownership of your new home. It's an exciting time for sure. But there are a couple of details you need to keep in mind before you get handed the keys:</p>
-        <ul>
-          <li><strong>Closing costs</strong> &mdash; these fees need to be paid by or on the closing day and include mortgage application fees, inspections, legal fees, insurance, registration and more.</li>
-        </ul>
-        <p>All these costs might make your head spin. But you can take solace in the fact that your real estate agent will be a great help in managing all of this and get you to your last step&hellip;</p>
-      </div>
-    </details>
+  </main>
 
-    <!-- Step 8 -->
-    <details class="step">
-      <summary>
-        <span class="step-num">08</span>
-        <span class="step-title">Home Moving Tips</span>
-        <span class="step-icon" aria-hidden="true"></span>
-      </summary>
-      <div class="step-content">
-        <p>The day has arrived. And there will be as much excitement as there will be sore backs. But you can take the pain out of moving day by planning ahead. Here are some tips for a smooth move:</p>
-        <ul>
-          <li>Make a moving checklist that details a plan for things that need to be done weeks before you move all the way up to moving day itself.</li>
-          <li>Plan for packing by clearly labeling boxes with the rooms they are to go to. You might even want to provide a small floor plan for the movers so they know exactly where to take them.</li>
-          <li>Make sure you get competitive quotes from reliable moving companies. Or, to save money, find out how much it would cost to hire a moving van yourself (and bribe your friends to help you).</li>
-          <li>If you own your current home, cancel your cable and utilities and transfer any rented appliances (like water heater or furnace) to the new homeowners. While you're at it, make sure to have the gas, electricity, cable and phone hooked up at your new home.</li>
-          <li>Inform your key contacts &mdash; work, Canada Post, doctors, friends, pharmacy, etc. &mdash; of your change of address.</li>
-          <li>If you have children, make sure you talk to them and explain why you're moving and reassure them that the friends they've made can continue to be their friends. Ask for their opinion too on things like what colour to paint their rooms. Try and make it exciting for them.</li>
-          <li>On moving day, plan an easy meal like picking up some take-out. Moving is stressful enough without having to cook.</li>
-        </ul>
-        <p><em>Congratulations. You're all moved in. Welcome home!</em></p>
-      </div>
-    </details>
+  <script>
+  (function(){
+    /* ---------- Step metadata ---------- */
+    var STEPS=[
+      {n:1,title:'Deciding to Buy'},
+      {n:2,title:'Choosing a REALTOR\u00AE'},
+      {n:3,title:'Understanding Your Budget'},
+      {n:4,title:'First-Time Buyer Programs'},
+      {n:5,title:'Finding a Home & Making an Offer'},
+      {n:6,title:'Inspections & Documents'},
+      {n:7,title:'Closing Costs'},
+      {n:8,title:'Closing & Moving In'}
+    ];
+    /* segment fill colours — RLP-approved palette, alternating */
+    var SEG_FILL=['#EA002A','#B8AC9C','#C20023','#6B6660',
+                  '#EA002A','#B8AC9C','#C20023','#6B6660'];
 
-  </div>
-</section>
+    /* ---------- Build the SVG ring ---------- */
+    var CX=160, CY=160, R_OUT=150, R_IN=92, R_BADGE=121;
+    function pol(cx,cy,r,deg){
+      var rad=(deg-90)*Math.PI/180;
+      return [cx+r*Math.cos(rad), cy+r*Math.sin(rad)];
+    }
+    function arcPath(startDeg,endDeg){
+      var o1=pol(CX,CY,R_OUT,startDeg), o2=pol(CX,CY,R_OUT,endDeg);
+      var i2=pol(CX,CY,R_IN,endDeg),   i1=pol(CX,CY,R_IN,startDeg);
+      var large=(endDeg-startDeg)>180?1:0;
+      return 'M'+o1[0]+' '+o1[1]+
+             ' A'+R_OUT+' '+R_OUT+' 0 '+large+' 1 '+o2[0]+' '+o2[1]+
+             ' L'+i2[0]+' '+i2[1]+
+             ' A'+R_IN+' '+R_IN+' 0 '+large+' 0 '+i1[0]+' '+i1[1]+
+             ' Z';
+    }
+    var ring=document.getElementById('bg-ring');
+    var svgNS='http://www.w3.org/2000/svg';
+    for(var k=0;k<8;k++){
+      /* Step k+1 placed counter-clockwise from the top so steps 1-4
+         run down the LEFT side and 5-8 down the RIGHT side, matching
+         the callout columns. */
+      var start=-(k+1)*45, end=start+45, mid=start+22.5;
+      var g=document.createElementNS(svgNS,'g');
+      g.setAttribute('class','bg-seg');
+      g.setAttribute('data-step',(k+1));
+      g.setAttribute('tabindex','0');
+      g.setAttribute('role','button');
+      g.setAttribute('aria-label','Step '+(k+1)+': '+STEPS[k].title);
 
-<!-- CTA -->
-<section class="cta">
-  <div class="cta-inner">
-    <h2>Ready to take the first step?</h2>
-    <p>Connect with a Royal LePage Solutions REALTOR<sup>&reg;</sup> today. We'll help you navigate every step of the journey to your new home.</p>
-    <a href="#" class="btn">Connect with a REALTOR<sup style="font-size:9px;">&reg;</sup></a>
-  </div>
-</section>
+      var seg=document.createElementNS(svgNS,'path');
+      seg.setAttribute('class','bg-seg-arc');
+      seg.setAttribute('d',arcPath(start+1.2,end-1.2));
+      seg.setAttribute('fill',SEG_FILL[k]);
+      g.appendChild(seg);
 
-<!-- Footer -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-col">
-      <div class="logo" style="margin-bottom: 16px;">
-        ROYAL LE<span class="accent">PAGE</span><sup style="font-size:10px;">&reg;</sup>
-        <small>SOLUTIONS</small>
-      </div>
-      <p>Proudly Canadian. Serving Calgary, Canmore and Okotoks with expert real estate guidance since day one.</p>
-    </div>
-    <div class="footer-col">
-      <h4>Head Office</h4>
-      <p><strong>Royal LePage Solutions South</strong></p>
-      <p>205&ndash;264 Midpark Way SE<br>Calgary, Alberta, T2X 1J6</p>
-      <p><a href="tel:+14032525900">(403) 252-5900</a></p>
-      <p><a href="mailto:solutionssouth@royallepage.ca">solutionssouth@royallepage.ca</a></p>
-    </div>
-    <div class="footer-col">
-      <h4>Quick Links</h4>
-      <p><a href="#">Listings</a></p>
-      <p><a href="#">Our Agents</a></p>
-      <p><a href="#">Buyers</a></p>
-      <p><a href="#">Sellers</a></p>
-      <p><a href="#">Commercial</a></p>
-    </div>
-    <div class="footer-col">
-      <h4>Connect</h4>
-      <p><a href="#">Facebook</a></p>
-      <p><a href="#">Instagram</a></p>
-      <p><a href="#">LinkedIn</a></p>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div>&copy; 2026 Royal LePage Solutions. All Rights Reserved.</div>
-    <div class="disclaimer">Royal LePage<sup>&reg;</sup> is a registered trademark of Royal Bank of Canada and is used under licence by Bridgemarq Real Estate Services<sup>&reg;</sup>. Each office is independently owned and operated.</div>
-  </div>
-</footer>
+      var bp=pol(CX,CY,R_BADGE,mid);
+      var badge=document.createElementNS(svgNS,'circle');
+      badge.setAttribute('class','bg-seg-badge');
+      badge.setAttribute('cx',bp[0]); badge.setAttribute('cy',bp[1]);
+      badge.setAttribute('r',16);
+      badge.setAttribute('fill','#ffffff');
+      g.appendChild(badge);
 
+      var num=document.createElementNS(svgNS,'text');
+      num.setAttribute('class','bg-seg-num');
+      num.setAttribute('x',bp[0]); num.setAttribute('y',bp[1]+4);
+      num.setAttribute('text-anchor','middle');
+      num.setAttribute('fill',SEG_FILL[k]);
+      num.textContent='0'+(k+1);
+      g.appendChild(num);
+
+      ring.appendChild(g);
+    }
+
+    /* ---------- Selection logic ---------- */
+    var panels=document.querySelectorAll('.bg-detail-panel');
+    var segs=document.querySelectorAll('.bg-seg');
+    var callouts=document.querySelectorAll('.bg-callout');
+    var prevBtn=document.getElementById('bgPrev');
+    var nextBtn=document.getElementById('bgNext');
+    var prevLabel=document.getElementById('bgPrevLabel');
+    var nextLabel=document.getElementById('bgNextLabel');
+    var current=0;
+
+    function selectStep(n,doScroll){
+      current=n;
+      panels.forEach(function(p){
+        p.classList.toggle('is-shown',+p.dataset.panel===n);
+      });
+      segs.forEach(function(s){
+        s.classList.toggle('is-active',+s.dataset.step===n);
+      });
+      callouts.forEach(function(c){
+        c.classList.toggle('is-active',+c.dataset.step===n);
+      });
+      if(n>1){
+        prevBtn.disabled=false;
+        prevLabel.textContent='0'+(n-1)+'  '+STEPS[n-2].title;
+      }else{
+        prevBtn.disabled=true; prevLabel.textContent='—';
+      }
+      if(n<8){
+        nextBtn.disabled=false;
+        nextLabel.textContent='0'+(n+1)+'  '+STEPS[n].title;
+      }else{
+        nextBtn.disabled=true; nextLabel.textContent='—';
+      }
+      if(doScroll){
+        document.getElementById('bg-detail')
+          .scrollIntoView({behavior:'smooth',block:'start'});
+      }
+    }
+
+    segs.forEach(function(s){
+      s.addEventListener('click',function(){ selectStep(+s.dataset.step,true); });
+      s.addEventListener('keydown',function(e){
+        if(e.key==='Enter'||e.key===' '){
+          e.preventDefault(); selectStep(+s.dataset.step,true);
+        }
+      });
+    });
+    callouts.forEach(function(c){
+      c.addEventListener('click',function(){ selectStep(+c.dataset.step,true); });
+    });
+    prevBtn.addEventListener('click',function(){
+      if(current>1) selectStep(current-1,true);
+    });
+    nextBtn.addEventListener('click',function(){
+      if(current<8) selectStep(current+1,true);
+    });
+
+    /* open on step 1 by default (no scroll) */
+    selectStep(1,false);
+
+    /* ---------- Glossary accordion ---------- */
+    document.querySelectorAll('.bg-acc-q').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var item=btn.parentElement;
+        var ans=item.querySelector('.bg-acc-a');
+        var isOpen=item.classList.contains('open');
+        document.querySelectorAll('.bg-acc-item').forEach(function(it){
+          it.classList.remove('open');
+          it.querySelector('.bg-acc-a').style.maxHeight=null;
+        });
+        if(!isOpen){
+          item.classList.add('open');
+          ans.style.maxHeight=ans.scrollHeight+'px';
+        }
+      });
+    });
+
+    /* ---------- Land titles fee calculator ---------- */
+    function ltFee(value){
+      if(!value||value<0) return 0;
+      var units=Math.ceil(value/5000);
+      return 50+units*5;
+    }
+    function money(n){ return '$'+Math.round(n).toLocaleString('en-CA'); }
+    function updateCalc(){
+      var price=parseFloat(document.getElementById('calcPrice').value)||0;
+      var mtg=parseFloat(document.getElementById('calcMortgage').value)||0;
+      var t=ltFee(price), m=ltFee(mtg);
+      document.getElementById('calcTransfer').textContent=money(t);
+      document.getElementById('calcMtg').textContent=money(m);
+      document.getElementById('calcTotal').textContent=money(t+m);
+    }
+    document.getElementById('calcPrice').addEventListener('input',updateCalc);
+    document.getElementById('calcMortgage').addEventListener('input',updateCalc);
+    updateCalc();
+  })();
+  </script>
 </body>
 </html>
