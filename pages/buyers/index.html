@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Calgary Buyer's Guide — Royal LePage Solutions</title>
-  <meta name="description" content="A simple, step-by-step home buying guide for Calgary and Alberta: budgeting, first-time buyer programs, offers, inspections, closing costs, and a land titles fee calculator.">
+  <meta name="description" content="A simple, step-by-step home buying guide for Calgary and Alberta: budgeting, first-time buyer programs, offers, inspections, closing costs, and a land titles fee estimator.">
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
   <!-- Page-specific styles -->
   <style>
     /* ============================================================
-       Calgary Buyer's Guide — circular infographic version
+       Calgary Buyer's Guide — circular infographic, improved build
        Plain-language content. Brand tokens (--rls-*) from header/site CSS.
        Palette = RLP-approved primary + permitted secondary tones.
        ============================================================ */
@@ -66,8 +66,8 @@
       display:flex; align-items:center; justify-content:center;
       color:#fff; text-align:center;
       background:
-        linear-gradient(rgba(15,15,15,.62),rgba(15,15,15,.62)),
-        url('https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+        linear-gradient(rgba(15,15,15,.58),rgba(15,15,15,.66)),
+        url('https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1800&q=80') center 60%/cover no-repeat;
     }
     .bg-hero-inner{ max-width:760px; padding:0 1.5rem; }
     .bg-hero .bg-eyebrow{ color:rgba(255,255,255,.78); }
@@ -84,9 +84,29 @@
     .bg-info-section .bg-eyebrow{ display:block; }
     .bg-info-section .bg-h2{ margin-top:.4rem; }
     .bg-info-intro{
-      max-width:640px; margin:0 auto 2.4rem;
+      max-width:640px; margin:0 auto 1.4rem;
       color:var(--rls-warm-grey,#6B6660); font-size:1rem;
     }
+
+    /* ── Progress bar ── */
+    .bg-progress{
+      max-width:340px; margin:0 auto 2.4rem;
+    }
+    .bg-progress-track{
+      height:5px; background:var(--bg-line);
+      border-radius:3px; overflow:hidden;
+    }
+    .bg-progress-fill{
+      height:100%; width:0%;
+      background:var(--rls-red,#EA002A);
+      border-radius:3px;
+      transition:width .45s cubic-bezier(.4,0,.2,1);
+    }
+    .bg-progress-label{
+      font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--bg-muted); margin-top:.6rem;
+    }
+    .bg-progress-label strong{ color:var(--rls-red,#EA002A); font-weight:700; }
 
     /* ── Circular infographic ── */
     .bg-wheel-area{
@@ -95,19 +115,29 @@
     }
     .bg-wheel{
       position:relative; flex:0 0 auto;
-      width:clamp(280px,34vw,420px);
-      height:clamp(280px,34vw,420px);
+      width:clamp(260px,32vw,420px);
+      height:clamp(260px,32vw,420px);
     }
-    .bg-wheel svg{ width:100%; height:100%; display:block; }
-    .bg-seg{ cursor:pointer; transition:opacity .2s; }
-    .bg-seg:hover{ opacity:.85; }
+    .bg-wheel svg{ width:100%; height:100%; display:block; overflow:visible; }
+    .bg-seg{ cursor:pointer; }
+    .bg-seg .bg-seg-arc{
+      transition:opacity .2s, transform .25s cubic-bezier(.34,1.56,.64,1);
+      transform-origin:160px 160px;
+    }
+    .bg-seg:hover .bg-seg-arc{ opacity:.88; transform:scale(1.035); }
     .bg-seg:focus{ outline:none; }
+    .bg-seg:focus-visible .bg-seg-arc{
+      stroke:var(--rls-black,#000); stroke-width:2; stroke-dasharray:3 3;
+    }
     .bg-seg-num{
       font-family:var(--rls-sans);
       font-weight:700; font-size:13px;
       pointer-events:none; user-select:none;
     }
-    .bg-seg-badge{ pointer-events:none; }
+    .bg-seg-badge, .bg-seg-check{ pointer-events:none; }
+    .bg-seg-check{ opacity:0; transition:opacity .3s; }
+    .bg-seg.is-visited .bg-seg-check{ opacity:1; }
+    .bg-seg.is-visited .bg-seg-num{ opacity:0; }
     .bg-hub-text{
       font-family:var(--rls-sans);
       fill:var(--rls-black,#000);
@@ -131,6 +161,7 @@
       cursor:pointer;
       transition:border-color .2s, box-shadow .2s, transform .15s;
       width:100%; font-family:var(--rls-sans);
+      position:relative;
     }
     .bg-callout:hover{
       box-shadow:0 6px 18px rgba(0,0,0,.08);
@@ -144,8 +175,18 @@
       flex:0 0 auto; width:34px; height:34px;
       display:flex; align-items:center; justify-content:center;
       color:var(--rls-red,#EA002A);
+      position:relative;
     }
     .bg-callout-icon svg{ width:26px; height:26px; }
+    /* tiny visited check on the card */
+    .bg-callout-check{
+      position:absolute; top:-3px; right:-5px;
+      width:14px; height:14px; border-radius:50%;
+      background:var(--rls-red,#EA002A); color:#fff;
+      display:none; align-items:center; justify-content:center;
+    }
+    .bg-callout-check svg{ width:9px; height:9px; }
+    .bg-callout.is-visited .bg-callout-check{ display:flex; }
     .bg-callout-body{ flex:1 1 auto; min-width:0; }
     .bg-callout-body h4{
       margin:0; font-size:.8rem; font-weight:700;
@@ -186,30 +227,84 @@
       display:flex; align-items:center; justify-content:center;
       font-family:var(--bg-display); font-size:1.7rem; font-weight:600;
     }
+    /* panel fade/slide animation */
     .bg-detail-panel{ display:none; }
-    .bg-detail-panel.is-shown{ display:block; }
+    .bg-detail-panel.is-shown{
+      display:block;
+      animation:bgPanelIn .42s cubic-bezier(.22,.61,.36,1) both;
+    }
+    @keyframes bgPanelIn{
+      from{ opacity:0; transform:translateY(14px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+    @media(prefers-reduced-motion:reduce){
+      .bg-detail-panel.is-shown{ animation:none; }
+      .bg-progress-fill{ transition:none; }
+      .bg-seg .bg-seg-arc{ transition:opacity .2s; }
+    }
 
     .bg-detail-nav{
       display:flex; justify-content:space-between;
-      gap:14px; margin-top:2rem;
-      border-top:1px solid var(--bg-line); padding-top:1.4rem;
+      gap:14px; margin-top:2.2rem;
+      border-top:1px solid var(--bg-line); padding-top:1.8rem;
     }
     .bg-nav-btn{
-      background:none; border:0; cursor:pointer;
+      background:#fff; cursor:pointer;
       font-family:var(--rls-sans);
-      display:flex; flex-direction:column; gap:2px;
-      transition:color .2s;
+      display:flex; align-items:center; gap:14px;
+      border:1.5px solid var(--bg-line);
+      border-radius:40px;
+      padding:14px 22px;
+      transition:border-color .2s, box-shadow .2s, transform .15s, background .2s;
+      max-width:48%;
+    }
+    .bg-nav-btn:hover:not(:disabled){
+      border-color:var(--rls-red,#EA002A);
+      box-shadow:0 6px 18px rgba(234,0,42,.12);
+      transform:translateY(-1px);
     }
     .bg-nav-btn:hover:not(:disabled) strong{ color:var(--rls-red,#EA002A); }
-    .bg-nav-btn:disabled{ opacity:.35; cursor:default; }
+    .bg-nav-btn:focus-visible{
+      outline:2px solid var(--rls-red,#EA002A); outline-offset:2px;
+    }
+    .bg-nav-btn:disabled{ opacity:.4; cursor:default; background:var(--bg-soft); }
+    /* arrow chip */
+    .bg-nav-arrow{
+      flex:0 0 auto;
+      width:34px; height:34px; border-radius:50%;
+      background:var(--bg-soft);
+      display:flex; align-items:center; justify-content:center;
+      color:var(--rls-warm-grey,#6B6660);
+      transition:background .2s, color .2s, transform .2s;
+    }
+    .bg-nav-arrow svg{ width:16px; height:16px; }
+    .bg-nav-btn:hover:not(:disabled) .bg-nav-arrow{
+      background:var(--rls-red,#EA002A); color:#fff;
+    }
+    .bg-nav-btn.bg-nav-prev:hover:not(:disabled) .bg-nav-arrow{ transform:translateX(-3px); }
+    .bg-nav-btn.bg-nav-next:hover:not(:disabled) .bg-nav-arrow{ transform:translateX(3px); }
+    /* text stack */
+    .bg-nav-text{
+      display:flex; flex-direction:column; gap:2px; min-width:0;
+    }
+    .bg-nav-btn.bg-nav-next{ flex-direction:row-reverse; }
+    .bg-nav-btn.bg-nav-next .bg-nav-text{ text-align:right; }
     .bg-nav-btn .bg-nav-label{
-      font-size:.66rem; letter-spacing:.16em; text-transform:uppercase;
+      font-size:.62rem; letter-spacing:.18em; text-transform:uppercase;
       color:var(--bg-muted);
     }
-    .bg-nav-btn.bg-nav-next{ text-align:right; align-items:flex-end; }
     .bg-nav-btn strong{
       font-weight:600; color:var(--rls-black,#000);
       font-size:.92rem; transition:color .2s;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    @media(prefers-reduced-motion:reduce){
+      .bg-nav-btn, .bg-nav-arrow{ transition:border-color .2s, background .2s, color .2s; }
+    }
+    @media(max-width:560px){
+      .bg-nav-btn{ padding:11px 14px; gap:10px; }
+      .bg-nav-btn strong{ font-size:.82rem; }
+      .bg-nav-arrow{ width:30px; height:30px; }
     }
 
     /* ── Alberta callout box ── */
@@ -226,7 +321,6 @@
     }
     .bg-flag p{ color:var(--rls-dark-grey,#2A2A2A); margin:0 0 .6rem; font-size:.96rem; }
     .bg-flag p:last-child{ margin-bottom:0; }
-    .bg-flag .bg-list{ color:var(--rls-dark-grey,#2A2A2A); margin-bottom:.6rem; }
 
     .bg-note{
       background:var(--bg-soft); padding:20px 24px;
@@ -236,7 +330,7 @@
     .bg-note strong{ color:var(--rls-black,#000); }
     .bg-note p{ margin:0; }
 
-    /* ── two-column lists (needs/wants etc) ── */
+    /* ── two-column lists ── */
     .bg-cols{
       display:grid; grid-template-columns:1fr 1fr;
       gap:1.4rem; margin:1.2rem 0;
@@ -301,7 +395,7 @@
     }
     .bg-inc-card p{ font-size:.9rem; color:var(--rls-warm-grey,#6B6660); margin:0; }
 
-    /* ── Closing-cost calculator ── */
+    /* ── Closing-cost estimator ── */
     .bg-calc{
       background:var(--rls-black,#000); color:#fff;
       border-radius:6px; padding:clamp(28px,4vw,44px); margin:1.8rem 0;
@@ -350,6 +444,7 @@
       font-size:.76rem; color:#8f8f8f;
       margin-top:1.1rem; line-height:1.5;
     }
+    .bg-calc-note strong{ color:#cfcfcf; }
 
     /* ── Glossary accordion ── */
     .bg-acc-item{ border-bottom:1px solid var(--bg-line); }
@@ -402,14 +497,15 @@
 
     /* ── Responsive ── */
     @media(max-width:1024px){
-      .bg-wheel-area{ flex-direction:column; }
+      .bg-wheel-area{ flex-direction:column; gap:22px; }
       .bg-callouts{
         flex-direction:row; flex-wrap:wrap;
-        max-width:none; justify-content:center;
+        max-width:560px; justify-content:center;
       }
       .bg-callout{ width:calc(50% - 6px); }
       .bg-col-left .bg-callout{ flex-direction:row; text-align:left; }
-      .bg-wheel{ order:-1; }
+      /* wheel shrinks and sits first as a compact visual anchor */
+      .bg-wheel{ order:-1; width:240px; height:240px; }
     }
     @media(max-width:768px){
       .bg-wrap{ padding:0 1.5rem; }
@@ -417,6 +513,9 @@
       .bg-calc-inputs{ grid-template-columns:1fr; }
       .bg-cols{ grid-template-columns:1fr; }
       .bg-callout{ width:100%; }
+      /* on phones the cards ARE the navigation; wheel becomes a small badge */
+      .bg-wheel{ width:170px; height:170px; }
+      .bg-info-intro{ margin-bottom:1rem; }
     }
   </style>
 </head>
@@ -443,7 +542,18 @@
         <span class="bg-eyebrow">The 8-Step Journey</span>
         <h2 class="bg-h2">Your Path to Owning a Home</h2>
         <p class="bg-info-intro">Click any step on the wheel — or a card beside
-        it — to open that part of the guide.</p>
+        it — to open that part of the guide. Steps you've read are marked with
+        a check.</p>
+
+        <!-- progress -->
+        <div class="bg-progress">
+          <div class="bg-progress-track">
+            <div class="bg-progress-fill" id="bgProgressFill"></div>
+          </div>
+          <div class="bg-progress-label">
+            <strong id="bgProgressCount">0</strong> of 8 steps explored
+          </div>
+        </div>
 
         <div class="bg-wheel-area">
 
@@ -455,6 +565,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/>
                 </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
               </span>
               <span class="bg-callout-body">
                 <h4>Deciding to Buy</h4>
@@ -467,6 +578,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/>
                 </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
               </span>
               <span class="bg-callout-body">
                 <h4>Choosing a REALTOR®</h4>
@@ -479,6 +591,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/>
                 </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
               </span>
               <span class="bg-callout-body">
                 <h4>Understanding Your Budget</h4>
@@ -491,6 +604,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/><circle cx="12" cy="12" r="4"/>
                 </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
               </span>
               <span class="bg-callout-body">
                 <h4>First-Time Buyer Programs</h4>
@@ -520,6 +634,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 3v4a1 1 0 0 0 1 1h4M7 3h8l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM9 13l2 2 4-4"/>
                 </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
               </span>
               <span class="bg-callout-body">
                 <h4>Making an Offer</h4>
@@ -532,6 +647,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M9 11l3 3 8-8M21 12a9 9 0 1 1-6.2-8.6"/>
                 </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
               </span>
               <span class="bg-callout-body">
                 <h4>Inspections &amp; Documents</h4>
@@ -544,6 +660,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14h3"/>
                 </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
               </span>
               <span class="bg-callout-body">
                 <h4>Closing Costs</h4>
@@ -556,6 +673,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M3 7h18M5 7l1 13a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1l1-13M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/>
                 </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
               </span>
               <span class="bg-callout-body">
                 <h4>Closing &amp; Moving In</h4>
@@ -785,7 +903,7 @@
             registration fees, based on the purchase price and the mortgage
             amount. This can make closing costs lower here than in provinces
             like Ontario or British Columbia. You can estimate those fees with
-            the calculator in Step 7.</p>
+            the tool in Step 7.</p>
           </div>
 
           <!-- ===== STEP 5 — Finding a Home & Making an Offer ===== -->
@@ -905,7 +1023,7 @@
                 </thead>
                 <tbody>
                   <tr><td>Legal fees</td><td>Your real estate lawyer's fee for closing the deal</td></tr>
-                  <tr><td>Land Titles registration fees</td><td>Based on purchase price and mortgage amount — see the calculator below</td></tr>
+                  <tr><td>Land Titles registration fees</td><td>Based on purchase price and mortgage amount — see the estimator below</td></tr>
                   <tr><td>Home inspection</td><td>Recommended on most purchases</td></tr>
                   <tr><td>Condo document review</td><td>If you're buying a condo</td></tr>
                   <tr><td>Title insurance</td><td>Helps protect against certain title or property issues</td></tr>
@@ -926,13 +1044,13 @@
               of paying thousands in transfer tax like buyers in some
               provinces, Alberta buyers pay two smaller Land Titles
               registration fees — one for the property transfer and one for the
-              mortgage. Try the calculator below to estimate yours.</p>
+              mortgage. Try the estimator below to get a rough idea.</p>
             </div>
 
             <div class="bg-calc">
-              <h3>Land Titles Fee Calculator</h3>
-              <p class="bg-calc-sub">Estimate the two Alberta Land Titles
-              registration fees on your purchase.</p>
+              <h3>Land Titles Fee Estimator</h3>
+              <p class="bg-calc-sub">A rough estimate of the two Alberta Land
+              Titles registration fees on your purchase.</p>
               <div class="bg-calc-inputs">
                 <div class="bg-calc-field">
                   <label for="calcPrice">Purchase Price ($)</label>
@@ -957,10 +1075,12 @@
                   <span id="calcTotal">$1,090</span>
                 </div>
               </div>
-              <p class="bg-calc-note">This is an estimate of Land Titles
-              registration fees only — it doesn't include legal fees, title
-              insurance, inspections, or tax adjustments. Fee formulas can
-              change, so confirm the exact amounts with your lawyer.</p>
+              <p class="bg-calc-note"><strong>This is an estimate only.</strong>
+              It covers Land Titles registration fees — not legal fees, title
+              insurance, inspections, or tax adjustments — and uses the fee
+              formula in effect as of <span id="bgCalcDate">May 2026</span>.
+              Government fees can change, so always confirm the exact amounts
+              with your lawyer before relying on them.</p>
             </div>
           </div>
 
@@ -1018,12 +1138,26 @@
           <!-- prev / next -->
           <div class="bg-detail-nav">
             <button class="bg-nav-btn bg-nav-prev" id="bgPrev" type="button">
-              <span class="bg-nav-label">Previous Step</span>
-              <strong id="bgPrevLabel">—</strong>
+              <span class="bg-nav-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 5l-7 7 7 7"/>
+                </svg>
+              </span>
+              <span class="bg-nav-text">
+                <span class="bg-nav-label">Previous Step</span>
+                <strong id="bgPrevLabel">—</strong>
+              </span>
             </button>
             <button class="bg-nav-btn bg-nav-next" id="bgNext" type="button">
-              <span class="bg-nav-label">Next Step</span>
-              <strong id="bgNextLabel">—</strong>
+              <span class="bg-nav-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 5l7 7-7 7"/>
+                </svg>
+              </span>
+              <span class="bg-nav-text">
+                <span class="bg-nav-label">Next Step</span>
+                <strong id="bgNextLabel">—</strong>
+              </span>
             </button>
           </div>
 
@@ -1134,8 +1268,7 @@
     var svgNS='http://www.w3.org/2000/svg';
     for(var k=0;k<8;k++){
       /* Step k+1 placed counter-clockwise from the top so steps 1-4
-         run down the LEFT side and 5-8 down the RIGHT side, matching
-         the callout columns. */
+         run down the LEFT side and 5-8 down the RIGHT side. */
       var start=-(k+1)*45, end=start+45, mid=start+22.5;
       var g=document.createElementNS(svgNS,'g');
       g.setAttribute('class','bg-seg');
@@ -1166,6 +1299,18 @@
       num.textContent='0'+(k+1);
       g.appendChild(num);
 
+      /* visited checkmark (hidden until step is opened) */
+      var chk=document.createElementNS(svgNS,'path');
+      chk.setAttribute('class','bg-seg-check');
+      chk.setAttribute('d','M'+(bp[0]-6)+' '+bp[1]+
+                          ' l4 4 l8 -8');
+      chk.setAttribute('fill','none');
+      chk.setAttribute('stroke',SEG_FILL[k]);
+      chk.setAttribute('stroke-width','2.6');
+      chk.setAttribute('stroke-linecap','round');
+      chk.setAttribute('stroke-linejoin','round');
+      g.appendChild(chk);
+
       ring.appendChild(g);
     }
 
@@ -1177,9 +1322,25 @@
     var nextBtn=document.getElementById('bgNext');
     var prevLabel=document.getElementById('bgPrevLabel');
     var nextLabel=document.getElementById('bgNextLabel');
+    var progFill=document.getElementById('bgProgressFill');
+    var progCount=document.getElementById('bgProgressCount');
     var current=0;
+    var visited={};
 
-    function selectStep(n,doScroll){
+    function markVisited(n){
+      visited[n]=true;
+      segs.forEach(function(s){
+        if(+s.dataset.step===n) s.classList.add('is-visited');
+      });
+      callouts.forEach(function(c){
+        if(+c.dataset.step===n) c.classList.add('is-visited');
+      });
+      var count=Object.keys(visited).length;
+      progCount.textContent=count;
+      progFill.style.width=(count/8*100)+'%';
+    }
+
+    function selectStep(n,doScroll,updateHash){
       current=n;
       panels.forEach(function(p){
         p.classList.toggle('is-shown',+p.dataset.panel===n);
@@ -1202,6 +1363,14 @@
       }else{
         nextBtn.disabled=true; nextLabel.textContent='—';
       }
+      markVisited(n);
+      if(updateHash){
+        if(history.replaceState){
+          history.replaceState(null,'','#step-'+n);
+        }else{
+          location.hash='step-'+n;
+        }
+      }
       if(doScroll){
         document.getElementById('bg-detail')
           .scrollIntoView({behavior:'smooth',block:'start'});
@@ -1209,25 +1378,46 @@
     }
 
     segs.forEach(function(s){
-      s.addEventListener('click',function(){ selectStep(+s.dataset.step,true); });
+      s.addEventListener('click',function(){ selectStep(+s.dataset.step,true,true); });
       s.addEventListener('keydown',function(e){
         if(e.key==='Enter'||e.key===' '){
-          e.preventDefault(); selectStep(+s.dataset.step,true);
+          e.preventDefault(); selectStep(+s.dataset.step,true,true);
         }
       });
     });
     callouts.forEach(function(c){
-      c.addEventListener('click',function(){ selectStep(+c.dataset.step,true); });
+      c.addEventListener('click',function(){ selectStep(+c.dataset.step,true,true); });
     });
     prevBtn.addEventListener('click',function(){
-      if(current>1) selectStep(current-1,true);
+      if(current>1) selectStep(current-1,true,true);
     });
     nextBtn.addEventListener('click',function(){
-      if(current<8) selectStep(current+1,true);
+      if(current<8) selectStep(current+1,true,true);
     });
 
-    /* open on step 1 by default (no scroll) */
-    selectStep(1,false);
+    /* ---------- Deep-linking: open the step named in the URL hash ---------- */
+    function stepFromHash(){
+      var m=(location.hash||'').match(/^#step-([1-8])$/);
+      return m?+m[1]:null;
+    }
+    var initial=stepFromHash();
+    if(initial){
+      selectStep(initial,false,false);
+      /* scroll to the panel shortly after load so the header is settled */
+      window.addEventListener('load',function(){
+        setTimeout(function(){
+          document.getElementById('bg-detail')
+            .scrollIntoView({behavior:'smooth',block:'start'});
+        },300);
+      });
+    }else{
+      selectStep(1,false,false);
+    }
+    /* respond to back/forward navigation between steps */
+    window.addEventListener('hashchange',function(){
+      var s=stepFromHash();
+      if(s && s!==current) selectStep(s,true,false);
+    });
 
     /* ---------- Glossary accordion ---------- */
     document.querySelectorAll('.bg-acc-q').forEach(function(btn){
@@ -1246,11 +1436,15 @@
       });
     });
 
-    /* ---------- Land titles fee calculator ---------- */
+    /* ---------- Land titles fee estimator ---------- */
+    /* Formula in effect as of the date shown on the page. If Alberta
+       changes its Land Titles fees, update FEE_BASE / FEE_PER / FEE_UNIT
+       and the bgCalcDate text below. */
+    var FEE_BASE=50, FEE_PER=5, FEE_UNIT=5000;
     function ltFee(value){
       if(!value||value<0) return 0;
-      var units=Math.ceil(value/5000);
-      return 50+units*5;
+      var units=Math.ceil(value/FEE_UNIT);
+      return FEE_BASE+units*FEE_PER;
     }
     function money(n){ return '$'+Math.round(n).toLocaleString('en-CA'); }
     function updateCalc(){
