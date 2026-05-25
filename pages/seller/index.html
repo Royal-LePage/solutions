@@ -1,1 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Calgary Seller's Guide — Royal LePage Solutions</title>
+  <meta name="description" content="A simple, step-by-step home selling guide for Calgary and Alberta: preparing your home, pricing, marketing, reviewing offers, closing costs, and taxes when you sell.">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Header CSS -->
+  <link rel="stylesheet" href="../../assets/css/header.css?v=1010">
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="../../assets/css/styles.css?v=1001">
+  <!-- Header JS (injects header markup) -->
+  <script defer src="../../assets/js/header.js?v=1009"></script>
+  <!-- Page-specific styles -->
+  <style>
+    /* ============================================================
+       Calgary Seller's Guide — circular infographic
+       Matches the Buyer's Guide. Brand tokens (--rls-*) from header/site CSS.
+       Palette = RLP-approved primary + permitted secondary tones.
+       ============================================================ */
+    :root{
+      --bg-display: 'Cormorant Garamond', Georgia, serif;
+      --bg-soft:    #f5f4f2;
+      --bg-muted:   #8a8a8a;
+      --bg-line:    #e3e1dd;
+      --bg-flag:    #fff4f5;
+    }
 
+    .bg-wrap{
+      max-width: var(--rls-max-width, 1200px);
+      margin: 0 auto;
+      padding: 0 2.5rem;
+    }
+    .bg-eyebrow{
+      font-size:.72rem; letter-spacing:.28em; text-transform:uppercase;
+      color:var(--bg-muted); font-weight:500;
+    }
+    .bg-h2{
+      font-family:var(--bg-display);
+      font-weight:500;
+      font-size:clamp(1.9rem,3.6vw,2.7rem);
+      line-height:1.12;
+      color:var(--rls-black,#000);
+      margin:0 0 .35em;
+    }
+    .bg-h3{
+      font-family:var(--rls-sans);
+      font-weight:600; font-size:1.06rem; letter-spacing:.02em;
+      color:var(--rls-black,#000);
+      margin:1.8rem 0 .6rem;
+    }
+    .bg-rule{ width:54px; height:1px; background:var(--bg-muted); margin:16px 0 24px; }
+    .bg-p{ color:var(--rls-warm-grey,#6B6660); margin:0 0 1rem; }
+    .bg-p:last-child{ margin-bottom:0; }
+    .bg-list{ color:var(--rls-warm-grey,#6B6660); margin:0 0 1rem 1.1rem; padding:0; }
+    .bg-list li{ margin-bottom:.5rem; }
+
+    /* ── Hero ── */
+    .bg-hero{
+      position:relative;
+      min-height:clamp(300px,38vw,440px);
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; text-align:center;
+      background:
+        linear-gradient(rgba(15,15,15,.58),rgba(15,15,15,.66)),
+        url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1800&q=80') center 55%/cover no-repeat;
+    }
+    .bg-hero-inner{ max-width:760px; padding:0 1.5rem; }
+    .bg-hero .bg-eyebrow{ color:rgba(255,255,255,.78); }
+    .bg-hero h1{
+      font-family:var(--bg-display);
+      font-weight:500; font-size:clamp(2.4rem,5.5vw,4.2rem);
+      letter-spacing:.02em; color:#fff;
+      margin:.4rem 0 .6rem; line-height:1.04;
+    }
+    .bg-hero p{ color:rgba(255,255,255,.85); font-size:1.05rem; margin:0; }
+
+    /* ── Infographic section ── */
+    .bg-info-section{ padding:clamp(48px,7vw,86px) 0; text-align:center; }
+    .bg-info-section .bg-eyebrow{ display:block; }
+    .bg-info-section .bg-h2{ margin-top:.4rem; }
+    .bg-info-intro{
+      max-width:640px; margin:0 auto 1.4rem;
+      color:var(--rls-warm-grey,#6B6660); font-size:1rem;
+    }
+
+    /* ── Progress bar ── */
+    .bg-progress{ max-width:340px; margin:0 auto 2.4rem; }
+    .bg-progress-track{
+      height:5px; background:var(--bg-line);
+      border-radius:3px; overflow:hidden;
+    }
+    .bg-progress-fill{
+      height:100%; width:0%;
+      background:var(--rls-red,#EA002A);
+      border-radius:3px;
+      transition:width .45s cubic-bezier(.4,0,.2,1);
+    }
+    .bg-progress-label{
+      font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--bg-muted); margin-top:.6rem;
+    }
+    .bg-progress-label strong{ color:var(--rls-red,#EA002A); font-weight:700; }
+
+    /* ── Circular infographic ── */
+    .bg-wheel-area{
+      display:flex; align-items:center; justify-content:center;
+      gap:clamp(8px,1.5vw,26px);
+    }
+    .bg-wheel{
+      position:relative; flex:0 0 auto;
+      width:clamp(260px,32vw,420px);
+      height:clamp(260px,32vw,420px);
+    }
+    .bg-wheel svg{ width:100%; height:100%; display:block; overflow:visible; }
+    .bg-seg{ cursor:pointer; }
+    .bg-seg .bg-seg-arc{
+      transition:opacity .2s, transform .25s cubic-bezier(.34,1.56,.64,1);
+      transform-origin:160px 160px;
+    }
+    .bg-seg:hover .bg-seg-arc{ opacity:.88; transform:scale(1.035); }
+    .bg-seg:focus{ outline:none; }
+    .bg-seg:focus-visible .bg-seg-arc{
+      stroke:var(--rls-black,#000); stroke-width:2; stroke-dasharray:3 3;
+    }
+    .bg-seg-num{
+      font-family:var(--rls-sans);
+      font-weight:700; font-size:13px;
+      pointer-events:none; user-select:none;
+    }
+    .bg-seg-badge, .bg-seg-check{ pointer-events:none; }
+    .bg-seg-check{ opacity:0; transition:opacity .3s; }
+    .bg-seg.is-visited .bg-seg-check{ opacity:1; }
+    .bg-seg.is-visited .bg-seg-num{ opacity:0; }
+    .bg-hub-text{
+      font-family:var(--rls-sans);
+      fill:var(--rls-black,#000);
+      pointer-events:none; user-select:none;
+    }
+    .bg-seg.is-active .bg-seg-arc{
+      stroke:var(--rls-black,#000); stroke-width:3;
+    }
+
+    /* ── Side callout columns ── */
+    .bg-callouts{
+      display:flex; flex-direction:column;
+      gap:10px; flex:1 1 0; min-width:0;
+      max-width:340px;
+    }
+    .bg-callout{
+      display:flex; align-items:center; gap:12px;
+      border:2px solid var(--bg-line);
+      border-radius:30px;
+      background:#fff; padding:12px 16px;
+      cursor:pointer;
+      transition:border-color .2s, box-shadow .2s, transform .15s;
+      width:100%; font-family:var(--rls-sans);
+      position:relative;
+    }
+    .bg-callout:hover{
+      box-shadow:0 6px 18px rgba(0,0,0,.08);
+      transform:translateY(-1px);
+    }
+    .bg-callout.is-active{
+      border-color:var(--rls-red,#EA002A);
+      box-shadow:0 6px 20px rgba(234,0,42,.14);
+    }
+    .bg-callout-icon{
+      flex:0 0 auto; width:34px; height:34px;
+      display:flex; align-items:center; justify-content:center;
+      color:var(--rls-red,#EA002A);
+      position:relative;
+    }
+    .bg-callout-icon svg{ width:26px; height:26px; }
+    .bg-callout-check{
+      position:absolute; top:-3px; right:-5px;
+      width:14px; height:14px; border-radius:50%;
+      background:var(--rls-red,#EA002A); color:#fff;
+      display:none; align-items:center; justify-content:center;
+    }
+    .bg-callout-check svg{ width:9px; height:9px; }
+    .bg-callout.is-visited .bg-callout-check{ display:flex; }
+    .bg-callout-body{ flex:1 1 auto; min-width:0; }
+    .bg-callout-body h4{
+      margin:0; font-size:.8rem; font-weight:700;
+      letter-spacing:.04em; text-transform:uppercase;
+      color:var(--rls-black,#000); line-height:1.25;
+    }
+    .bg-callout-body p{
+      margin:.15rem 0 0; font-size:.76rem;
+      color:var(--rls-warm-grey,#6B6660); line-height:1.4;
+    }
+    .bg-callout-step{
+      flex:0 0 auto; font-family:var(--bg-display);
+      font-size:1.3rem; font-weight:600;
+      color:var(--bg-line);
+    }
+    .bg-callout.is-active .bg-callout-step{ color:var(--rls-red,#EA002A); }
+    .bg-col-right .bg-callout{ flex-direction:row; text-align:left; }
+    .bg-col-left .bg-callout{ flex-direction:row-reverse; text-align:right; }
+
+    /* ── Detail panel ── */
+    .bg-detail-section{ padding-bottom:clamp(50px,7vw,90px); }
+    .bg-detail{
+      background:#fff;
+      border:1px solid var(--bg-line);
+      border-top:4px solid var(--rls-red,#EA002A);
+      border-radius:0 0 6px 6px;
+      padding:clamp(28px,4vw,48px);
+      scroll-margin-top:190px;
+    }
+    .bg-detail-head{
+      display:flex; align-items:center; gap:18px;
+      margin-bottom:.4rem;
+    }
+    .bg-detail-badge{
+      flex:0 0 auto;
+      width:58px; height:58px; border-radius:50%;
+      background:var(--rls-red,#EA002A); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-family:var(--bg-display); font-size:1.7rem; font-weight:600;
+    }
+    .bg-detail-panel{ display:none; }
+    .bg-detail-panel.is-shown{
+      display:block;
+      animation:bgPanelIn .42s cubic-bezier(.22,.61,.36,1) both;
+    }
+    @keyframes bgPanelIn{
+      from{ opacity:0; transform:translateY(14px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+    @media(prefers-reduced-motion:reduce){
+      .bg-detail-panel.is-shown{ animation:none; }
+      .bg-progress-fill{ transition:none; }
+      .bg-seg .bg-seg-arc{ transition:opacity .2s; }
+    }
+
+    /* ── prev / next buttons ── */
+    .bg-detail-nav{
+      display:flex; justify-content:space-between;
+      gap:14px; margin-top:2.2rem;
+      border-top:1px solid var(--bg-line); padding-top:1.8rem;
+    }
+    .bg-nav-btn{
+      background:#fff; cursor:pointer;
+      font-family:var(--rls-sans);
+      display:flex; align-items:center; gap:14px;
+      border:1.5px solid var(--bg-line);
+      border-radius:40px;
+      padding:14px 22px;
+      transition:border-color .2s, box-shadow .2s, transform .15s, background .2s;
+      max-width:48%;
+    }
+    .bg-nav-btn:hover:not(:disabled){
+      border-color:var(--rls-red,#EA002A);
+      box-shadow:0 6px 18px rgba(234,0,42,.12);
+      transform:translateY(-1px);
+    }
+    .bg-nav-btn:hover:not(:disabled) strong{ color:var(--rls-red,#EA002A); }
+    .bg-nav-btn:focus-visible{
+      outline:2px solid var(--rls-red,#EA002A); outline-offset:2px;
+    }
+    .bg-nav-btn:disabled{ opacity:.4; cursor:default; background:var(--bg-soft); }
+    .bg-nav-arrow{
+      flex:0 0 auto;
+      width:34px; height:34px; border-radius:50%;
+      background:var(--bg-soft);
+      display:flex; align-items:center; justify-content:center;
+      color:var(--rls-warm-grey,#6B6660);
+      transition:background .2s, color .2s, transform .2s;
+    }
+    .bg-nav-arrow svg{ width:16px; height:16px; }
+    .bg-nav-btn:hover:not(:disabled) .bg-nav-arrow{
+      background:var(--rls-red,#EA002A); color:#fff;
+    }
+    .bg-nav-btn.bg-nav-prev:hover:not(:disabled) .bg-nav-arrow{ transform:translateX(-3px); }
+    .bg-nav-btn.bg-nav-next:hover:not(:disabled) .bg-nav-arrow{ transform:translateX(3px); }
+    .bg-nav-text{
+      display:flex; flex-direction:column; gap:2px; min-width:0;
+    }
+    .bg-nav-btn.bg-nav-next{ flex-direction:row-reverse; }
+    .bg-nav-btn.bg-nav-next .bg-nav-text{ text-align:right; }
+    .bg-nav-btn .bg-nav-label{
+      font-size:.62rem; letter-spacing:.18em; text-transform:uppercase;
+      color:var(--bg-muted);
+    }
+    .bg-nav-btn strong{
+      font-weight:600; color:var(--rls-black,#000);
+      font-size:.92rem; transition:color .2s;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    @media(prefers-reduced-motion:reduce){
+      .bg-nav-btn, .bg-nav-arrow{ transition:border-color .2s, background .2s, color .2s; }
+    }
+    @media(max-width:560px){
+      .bg-nav-btn{ padding:11px 14px; gap:10px; }
+      .bg-nav-btn strong{ font-size:.82rem; }
+      .bg-nav-arrow{ width:30px; height:30px; }
+    }
+
+    /* ── Alberta callout box ── */
+    .bg-flag{
+      background:var(--bg-flag);
+      border-left:3px solid var(--rls-red,#EA002A);
+      padding:22px 26px; margin:1.6rem 0;
+      border-radius:0 4px 4px 0;
+    }
+    .bg-flag-title{
+      font-weight:700; font-size:.78rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--rls-red,#EA002A);
+      margin-bottom:.5rem;
+    }
+    .bg-flag p{ color:var(--rls-dark-grey,#2A2A2A); margin:0 0 .6rem; font-size:.96rem; }
+    .bg-flag p:last-child{ margin-bottom:0; }
+
+    .bg-note{
+      background:var(--bg-soft); padding:20px 24px;
+      margin:1.4rem 0; border-radius:4px;
+      font-size:.94rem; color:var(--rls-dark-grey,#2A2A2A);
+    }
+    .bg-note strong{ color:var(--rls-black,#000); }
+    .bg-note p{ margin:0; }
+
+    /* ── two-column lists ── */
+    .bg-cols{
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:1.4rem; margin:1.2rem 0;
+    }
+    .bg-col-card{
+      background:var(--bg-soft);
+      border-radius:5px; padding:20px 24px;
+    }
+    .bg-col-card h4{
+      font-family:var(--rls-sans); font-size:.82rem; font-weight:700;
+      letter-spacing:.08em; text-transform:uppercase;
+      color:var(--rls-red,#EA002A); margin:0 0 .7rem;
+    }
+    .bg-col-card ul{
+      list-style:none; margin:0; padding:0;
+      color:var(--rls-warm-grey,#6B6660); font-size:.93rem;
+    }
+    .bg-col-card li{
+      padding:.28rem 0 .28rem 1.1rem; position:relative;
+    }
+    .bg-col-card li::before{
+      content:''; position:absolute; left:0; top:.95em;
+      width:5px; height:5px; border-radius:50%;
+      background:var(--rls-red,#EA002A);
+    }
+
+    /* ── Tables ── */
+    .bg-table-scroll{ overflow-x:auto; margin:1.4rem 0; }
+    table.bg-table{
+      width:100%; border-collapse:collapse;
+      font-size:.92rem; min-width:460px;
+    }
+    table.bg-table th, table.bg-table td{
+      text-align:left; padding:12px 16px;
+      border-bottom:1px solid var(--bg-line); vertical-align:top;
+    }
+    table.bg-table thead th{
+      background:var(--rls-black,#000); color:#fff;
+      font-weight:600; font-size:.74rem;
+      letter-spacing:.1em; text-transform:uppercase;
+    }
+    table.bg-table tbody tr:nth-child(even){ background:var(--bg-soft); }
+    table.bg-table td:last-child{ color:var(--rls-warm-grey,#6B6660); }
+
+    /* ── Glossary accordion ── */
+    .bg-acc-item{ border-bottom:1px solid var(--bg-line); }
+    .bg-acc-q{
+      width:100%; background:var(--bg-soft); border:0; cursor:pointer;
+      display:flex; align-items:center; gap:16px;
+      padding:18px 22px; font-family:var(--rls-sans);
+      font-size:.98rem; font-weight:500; color:var(--rls-black,#000);
+      text-align:left; transition:background .2s;
+    }
+    .bg-acc-q:hover{ background:#efeeec; }
+    .bg-acc-icon{
+      font-size:1.3rem; color:var(--rls-red,#EA002A);
+      transition:transform .3s; flex-shrink:0; font-weight:300;
+    }
+    .bg-acc-item.open .bg-acc-icon{ transform:rotate(45deg); }
+    .bg-acc-a{
+      max-height:0; overflow:hidden;
+      transition:max-height .35s ease; background:var(--bg-soft);
+    }
+    .bg-acc-a p{ padding:0 22px 22px; margin:0; font-size:.93rem; color:var(--rls-warm-grey,#6B6660); }
+
+    /* ── CTA ── */
+    .bg-cta{
+      background:var(--rls-black,#000); color:#fff;
+      text-align:center; padding:clamp(60px,8vw,100px) 0;
+    }
+    .bg-cta h2{
+      font-family:var(--bg-display); font-weight:500;
+      font-size:clamp(2rem,4vw,3rem); color:#fff; margin:0 0 .6rem;
+    }
+    .bg-cta p{ color:#bdbdbd; max-width:540px; margin:0 auto 1.8rem; }
+    .bg-btn{
+      display:inline-block;
+      font-size:.78rem; letter-spacing:.2em; text-transform:uppercase;
+      padding:18px 44px; border-radius:40px;
+      background:var(--rls-red,#EA002A); color:#fff; font-weight:600;
+      border:1px solid var(--rls-red,#EA002A);
+      transition:transform .2s, background .2s;
+    }
+    .bg-btn:hover{
+      transform:translateY(-2px);
+      background:var(--rls-red-dk,#C20023); color:#fff;
+    }
+
+    /* ── Disclaimer ── */
+    .bg-disclaimer{ background:var(--bg-soft); padding:clamp(28px,4vw,40px) 0; }
+    .bg-disclaimer .bg-wrap{ font-size:.78rem; color:var(--bg-muted); line-height:1.6; }
+    .bg-disclaimer strong{ color:var(--rls-dark-grey,#2A2A2A); }
+
+    /* ── Responsive ── */
+    @media(max-width:1024px){
+      .bg-wheel-area{ flex-direction:column; gap:22px; }
+      .bg-callouts{
+        flex-direction:row; flex-wrap:wrap;
+        max-width:560px; justify-content:center;
+      }
+      .bg-callout{ width:calc(50% - 6px); }
+      .bg-col-left .bg-callout{ flex-direction:row; text-align:left; }
+      .bg-wheel{ order:-1; width:240px; height:240px; }
+    }
+    @media(max-width:768px){
+      .bg-wrap{ padding:0 1.5rem; }
+      .bg-cols{ grid-template-columns:1fr; }
+      .bg-callout{ width:100%; }
+      .bg-wheel{ width:170px; height:170px; }
+      .bg-info-intro{ margin-bottom:1rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ─────────────────────────────────────────────
+       Header is injected automatically by header.js
+       ───────────────────────────────────────────── -->
+  <main>
+
+    <!-- ===================== HERO ===================== -->
+    <section class="bg-hero">
+      <div class="bg-hero-inner">
+        <span class="bg-eyebrow">Royal LePage Solutions</span>
+        <h1>Selling a Home in Alberta</h1>
+        <p>Selling a home is more than putting a sign on the lawn and waiting
+        for offers. This guide explains the selling process in simple terms, so
+        Alberta homeowners know what to expect from listing day to possession
+        day.</p>
+      </div>
+    </section>
+
+    <!-- ===================== INFOGRAPHIC ===================== -->
+    <section class="bg-info-section">
+      <div class="bg-wrap">
+        <span class="bg-eyebrow">The 8-Step Journey</span>
+        <h2 class="bg-h2">Your Path to a Successful Sale</h2>
+        <p class="bg-info-intro">Click any step on the wheel — or a card beside
+        it — to open that part of the guide. Steps you've read are marked with
+        a check.</p>
+
+        <!-- progress -->
+        <div class="bg-progress">
+          <div class="bg-progress-track">
+            <div class="bg-progress-fill" id="bgProgressFill"></div>
+          </div>
+          <div class="bg-progress-label">
+            <strong id="bgProgressCount">0</strong> of 8 steps explored
+          </div>
+        </div>
+
+        <div class="bg-wheel-area">
+
+          <!-- LEFT callout column: steps 1,2,3,4 -->
+          <div class="bg-callouts bg-col-left">
+            <button class="bg-callout" data-step="1">
+              <span class="bg-callout-step">01</span>
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21V9a3 3 0 0 1 6 0v12M4 21V11l8-6 8 6v10"/>
+                </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Deciding to Sell</h4>
+                <p>Your goals, timing &amp; the market.</p>
+              </span>
+            </button>
+            <button class="bg-callout" data-step="2">
+              <span class="bg-callout-step">02</span>
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3l4 8M12 3L8 11M4 11h16l-2 10H6L4 11zM9 16h6"/>
+                </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Getting Your Home Ready</h4>
+                <p>Repairs, curb appeal &amp; staging.</p>
+              </span>
+            </button>
+            <button class="bg-callout" data-step="3">
+              <span class="bg-callout-step">03</span>
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 3v4a1 1 0 0 0 1 1h4M7 3h8l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM9 13l2 2 4-4"/>
+                </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Documents &amp; Compliance</h4>
+                <p>Your RPR &amp; checking permits.</p>
+              </span>
+            </button>
+            <button class="bg-callout" data-step="4">
+              <span class="bg-callout-step">04</span>
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/>
+                </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Choosing a REALTOR®</h4>
+                <p>Listing agreement &amp; agency types.</p>
+              </span>
+            </button>
+          </div>
+
+          <!-- WHEEL -->
+          <div class="bg-wheel">
+            <svg viewBox="0 0 320 320" role="img" aria-label="8-step selling journey wheel">
+              <g id="bg-ring"></g>
+              <circle cx="160" cy="160" r="84" fill="#ffffff" stroke="#e3e1dd" stroke-width="1.5"/>
+              <text class="bg-hub-text" x="160" y="142" text-anchor="middle"
+                    font-size="17" font-weight="800" letter-spacing="1">8 STEPS</text>
+              <text class="bg-hub-text" x="160" y="164" text-anchor="middle"
+                    font-size="12.5" font-weight="600" fill="#6B6660" letter-spacing="2">TO SELLING A</text>
+              <text class="bg-hub-text" x="160" y="184" text-anchor="middle"
+                    font-size="12.5" font-weight="600" fill="#6B6660" letter-spacing="1.5">HOME IN ALBERTA</text>
+            </svg>
+          </div>
+
+          <!-- RIGHT callout column: steps 5,6,7,8 -->
+          <div class="bg-callouts bg-col-right">
+            <button class="bg-callout" data-step="5">
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Pricing &amp; Marketing</h4>
+                <p>Setting the price, measuring &amp; promotion.</p>
+              </span>
+              <span class="bg-callout-step">05</span>
+            </button>
+            <button class="bg-callout" data-step="6">
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 5C6 5 2 12 2 12s4 7 10 7 10-7 10-7-4-7-10-7zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
+                </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Showings &amp; Disclosure</h4>
+                <p>Open houses &amp; what you must disclose.</p>
+              </span>
+              <span class="bg-callout-step">06</span>
+            </button>
+            <button class="bg-callout" data-step="7">
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 3v4a1 1 0 0 0 1 1h4M7 3h8l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM8 13h8M8 17h5"/>
+                </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Reviewing Offers</h4>
+                <p>Offers, conditions, deposits &amp; counters.</p>
+              </span>
+              <span class="bg-callout-step">07</span>
+            </button>
+            <button class="bg-callout" data-step="8">
+              <span class="bg-callout-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14l2 2 4-4"/>
+                </svg>
+                <span class="bg-callout-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+              </span>
+              <span class="bg-callout-body">
+                <h4>Costs, Taxes &amp; Closing</h4>
+                <p>Closing costs, taxes &amp; moving out.</p>
+              </span>
+              <span class="bg-callout-step">08</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== DETAIL PANEL ===================== -->
+    <section class="bg-detail-section">
+      <div class="bg-wrap">
+        <div class="bg-detail" id="bg-detail">
+
+          <!-- ===== STEP 1 — Deciding to Sell ===== -->
+          <div class="bg-detail-panel" data-panel="1">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">01</div>
+              <h2 class="bg-h2">Deciding to Sell</h2>
+            </div>
+            <div class="bg-rule"></div>
+            <p class="bg-p">Before you list your home, it's important to
+            understand your goals. Getting clear on the "why" and "when" now
+            makes every later decision easier.</p>
+
+            <h3 class="bg-h3">Questions to Ask Yourself</h3>
+            <ul class="bg-list">
+              <li>Why am I selling?</li>
+              <li>When do I need to move?</li>
+              <li>Do I need to buy another home first?</li>
+              <li>How much do I still owe on my mortgage?</li>
+              <li>What repairs or updates should I do before listing?</li>
+              <li>What price would make sense in today's market?</li>
+            </ul>
+            <p class="bg-p">A REALTOR® can help you understand your home's
+            value and what buyers in your area are looking for.</p>
+          </div>
+
+          <!-- ===== STEP 2 — Getting Your Home Ready ===== -->
+          <div class="bg-detail-panel" data-panel="2">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">02</div>
+              <h2 class="bg-h2">Getting Your Home Ready</h2>
+            </div>
+            <div class="bg-rule"></div>
+            <p class="bg-p">Small improvements can make a big difference. You
+            don't always need major renovations — sometimes simple updates help
+            your home show much better.</p>
+
+            <div class="bg-cols">
+              <div class="bg-col-card">
+                <h4>Helpful Updates</h4>
+                <ul>
+                  <li>Fresh paint</li>
+                  <li>New light fixtures</li>
+                  <li>Updated door handles</li>
+                  <li>Clean carpets</li>
+                  <li>Small repairs</li>
+                  <li>Decluttering</li>
+                  <li>Yard cleanup &amp; better lighting</li>
+                </ul>
+              </div>
+              <div class="bg-col-card">
+                <h4>Good Staging Steps</h4>
+                <ul>
+                  <li>Clean from top to bottom</li>
+                  <li>Remove clutter &amp; personal photos</li>
+                  <li>Organize closets</li>
+                  <li>Open blinds, turn on lights</li>
+                  <li>Clear counters &amp; make beds</li>
+                  <li>Remove valuables before showings</li>
+                  <li>Keep pet items tidy</li>
+                </ul>
+              </div>
+            </div>
+            <p class="bg-p">Before spending money on renovations, talk to your
+            REALTOR®. Not every renovation increases your sale price enough to
+            be worth the cost.</p>
+
+            <h3 class="bg-h3">Curb Appeal</h3>
+            <p class="bg-p">Curb appeal is how your home looks from the
+            outside, and first impressions matter — buyers often start judging
+            a home before they walk inside. Things that help: cut the grass,
+            trim trees and bushes, add simple planters, clean the windows,
+            touch up peeling paint, tidy the front door area, and make sure the
+            exterior lights work.</p>
+            <div class="bg-flag">
+              <div class="bg-flag-title">Calgary Winter Tip</div>
+              <p>In Calgary, snow clearing and safe, ice-free walkways are
+              especially important during the winter months — both for the
+              impression they give and for the safety of everyone visiting
+              your home.</p>
+            </div>
+          </div>
+
+          <!-- ===== STEP 3 — Documents & Compliance ===== -->
+          <div class="bg-detail-panel" data-panel="3">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">03</div>
+              <h2 class="bg-h2">Documents &amp; Compliance</h2>
+            </div>
+            <div class="bg-rule"></div>
+
+            <h3 class="bg-h3">Order Your Real Property Report Early</h3>
+            <p class="bg-p">In Alberta, many sellers need to provide a Real
+            Property Report, or RPR. It's a survey-style document that shows
+            your property boundaries, the location of the house, and structures
+            like the garage, decks, fences, and sheds. The RPR is usually
+            reviewed by the municipality to confirm compliance — this is called
+            municipal compliance.</p>
+
+            <div class="bg-flag">
+              <div class="bg-flag-title">Why This Matters</div>
+              <p>If you've added a deck, garage, fence, shed, or other
+              structure, your old RPR may no longer be current. If something
+              was built without the right permits, it could delay closing.
+              That's why sellers should deal with the RPR early, instead of
+              waiting until the home is sold. For detached homes and some
+              bare-land condos, the RPR is one of the most important seller
+              documents.</p>
+            </div>
+
+            <h3 class="bg-h3">Check Permits and Compliance</h3>
+            <p class="bg-p">Before listing, check whether improvements on your
+            property had proper permits. This may include decks, garages,
+            basement developments, additions, sheds, hot tubs, secondary
+            suites, and major renovations. If something doesn't comply, it may
+            need to be fixed, removed, approved, or otherwise addressed before
+            closing. It's much better to find this out before listing than
+            during a buyer's condition period.</p>
+          </div>
+
+          <!-- ===== STEP 4 — Choosing a REALTOR ===== -->
+          <div class="bg-detail-panel" data-panel="4">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">04</div>
+              <h2 class="bg-h2">Choosing a REALTOR®</h2>
+            </div>
+            <div class="bg-rule"></div>
+            <p class="bg-p">Selling a home involves pricing, marketing,
+            paperwork, negotiation, and legal deadlines. A REALTOR® helps you
+            understand the market, set a listing price, prepare and market the
+            home, review offers, negotiate terms, track deadlines, work with
+            the buyer's agent, and coordinate with lawyers and other
+            professionals. In Alberta, real estate professionals are regulated
+            by RECA, the Real Estate Council of Alberta.</p>
+
+            <h3 class="bg-h3">Signing a Listing Agreement</h3>
+            <p class="bg-p">When you hire a REALTOR® to sell your home, you'll
+            usually sign a written agreement called a Written Service
+            Agreement. For sellers, this is often an Exclusive Seller
+            Representation Agreement. It explains who is representing you, the
+            listing price, the length of the listing, how commission works,
+            what services and marketing are included, what documents you need
+            to provide, and what happens after the listing ends.</p>
+            <div class="bg-flag">
+              <div class="bg-flag-title">About Commission</div>
+              <p>Commission and fees should be clearly explained before you
+              sign. GST applies to real estate commission in Alberta.</p>
+            </div>
+
+            <h3 class="bg-h3">Understanding Agency</h3>
+            <p class="bg-p">Agency describes the relationship between you and
+            your REALTOR®. There are three main ways a REALTOR® may work with
+            you in Alberta:</p>
+            <ul class="bg-list">
+              <li><strong>Designated Agency</strong> — common in Alberta. Your
+              specific REALTOR® represents you and works in your best interest,
+              owing you duties like loyalty, confidentiality, full disclosure,
+              reasonable care, following lawful instructions, and proper
+              accounting.</li>
+              <li><strong>Transaction Brokerage</strong> — this can happen if
+              the same REALTOR® becomes involved with both the seller and the
+              buyer. The REALTOR® becomes neutral and can't favour either side.
+              Both parties must agree to this in writing.</li>
+              <li><strong>Customer Status</strong> — the REALTOR® is not
+              representing you as a client. They may provide basic information,
+              but they aren't giving you full advice or working in your best
+              interest the way they would for a client.</li>
+            </ul>
+          </div>
+
+          <!-- ===== STEP 5 — Pricing & Marketing ===== -->
+          <div class="bg-detail-panel" data-panel="5">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">05</div>
+              <h2 class="bg-h2">Pricing &amp; Marketing</h2>
+            </div>
+            <div class="bg-rule"></div>
+
+            <h3 class="bg-h3">Setting the Right Price</h3>
+            <p class="bg-p">Pricing is one of the most important parts of
+            selling. Price too high and buyers may ignore the home; price too
+            low and you may leave money on the table. A REALTOR® usually helps
+            by reviewing recent sales, active and expired listings, the current
+            competition, and your home's location, condition, size, lot
+            features, and renovations, along with overall market trends.</p>
+            <div class="bg-flag">
+              <div class="bg-flag-title">Calgary Pricing Note</div>
+              <p>In Calgary, the market can differ by property type — detached
+              homes may see different demand than apartment condos. Your
+              pricing strategy should be based on your specific property, not
+              just the city average.</p>
+            </div>
+
+            <h3 class="bg-h3">Measuring Your Home</h3>
+            <p class="bg-p">In Alberta, residential listings must follow the
+            Residential Measurement Standard, or RMS — the standard way homes
+            are measured so buyers can compare properties fairly. Generally,
+            above-grade finished space is reported as the main size, below-grade
+            space is shown separately, and apartment condos are measured
+            differently than detached homes. Your REALTOR® will help make sure
+            your home is measured properly before it's listed.</p>
+
+            <h3 class="bg-h3">Marketing Your Home</h3>
+            <p class="bg-p">Good marketing helps the right buyers find your
+            property. A strong listing may include professional photos,
+            accurate measurements, a floor plan, an MLS® listing, a property
+            description and feature sheet, social media marketing, brokerage
+            website exposure, agent network sharing, a video or virtual tour,
+            and open houses where appropriate. In Alberta, MLS® listings are
+            commonly handled through Pillar 9™ and local boards such as CREB®
+            in Calgary. Marketing should always be accurate and not
+            misleading.</p>
+          </div>
+
+          <!-- ===== STEP 6 — Showings & Disclosure ===== -->
+          <div class="bg-detail-panel" data-panel="6">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">06</div>
+              <h2 class="bg-h2">Showings &amp; Disclosure</h2>
+            </div>
+            <div class="bg-rule"></div>
+
+            <h3 class="bg-h3">Open Houses and Showings</h3>
+            <p class="bg-p">During showings, buyers are deciding whether the
+            home feels right for them. Before a showing, turn on the lights and
+            open the blinds, clean the counters, put away laundry, remove
+            valuables, take pets out if possible, make sure walkways are safe,
+            keep the temperature comfortable, and avoid strong smells.
+            Afterward, your REALTOR® may collect feedback from buyers and their
+            agents, which can help you decide if any changes are needed.</p>
+
+            <h3 class="bg-h3">Seller Disclosure</h3>
+            <p class="bg-p">In Alberta, sellers must disclose known material
+            latent defects — serious problems that aren't easy to see during a
+            normal inspection and that affect the use or value of the property.
+            Examples include a basement that floods, hidden foundation
+            problems, serious mould, unsafe electrical work, major work done
+            without permits, or a hidden structural issue. If you know about a
+            serious hidden problem, it should be disclosed — a REALTOR® cannot
+            help hide a known material latent defect.</p>
+
+            <h3 class="bg-h3">Stigmatized Properties</h3>
+            <p class="bg-p">Some things may make a property feel uncomfortable
+            to a buyer even if they don't physically affect the home — such as
+            a death in the home, a crime that happened there, or a belief that
+            the home is haunted. In Alberta, sellers are generally not required
+            to volunteer this kind of information unless directly asked. If a
+            buyer asks a direct question, the REALTOR® cannot lie. It's worth
+            discussing with your REALTOR® how to handle these questions before
+            listing.</p>
+          </div>
+
+          <!-- ===== STEP 7 — Reviewing Offers ===== -->
+          <div class="bg-detail-panel" data-panel="7">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">07</div>
+              <h2 class="bg-h2">Reviewing Offers</h2>
+            </div>
+            <div class="bg-rule"></div>
+
+            <h3 class="bg-h3">Comparing Offers</h3>
+            <p class="bg-p">When an offer comes in, price matters — but it
+            isn't the only thing to review. Also look at the deposit amount,
+            the financing condition, the home inspection condition, any condo
+            document condition, the possession date, inclusions and exclusions,
+            the buyer's sale condition, and any other terms or requests. A lower
+            offer with fewer conditions can sometimes be stronger than a higher
+            offer that carries more risk. Your REALTOR® will help you compare
+            the details.</p>
+
+            <h3 class="bg-h3">Common Buyer Conditions</h3>
+            <p class="bg-p">A buyer may include conditions in their offer —
+            commonly financing approval, a home inspection, a condo document
+            review, the sale of the buyer's current home, lawyer review, and
+            title review. If the buyer removes or waives their conditions by the
+            deadline, the sale usually becomes firm. If they don't, the contract
+            may end.</p>
+
+            <div class="bg-flag">
+              <div class="bg-flag-title">About the Deposit</div>
+              <p>In Alberta, the buyer's deposit is usually held in trust by
+              the listing brokerage, and it shows the buyer is serious. If the
+              deal closes, the deposit is applied toward the purchase price. If
+              the buyer doesn't remove conditions, it's usually returned. If the
+              buyer removes conditions and later fails to close, the deposit may
+              be at risk. Your lawyer and REALTOR® can explain how this works in
+              your situation.</p>
+            </div>
+
+            <h3 class="bg-h3">Multiple Offers and Counter Offers</h3>
+            <p class="bg-p">Sometimes more than one buyer wants to write an
+            offer — a multiple-offer situation. The seller can accept one offer,
+            reject all offers, counter one offer, or ask buyers to improve their
+            offers, but should not accept more than one offer at the same time.
+            Each buyer's offer details are confidential unless the buyer gives
+            permission to share them. A counter offer means the seller is
+            offering different terms — changing things like price, possession
+            date, conditions, inclusions, deposit, or deadlines. Each counter
+            offer replaces the previous one, so review every detail carefully
+            before signing.</p>
+
+            <h3 class="bg-h3">Selling a Condo</h3>
+            <p class="bg-p">Selling a condo involves extra documents — bylaws
+            and rules, the budget and financial statements, the reserve fund
+            study and plan, AGM and board meeting minutes, the insurance
+            certificate, the estoppel and information certificates, details
+            about special assessments, and management agreements. The condo
+            corporation has timelines for providing certain documents after a
+            written request, so order them early because delays can affect the
+            sale. If a special assessment has been approved or is being
+            discussed, the contract should clearly state who is responsible for
+            paying it.</p>
+          </div>
+
+          <!-- ===== STEP 8 — Costs, Taxes & Closing ===== -->
+          <div class="bg-detail-panel" data-panel="8">
+            <div class="bg-detail-head">
+              <div class="bg-detail-badge">08</div>
+              <h2 class="bg-h2">Costs, Taxes &amp; Closing</h2>
+            </div>
+            <div class="bg-rule"></div>
+
+            <h3 class="bg-h3">Seller Closing Costs</h3>
+            <p class="bg-p">Sellers should understand the costs that come out
+            of their sale proceeds:</p>
+            <div class="bg-table-scroll">
+              <table class="bg-table">
+                <thead>
+                  <tr><th>Cost</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Real estate commission</td><td>The fee paid to the brokerage for selling the property</td></tr>
+                  <tr><td>GST on commission</td><td>The 5% federal tax charged on commission in Alberta</td></tr>
+                  <tr><td>Legal fees</td><td>Your real estate lawyer's fee</td></tr>
+                  <tr><td>Mortgage discharge fee</td><td>To remove your mortgage from the title</td></tr>
+                  <tr><td>Mortgage prepayment penalty</td><td>If you sell before your mortgage term ends</td></tr>
+                  <tr><td>Real Property Report &amp; compliance</td><td>The RPR cost and municipal compliance fee</td></tr>
+                  <tr><td>Condo document fees</td><td>Including the estoppel certificate fee, if applicable</td></tr>
+                  <tr><td>Property tax &amp; utility adjustments</td><td>Pro-rated to the possession date</td></tr>
+                  <tr><td>Moving costs</td><td>Movers, supplies, and time</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="bg-flag">
+              <div class="bg-flag-title">Watch the Mortgage Penalty</div>
+              <p>If you sell before your mortgage term ends, your lender may
+              charge a penalty, which can sometimes be expensive. Before
+              listing, ask your lender for a mortgage payout statement or
+              estimate so you understand how much money you may actually
+              receive after the sale.</p>
+            </div>
+
+            <h3 class="bg-h3">GST and Taxes When You Sell</h3>
+            <p class="bg-p">Most resale homes used as a primary residence are
+            not subject to GST on the sale price, but GST may apply to new
+            construction, substantially renovated homes, builder sales, and
+            some rental or investment properties. The seller is responsible for
+            confirming whether GST applies.</p>
+            <p class="bg-p">Selling can also have income tax consequences. If
+            the home was your principal residence for every year you owned it,
+            the gain may usually be sheltered from tax — though the sale still
+            needs to be reported on your return. If it was a rental, vacation,
+            or investment property, there may be capital gains tax. And under
+            Canada's property flipping rule, a residential property sold within
+            365 days of buying it may have its profit treated as business
+            income rather than a capital gain, with some exceptions for major
+            life events. Because tax rules are complex, speak with a Canadian
+            tax professional.</p>
+
+            <h3 class="bg-h3">Closing Day</h3>
+            <p class="bg-p">Closing day is when ownership transfers to the
+            buyer. The seller's lawyer usually receives the sale funds, pays out
+            the mortgage, pays the real estate commission and closing costs,
+            adjusts property taxes, discharges the mortgage, and sends the
+            seller the remaining proceeds. In Alberta, possession is often
+            around noon on the possession date unless the contract says
+            otherwise — and you should be fully moved out before possession
+            unless you have a written agreement saying otherwise.</p>
+
+            <h3 class="bg-h3">Seller Moving Checklist</h3>
+            <ul class="bg-list">
+              <li>Book movers, pack early, and label your boxes.</li>
+              <li>Cancel or transfer utilities and arrange final meter
+              readings.</li>
+              <li>Forward your mail and update your address.</li>
+              <li>Cancel your home insurance after closing.</li>
+              <li>Clean the home and remove all personal belongings.</li>
+              <li>Leave keys, fobs, remotes, and manuals for the buyer.</li>
+              <li>Check the garage, shed, attic, and storage areas.</li>
+              <li>If selling a condo, book the elevator and confirm move-out
+              rules with the condo manager.</li>
+            </ul>
+
+            <div class="bg-note">
+              <p><strong>You don't have to do this alone.</strong> Selling a
+              home is a big decision, but the process is much easier when you
+              prepare early, understand your documents, and work with the right
+              professionals. A good REALTOR® helps you price properly, avoid
+              surprises, manage offers, and move from listing day to possession
+              day with more confidence.</p>
+            </div>
+          </div>
+
+          <!-- prev / next -->
+          <div class="bg-detail-nav">
+            <button class="bg-nav-btn bg-nav-prev" id="bgPrev" type="button">
+              <span class="bg-nav-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 5l-7 7 7 7"/>
+                </svg>
+              </span>
+              <span class="bg-nav-text">
+                <span class="bg-nav-label">Previous Step</span>
+                <strong id="bgPrevLabel">—</strong>
+              </span>
+            </button>
+            <button class="bg-nav-btn bg-nav-next" id="bgNext" type="button">
+              <span class="bg-nav-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 5l7 7-7 7"/>
+                </svg>
+              </span>
+              <span class="bg-nav-text">
+                <span class="bg-nav-label">Next Step</span>
+                <strong id="bgNextLabel">—</strong>
+              </span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== GLOSSARY ===================== -->
+    <section class="bg-info-section" style="padding-top:0;">
+      <div class="bg-wrap" style="max-width:920px;">
+        <h2 class="bg-h2">Important Seller Terms</h2>
+        <div class="bg-rule" style="margin-left:auto;margin-right:auto;"></div>
+        <div class="bg-acc" style="text-align:left;">
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Real Property Report</button>
+            <div class="bg-acc-a"><p>A document prepared by an Alberta Land Surveyor showing the property's boundaries and improvements.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Municipal Compliance</button>
+            <div class="bg-acc-a"><p>Confirmation from the municipality about whether the property's improvements comply with local rules.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Material Latent Defect</button>
+            <div class="bg-acc-a"><p>A serious hidden problem that affects the use or value of the property.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>RMS (Residential Measurement Standard)</button>
+            <div class="bg-acc-a"><p>The standard used in Alberta to measure homes for real estate listings.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Estoppel Certificate</button>
+            <div class="bg-acc-a"><p>A condo document that confirms fees, payments, and amounts owing for a unit.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Special Assessment</button>
+            <div class="bg-acc-a"><p>An extra condo charge used to pay for major repairs or unexpected expenses.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Mortgage Discharge</button>
+            <div class="bg-acc-a"><p>The process of removing the seller's mortgage from the title after it is paid out.</p></div>
+          </div>
+          <div class="bg-acc-item">
+            <button class="bg-acc-q" type="button"><span class="bg-acc-icon">+</span>Commission &amp; GST on Commission</button>
+            <div class="bg-acc-a"><p>Commission is the fee paid to the real estate brokerage for selling the property. In Alberta, a 5% federal GST is charged on that commission.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CTA ===================== -->
+    <section class="bg-cta">
+      <div class="bg-wrap">
+        <h2>Thinking About Selling?</h2>
+        <p>Selling a home is a big decision — but you don't have to figure it
+        out alone. Let's talk through your goals and what your home could be
+        worth.</p>
+        <a href="https://info.royallepagesolutions.com/pages/contact/" class="bg-btn">Book a Free Consultation</a>
+      </div>
+    </section>
+
+    <!-- ===================== DISCLAIMER ===================== -->
+    <section class="bg-disclaimer">
+      <div class="bg-wrap">
+        <p><strong>Please note:</strong> This guide is general information for
+        Alberta home sellers and is not legal, financial, or tax advice.
+        Program details, costs, fees, and government rules can change. Always
+        confirm the details with your REALTOR®, lawyer, lender, accountant, and
+        the relevant government sources before you rely on them. Royal LePage®
+        and REALTOR® are trademarks used under licence.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+  (function(){
+    /* ---------- Step metadata ---------- */
+    var STEPS=[
+      {n:1,title:'Deciding to Sell'},
+      {n:2,title:'Getting Your Home Ready'},
+      {n:3,title:'Documents & Compliance'},
+      {n:4,title:'Choosing a REALTOR\u00AE'},
+      {n:5,title:'Pricing & Marketing'},
+      {n:6,title:'Showings & Disclosure'},
+      {n:7,title:'Reviewing Offers'},
+      {n:8,title:'Costs, Taxes & Closing'}
+    ];
+    /* segment fill colours — RLP-approved palette, alternating */
+    var SEG_FILL=['#EA002A','#B8AC9C','#C20023','#6B6660',
+                  '#EA002A','#B8AC9C','#C20023','#6B6660'];
+
+    /* ---------- Build the SVG ring ---------- */
+    var CX=160, CY=160, R_OUT=150, R_IN=92, R_BADGE=121;
+    function pol(cx,cy,r,deg){
+      var rad=(deg-90)*Math.PI/180;
+      return [cx+r*Math.cos(rad), cy+r*Math.sin(rad)];
+    }
+    function arcPath(startDeg,endDeg){
+      var o1=pol(CX,CY,R_OUT,startDeg), o2=pol(CX,CY,R_OUT,endDeg);
+      var i2=pol(CX,CY,R_IN,endDeg),   i1=pol(CX,CY,R_IN,startDeg);
+      var large=(endDeg-startDeg)>180?1:0;
+      return 'M'+o1[0]+' '+o1[1]+
+             ' A'+R_OUT+' '+R_OUT+' 0 '+large+' 1 '+o2[0]+' '+o2[1]+
+             ' L'+i2[0]+' '+i2[1]+
+             ' A'+R_IN+' '+R_IN+' 0 '+large+' 0 '+i1[0]+' '+i1[1]+
+             ' Z';
+    }
+    var ring=document.getElementById('bg-ring');
+    var svgNS='http://www.w3.org/2000/svg';
+    for(var k=0;k<8;k++){
+      /* Step k+1 placed counter-clockwise from the top so steps 1-4
+         run down the LEFT side and 5-8 down the RIGHT side. */
+      var start=-(k+1)*45, end=start+45, mid=start+22.5;
+      var g=document.createElementNS(svgNS,'g');
+      g.setAttribute('class','bg-seg');
+      g.setAttribute('data-step',(k+1));
+      g.setAttribute('tabindex','0');
+      g.setAttribute('role','button');
+      g.setAttribute('aria-label','Step '+(k+1)+': '+STEPS[k].title);
+
+      var seg=document.createElementNS(svgNS,'path');
+      seg.setAttribute('class','bg-seg-arc');
+      seg.setAttribute('d',arcPath(start+1.2,end-1.2));
+      seg.setAttribute('fill',SEG_FILL[k]);
+      g.appendChild(seg);
+
+      var bp=pol(CX,CY,R_BADGE,mid);
+      var badge=document.createElementNS(svgNS,'circle');
+      badge.setAttribute('class','bg-seg-badge');
+      badge.setAttribute('cx',bp[0]); badge.setAttribute('cy',bp[1]);
+      badge.setAttribute('r',16);
+      badge.setAttribute('fill','#ffffff');
+      g.appendChild(badge);
+
+      var num=document.createElementNS(svgNS,'text');
+      num.setAttribute('class','bg-seg-num');
+      num.setAttribute('x',bp[0]); num.setAttribute('y',bp[1]+4);
+      num.setAttribute('text-anchor','middle');
+      num.setAttribute('fill',SEG_FILL[k]);
+      num.textContent='0'+(k+1);
+      g.appendChild(num);
+
+      var chk=document.createElementNS(svgNS,'path');
+      chk.setAttribute('class','bg-seg-check');
+      chk.setAttribute('d','M'+(bp[0]-6)+' '+bp[1]+' l4 4 l8 -8');
+      chk.setAttribute('fill','none');
+      chk.setAttribute('stroke',SEG_FILL[k]);
+      chk.setAttribute('stroke-width','2.6');
+      chk.setAttribute('stroke-linecap','round');
+      chk.setAttribute('stroke-linejoin','round');
+      g.appendChild(chk);
+
+      ring.appendChild(g);
+    }
+
+    /* ---------- Selection logic ---------- */
+    var panels=document.querySelectorAll('.bg-detail-panel');
+    var segs=document.querySelectorAll('.bg-seg');
+    var callouts=document.querySelectorAll('.bg-callout');
+    var prevBtn=document.getElementById('bgPrev');
+    var nextBtn=document.getElementById('bgNext');
+    var prevLabel=document.getElementById('bgPrevLabel');
+    var nextLabel=document.getElementById('bgNextLabel');
+    var progFill=document.getElementById('bgProgressFill');
+    var progCount=document.getElementById('bgProgressCount');
+    var current=0;
+    var visited={};
+
+    function markVisited(n){
+      visited[n]=true;
+      segs.forEach(function(s){
+        if(+s.dataset.step===n) s.classList.add('is-visited');
+      });
+      callouts.forEach(function(c){
+        if(+c.dataset.step===n) c.classList.add('is-visited');
+      });
+      var count=Object.keys(visited).length;
+      progCount.textContent=count;
+      progFill.style.width=(count/8*100)+'%';
+    }
+
+    function selectStep(n,doScroll,updateHash){
+      current=n;
+      panels.forEach(function(p){
+        p.classList.toggle('is-shown',+p.dataset.panel===n);
+      });
+      segs.forEach(function(s){
+        s.classList.toggle('is-active',+s.dataset.step===n);
+      });
+      callouts.forEach(function(c){
+        c.classList.toggle('is-active',+c.dataset.step===n);
+      });
+      if(n>1){
+        prevBtn.disabled=false;
+        prevLabel.textContent='0'+(n-1)+'  '+STEPS[n-2].title;
+      }else{
+        prevBtn.disabled=true; prevLabel.textContent='—';
+      }
+      if(n<8){
+        nextBtn.disabled=false;
+        nextLabel.textContent='0'+(n+1)+'  '+STEPS[n].title;
+      }else{
+        nextBtn.disabled=true; nextLabel.textContent='—';
+      }
+      markVisited(n);
+      if(updateHash){
+        if(history.replaceState){
+          history.replaceState(null,'','#step-'+n);
+        }else{
+          location.hash='step-'+n;
+        }
+      }
+      if(doScroll){
+        document.getElementById('bg-detail')
+          .scrollIntoView({behavior:'smooth',block:'start'});
+      }
+    }
+
+    segs.forEach(function(s){
+      s.addEventListener('click',function(){ selectStep(+s.dataset.step,true,true); });
+      s.addEventListener('keydown',function(e){
+        if(e.key==='Enter'||e.key===' '){
+          e.preventDefault(); selectStep(+s.dataset.step,true,true);
+        }
+      });
+    });
+    callouts.forEach(function(c){
+      c.addEventListener('click',function(){ selectStep(+c.dataset.step,true,true); });
+    });
+    prevBtn.addEventListener('click',function(){
+      if(current>1) selectStep(current-1,true,true);
+    });
+    nextBtn.addEventListener('click',function(){
+      if(current<8) selectStep(current+1,true,true);
+    });
+
+    /* ---------- Deep-linking ---------- */
+    function stepFromHash(){
+      var m=(location.hash||'').match(/^#step-([1-8])$/);
+      return m?+m[1]:null;
+    }
+    var initial=stepFromHash();
+    if(initial){
+      selectStep(initial,false,false);
+      window.addEventListener('load',function(){
+        setTimeout(function(){
+          document.getElementById('bg-detail')
+            .scrollIntoView({behavior:'smooth',block:'start'});
+        },300);
+      });
+    }else{
+      selectStep(1,false,false);
+    }
+    window.addEventListener('hashchange',function(){
+      var s=stepFromHash();
+      if(s && s!==current) selectStep(s,true,false);
+    });
+
+    /* ---------- Glossary accordion ---------- */
+    document.querySelectorAll('.bg-acc-q').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var item=btn.parentElement;
+        var ans=item.querySelector('.bg-acc-a');
+        var isOpen=item.classList.contains('open');
+        document.querySelectorAll('.bg-acc-item').forEach(function(it){
+          it.classList.remove('open');
+          it.querySelector('.bg-acc-a').style.maxHeight=null;
+        });
+        if(!isOpen){
+          item.classList.add('open');
+          ans.style.maxHeight=ans.scrollHeight+'px';
+        }
+      });
+    });
+  })();
+  </script>
+</body>
+</html>
