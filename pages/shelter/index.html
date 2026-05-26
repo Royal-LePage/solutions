@@ -1,1 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Royal LePage Shelter Foundation — Royal LePage Solutions</title>
+  <meta name="description" content="Royal LePage Solutions proudly supports the Royal LePage Shelter Foundation, helping local women's shelters and violence prevention programs in Calgary and area.">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Header CSS -->
+  <link rel="stylesheet" href="../../assets/css/header.css?v=1010">
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="../../assets/css/styles.css?v=1001">
+  <!-- Header JS (injects header markup) -->
+  <script defer src="../../assets/js/header.js?v=1009"></script>
+  <!-- Page-specific styles -->
+  <style>
+    /* ============================================================
+       Shelter Foundation page
+       Brand tokens (--rls-*) come from header.css / styles.css
+       Palette = RLP-approved primary + permitted secondary tones.
+       ============================================================ */
+    :root{
+      --sf-display: 'Cormorant Garamond', Georgia, serif;
+      --sf-soft:    #f5f4f2;
+      --sf-muted:   #8a8a8a;
+      --sf-line:    #e3e1dd;
+    }
 
+    .sf-wrap{
+      max-width: var(--rls-max-width, 1200px);
+      margin: 0 auto;
+      padding: 0 2.5rem;
+    }
+    .sf-narrow{ max-width:820px; }
+    .sf-eyebrow{
+      font-size:.72rem; letter-spacing:.28em; text-transform:uppercase;
+      color:var(--sf-muted); font-weight:500;
+    }
+    .sf-h2{
+      font-family:var(--sf-display);
+      font-weight:500;
+      font-size:clamp(1.9rem,3.6vw,2.8rem);
+      line-height:1.12;
+      color:var(--rls-black,#000);
+      margin:0 0 .35em;
+    }
+    .sf-rule{ width:54px; height:2px; background:var(--rls-red,#EA002A); margin:14px 0 24px; }
+    .sf-rule.is-center{ margin-left:auto; margin-right:auto; }
+    .sf-p{ color:var(--rls-warm-grey,#6B6660); margin:0 0 1.1rem; font-size:1.02rem; }
+    .sf-p:last-child{ margin-bottom:0; }
+    .sf-section{ padding:clamp(54px,7vw,92px) 0; }
+
+    /* ── Hero ── */
+    .sf-hero{
+      position:relative;
+      min-height:clamp(360px,46vw,540px);
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; text-align:center;
+      /* EVENT PHOTO: replace this background URL with a wide team /
+         fundraising-event photo (golf tournament, charity night, etc). */
+      background:
+        linear-gradient(rgba(15,15,15,.62),rgba(15,15,15,.66)),
+        url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+    }
+    .sf-hero-inner{ max-width:760px; padding:0 1.5rem; }
+    .sf-hero .sf-eyebrow{ color:rgba(255,255,255,.8); }
+    .sf-hero h1{
+      font-family:var(--sf-display);
+      font-weight:500; font-size:clamp(2.4rem,5.5vw,4.2rem);
+      letter-spacing:.02em; color:#fff;
+      margin:.5rem 0 .7rem; line-height:1.05;
+    }
+    .sf-hero p{ color:rgba(255,255,255,.88); font-size:1.08rem; margin:0; }
+
+    /* ── Intro ── */
+    .sf-intro{ text-align:center; }
+    .sf-intro .sf-p{ font-size:1.08rem; }
+    .sf-lead{
+      font-family:var(--sf-display);
+      font-size:clamp(1.3rem,2.4vw,1.7rem);
+      font-weight:500; color:var(--rls-black,#000);
+      line-height:1.4; margin:0 0 1.4rem;
+    }
+
+    /* ── Stats band ── */
+    .sf-stats{
+      background:var(--rls-black,#000); color:#fff;
+    }
+    .sf-stats-grid{
+      display:grid; grid-template-columns:repeat(3,1fr);
+      gap:1px; background:rgba(255,255,255,.12);
+    }
+    .sf-stat{
+      background:var(--rls-black,#000);
+      padding:clamp(34px,5vw,56px) 1.5rem; text-align:center;
+    }
+    .sf-stat-num{
+      font-family:var(--sf-display);
+      font-size:clamp(2.4rem,4.5vw,3.4rem);
+      font-weight:600; color:var(--rls-red,#EA002A);
+      line-height:1; margin-bottom:.5rem;
+    }
+    .sf-stat-label{
+      font-size:.82rem; letter-spacing:.06em;
+      color:#cfcfcf; line-height:1.5;
+    }
+
+    /* ── Why it matters (image + text) ── */
+    .sf-split{
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:clamp(36px,5vw,72px); align-items:center;
+    }
+    .sf-split-img{
+      /* EVENT PHOTO: replace with a team or community photo. */
+      border-radius:6px; overflow:hidden;
+      background:var(--sf-soft);
+      aspect-ratio:4/3;
+    }
+    .sf-split-img img{
+      width:100%; height:100%; object-fit:cover; display:block;
+    }
+    .sf-quote-card{
+      background:var(--sf-soft);
+      border-left:3px solid var(--rls-red,#EA002A);
+      padding:24px 28px; border-radius:0 5px 5px 0;
+      margin:1.4rem 0 0;
+    }
+    .sf-quote-card p{
+      font-family:var(--sf-display);
+      font-size:1.25rem; font-weight:500;
+      color:var(--rls-black,#000); margin:0; line-height:1.4;
+    }
+
+    /* ── Ways we support / get involved cards ── */
+    .sf-cards{
+      display:grid; grid-template-columns:repeat(3,1fr);
+      gap:22px; margin-top:2rem;
+    }
+    .sf-card{
+      border:1px solid var(--sf-line);
+      border-top:3px solid var(--rls-red,#EA002A);
+      border-radius:0 0 5px 5px;
+      padding:28px 26px;
+    }
+    .sf-card-icon{
+      width:46px; height:46px; border-radius:50%;
+      background:#fff4f5;
+      display:flex; align-items:center; justify-content:center;
+      color:var(--rls-red,#EA002A); margin-bottom:1rem;
+    }
+    .sf-card-icon svg{ width:24px; height:24px; }
+    .sf-card h3{
+      font-family:var(--rls-sans);
+      font-size:1.02rem; font-weight:600;
+      color:var(--rls-black,#000); margin:0 0 .5rem;
+    }
+    .sf-card p{
+      font-size:.93rem; color:var(--rls-warm-grey,#6B6660);
+      margin:0; line-height:1.6;
+    }
+
+    /* ── Get-involved list ── */
+    .sf-involved{ background:var(--sf-soft); }
+    .sf-involved-list{
+      list-style:none; margin:1.6rem 0 0; padding:0;
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:14px 30px;
+    }
+    .sf-involved-list li{
+      display:flex; gap:14px; align-items:flex-start;
+      color:var(--rls-dark-grey,#2A2A2A); font-size:1rem;
+    }
+    .sf-check{
+      flex:0 0 auto; width:26px; height:26px; border-radius:50%;
+      background:var(--rls-red,#EA002A); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      margin-top:1px;
+    }
+    .sf-check svg{ width:13px; height:13px; }
+
+    /* ── Local partners ── */
+    .sf-partners{
+      display:grid; grid-template-columns:repeat(3,1fr);
+      gap:22px; margin-top:2rem;
+    }
+    .sf-partner{
+      background:#fff;
+      border:1px solid var(--sf-line);
+      border-radius:6px; padding:28px 26px;
+      text-align:center;
+    }
+    .sf-partner-mark{
+      width:54px; height:54px; border-radius:50%;
+      background:var(--rls-black,#000); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      margin:0 auto 1rem;
+      font-family:var(--sf-display); font-weight:600; font-size:1.4rem;
+    }
+    .sf-partner h3{
+      font-family:var(--rls-sans);
+      font-size:1.02rem; font-weight:600;
+      color:var(--rls-black,#000); margin:0 0 .4rem;
+    }
+    .sf-partner p{
+      font-size:.88rem; color:var(--rls-warm-grey,#6B6660);
+      margin:0; line-height:1.55;
+    }
+    .sf-partners-note{
+      text-align:center; margin-top:1.8rem;
+      font-size:.95rem; color:var(--rls-warm-grey,#6B6660);
+    }
+
+    /* ── Photo gallery ── */
+    .sf-gallery{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      grid-auto-rows:170px;
+      gap:14px; margin-top:2rem;
+    }
+    .sf-gallery figure{
+      margin:0; border-radius:5px; overflow:hidden;
+      background:var(--sf-soft); position:relative;
+    }
+    .sf-gallery img{
+      width:100%; height:100%; object-fit:cover; display:block;
+      transition:transform .5s ease;
+    }
+    .sf-gallery figure:hover img{ transform:scale(1.05); }
+    /* feature two tiles larger for a varied layout */
+    .sf-gallery .sf-g-wide{ grid-column:span 2; }
+    .sf-gallery .sf-g-tall{ grid-row:span 2; }
+    .sf-gallery figcaption{
+      position:absolute; left:0; right:0; bottom:0;
+      background:linear-gradient(transparent,rgba(0,0,0,.72));
+      color:#fff; font-size:.78rem; letter-spacing:.02em;
+      padding:22px 14px 12px;
+    }
+
+    /* ── CTA ── */
+    .sf-cta{
+      background:var(--rls-red,#EA002A); color:#fff;
+      text-align:center; padding:clamp(56px,7vw,92px) 0;
+    }
+    .sf-cta h2{
+      font-family:var(--sf-display); font-weight:500;
+      font-size:clamp(2rem,4vw,2.9rem); color:#fff; margin:0 0 .6rem;
+    }
+    .sf-cta p{
+      color:rgba(255,255,255,.9); max-width:560px;
+      margin:0 auto 1.8rem; font-size:1.04rem;
+    }
+    .sf-btn{
+      display:inline-block;
+      font-size:.78rem; letter-spacing:.2em; text-transform:uppercase;
+      padding:18px 44px; border-radius:40px;
+      background:#fff; color:var(--rls-red,#EA002A); font-weight:600;
+      border:1px solid #fff;
+      transition:transform .2s, background .2s, color .2s;
+    }
+    .sf-btn:hover{
+      transform:translateY(-2px);
+      background:var(--rls-black,#000); color:#fff; border-color:var(--rls-black,#000);
+    }
+
+    /* ── Closing note ── */
+    .sf-close{ text-align:center; }
+    .sf-close .sf-lead{ margin-bottom:0; }
+
+    /* ── Disclaimer ── */
+    .sf-disclaimer{ background:var(--sf-soft); padding:clamp(26px,4vw,38px) 0; }
+    .sf-disclaimer .sf-wrap{ font-size:.78rem; color:var(--sf-muted); line-height:1.6; }
+
+    /* ── Responsive ── */
+    @media(max-width:900px){
+      .sf-stats-grid{ grid-template-columns:1fr; }
+      .sf-split{ grid-template-columns:1fr; }
+      .sf-cards, .sf-partners{ grid-template-columns:1fr; }
+      .sf-involved-list{ grid-template-columns:1fr; }
+      .sf-gallery{ grid-template-columns:repeat(2,1fr); grid-auto-rows:150px; }
+      .sf-gallery .sf-g-wide{ grid-column:span 2; }
+      .sf-gallery .sf-g-tall{ grid-row:span 1; }
+    }
+    @media(max-width:768px){
+      .sf-wrap{ padding:0 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ─────────────────────────────────────────────
+       Header is injected automatically by header.js
+       ───────────────────────────────────────────── -->
+  <main>
+
+    <!-- ===================== HERO ===================== -->
+    <section class="sf-hero">
+      <div class="sf-hero-inner">
+        <span class="sf-eyebrow">Royal LePage Solutions</span>
+        <h1>Royal LePage Shelter Foundation</h1>
+        <p>Giving back to our community is an important part of who we are.</p>
+      </div>
+    </section>
+
+    <!-- ===================== INTRO ===================== -->
+    <section class="sf-section sf-intro">
+      <div class="sf-wrap sf-narrow">
+        <p class="sf-lead">A home should be a safe place — and helping people
+        feel safe, supported, and at home is at the heart of what we do.</p>
+        <p class="sf-p">Through the Royal LePage Shelter Foundation, we support
+        local women's shelters and programs that help women and children
+        experiencing domestic violence. The Foundation is Canada's largest
+        public foundation dedicated solely to supporting women's shelters and
+        violence prevention programs.</p>
+        <p class="sf-p">Since it began in 1998, the Royal LePage Shelter
+        Foundation has helped raise millions of dollars for shelters across
+        Canada. One thing that makes the Foundation special is that Royal
+        LePage Canada covers the administrative costs — which means every
+        dollar raised by Royal LePage agents and brokerages goes directly to
+        the cause.</p>
+      </div>
+    </section>
+
+    <!-- ===================== STATS BAND ===================== -->
+    <section class="sf-stats">
+      <div class="sf-stats-grid">
+        <div class="sf-stat">
+          <div class="sf-stat-num">1998</div>
+          <div class="sf-stat-label">The year the Shelter Foundation began</div>
+        </div>
+        <div class="sf-stat">
+          <div class="sf-stat-num">100%</div>
+          <div class="sf-stat-label">Of every dollar raised goes directly to the cause</div>
+        </div>
+        <div class="sf-stat">
+          <div class="sf-stat-num">Millions</div>
+          <div class="sf-stat-label">Raised for women's shelters across Canada</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== WHY THIS MATTERS ===================== -->
+    <section class="sf-section">
+      <div class="sf-wrap">
+        <div class="sf-split">
+          <div>
+            <span class="sf-eyebrow">Why This Matters</span>
+            <h2 class="sf-h2">A Safe Place to Call Home</h2>
+            <div class="sf-rule"></div>
+            <p class="sf-p">Sadly, many women and children in Canada are forced
+            to leave their homes because of domestic violence. Women's shelters
+            provide a safe place to stay, along with support, guidance, and
+            resources during an incredibly difficult time.</p>
+            <p class="sf-p">By supporting the Royal LePage Shelter Foundation,
+            we're helping local shelters continue this important work — and
+            helping create safer homes and stronger communities.</p>
+            <div class="sf-quote-card">
+              <p>"Real estate is about more than buying and selling houses.
+              It's also about helping people feel safe, supported, and at
+              home."</p>
+            </div>
+          </div>
+          <!-- EVENT PHOTO: replace the image below with a team or
+               community photo (a fundraising event, volunteers, a
+               cheque presentation). Avoid any imagery that could
+               identify shelter clients. -->
+          <div class="sf-split-img">
+            <img src="https://images.unsplash.com/photo-1593113646773-028c64a8f1b8?auto=format&fit=crop&w=1000&q=80"
+                 alt="Royal LePage Solutions team supporting the community">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== HOW WE SUPPORT ===================== -->
+    <section class="sf-section" style="padding-top:0;">
+      <div class="sf-wrap">
+        <div style="text-align:center;">
+          <span class="sf-eyebrow">Our Commitment</span>
+          <h2 class="sf-h2">How Royal LePage Solutions Helps</h2>
+          <div class="sf-rule is-center"></div>
+        </div>
+        <div class="sf-cards">
+          <div class="sf-card">
+            <div class="sf-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 21s-7-4.35-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.65-9.5 9-9.5 9z"/>
+              </svg>
+            </div>
+            <h3>Commission Donors</h3>
+            <p>Our agents can choose to become commission donors, giving a
+            portion of their real estate commissions to the Shelter Foundation.
+            This keeps support going all year — not just during one-time
+            events.</p>
+          </div>
+          <div class="sf-card">
+            <div class="sf-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/>
+              </svg>
+            </div>
+            <h3>Local Fundraising</h3>
+            <p>We support local fundraising efforts and community initiatives
+            that raise both awareness and funds for shelters right here in our
+            area.</p>
+          </div>
+          <div class="sf-card">
+            <div class="sf-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 21 12 17l-5.5 4L8 13.5 3 9l6.5-.5z"/>
+              </svg>
+            </div>
+            <h3>Community Events</h3>
+            <p>From local events to shelter-focused campaigns, our team takes
+            part in efforts throughout the year that strengthen support for
+            families in our communities.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PHOTO GALLERY ===================== -->
+    <!-- EVENT PHOTOS: this gallery is built for your real event photos.
+         Swap each placeholder src for a team / fundraising photo and
+         update the <figcaption> text. Keep, remove, or add tiles as
+         needed — the .sf-g-wide and .sf-g-tall classes vary the layout. -->
+    <section class="sf-section" style="padding-top:0;">
+      <div class="sf-wrap">
+        <div style="text-align:center;">
+          <span class="sf-eyebrow">In Our Community</span>
+          <h2 class="sf-h2">Supporting the Cause Together</h2>
+          <div class="sf-rule is-center"></div>
+        </div>
+        <div class="sf-gallery">
+          <figure class="sf-g-wide sf-g-tall">
+            <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=1000&q=80"
+                 alt="Royal LePage Solutions fundraising event">
+            <figcaption>Our annual fundraising event</figcaption>
+          </figure>
+          <figure>
+            <img src="https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=700&q=80"
+                 alt="Team volunteering in the community">
+            <figcaption>Volunteering together</figcaption>
+          </figure>
+          <figure>
+            <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=700&q=80"
+                 alt="Community gathering">
+            <figcaption>Community gathering</figcaption>
+          </figure>
+          <figure class="sf-g-wide">
+            <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1000&q=80"
+                 alt="Celebrating a fundraising milestone">
+            <figcaption>Celebrating a fundraising milestone</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== LOCAL PARTNERS ===================== -->
+    <section class="sf-section" style="padding-top:0;">
+      <div class="sf-wrap">
+        <div style="text-align:center;">
+          <span class="sf-eyebrow">Local Shelter Partners</span>
+          <h2 class="sf-h2">Organizations We're Proud to Support</h2>
+          <div class="sf-rule is-center"></div>
+        </div>
+        <div class="sf-partners">
+          <div class="sf-partner">
+            <div class="sf-partner-mark">F</div>
+            <h3>FearIsNotLove</h3>
+            <p>Formerly the Calgary Women's Emergency Shelter — providing
+            shelter, crisis support, and safety planning.</p>
+          </div>
+          <div class="sf-partner">
+            <div class="sf-partner-mark">R</div>
+            <h3>Rowan House Society</h3>
+            <p>Supporting women and families experiencing family violence in
+            the communities south of Calgary.</p>
+          </div>
+          <div class="sf-partner">
+            <div class="sf-partner-mark">Y</div>
+            <h3>YWCA Banff</h3>
+            <p>Offering shelter, counselling, and support services for people
+            experiencing family violence in the Bow Valley.</p>
+          </div>
+        </div>
+        <p class="sf-partners-note">These organizations provide shelter, safety
+        planning, crisis support, counselling, and other vital services for
+        people experiencing family violence in Calgary and surrounding
+        communities.</p>
+      </div>
+    </section>
+
+    <!-- ===================== HOW AGENTS CAN GET INVOLVED ===================== -->
+    <section class="sf-section sf-involved">
+      <div class="sf-wrap">
+        <span class="sf-eyebrow">For Our Agents</span>
+        <h2 class="sf-h2">How Agents Can Get Involved</h2>
+        <div class="sf-rule"></div>
+        <p class="sf-p">We believe small actions can make a big difference.
+        There are many ways for our agents to support the Shelter Foundation
+        and the local shelters connected to our communities:</p>
+        <ul class="sf-involved-list">
+          <li>
+            <span class="sf-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+            <span>Becoming a commission donor</span>
+          </li>
+          <li>
+            <span class="sf-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+            <span>Taking part in local fundraising events</span>
+          </li>
+          <li>
+            <span class="sf-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+            <span>Volunteering time or resources</span>
+          </li>
+          <li>
+            <span class="sf-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+            <span>Sharing information about the Foundation with clients and the community</span>
+          </li>
+          <li>
+            <span class="sf-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
+            <span>Supporting shelter-focused campaigns throughout the year</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== OUR GOAL / CLOSING ===================== -->
+    <section class="sf-section sf-close">
+      <div class="sf-wrap sf-narrow">
+        <span class="sf-eyebrow">A Cause Close to Home</span>
+        <h2 class="sf-h2">Our Goal</h2>
+        <div class="sf-rule is-center"></div>
+        <p class="sf-p">At Royal LePage Solutions, our goal is to keep building
+        strong support for the Shelter Foundation and the local shelters
+        connected to our communities. Whether it's through commission
+        donations, fundraising events, or simply helping raise awareness, every
+        contribution helps create safer homes and stronger communities.</p>
+        <p class="sf-lead">That is why we are proud to support the Royal LePage
+        Shelter Foundation and the local organizations doing this important
+        work every day.</p>
+      </div>
+    </section>
+
+    <!-- ===================== CTA ===================== -->
+    <section class="sf-cta">
+      <div class="sf-wrap">
+        <h2>Want to Help?</h2>
+        <p>Whether you'd like to get involved, learn more, or support a local
+        shelter, we'd love to hear from you.</p>
+        <a href="https://info.royallepagesolutions.com/pages/contact/" class="sf-btn">Get in Touch</a>
+      </div>
+    </section>
+
+    <!-- ===================== DISCLAIMER ===================== -->
+    <section class="sf-disclaimer">
+      <div class="sf-wrap">
+        <p>The Royal LePage Shelter Foundation is a registered public
+        foundation. Royal LePage® and the Royal LePage Shelter Foundation™ are
+        trademarks used under licence. If you or someone you know is
+        experiencing family violence and needs help, please contact a local
+        shelter or emergency services.</p>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>
