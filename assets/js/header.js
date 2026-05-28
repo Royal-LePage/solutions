@@ -82,7 +82,7 @@ console.log('RLS HEADER JS LOADED v1011');
           <div class="rls-menu-col">
             <h3>Royal LePage</h3>
             <ul>
-              <li><a href="https://info.royallepagesolutions.com/pages/about-rlp/">About Royal LePage</a></li>
+              <li><a href="https://www.royallepage.ca/en/realestate/about-us/">About Royal LePage</a></li>
               <li><a href="https://info.royallepagesolutions.com/pages/shelter/">Shelter Foundation</a></li>
             </ul>
           </div>
