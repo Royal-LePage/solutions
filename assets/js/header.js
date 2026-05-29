@@ -61,6 +61,7 @@ console.log('RLS HEADER JS LOADED v1011');
               <li><a href="https://info.royallepagesolutions.com/pages/join-us/">Join Us / Careers</a></li>
               <li><a href="https://info.royallepagesolutions.com/pages/deposit/">Deposit Instructions</a></li>
               <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/blog/">Blog</a></li>
             </ul>
           </div>
 
