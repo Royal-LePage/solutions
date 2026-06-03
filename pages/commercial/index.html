@@ -9,12 +9,1107 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <!-- Header CSS -->
-  <link rel="stylesheet" href="../../assets/css/header.css?v=1010">
-  <!-- Site CSS -->
-  <link rel="stylesheet" href="../../assets/css/styles.css?v=1001">
-  <!-- Header JS (injects header markup) -->
-  <script defer src="../../assets/js/header.js?v=1011"></script>
+  <!-- Header CSS (inlined for standalone preview) -->
+  <style>
+/* =========================================================
+   Royal LePage Solutions - Custom Header
+   v1010 - Increased subpage #listings-map padding to 60px/40px
+           so the red filter bar subtitle isn't clipped by header
+   ========================================================= */
+
+:root {
+  --rls-red:        #EA002A;
+  --rls-red-dk:     #C20023;
+  --rls-black:      #000000;
+  --rls-white:      #FFFFFF;
+  --rls-dark-grey:  #2A2A2A;
+  --rls-warm-grey:  #6B6660;
+  --rls-light-grey: #E8E6E3;
+  --rls-stone:      #D8D3CB;
+  --rls-taupe:      #B8AC9C;
+
+  --rls-header-h:        160px;
+  --rls-header-h-tablet: 130px;
+  --rls-header-h-mobile: 96px;
+
+  --rls-sans: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+}
+
+/* ─────────────────────────────────────────────────────────
+   0) Reset / page baseline
+   ───────────────────────────────────────────────────────── */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.rls-menu-open {
+  overflow: hidden !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   1) Hide BoldTrail's native header ONLY after ours injects
+   ───────────────────────────────────────────────────────── */
+body.has-rls-header #header,
+body.has-rls-header div#header,
+body.has-rls-header .site-header,
+body.has-rls-header .kv-header,
+body.has-rls-header #quick-search,
+body.has-rls-header #fixed-header-spacer,
+body.has-rls-header .page-wrapper > #header {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+}
+
+body.has-rls-header #fixed-header-spacer,
+body.has-rls-header .header-spacer,
+body.has-rls-header .sticky-spacer,
+body.has-rls-header .kv-sticky-spacer {
+  position: static !important;
+  z-index: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   2) Reserve header space (when not in hero mode)
+   ───────────────────────────────────────────────────────── */
+body.rls-header-ready:not(.rls-has-hero) {
+  padding-top: var(--rls-header-h) !important;
+}
+
+@media (max-width: 1024px) {
+  body.rls-header-ready:not(.rls-has-hero) {
+    padding-top: var(--rls-header-h-tablet) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  body.rls-header-ready:not(.rls-has-hero) {
+    padding-top: var(--rls-header-h-mobile) !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   2b) Map/search results pages — push the full-bleed
+       map+results layout below the fixed header.
+       BoldTrail's #listings-map breaks out of the body's
+       padded area, so it needs its own offset to keep the
+       red filter bar / pagination from sliding under the
+       fixed header.
+   ───────────────────────────────────────────────────────── */
+body.rls-header-ready:not(.rls-has-hero) #listings-map {
+  padding-top: 60px !important;
+}
+
+@media (max-width: 768px) {
+  body.rls-header-ready:not(.rls-has-hero) #listings-map {
+    padding-top: 40px !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   3) Header container
+   ───────────────────────────────────────────────────────── */
+#rls-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 9999 !important;
+  font-family: var(--rls-sans);
+  background: var(--rls-black);
+  color: var(--rls-white);
+  transition: background-color 0.35s ease, box-shadow 0.35s ease;
+  pointer-events: auto !important;
+}
+
+#rls-header * {
+  pointer-events: auto !important;
+}
+
+/* Transparent mode when over a hero, before scroll */
+body.rls-has-hero #rls-header.is-transparent {
+  background: transparent;
+  box-shadow: none;
+}
+
+#rls-header.is-scrolled {
+  background: var(--rls-black);
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* ─────────────────────────────────────────────────────────
+   4) Header inner layout
+   ───────────────────────────────────────────────────────── */
+#rls-header .rls-header-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+  height: var(--rls-header-h);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+}
+
+/* ─────────────────────────────────────────────────────────
+   5) Logo - absolutely centered
+   ───────────────────────────────────────────────────────── */
+#rls-header .rls-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  line-height: 1;
+  transition: opacity 0.25s ease;
+}
+
+#rls-header .rls-logo:hover {
+  opacity: 0.85;
+}
+
+#rls-header .rls-logo img {
+  height: 130px;
+  width: auto;
+  display: block;
+}
+
+/* ─────────────────────────────────────────────────────────
+   6) Header right (deposit button + phone + hamburger)
+   ───────────────────────────────────────────────────────── */
+#rls-header .rls-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* Deposit Instructions button — white outlined */
+#rls-header .rls-deposit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: var(--rls-white);
+  font-family: var(--rls-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.4rem;
+  border-radius: 2px;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+#rls-header .rls-deposit-btn:hover {
+  background: var(--rls-red);
+  border-color: var(--rls-red);
+  color: var(--rls-white);
+}
+
+#rls-header .rls-phone {
+  text-decoration: none;
+  color: var(--rls-white);
+  font-family: var(--rls-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  transition: color 0.25s ease;
+  white-space: nowrap;
+}
+
+#rls-header .rls-phone:hover {
+  color: var(--rls-red);
+}
+
+/* Hamburger button */
+#rls-header .rls-hamburger {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 2px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+#rls-header .rls-hamburger:hover {
+  background: var(--rls-red);
+  border-color: var(--rls-red);
+}
+
+#rls-header .rls-hamburger:focus {
+  outline: 2px solid var(--rls-red);
+  outline-offset: 2px;
+}
+
+#rls-header .rls-hamburger-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 22px;
+}
+
+#rls-header .rls-hamburger-lines span {
+  display: block;
+  height: 1.5px;
+  background: var(--rls-white);
+  border-radius: 1px;
+  transition: width 0.35s ease;
+}
+
+#rls-header .rls-hamburger-lines span:nth-child(1) { width: 100%; }
+#rls-header .rls-hamburger-lines span:nth-child(2) { width: 65%; align-self: flex-end; }
+
+/* ─────────────────────────────────────────────────────────
+   7) Slide-out menu overlay
+   ───────────────────────────────────────────────────────── */
+#rls-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+  z-index: 9998;
+}
+
+#rls-menu-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ─────────────────────────────────────────────────────────
+   8) Slide-out menu (from right)
+   ───────────────────────────────────────────────────────── */
+#rls-slide-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: min(720px, 100vw);
+  background: var(--rls-black);
+  transform: translateX(100%);
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 10000;
+  overflow-y: auto;
+  box-shadow: -4px 0 30px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+}
+
+#rls-slide-menu.is-open {
+  transform: translateX(0);
+}
+
+/* Subtle red accent at top edge */
+#rls-slide-menu::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--rls-red);
+}
+
+/* Close button */
+#rls-slide-menu .rls-menu-close {
+  position: absolute;
+  top: 1.75rem;
+  right: 2rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--rls-white);
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  z-index: 2;
+}
+
+#rls-slide-menu .rls-menu-close:hover {
+  background: var(--rls-red);
+  border-color: var(--rls-red);
+  transform: rotate(90deg);
+}
+
+#rls-slide-menu .rls-menu-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   9) Menu content layout
+   ───────────────────────────────────────────────────────── */
+#rls-slide-menu .rls-menu-inner {
+  padding: 5rem 3.5rem 2rem;
+  flex: 1;
+}
+
+#rls-slide-menu .rls-menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem 3rem;
+}
+
+#rls-slide-menu .rls-menu-col h3 {
+  font-family: var(--rls-sans);
+  color: var(--rls-white);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+#rls-slide-menu .rls-menu-col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+#rls-slide-menu .rls-menu-col a,
+#rls-slide-menu .rls-menu-col button {
+  font-family: var(--rls-sans);
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  padding: 0.5rem 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  transition: color 0.25s ease, padding-left 0.25s ease;
+}
+
+#rls-slide-menu .rls-menu-col a::before,
+#rls-slide-menu .rls-menu-col button::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--rls-red);
+  transition: width 0.25s ease;
+  transform: translateY(-50%);
+}
+
+#rls-slide-menu .rls-menu-col a:hover,
+#rls-slide-menu .rls-menu-col button:hover {
+  color: var(--rls-red);
+  padding-left: 1.25rem;
+}
+
+#rls-slide-menu .rls-menu-col a:hover::before,
+#rls-slide-menu .rls-menu-col button:hover::before {
+  width: 0.85rem;
+}
+
+/* Submenu indicator arrow */
+#rls-slide-menu .rls-submenu-arrow {
+  font-size: 1.1rem;
+  font-weight: 300;
+  opacity: 0.6;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+#rls-slide-menu .rls-menu-col button:hover .rls-submenu-arrow {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+/* ─────────────────────────────────────────────────────────
+   10) Contact strip at bottom of slide-out
+   ───────────────────────────────────────────────────────── */
+#rls-slide-menu .rls-menu-contact {
+  background: var(--rls-red);
+  color: var(--rls-white);
+  padding: 2rem 3.5rem;
+  font-family: var(--rls-sans);
+}
+
+#rls-slide-menu .rls-menu-contact .rls-contact-brand {
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-bottom: 1.25rem;
+}
+
+#rls-slide-menu .rls-menu-contact a,
+#rls-slide-menu .rls-menu-contact span {
+  color: var(--rls-white);
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  line-height: 1.55;
+  transition: opacity 0.25s ease;
+}
+
+#rls-slide-menu .rls-menu-contact a:hover {
+  opacity: 0.78;
+}
+
+#rls-slide-menu .rls-contact-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+#rls-slide-menu .rls-contact-row svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-top: 4px;
+  opacity: 0.9;
+}
+
+/* ─────────────────────────────────────────────────────────
+   11) Mobile submenu panel (slides in over main menu)
+   ───────────────────────────────────────────────────────── */
+#rls-slide-menu .rls-submenu-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--rls-black);
+  padding: 5rem 3.5rem 2rem;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.77, 0, 0.175, 1);
+  overflow-y: auto;
+  z-index: 3;
+  display: none;
+}
+
+#rls-slide-menu .rls-submenu-panel.is-open {
+  transform: translateX(0);
+  display: block;
+}
+
+#rls-slide-menu .rls-submenu-back {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--rls-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.25s ease;
+}
+
+#rls-slide-menu .rls-submenu-back:hover {
+  color: var(--rls-red);
+}
+
+#rls-slide-menu .rls-submenu-back::before {
+  content: '←';
+  font-size: 1.1rem;
+}
+
+#rls-slide-menu .rls-submenu-title {
+  font-family: var(--rls-sans);
+  color: var(--rls-white);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+#rls-slide-menu .rls-submenu-panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+#rls-slide-menu .rls-submenu-panel a {
+  font-family: var(--rls-sans);
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  padding: 0.6rem 0;
+  display: block;
+  transition: color 0.25s ease, padding-left 0.25s ease;
+  position: relative;
+}
+
+#rls-slide-menu .rls-submenu-panel a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--rls-red);
+  transition: width 0.25s ease;
+  transform: translateY(-50%);
+}
+
+#rls-slide-menu .rls-submenu-panel a:hover {
+  color: var(--rls-red);
+  padding-left: 1.25rem;
+}
+
+#rls-slide-menu .rls-submenu-panel a:hover::before {
+  width: 0.85rem;
+}
+
+/* ─────────────────────────────────────────────────────────
+   12) Responsive
+   ───────────────────────────────────────────────────────── */
+@media (max-width: 1200px) {
+  #rls-header .rls-deposit-btn {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    padding: 0.75rem 1.1rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  #rls-header .rls-header-inner {
+    padding: 0 1.75rem;
+    height: var(--rls-header-h-tablet);
+  }
+  #rls-header .rls-logo img { height: 105px; }
+  #rls-header .rls-header-right { gap: 0.85rem; }
+  #rls-header .rls-phone { display: none; }
+}
+
+@media (max-width: 768px) {
+  #rls-slide-menu .rls-menu-inner {
+    padding: 4.5rem 2rem 1.5rem;
+  }
+  #rls-slide-menu .rls-menu-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  #rls-slide-menu .rls-menu-contact {
+    padding: 1.75rem 2rem;
+  }
+  #rls-slide-menu .rls-submenu-panel {
+    padding: 4.5rem 2rem 1.5rem;
+  }
+  #rls-header .rls-deposit-btn {
+    font-size: 0.65rem;
+    padding: 0.6rem 0.85rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (max-width: 600px) {
+  #rls-header .rls-header-inner {
+    padding: 0 1rem;
+    height: var(--rls-header-h-mobile);
+  }
+  #rls-header .rls-logo img { height: 72px; }
+  #rls-header .rls-header-right { gap: 0.5rem; }
+  #rls-header .rls-hamburger { width: 42px; height: 42px; }
+  /* Hide deposit button text on very small screens — could replace with icon if desired */
+  #rls-header .rls-deposit-btn {
+    font-size: 0.6rem;
+    padding: 0.55rem 0.7rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+  </style>
+  <!-- Site CSS (inlined for standalone preview) -->
+  <style>
+/* =========================================================
+   Royal LePage Solutions - Site-wide styles
+   v1001 - For pages hosted on info.royallepagesolutions.com
+   ========================================================= */
+
+:root {
+  --rls-red:        #EA002A;
+  --rls-red-dk:     #C20023;
+  --rls-black:      #000000;
+  --rls-white:      #FFFFFF;
+  --rls-dark-grey:  #2A2A2A;
+  --rls-warm-grey:  #6B6660;
+  --rls-light-grey: #E8E6E3;
+  --rls-stone:      #D8D3CB;
+  --rls-taupe:      #B8AC9C;
+
+  --rls-sans: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+
+  --rls-max-width: 1200px;
+}
+
+/* ─── Reset ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--rls-sans);
+  color: var(--rls-dark-grey);
+  background: var(--rls-white);
+  line-height: 1.65;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Typography ─── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--rls-sans);
+  color: var(--rls-black);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  font-weight: 200;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 300;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-weight: 500;
+}
+
+p {
+  margin: 0 0 1rem;
+  color: var(--rls-warm-grey);
+}
+
+a {
+  color: var(--rls-red);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+a:hover {
+  color: var(--rls-red-dk);
+}
+
+/* ─── Hero section ─── */
+.rls-hero {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  background: var(--rls-black);
+  color: var(--rls-white);
+  overflow: hidden;
+}
+
+.rls-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.5;
+}
+
+.rls-hero-content {
+  position: relative;
+  max-width: var(--rls-max-width);
+  margin: 0 auto;
+  padding: 6rem 2.5rem 4rem;
+  width: 100%;
+  z-index: 2;
+}
+
+.rls-hero-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.25rem;
+}
+
+.rls-hero h1 {
+  color: var(--rls-white);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  max-width: 18ch;
+  margin-bottom: 1.5rem;
+}
+
+.rls-hero h1 .accent {
+  color: var(--rls-red);
+  font-weight: 400;
+}
+
+/* ─── Container ─── */
+.rls-container {
+  max-width: var(--rls-max-width);
+  margin: 0 auto;
+  padding: 0 2.5rem;
+}
+
+.rls-section {
+  padding: 5rem 0;
+}
+
+/* ─── Buttons ─── */
+.rls-btn {
+  display: inline-block;
+  background: var(--rls-red);
+  color: var(--rls-white);
+  font-family: var(--rls-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 1rem 2.25rem;
+  border: 1px solid var(--rls-red);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+  text-decoration: none;
+}
+
+.rls-btn:hover {
+  background: var(--rls-red-dk);
+  border-color: var(--rls-red-dk);
+  color: var(--rls-white);
+}
+
+.rls-btn-outline {
+  background: transparent;
+  color: var(--rls-black);
+  border-color: var(--rls-black);
+}
+
+.rls-btn-outline:hover {
+  background: var(--rls-black);
+  color: var(--rls-white);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .rls-hero-content {
+    padding: 5rem 1.5rem 3rem;
+  }
+  .rls-container {
+    padding: 0 1.5rem;
+  }
+  .rls-section {
+    padding: 3.5rem 0;
+  }
+}
+
+  </style>
+  <!-- Header JS reference removed; inlined before   <!-- Header JS (inlined for standalone preview) -->
+  <script>
+/* =========================================================
+   Royal LePage Solutions - Header Injection & Behavior
+   v1011 - Reconciled all menu links to info.royallepagesolutions.com
+           pages; added Commercial Listings + Find an Agent under
+           Search & Services; moved Commercial Listings under Our Listings
+   ========================================================= */
+
+console.log('RLS HEADER JS LOADED v1011');
+
+(function () {
+  const VERSION = '1011';
+
+  // Base URL where logo and other assets live
+  const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
+
+  const DEPOSIT_URL = 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust';
+  const DEPOSIT_INSTRUCTIONS_URL = ASSET_BASE + '/deposits/';
+  const LOGO_URL = ASSET_BASE + '/assets/images/Solutions%20Logo%20Script_White%20%2B%20Red.png';
+
+  /* ─── Header markup ─── */
+  function buildHeaderHTML() {
+    return `
+      <div class="rls-header-inner">
+        <a href="https://www.rlpsolutions.ca/" class="rls-logo" aria-label="Royal LePage Solutions Home">
+          <img src="${LOGO_URL}" alt="Royal LePage Solutions">
+        </a>
+
+        <div class="rls-header-right">
+          <a class="rls-deposit-btn" href="${DEPOSIT_URL}">Deposit Instructions</a>
+          <a class="rls-phone" href="tel:4032525900">403.252.5900</a>
+          <button class="rls-hamburger" id="rls-hamburger" aria-label="Open menu" aria-expanded="false" type="button">
+            <span class="rls-hamburger-lines">
+              <span></span>
+              <span></span>
+            </span>
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ─── Slide-out menu markup ─── */
+  function buildMenuHTML() {
+    return `
+      <button class="rls-menu-close" id="rls-menu-close" aria-label="Close menu" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18"/>
+          <line x1="18" y1="6" x2="6" y2="18"/>
+        </svg>
+      </button>
+
+      <div class="rls-menu-inner">
+        <div class="rls-menu-grid">
+
+          <!-- Column 1: THE BROKERAGE -->
+          <div class="rls-menu-col">
+            <h3>The Brokerage</h3>
+            <ul>
+              <li><a href="https://info.royallepagesolutions.com/pages/about-us/">About Us</a></li>
+              <li><a href="https://www.rlpsolutions.ca/agents.php">Meet Our Team</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/join-us/">Join Us / Careers</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/deposit/">Deposit Instructions</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 2: SEARCH & SERVICES -->
+          <div class="rls-menu-col">
+            <h3>Search &amp; Services</h3>
+            <ul>
+              <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1&rtype=map">Search Listings</a></li>
+              <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1#rslt">Our Listings</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/commercial/">Commercial Listings</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/buyers/">Buying</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/seller/">Selling</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/finance/">Finance</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/lead/">Find an Agent</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 3: ROYAL LEPAGE -->
+          <div class="rls-menu-col">
+            <h3>Royal LePage</h3>
+            <ul>
+              <li><a href="https://info.royallepagesolutions.com/pages/about-rlp/">About Royal LePage</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/shelter/">Shelter Foundation</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 4: CONNECT -->
+          <div class="rls-menu-col">
+            <h3>Connect</h3>
+            <ul>
+              <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact Us</a></li>
+              <li><a href="https://www.facebook.com/RLPSolutions" target="_blank" rel="noopener">Facebook</a></li>
+              <li><a href="http://www.instagram.com/royallepagesolutions" target="_blank" rel="noopener">Instagram</a></li>
+              <li><a href="http://www.linkedin.com/company/royal-lepage-solutions" target="_blank" rel="noopener">LinkedIn</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Contact strip -->
+      <div class="rls-menu-contact">
+        <div class="rls-contact-brand">Royal LePage&reg; Solutions</div>
+
+        <div class="rls-contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <a href="tel:4032525900">403.252.5900</a>
+        </div>
+
+        <div class="rls-contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span>Calgary, Alberta</span>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ─── Inject everything ─── */
+  function ensureInjected() {
+    document.body.classList.add('has-rls-header');
+
+    let header = document.getElementById('rls-header');
+    if (!header) {
+      header = document.createElement('header');
+      header.id = 'rls-header';
+      header.innerHTML = buildHeaderHTML();
+      document.body.insertAdjacentElement('afterbegin', header);
+    } else if (!header.querySelector('#rls-hamburger')) {
+      header.innerHTML = buildHeaderHTML();
+    }
+
+    let overlay = document.getElementById('rls-menu-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'rls-menu-overlay';
+      document.body.appendChild(overlay);
+    }
+
+    let menu = document.getElementById('rls-slide-menu');
+    if (!menu) {
+      menu = document.createElement('aside');
+      menu.id = 'rls-slide-menu';
+      menu.setAttribute('aria-hidden', 'true');
+      menu.innerHTML = buildMenuHTML();
+      document.body.appendChild(menu);
+    } else if (!menu.querySelector('#rls-menu-close')) {
+      menu.innerHTML = buildMenuHTML();
+    }
+
+    bindHeaderBehavior(header, menu, overlay);
+
+    requestAnimationFrame(() => {
+      document.body.classList.add('rls-header-ready');
+    });
+
+    console.log('[RLS Header] Injected + bound OK - v' + VERSION);
+  }
+
+  /* ─── Behavior bindings ─── */
+  function bindHeaderBehavior(header, menu, overlay) {
+    if (header.dataset.rlsBound === '1') return;
+    header.dataset.rlsBound = '1';
+
+    const hamburger = document.getElementById('rls-hamburger');
+    const closeBtn = document.getElementById('rls-menu-close');
+
+    if (!hamburger || !closeBtn) return;
+
+    function openMenu() {
+      menu.classList.add('is-open');
+      overlay.classList.add('is-open');
+      document.body.classList.add('rls-menu-open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeMenu() {
+      menu.classList.remove('is-open');
+      overlay.classList.remove('is-open');
+      document.body.classList.remove('rls-menu-open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+      menu.querySelectorAll('.rls-submenu-panel').forEach(p => {
+        p.classList.remove('is-open');
+        p.setAttribute('aria-hidden', 'true');
+      });
+    }
+
+    hamburger.addEventListener('click', openMenu);
+    closeBtn.addEventListener('click', closeMenu);
+    overlay.addEventListener('click', closeMenu);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.classList.contains('is-open')) closeMenu();
+    });
+
+    menu.querySelectorAll('.rls-submenu-trigger').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = btn.getAttribute('data-submenu');
+        const panel = document.getElementById('rls-submenu-' + id);
+        if (panel) {
+          panel.classList.add('is-open');
+          panel.setAttribute('aria-hidden', 'false');
+        }
+      });
+    });
+
+    menu.querySelectorAll('[data-submenu-back]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-submenu-back');
+        const panel = document.getElementById('rls-submenu-' + id);
+        if (panel) {
+          panel.classList.remove('is-open');
+          panel.setAttribute('aria-hidden', 'true');
+        }
+      });
+    });
+
+    menu.addEventListener('click', (e) => {
+      if (e.target.closest('a')) closeMenu();
+    });
+  }
+
+  function run() {
+    ensureInjected();
+    setTimeout(ensureInjected, 500);
+    setTimeout(ensureInjected, 1500);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+    window.addEventListener('load', run);
+  } else {
+    run();
+  }
+})();
+
+  </script>
+</body> for standalone preview -->
   <!-- Page-specific styles -->
   <style>
     /* ============================================================
@@ -874,6 +1969,255 @@
       placeEl.value = (typed === DEFAULT_DISPLAY) ? DEFAULT_PLACEID : '';
     });
   })();
+  </script>
+  <!-- Header JS (inlined for standalone preview) -->
+  <script>
+/* =========================================================
+   Royal LePage Solutions - Header Injection & Behavior
+   v1011 - Reconciled all menu links to info.royallepagesolutions.com
+           pages; added Commercial Listings + Find an Agent under
+           Search & Services; moved Commercial Listings under Our Listings
+   ========================================================= */
+
+console.log('RLS HEADER JS LOADED v1011');
+
+(function () {
+  const VERSION = '1011';
+
+  // Base URL where logo and other assets live
+  const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
+
+  const DEPOSIT_URL = 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust';
+  const DEPOSIT_INSTRUCTIONS_URL = ASSET_BASE + '/deposits/';
+  const LOGO_URL = ASSET_BASE + '/assets/images/Solutions%20Logo%20Script_White%20%2B%20Red.png';
+
+  /* ─── Header markup ─── */
+  function buildHeaderHTML() {
+    return `
+      <div class="rls-header-inner">
+        <a href="https://www.rlpsolutions.ca/" class="rls-logo" aria-label="Royal LePage Solutions Home">
+          <img src="${LOGO_URL}" alt="Royal LePage Solutions">
+        </a>
+
+        <div class="rls-header-right">
+          <a class="rls-deposit-btn" href="${DEPOSIT_URL}">Deposit Instructions</a>
+          <a class="rls-phone" href="tel:4032525900">403.252.5900</a>
+          <button class="rls-hamburger" id="rls-hamburger" aria-label="Open menu" aria-expanded="false" type="button">
+            <span class="rls-hamburger-lines">
+              <span></span>
+              <span></span>
+            </span>
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ─── Slide-out menu markup ─── */
+  function buildMenuHTML() {
+    return `
+      <button class="rls-menu-close" id="rls-menu-close" aria-label="Close menu" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18"/>
+          <line x1="18" y1="6" x2="6" y2="18"/>
+        </svg>
+      </button>
+
+      <div class="rls-menu-inner">
+        <div class="rls-menu-grid">
+
+          <!-- Column 1: THE BROKERAGE -->
+          <div class="rls-menu-col">
+            <h3>The Brokerage</h3>
+            <ul>
+              <li><a href="https://info.royallepagesolutions.com/pages/about-us/">About Us</a></li>
+              <li><a href="https://www.rlpsolutions.ca/agents.php">Meet Our Team</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/join-us/">Join Us / Careers</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/deposit/">Deposit Instructions</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 2: SEARCH & SERVICES -->
+          <div class="rls-menu-col">
+            <h3>Search &amp; Services</h3>
+            <ul>
+              <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1&rtype=map">Search Listings</a></li>
+              <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1#rslt">Our Listings</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/commercial/">Commercial Listings</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/buyers/">Buying</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/seller/">Selling</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/finance/">Finance</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/lead/">Find an Agent</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 3: ROYAL LEPAGE -->
+          <div class="rls-menu-col">
+            <h3>Royal LePage</h3>
+            <ul>
+              <li><a href="https://info.royallepagesolutions.com/pages/about-rlp/">About Royal LePage</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/shelter/">Shelter Foundation</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 4: CONNECT -->
+          <div class="rls-menu-col">
+            <h3>Connect</h3>
+            <ul>
+              <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact Us</a></li>
+              <li><a href="https://www.facebook.com/RLPSolutions" target="_blank" rel="noopener">Facebook</a></li>
+              <li><a href="http://www.instagram.com/royallepagesolutions" target="_blank" rel="noopener">Instagram</a></li>
+              <li><a href="http://www.linkedin.com/company/royal-lepage-solutions" target="_blank" rel="noopener">LinkedIn</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Contact strip -->
+      <div class="rls-menu-contact">
+        <div class="rls-contact-brand">Royal LePage&reg; Solutions</div>
+
+        <div class="rls-contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <a href="tel:4032525900">403.252.5900</a>
+        </div>
+
+        <div class="rls-contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span>Calgary, Alberta</span>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ─── Inject everything ─── */
+  function ensureInjected() {
+    document.body.classList.add('has-rls-header');
+
+    let header = document.getElementById('rls-header');
+    if (!header) {
+      header = document.createElement('header');
+      header.id = 'rls-header';
+      header.innerHTML = buildHeaderHTML();
+      document.body.insertAdjacentElement('afterbegin', header);
+    } else if (!header.querySelector('#rls-hamburger')) {
+      header.innerHTML = buildHeaderHTML();
+    }
+
+    let overlay = document.getElementById('rls-menu-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'rls-menu-overlay';
+      document.body.appendChild(overlay);
+    }
+
+    let menu = document.getElementById('rls-slide-menu');
+    if (!menu) {
+      menu = document.createElement('aside');
+      menu.id = 'rls-slide-menu';
+      menu.setAttribute('aria-hidden', 'true');
+      menu.innerHTML = buildMenuHTML();
+      document.body.appendChild(menu);
+    } else if (!menu.querySelector('#rls-menu-close')) {
+      menu.innerHTML = buildMenuHTML();
+    }
+
+    bindHeaderBehavior(header, menu, overlay);
+
+    requestAnimationFrame(() => {
+      document.body.classList.add('rls-header-ready');
+    });
+
+    console.log('[RLS Header] Injected + bound OK - v' + VERSION);
+  }
+
+  /* ─── Behavior bindings ─── */
+  function bindHeaderBehavior(header, menu, overlay) {
+    if (header.dataset.rlsBound === '1') return;
+    header.dataset.rlsBound = '1';
+
+    const hamburger = document.getElementById('rls-hamburger');
+    const closeBtn = document.getElementById('rls-menu-close');
+
+    if (!hamburger || !closeBtn) return;
+
+    function openMenu() {
+      menu.classList.add('is-open');
+      overlay.classList.add('is-open');
+      document.body.classList.add('rls-menu-open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeMenu() {
+      menu.classList.remove('is-open');
+      overlay.classList.remove('is-open');
+      document.body.classList.remove('rls-menu-open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+      menu.querySelectorAll('.rls-submenu-panel').forEach(p => {
+        p.classList.remove('is-open');
+        p.setAttribute('aria-hidden', 'true');
+      });
+    }
+
+    hamburger.addEventListener('click', openMenu);
+    closeBtn.addEventListener('click', closeMenu);
+    overlay.addEventListener('click', closeMenu);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.classList.contains('is-open')) closeMenu();
+    });
+
+    menu.querySelectorAll('.rls-submenu-trigger').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = btn.getAttribute('data-submenu');
+        const panel = document.getElementById('rls-submenu-' + id);
+        if (panel) {
+          panel.classList.add('is-open');
+          panel.setAttribute('aria-hidden', 'false');
+        }
+      });
+    });
+
+    menu.querySelectorAll('[data-submenu-back]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-submenu-back');
+        const panel = document.getElementById('rls-submenu-' + id);
+        if (panel) {
+          panel.classList.remove('is-open');
+          panel.setAttribute('aria-hidden', 'true');
+        }
+      });
+    });
+
+    menu.addEventListener('click', (e) => {
+      if (e.target.closest('a')) closeMenu();
+    });
+  }
+
+  function run() {
+    ensureInjected();
+    setTimeout(ensureInjected, 500);
+    setTimeout(ensureInjected, 1500);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+    window.addEventListener('load', run);
+  } else {
+    run();
+  }
+})();
+
   </script>
 </body>
 </html>
