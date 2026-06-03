@@ -1,1 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commercial Listings — Royal LePage Solutions</title>
 
+<!-- Fonts: Raleway is required by the RLS header; Montserrat/Open Sans for this page -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- RLS shared header (CSS + JS injects the header markup automatically) -->
+<link rel="stylesheet" href="../../assets/css/header.css?v=1010">
+<script defer src="../../assets/js/header.js?v=1011"></script>
+
+<style>
+:root {
+  --red: #EA002A;
+  --black: #111111;
+  --dark: #1a1a1a;
+  --mid-grey: #444444;
+  --white: #ffffff;
+  --off-white: #f5f5f5;
+  --light: #eeeeee;
+  --border: #dddddd;
+  --text: #222222;
+  --muted: #777777;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Open Sans', sans-serif; background: var(--off-white); color: var(--text); -webkit-font-smoothing: antialiased; }
+#loadingOverlay { position:fixed; inset:0; background:var(--white); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; transition:opacity 0.4s; }
+#loadingOverlay.hidden { opacity:0; pointer-events:none; }
+#loadingOverlay img { animation:logoPulse 1.6s ease-in-out infinite; }
+@keyframes logoPulse { 0%,100%{opacity:.55} 50%{opacity:1} }
+.loader-sub { font-size:12px; color:var(--muted); letter-spacing:1px; }
+#coverHeader { background:var(--dark); position:relative; overflow:hidden; padding:52px 32px 48px; }
+#coverHeader::before { content:''; position:absolute; inset:0; background:repeating-linear-gradient(90deg,transparent,transparent 72px,rgba(234,0,42,.035) 72px,rgba(234,0,42,.035) 73px); }
+.cover-red-stripe { position:absolute; top:0; left:0; width:7px; height:100%; background:var(--red); }
+.cover-inner { max-width:1280px; margin:0 auto; position:relative; display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+#catTabs { background:var(--dark); border-bottom:3px solid var(--red); position:sticky; top:0; z-index:190; overflow-x:auto; scrollbar-width:none; }
+#catTabs::-webkit-scrollbar { display:none; }
+.cat-tabs-inner { max-width:1280px; margin:0 auto; display:flex; padding:0 32px; }
+.cat-tab-btn { font-family:'Montserrat',sans-serif; font-weight:700; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,.5); padding:13px 18px; border:none; background:transparent; cursor:pointer; border-bottom:3px solid transparent; margin-bottom:-3px; white-space:nowrap; transition:all .2s; text-decoration:none; display:block; }
+.cat-tab-btn:hover { color:var(--white); background:rgba(255,255,255,.05); }
+.cat-tab-btn.active { color:var(--white); border-bottom-color:var(--red); }
+#mainContent { max-width:1280px; margin:0 auto; padding:40px 32px 80px; }
+.cat-section { margin-bottom:48px; }
+.cat-section-header { display:flex; align-items:stretch; margin-bottom:0; }
+.cat-section-title { background:var(--red); padding:12px 24px; font-family:'Montserrat',sans-serif; font-weight:900; font-size:13px; letter-spacing:2.5px; text-transform:uppercase; color:var(--white); display:inline-flex; align-items:center; align-self:flex-start; box-shadow:2px 2px 8px rgba(0,0,0,.12); }
+.listings-table-wrap { background:var(--white); border:1px solid var(--border); border-top:none; overflow-x:auto; }
+table.lt { width:100%; border-collapse:collapse; font-size:12.5px; }
+table.lt thead tr { background:#2e2e2e; }
+table.lt thead th { font-family:'Montserrat',sans-serif; font-weight:700; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,.65); padding:11px 14px; text-align:left; border-right:1px solid rgba(255,255,255,.06); white-space:nowrap; }
+table.lt thead th:last-child { border-right:none; }
+table.lt tbody tr { border-bottom:1px solid var(--border); transition:background .12s; }
+table.lt tbody tr:last-child { border-bottom:none; }
+table.lt tbody tr:hover { background:#fafafa; }
+table.lt tbody tr:nth-child(even) { background:#fcfcfc; }
+table.lt tbody tr:nth-child(even):hover { background:#f5f5f5; }
+table.lt td { padding:14px; vertical-align:top; border-right:1px solid var(--border); line-height:1.5; }
+table.lt td:last-child { border-right:none; }
+.td-photo { width:90px; }
+.listing-photo { width:82px; height:62px; object-fit:cover; display:block; border-radius:1px; background:var(--light); cursor:pointer; transition:opacity .15s; }
+.listing-photo:hover { opacity:0.85; }
+.listing-photo-ph { width:82px; height:62px; background:var(--light); display:flex; align-items:center; justify-content:center; font-size:22px; color:#ccc; border-radius:1px; }
+#lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:9999; align-items:center; justify-content:center; cursor:pointer; }
+#lightbox.open { display:flex; }
+#lightbox img { max-width:90vw; max-height:88vh; object-fit:contain; border-radius:3px; box-shadow:0 8px 48px rgba(0,0,0,.6); }
+#lightbox-close { position:absolute; top:20px; right:28px; color:#fff; font-size:36px; font-weight:300; cursor:pointer; line-height:1; opacity:0.7; transition:opacity .15s; }
+#lightbox-close:hover { opacity:1; }
+.td-property { min-width:170px; }
+.prop-address { font-family:'Montserrat',sans-serif; font-weight:800; font-size:12px; color:var(--black); margin-bottom:3px; line-height:1.3; }
+.prop-mls { font-size:10.5px; color:var(--muted); margin-bottom:5px; }
+.prop-brochure { display:inline-block; margin-top:5px; font-family:'Montserrat',sans-serif; font-weight:800; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--red); border:1px solid var(--red); padding:3px 9px; border-radius:2px; text-decoration:none; transition:all .15s; }
+.prop-brochure:hover { background:var(--red); color:var(--white); }
+.td-size { width:120px; font-size:11.5px; color:var(--mid-grey); white-space:pre-line; }
+.td-type { width:90px; }
+.td-price { width:130px; }
+.price-main { font-family:'Montserrat',sans-serif; font-weight:800; font-size:13px; color:var(--black); line-height:1.4; white-space:pre-line; }
+.td-comments { min-width:200px; }
+.comments-list { list-style:none; padding:0; }
+.comments-list li { padding-left:12px; position:relative; font-size:12px; color:#555; line-height:1.5; margin-bottom:2px; }
+.comments-list li::before { content:'·'; position:absolute; left:0; color:var(--red); font-weight:900; font-size:14px; line-height:1.3; }
+.td-contact { width:140px; }
+.contact-block { display:flex; flex-direction:column; align-items:flex-start; }
+.contact-photo { width:48px; height:48px; border-radius:50%; object-fit:cover; object-position:center 25%; background:var(--light); margin-bottom:5px; flex-shrink:0; }
+.contact-photo-ph { width:48px; height:48px; border-radius:50%; background:var(--light); display:flex; align-items:center; justify-content:center; font-size:20px; color:#bbb; margin-bottom:5px; flex-shrink:0; }
+.contact-name { font-family:'Montserrat',sans-serif; font-weight:800; font-size:11.5px; color:var(--black); line-height:1.3; margin-bottom:2px; }
+.contact-phone { font-family:'Montserrat',sans-serif; font-weight:700; font-size:10.5px; color:var(--red); text-decoration:none; line-height:1.3; }
+.contact-phone:hover { text-decoration:underline; }
+.contact-email { font-size:9.5px; color:var(--muted); text-decoration:none; line-height:1.3; word-break:break-all; margin-top:1px; }
+.contact-email:hover { color:var(--red); }
+.contact-divider { width:24px; height:1px; background:var(--border); margin:5px 0; }
+
+/* BADGES */
+.badge { display:inline-block; padding:3px 9px; font-family:'Montserrat',sans-serif; font-weight:800; font-size:9.5px; letter-spacing:1px; text-transform:uppercase; border-radius:2px; line-height:1.4; }
+/* Status badge — alone in Status column, slightly larger */
+.badge-status { display:block; font-size:11px; padding:4px 9px; text-align:center; }
+/* Sale/Lease badge — sits above the property address */
+.badge-saletype { display:inline-block; font-size:9px; padding:2px 7px; margin-bottom:6px; }
+.badge-sale       { background:rgba(234,0,42,.09); color:var(--red); }
+.badge-lease      { background:rgba(0,100,200,.08); color:#0055aa; }
+.badge-active     { background:#e8f5e9; color:#2e7d32; }
+.badge-sold       { background:#ffebee; color:#c62828; }
+.badge-leased     { background:#fff3e0; color:#e65100; }
+.badge-condsold   { background:#fce4ec; color:#880e4f; }
+.badge-condleased { background:#ede7f6; color:#4527a0; }
+.badge-new        { background:#e8f5e9; color:#2e7d32; }
+.badge-pricered   { background:#fff8e1; color:#f57f17; }
+
+#needsSection { margin-top:48px; background:var(--white); border:1px solid var(--border); }
+.needs-section-header { background:var(--red); padding:12px 24px; font-family:'Montserrat',sans-serif; font-weight:900; font-size:13px; letter-spacing:2.5px; text-transform:uppercase; color:var(--white); display:inline-flex; align-items:center; justify-content:space-between; box-shadow:2px 2px 8px rgba(0,0,0,.12); }
+.needs-section-sub { font-size:10px; letter-spacing:1px; color:rgba(255,255,255,.6); font-weight:600; margin-top:2px; }
+table.nt { width:100%; border-collapse:collapse; font-size:12.5px; }
+table.nt thead tr { background:#2e2e2e; }
+table.nt thead th { font-family:'Montserrat',sans-serif; font-weight:700; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,.65); padding:11px 14px; text-align:left; border-right:1px solid rgba(255,255,255,.06); white-space:nowrap; }
+table.nt thead th:last-child { border-right:none; }
+table.nt tbody tr { border-bottom:1px solid var(--border); transition:background .12s; }
+table.nt tbody tr:last-child { border-bottom:none; }
+table.nt tbody tr:hover { background:#fafafa; }
+table.nt tbody tr:nth-child(even) { background:#fcfcfc; }
+table.nt td { padding:14px; vertical-align:top; border-right:1px solid var(--border); line-height:1.5; font-size:12.5px; }
+table.nt td:last-child { border-right:none; }
+.needs-cat-badge { display:inline-block; padding:3px 9px; font-family:'Montserrat',sans-serif; font-weight:800; font-size:9.5px; letter-spacing:1px; text-transform:uppercase; border-radius:2px; background:rgba(234,0,42,.09); color:var(--red); }
+.needs-desc { font-size:12.5px; color:var(--text); line-height:1.6; }
+.needs-budget { font-family:'Montserrat',sans-serif; font-weight:800; font-size:13px; color:var(--black); }
+.needs-empty { padding:32px; text-align:center; color:var(--muted); font-size:13px; }
+
+#agentsSection { margin-top:48px; background:var(--white); border:1px solid var(--border); }
+.agents-section-header { background:var(--red); padding:12px 24px; font-family:'Montserrat',sans-serif; font-weight:900; font-size:13px; letter-spacing:2.5px; text-transform:uppercase; color:var(--white); display:inline-block; box-shadow:2px 2px 8px rgba(0,0,0,.12); }
+.agents-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); }
+.agent-card { position:relative; height:280px; background-size:contain; background-repeat:no-repeat; background-position:center 20%; background-color:var(--dark); border-right:1px solid var(--border); border-bottom:1px solid var(--border); overflow:hidden; transition:transform .2s; }
+.agent-card:hover { transform:scale(1.02); z-index:2; }
+.agent-card-overlay { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.6) 60%, transparent 100%); padding:16px 14px 14px; }
+.agent-name { font-family:'Montserrat',sans-serif; font-weight:800; font-size:13px; color:var(--white); margin-bottom:1px; }
+.agent-title { font-size:10px; color:rgba(255,255,255,.55); line-height:1.4; margin-bottom:6px; }
+.agent-phone { font-family:'Montserrat',sans-serif; font-weight:700; font-size:11px; color:var(--red); margin-bottom:1px; }
+.agent-email { font-size:10px; color:rgba(255,255,255,.45); word-break:break-all; }
+
+/* PRINT */
+#printRoot { display:none; }
+@media print {
+  @page { size:11in 8.5in; margin:0.25in; }
+  html, body { background:#fff !important; margin:0; padding:0; }
+  body > * { display:none !important; }
+  body > #printRoot { display:block !important; }
+  #printRoot, #printRoot * { visibility:visible !important; }
+  #printRoot { position:absolute !important; left:0 !important; top:0 !important; right:0 !important; width:100% !important; }
+  * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+  .pr-cover { page-break-after:always; }
+  .pr-row { page-break-inside:avoid; }
+  .pr-cat-hdr, .pr-col-hdr { page-break-after:avoid; }
+  .pr-needs, .pr-roster { page-break-before:always; }
+}
+
+.pr-cover { background:#111; color:#fff; padding:1.4in 0.5in 0.5in; text-align:center; height:7.8in; box-sizing:border-box; position:relative; }
+.pr-cover::before, .pr-cover::after { content:''; position:absolute; left:0; right:0; height:8px; background:#EA002A; }
+.pr-cover::before { top:0; }
+.pr-cover::after  { bottom:0; }
+.pr-cover-logo   { height:1.2in; width:auto; display:block; margin:0 auto 0.5in; }
+.pr-cover-title  { font-family:'Montserrat',sans-serif; font-weight:900; font-size:28pt; color:#EA002A; text-transform:uppercase; letter-spacing:-0.5px; line-height:1; margin-bottom:14px; }
+.pr-cover-sub    { font-family:'Montserrat',sans-serif; font-weight:700; font-size:14pt; color:#fff; letter-spacing:5px; text-transform:uppercase; margin-bottom:18px; }
+.pr-cover-rule   { width:80px; height:3px; background:#EA002A; margin:0 auto 18px; }
+.pr-cover-month  { font-family:'Montserrat',sans-serif; font-weight:700; font-size:18pt; color:#fff; letter-spacing:4px; text-transform:uppercase; margin-bottom:14px; }
+.pr-cover-agent  { font-family:'Montserrat',sans-serif; font-weight:800; font-size:13pt; color:#C8A84B; letter-spacing:3px; text-transform:uppercase; margin-bottom:32px; }
+.pr-cover-foot   { position:absolute; bottom:0.6in; left:0; right:0; }
+.pr-cover-brand  { font-family:'Montserrat',sans-serif; font-weight:800; font-size:11pt; color:rgba(255,255,255,.7); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:4px; }
+.pr-cover-loc    { font-size:9pt; color:rgba(255,255,255,.4); letter-spacing:1px; margin-bottom:6px; }
+.pr-cover-links  { font-size:9pt; color:rgba(255,255,255,.4); letter-spacing:1px; }
+.pr-cover-links a { color:rgba(255,255,255,.5); text-decoration:none; }
+
+.pr-cat-hdr { background:#EA002A; padding:7pt 14pt; font-family:'Montserrat',sans-serif; font-weight:900; font-size:9pt; letter-spacing:2px; text-transform:uppercase; color:#fff; margin-top:6pt; }
+.pr-cat-hdr:first-of-type { margin-top:0; }
+.pr-col-hdr { display:flex; background:#2e2e2e; }
+.pr-col-hdr > div { font-family:'Montserrat',sans-serif; font-weight:700; font-size:7pt; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,.6); padding:5pt 7pt; border-right:1px solid rgba(255,255,255,.06); box-sizing:border-box; }
+.pr-col-hdr > div:last-child { border-right:none; }
+
+.pr-row { display:flex; border-bottom:1px solid #e5e5e5; align-items:stretch; box-sizing:border-box; }
+.pr-row:nth-child(even) { background:#fafafa; }
+.pr-row > div { padding:5pt 7pt; border-right:1px solid #ebebeb; box-sizing:border-box; }
+.pr-row > div:last-child { border-right:none; }
+.pr-c-ph { width:62pt; min-width:62pt; flex-shrink:0; }
+.pr-c-pr { width:130pt; min-width:130pt; flex-shrink:0; }
+.pr-c-sz { width:78pt; min-width:78pt; flex-shrink:0; font-size:8pt; color:#555; line-height:1.4; }
+.pr-c-tp { width:72pt; min-width:72pt; flex-shrink:0; }
+.pr-c-px { width:88pt; min-width:88pt; flex-shrink:0; }
+.pr-c-cm { flex:1; min-width:0; }
+.pr-c-ct { width:100pt; min-width:100pt; flex-shrink:0; }
+
+.pr-img { width:50pt; height:36pt; object-fit:cover; display:block; border-radius:1px; }
+.pr-img-ph { width:50pt; height:36pt; background:#eee; border-radius:1px; }
+.pr-addr { font-family:'Montserrat',sans-serif; font-weight:800; font-size:8pt; color:#111; line-height:1.3; margin-bottom:2px; }
+.pr-mls  { font-size:7pt; color:#999; margin-bottom:2px; }
+.pr-broch { display:inline-block; font-family:'Montserrat',sans-serif; font-weight:800; font-size:6.5pt; letter-spacing:.8px; text-transform:uppercase; color:#EA002A; text-decoration:none; border:1px solid #EA002A; padding:1px 5px; border-radius:1px; margin-top:2px; }
+.pr-pv { font-family:'Montserrat',sans-serif; font-weight:800; font-size:9pt; color:#111; line-height:1.4; }
+.pr-bul { padding-left:9px; position:relative; font-size:7.5pt; color:#444; line-height:1.45; margin-bottom:1px; }
+.pr-bul::before { content:'·'; position:absolute; left:0; color:#EA002A; font-weight:900; font-size:10pt; line-height:1.2; }
+
+/* Agent contact block in listings — photo + name + phone + email */
+.pr-cn-block { display:flex; flex-direction:column; align-items:flex-start; }
+.pr-cn-photo { width:32pt; height:32pt; border-radius:50%; object-fit:cover; object-position:center 25%; background:#eee; margin-bottom:3pt; }
+.pr-cn-photo-ph { width:32pt; height:32pt; border-radius:50%; background:#eee; margin-bottom:3pt; }
+.pr-cn  { font-family:'Montserrat',sans-serif; font-weight:800; font-size:7.5pt; color:#111; line-height:1.25; margin-bottom:1pt; }
+.pr-cn-phone { font-family:'Montserrat',sans-serif; font-weight:700; font-size:7pt; color:#EA002A; text-decoration:none; line-height:1.25; }
+.pr-cn-email { font-size:6pt; color:#888; text-decoration:none; line-height:1.25; word-break:break-all; margin-top:1pt; }
+.pr-cn-divider { width:18pt; height:1px; background:#ddd; margin:4pt 0; }
+
+/* Status badges in the print — Status alone in column, Sale/Lease above address */
+.pr-bdg { display:inline-block; padding:2px 5px; font-family:'Montserrat',sans-serif; font-weight:800; font-size:6.5pt; letter-spacing:.8px; text-transform:uppercase; border-radius:2px; }
+.pr-bdg-status { display:block; font-size:8pt; padding:3px 5px; text-align:center; }
+.pr-bdg-saletype { display:inline-block; font-size:6.5pt; padding:1px 5px; margin-bottom:3pt; }
+.pr-bdg-sale   { background:rgba(234,0,42,.08); color:#EA002A; }
+.pr-bdg-lease  { background:rgba(0,100,200,.07); color:#0055aa; }
+.pr-bdg-active { background:#e8f5e9; color:#2e7d32; }
+.pr-bdg-sold   { background:#ffebee; color:#c62828; }
+.pr-bdg-leased { background:#fff3e0; color:#e65100; }
+.pr-bdg-cs     { background:#fce4ec; color:#880e4f; }
+.pr-bdg-cl     { background:#ede7f6; color:#4527a0; }
+.pr-bdg-new    { background:#e8f5e9; color:#2e7d32; }
+.pr-bdg-pr     { background:#fff8e1; color:#f57f17; }
+.pr-bdg-rm     { display:block; font-size:6pt; color:#999; margin-top:2px; text-align:center; }
+
+.pr-needs-hdr { background:#EA002A; padding:7pt 14pt; font-family:'Montserrat',sans-serif; font-weight:900; font-size:9pt; letter-spacing:2px; text-transform:uppercase; color:#fff; }
+.pr-needs-sub { background:#fff; padding:4pt 14pt; font-size:7.5pt; color:#777; letter-spacing:1px; border-bottom:1px solid #e5e5e5; }
+.pr-needs-row { display:flex; border-bottom:1px solid #e5e5e5; }
+.pr-needs-row:nth-child(even) { background:#fafafa; }
+.pr-needs-row > div { padding:6pt 8pt; border-right:1px solid #ebebeb; box-sizing:border-box; }
+.pr-needs-row > div:last-child { border-right:none; }
+
+.pr-roster-hdr { background:#EA002A; padding:7pt 14pt; font-family:'Montserrat',sans-serif; font-weight:900; font-size:9pt; letter-spacing:2px; text-transform:uppercase; color:#fff; margin-bottom:0; }
+.pr-roster-grid { display:flex; flex-wrap:wrap; background:#ddd; }
+.pr-card { width:25%; box-sizing:border-box; background:#fff; padding:0; border-right:1pt solid #ddd; border-bottom:1pt solid #ddd; page-break-inside:avoid; display:flex; align-items:stretch; min-height:60pt; }
+.pr-card-photo-wrap { width:54pt; min-width:54pt; flex-shrink:0; background:#1a1a1a; overflow:hidden; position:relative; }
+.pr-card-ph { width:100%; height:100%; object-fit:cover; display:block; }
+.pr-card-ph-ph { width:100%; height:100%; background:#2a2a2a; display:block; }
+.pr-card-info { flex:1; padding:7pt 8pt; display:flex; flex-direction:column; justify-content:center; min-width:0; overflow:hidden; }
+.pr-card-nm { font-family:'Montserrat',sans-serif; font-weight:800; font-size:8.5pt; color:#111; margin-bottom:1pt; line-height:1.2; }
+.pr-card-tt { font-size:6.5pt; color:#888; line-height:1.3; margin-bottom:3pt; }
+.pr-card-pn { font-family:'Montserrat',sans-serif; font-weight:700; font-size:7.5pt; margin-bottom:1pt; }
+.pr-card-pn a { color:#EA002A; text-decoration:none; }
+.pr-card-em { font-size:6pt; word-break:break-all; line-height:1.3; }
+.pr-card-em a { color:#888; text-decoration:none; }
+
+.pr-agent-hdr { background:#fff; color:#111; display:flex; align-items:stretch; padding:0; margin-bottom:6pt; page-break-after:avoid; border-top:4px solid #EA002A; border-bottom:4px solid #EA002A; }
+.pr-agent-hdr-photo { width:84pt; min-width:84pt; flex-shrink:0; background:#1a1a1a; overflow:hidden; }
+.pr-agent-hdr-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+.pr-agent-hdr-photo-ph { width:100%; height:100%; background:#2a2a2a; }
+.pr-agent-hdr-info { flex:1; padding:10pt 16pt; display:flex; flex-direction:column; justify-content:center; min-width:0; }
+.pr-agent-hdr-nm { font-family:'Montserrat',sans-serif; font-weight:900; font-size:20pt; color:#111; line-height:1.1; letter-spacing:-0.3px; margin-bottom:2pt; }
+.pr-agent-hdr-tt { font-family:'Montserrat',sans-serif; font-weight:600; font-size:8pt; color:#777; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6pt; }
+.pr-agent-hdr-contact { display:flex; gap:14pt; flex-wrap:wrap; align-items:center; }
+.pr-agent-hdr-contact > div { font-size:9pt; color:#444; line-height:1.2; }
+.pr-agent-hdr-contact a { color:#444; text-decoration:none; }
+.pr-agent-hdr-contact .pr-agent-hdr-pn { font-family:'Montserrat',sans-serif; font-weight:800; font-size:11pt; }
+.pr-agent-hdr-contact .pr-agent-hdr-pn a { color:#EA002A; }
+.pr-agent-hdr-meta { width:200pt; min-width:200pt; flex-shrink:0; padding:10pt 16pt; display:flex; flex-direction:column; align-items:flex-end; justify-content:center; border-left:1px solid #e5e5e5; }
+.pr-agent-hdr-logo { height:60pt; width:auto; max-width:100%; display:block; margin-bottom:6pt; }
+.pr-agent-hdr-meta-month { font-family:'Montserrat',sans-serif; font-weight:800; font-size:10pt; color:#111; letter-spacing:2px; text-transform:uppercase; }
+
+/* ─────────────────────────────────────────────────────────
+   RLS HEADER INTEGRATION
+   The shared header is position:fixed (160px desktop / 130px
+   tablet / 96px mobile). header.css adds top padding to <body>
+   for non-hero pages — but this page's #catTabs is
+   position:sticky;top:0 and would slide UNDER the fixed header.
+   Re-anchor #catTabs to sit just below the RLS header at each
+   breakpoint so the tab bar stays visible while scrolling.
+   ───────────────────────────────────────────────────────── */
+body.rls-header-ready:not(.rls-has-hero) #catTabs { top:160px; }
+@media (max-width:1024px) {
+  body.rls-header-ready:not(.rls-has-hero) #catTabs { top:130px; }
+}
+@media (max-width:600px) {
+  body.rls-header-ready:not(.rls-has-hero) #catTabs { top:96px; }
+}
+
+@media (max-width:700px) { .cover-inner,#mainContent,.cat-tabs-inner{padding-left:16px;padding-right:16px} }
+</style>
+</head>
+<body>
+
+<div id="loadingOverlay">
+  <img src="https://royallepagesolutions.com/wp-content/uploads/2026/05/2024-RLP-Commercial-Logos_Black-Red-Brokerage.png" alt="Royal LePage Commercial" style="height:90px;width:auto;margin-bottom:24px;" onerror="this.style.display='none'">
+  <div class="loader-sub">Loading current listings…</div>
+</div>
+
+<div id="coverHeader">
+  <div class="cover-red-stripe"></div>
+  <div class="cover-inner" style="justify-content:center;">
+    <div style="text-align:center;">
+      <img src="https://royallepagesolutions.com/wp-content/uploads/2026/05/2024-RLP-Commercial-Logos_White-Red-Brokerage-.png" alt="Royal LePage Commercial" style="height:140px;width:auto;display:block;margin:0 auto;" onerror="this.style.display='none'">
+    </div>
+  </div>
+</div>
+
+<div id="catTabs"><div class="cat-tabs-inner" id="catTabsInner"></div></div>
+
+<div id="mainContent">
+  <div id="sectionsWrap"></div>
+  <div id="needsSection" style="display:none">
+    <div class="needs-section-header">
+      <div>
+        <div>Needs &amp; Wants</div>
+        <div class="needs-section-sub">Buyer requirements — contact the agent if you have a match</div>
+      </div>
+    </div>
+    <div id="needsTableWrap"></div>
+  </div>
+  <div id="agentsSection" style="display:none">
+    <div class="agents-section-header">Our Associates</div>
+    <div style="background:var(--dark);height:38px;"></div>
+    <div class="agents-grid" id="agentsGrid"></div>
+  </div>
+</div>
+
+<div id="printRoot"></div>
+
+<script>
+const CONFIG = {
+  LISTINGS_CSV_URL:'https://docs.google.com/spreadsheets/d/e/2PACX-1vTToAC7Jf5XxoV-vZe6K7jgMudt_3vJClps8j6qDW4wyET3Wj-BQRUwQqNpBA4rW1hjn7hNfbfh_Y9I/pub?gid=118750696&single=true&output=csv',
+  AGENTS_CSV_URL:'https://docs.google.com/spreadsheets/d/e/2PACX-1vTToAC7Jf5XxoV-vZe6K7jgMudt_3vJClps8j6qDW4wyET3Wj-BQRUwQqNpBA4rW1hjn7hNfbfh_Y9I/pub?gid=237844589&single=true&output=csv',
+  NEEDS_CSV_URL:'https://docs.google.com/spreadsheets/d/e/2PACX-1vTToAC7Jf5XxoV-vZe6K7jgMudt_3vJClps8j6qDW4wyET3Wj-BQRUwQqNpBA4rW1hjn7hNfbfh_Y9I/pub?gid=1815568429&single=true&output=csv',
+  REPORT_MONTH:'',
+  USE_SAMPLE_DATA:false
+};
+
+const CAT_ORDER=['Industrial','Investment','Land','Office','Retail','Business'];
+const CAT_LABELS={Industrial:'Industrial For Sale / Lease',Investment:'Investment For Sale / Lease',Land:'Land For Sale / Lease',Office:'Office For Sale / Lease',Retail:'Retail For Sale / Lease',Business:'Businesses For Sale / Lease'};
+
+let allListings=[], allAgents=[], allNeeds=[];
+
+function csvToRows(text){const rows=[];let row=[],cell='',inQ=false;for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(inQ&&text[i+1]==='"'){cell+='"';i++;}else inQ=!inQ;}else if(c===','&&!inQ){row.push(cell);cell='';}else if((c==='\n'||c==='\r')&&!inQ){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cell);rows.push(row);row=[];cell='';}else cell+=c;}if(cell||row.length){row.push(cell);rows.push(row);}return rows;}
+
+async function loadData(){
+  if(CONFIG.USE_SAMPLE_DATA||!CONFIG.LISTINGS_CSV_URL)return;
+  try{
+    const r1=await fetch(CONFIG.LISTINGS_CSV_URL);
+    const rows=csvToRows(await r1.text()).slice(1).filter(r=>r[0]);
+    allListings=rows.map(r=>({category:r[0]||'',address:r[1]||'',mls:r[2]||'',size:r[3]||'',type:r[4]||'Sale',price:r[5]||'',comments:r[6]||'',agent:r[7]||'',agent2:r[8]||'',status:r[9]||'Active',photo:r[10]||'',brochure:r[11]||''}));
+    if(CONFIG.AGENTS_CSV_URL){const r2=await fetch(CONFIG.AGENTS_CSV_URL);const ar=csvToRows(await r2.text()).slice(2).filter(r=>r[0]&&r[0]!=='Agent Name');allAgents=ar.map(r=>({name:r[0]||'',title:r[1]||'',phone:r[2]||'',email:r[3]||'',photo:r[4]||'',website:r[5]||''})).sort((a,b)=>a.name.localeCompare(b.name));}
+    if(CONFIG.NEEDS_CSV_URL){const r3=await fetch(CONFIG.NEEDS_CSV_URL);const nr=csvToRows(await r3.text()).slice(1).filter(r=>r[0]&&r[0].toLowerCase()!=='category');allNeeds=nr.map(r=>({category:r[0]||'',description:r[1]||'',budget:r[2]||'',location:r[3]||'',size:r[4]||'',agent:r[5]||'',date:r[6]||''}));}
+  }catch(e){}
+}
+
+// Status only — Sale/Lease has moved above the address in the Property column
+function badgeHtml(status){
+  const s=(status||'').trim().toLowerCase();
+  let statusLabel='Active',statusClass='badge-active',extraNote='';
+  if(s==='sold'){statusLabel='Sold';statusClass='badge-sold';}
+  else if(s==='conditionally sold'){statusLabel='Cond. Sold';statusClass='badge-condsold';}
+  else if(s==='leased'){statusLabel='Leased';statusClass='badge-leased';extraNote='<div style="font-size:9.5px;color:var(--muted);margin-top:3px;text-align:center;">Remains for Sale</div>';}
+  else if(s==='conditionally leased'){statusLabel='Cond. Leased';statusClass='badge-condleased';}
+  else if(s==='new'){statusLabel='New';statusClass='badge-new';}
+  else if(s==='price reduction'){statusLabel='Price Reduction';statusClass='badge-pricered';}
+  return `<span class="badge badge-status ${statusClass}">${statusLabel}</span>${extraNote}`;
+}
+
+// Small Sale/Lease pill that sits above the property address
+function saleTypeBadge(type){
+  const t=(type||'').toLowerCase();
+  const cls=t==='lease'?'badge-lease':'badge-sale';
+  const label=t==='lease'?'For Lease':(t==='sale/lease'?'For Sale / Lease':'For Sale');
+  return `<span class="badge badge-saletype ${cls}">${label}</span>`;
+}
+
+// Find agent details (photo, phone, email) from allAgents by name
+function findAgent(name){
+  if(!name) return null;
+  return allAgents.find(a => a.name && a.name.trim().toLowerCase() === name.trim().toLowerCase()) || {name:name,phone:'',email:'',photo:''};
+}
+
+// Render a single agent's contact block (photo + name + phone + email) for the live page
+function contactBlock(name){
+  const ag = findAgent(name);
+  if(!ag) return '';
+  const photo = ag.photo
+    ? `<img class="contact-photo" src="${ag.photo}" alt="${ag.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="contact-photo-ph" style="display:none">👤</div>`
+    : `<div class="contact-photo-ph">👤</div>`;
+  const phone = ag.phone ? `<a class="contact-phone" href="tel:${ag.phone.replace(/[^0-9+]/g,'')}">${ag.phone}</a>` : '';
+  const email = ag.email ? `<a class="contact-email" href="mailto:${ag.email}">${ag.email}</a>` : '';
+  return `${photo}<div class="contact-name">${ag.name}</div>${phone}${email}`;
+}
+
+function renderRow(l){
+  const bullets=(l.comments||'').split('|').filter(Boolean).map(c=>`<li>${c.trim()}</li>`).join('');
+  return`<tr>
+    <td class="td-photo">
+      ${l.photo?`<img class="listing-photo" src="${l.photo}" alt="" onclick="openLightbox(this.src)" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:``}
+      <div class="listing-photo-ph" style="${l.photo?'display:none':''}">🏢</div>
+    </td>
+    <td class="td-property">
+      ${saleTypeBadge(l.type)}
+      <div class="prop-address">${(l.address||'').replace(/\n/g,'<br>')}</div>
+      ${l.mls?`<div class="prop-mls">MLS# ${l.mls}</div>`:''}
+      ${l.brochure?`<a class="prop-brochure" href="${l.brochure}" target="_blank">⬇ Brochure</a>`:''}
+    </td>
+    <td class="td-size">${(l.size||'—')}</td>
+    <td class="td-type">${badgeHtml(l.status)}</td>
+    <td class="td-price"><div class="price-main">${(l.price||'').replace(/\n/g,'<br>')}</div></td>
+    <td class="td-comments"><ul class="comments-list">${bullets}</ul></td>
+    <td class="td-contact">
+      ${l.agent
+        ? `<div class="contact-block">${contactBlock(l.agent)}${l.agent2 ? `<div class="contact-divider"></div>${contactBlock(l.agent2)}` : ''}</div>`
+        : '<div class="contact-name">—</div>'}
+    </td>
+  </tr>`;
+}
+
+function renderSection(cat,listings){
+  const label=CAT_LABELS[cat]||cat;
+  return`<div class="cat-section" id="section-${cat}">
+    <div class="cat-section-header">
+      <div class="cat-section-title">${label}</div>
+    </div>
+    <div class="listings-table-wrap">
+      <table class="lt">
+        <thead><tr>
+          <th style="width:90px"></th>
+          <th>Property</th>
+          <th style="width:120px">Size</th>
+          <th style="width:90px">Status</th>
+          <th style="width:130px">Asking Price</th>
+          <th>Comments</th>
+          <th style="width:140px">Contact</th>
+        </tr></thead>
+        <tbody>${listings.map(renderRow).join('')}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderNeedsTable(needs){
+  if(!needs.length) return`<div class="needs-empty">No current buyer needs on file.</div>`;
+  const rows=needs.map(n=>`<tr>
+    <td><span class="needs-cat-badge">${n.category}</span></td>
+    <td><div class="needs-desc">${n.description}</div></td>
+    <td><div class="needs-budget">${n.budget}</div></td>
+    <td style="font-size:12px;color:var(--mid-grey);">${n.location}</td>
+    <td style="font-size:12px;color:var(--mid-grey);">${n.size}</td>
+    <td><div class="contact-name">${n.agent}</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">${n.date}</div></td>
+  </tr>`).join('');
+  return`<div style="overflow-x:auto"><table class="nt">
+    <thead><tr>
+      <th style="width:110px">Category</th>
+      <th>What They're Looking For</th>
+      <th style="width:140px">Budget / Rate</th>
+      <th style="width:140px">Location</th>
+      <th style="width:110px">Size</th>
+      <th style="width:110px">Agent</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>`;
+}
+
+function render(){
+  const activeCats=CAT_ORDER.filter(c=>allListings.some(l=>l.category===c));
+  document.getElementById('catTabsInner').innerHTML=
+    activeCats.map(c=>`<a class="cat-tab-btn" href="#section-${c}">${c}</a>`).join('')+
+    `<a class="cat-tab-btn" href="#needsSection">Needs &amp; Wants</a>`+
+    `<a class="cat-tab-btn" href="#agentsSection">Our Associates</a>`+
+    `<div style="flex:1"></div>`+
+    `<button id="mainSaveBtn" onclick="saveFullPDF()" style="background:var(--red);color:#fff;border:none;padding:0 18px;font-family:'Montserrat',sans-serif;font-weight:800;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;height:100%;white-space:nowrap;" title="Opens your browser's print dialog. Choose 'Save as PDF' as the destination.">🖨 Save Monthly Vacancy Report</button>`;
+  document.getElementById('sectionsWrap').innerHTML=
+    activeCats.map(cat=>renderSection(cat,allListings.filter(l=>l.category===cat))).join('');
+  document.getElementById('needsTableWrap').innerHTML=renderNeedsTable(allNeeds);
+  document.getElementById('needsSection').style.display='block';
+  const agents=allAgents.length?allAgents:[...new Set(allListings.map(l=>l.agent).filter(Boolean))].sort().map(n=>({name:n,title:'Associate\nCommercial Division',phone:'',email:'',photo:''}));
+  document.getElementById('agentsGrid').innerHTML=agents.map(a=>`
+    <div class="agent-card" style="${a.photo?`background-image:url('${a.photo}');`:''}">
+      ${!a.photo?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.15;">👤</div>`:''}
+      <div class="agent-card-overlay">
+        <div class="agent-name">${a.name}</div>
+        <div class="agent-title">${(a.title||'').replace(/\n/g,' · ')}</div>
+        <div class="agent-phone">${a.phone}</div>
+        <div class="agent-email">${a.email}</div>
+        ${a.website?`<a href="${a.website.startsWith('http')?a.website:'https://'+a.website}" target="_blank" style="display:inline-block;margin-top:6px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--white);border:1px solid rgba(255,255,255,.4);padding:3px 8px;border-radius:2px;text-decoration:none;transition:all .15s;" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='rgba(255,255,255,.4)';this.style.color='var(--white)'">🌐 Website</a>`:''}
+        <button onclick="saveAgentPDF('${a.name.replace(/'/g,"\\'")}')" style="display:inline-block;margin-top:6px;margin-left:${a.website?'6px':'0'};font-family:'Montserrat',sans-serif;font-weight:700;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--white);border:1px solid rgba(234,0,42,.6);padding:3px 8px;border-radius:2px;background:transparent;cursor:pointer;transition:all .15s;" onmouseover="this.style.background='var(--red)';this.style.borderColor='var(--red)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(234,0,42,.6)'" title="Opens your browser's print dialog. Choose 'Save as PDF'.">🖨 My Listing Report</button>
+      </div>
+    </div>`).join('');
+  document.getElementById('agentsSection').style.display='block';
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const id=e.target.id.replace('section-','');document.querySelectorAll('.cat-tab-btn').forEach(t=>t.classList.toggle('active',t.getAttribute('href')==='#section-'+id||t.getAttribute('href')==='#'+e.target.id));}});},{rootMargin:'-20% 0px -70% 0px'});
+  activeCats.forEach(c=>{const el=document.getElementById('section-'+c);if(el)obs.observe(el);});
+  const needsEl=document.getElementById('needsSection');
+  if(needsEl)obs.observe(needsEl);
+}
+
+async function init(){
+  await loadData();render();
+  const ol=document.getElementById('loadingOverlay');
+  ol.classList.add('hidden');setTimeout(()=>ol.style.display='none',500);
+}
+
+const LOGO_URL = 'https://royallepagesolutions.com/wp-content/uploads/2026/05/2024-RLP-Commercial-Logos_White-Red-Brokerage-.png';
+const LOGO_URL_DARK = 'https://royallepagesolutions.com/wp-content/uploads/2026/05/2024-RLP-Commercial-Logos_Black-Red-Brokerage.png';
+
+// Render a single agent's contact block for PDF (photo + name + phone + email)
+function prContactBlock(name){
+  const ag = findAgent(name);
+  if(!ag) return '';
+  const photo = ag.photo
+    ? `<img class="pr-cn-photo" src="${ag.photo}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="pr-cn-photo-ph" style="display:none"></div>`
+    : `<div class="pr-cn-photo-ph"></div>`;
+  const phone = ag.phone ? `<a class="pr-cn-phone" href="tel:${ag.phone.replace(/[^0-9+]/g,'')}">${ag.phone}</a>` : '';
+  const email = ag.email ? `<a class="pr-cn-email" href="mailto:${ag.email}">${ag.email}</a>` : '';
+  return `${photo}<div class="pr-cn">${ag.name}</div>${phone}${email}`;
+}
+
+// Build a single listing row for print — Sale/Lease above address, Status alone in Status column
+function prListingRow(l){
+  const buls = (l.comments||'').split('|').filter(Boolean)
+    .map(b => `<div class="pr-bul">${b.trim()}</div>`).join('');
+
+  const s = (l.status||'').trim().toLowerCase();
+  const t = (l.type||'').toLowerCase();
+  // Status badge (alone in Status column)
+  let statusLabel='Active',statusClass='pr-bdg-active',extraNote='';
+  if(s==='sold'){statusLabel='Sold';statusClass='pr-bdg-sold';}
+  else if(s==='conditionally sold'){statusLabel='Cond. Sold';statusClass='pr-bdg-cs';}
+  else if(s==='leased'){statusLabel='Leased';statusClass='pr-bdg-leased';extraNote='<span class="pr-bdg-rm">Remains for Sale</span>';}
+  else if(s==='conditionally leased'){statusLabel='Cond. Leased';statusClass='pr-bdg-cl';}
+  else if(s==='new'){statusLabel='New';statusClass='pr-bdg-new';}
+  else if(s==='price reduction'){statusLabel='Price Reduction';statusClass='pr-bdg-pr';}
+  const statusBadge = `<span class="pr-bdg pr-bdg-status ${statusClass}">${statusLabel}</span>${extraNote}`;
+  // Sale/Lease badge (sits above address)
+  const saleClass = t==='lease' ? 'pr-bdg-lease' : 'pr-bdg-sale';
+  const saleLabel = t==='lease' ? 'For Lease' : (t==='sale/lease' ? 'For Sale / Lease' : 'For Sale');
+  const saleBadge = `<span class="pr-bdg pr-bdg-saletype ${saleClass}">${saleLabel}</span>`;
+
+  return `<div class="pr-row">
+    <div class="pr-c-ph">
+      ${l.photo
+        ? `<img class="pr-img" src="${l.photo}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="pr-img-ph" style="display:none"></div>`
+        : `<div class="pr-img-ph"></div>`}
+    </div>
+    <div class="pr-c-pr">
+      ${saleBadge}
+      <div class="pr-addr">${(l.address||'').replace(/\n/g,'<br>')}</div>
+      ${l.mls ? `<div class="pr-mls">MLS# ${l.mls}</div>` : ''}
+      ${l.brochure ? `<a class="pr-broch" href="${l.brochure}">⬇ Brochure</a>` : ''}
+    </div>
+    <div class="pr-c-sz">${(l.size||'—').replace(/\n/g,'<br>')}</div>
+    <div class="pr-c-tp">${statusBadge}</div>
+    <div class="pr-c-px"><div class="pr-pv">${(l.price||'—').replace(/\n/g,'<br>')}</div></div>
+    <div class="pr-c-cm">${buls}</div>
+    <div class="pr-c-ct">
+      ${l.agent
+        ? `<div class="pr-cn-block">${prContactBlock(l.agent)}${l.agent2 ? `<div class="pr-cn-divider"></div>${prContactBlock(l.agent2)}` : ''}</div>`
+        : `<div class="pr-cn">—</div>`}
+    </div>
+  </div>`;
+}
+
+const PR_COL_HDR = `<div class="pr-col-hdr">
+  <div style="width:62pt;min-width:62pt;"></div>
+  <div style="width:130pt;min-width:130pt;">Property</div>
+  <div style="width:78pt;min-width:78pt;">Size</div>
+  <div style="width:72pt;min-width:72pt;">Status</div>
+  <div style="width:88pt;min-width:88pt;">Asking Price</div>
+  <div style="flex:1;">Comments</div>
+  <div style="width:100pt;min-width:100pt;">Contact</div>
+</div>`;
+
+function prCoverPage(month, agentName){
+  return `<div class="pr-cover">
+    <img class="pr-cover-logo" src="${LOGO_URL}" alt="Royal LePage Commercial" onerror="this.style.display='none'">
+    <div class="pr-cover-title">Commercial Listings</div>
+    <div class="pr-cover-sub">Monthly Vacancy Report</div>
+    <div class="pr-cover-rule"></div>
+    <div class="pr-cover-month">${month}</div>
+    ${agentName ? `<div class="pr-cover-agent">Prepared by ${agentName}</div>` : ''}
+    <div class="pr-cover-foot">
+      <div class="pr-cover-brand">Royal LePage® Solutions</div>
+      <div class="pr-cover-loc">Commercial Division · Calgary, Alberta</div>
+      <div class="pr-cover-links">
+        <a href="https://royallepagesolutions.com/">royallepagesolutions.com</a>
+        &nbsp;·&nbsp;
+        <a href="tel:+14032525900">(403) 252-5900</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+const PR_CLBL = {
+  Industrial:'Industrial For Sale / Lease',
+  Investment:'Investment For Sale / Lease',
+  Land:'Land For Sale / Lease',
+  Office:'Office For Sale / Lease',
+  Retail:'Retail For Sale / Lease',
+  Business:'Businesses For Sale / Lease'
+};
+const PR_CATS = ['Industrial','Investment','Land','Office','Retail','Business'];
+
+function buildFullPrintHTML(month){
+  const ac = PR_CATS.filter(c => allListings.some(l => l.category===c));
+  let html = prCoverPage(month, null);
+  html += PR_COL_HDR;
+  ac.forEach(cat => {
+    html += `<div class="pr-cat-hdr">${PR_CLBL[cat]}</div>`;
+    allListings.filter(l => l.category===cat).forEach(l => { html += prListingRow(l); });
+  });
+  if(allNeeds && allNeeds.length){
+    html += `<div class="pr-needs">
+      <div class="pr-needs-hdr">Needs &amp; Wants</div>
+      <div class="pr-needs-sub">Buyer requirements — contact the agent if you have a match</div>
+      <div class="pr-col-hdr">
+        <div style="width:80pt;min-width:80pt;">Category</div>
+        <div style="flex:1;">What They're Looking For</div>
+        <div style="width:90pt;min-width:90pt;">Budget / Rate</div>
+        <div style="width:90pt;min-width:90pt;">Location</div>
+        <div style="width:78pt;min-width:78pt;">Size</div>
+        <div style="width:80pt;min-width:80pt;">Agent</div>
+      </div>`;
+    allNeeds.forEach(n => {
+      html += `<div class="pr-needs-row">
+        <div style="width:80pt;min-width:80pt;"><span class="pr-bdg pr-bdg-sale">${n.category}</span></div>
+        <div style="flex:1;font-size:8pt;color:#222;line-height:1.5;">${n.description}</div>
+        <div style="width:90pt;min-width:90pt;font-family:'Montserrat',sans-serif;font-weight:800;font-size:8pt;color:#111;">${n.budget}</div>
+        <div style="width:90pt;min-width:90pt;font-size:7.5pt;color:#555;">${n.location}</div>
+        <div style="width:78pt;min-width:78pt;font-size:7.5pt;color:#555;">${n.size}</div>
+        <div style="width:80pt;min-width:80pt;"><div class="pr-cn">${n.agent}</div><div style="font-family:'Open Sans',sans-serif;font-size:7pt;color:#999;font-weight:600;margin-top:1px;">${n.date}</div></div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  if(allAgents && allAgents.length){
+    html += `<div class="pr-roster">
+      <div class="pr-roster-hdr">Our Associates</div>
+      <div class="pr-roster-grid">`;
+    allAgents.forEach(a => {
+      html += `<div class="pr-card">
+        <div class="pr-card-photo-wrap">
+          ${a.photo
+            ? `<img class="pr-card-ph" src="${a.photo}" alt="${a.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="pr-card-ph-ph" style="display:none"></div>`
+            : `<div class="pr-card-ph-ph"></div>`}
+        </div>
+        <div class="pr-card-info">
+          <div class="pr-card-nm">${a.name}</div>
+          <div class="pr-card-tt">${(a.title||'').replace(/\n/g,' · ')}</div>
+          ${a.phone ? `<div class="pr-card-pn"><a href="tel:${a.phone.replace(/[^0-9+]/g,'')}">${a.phone}</a></div>` : ''}
+          ${a.email ? `<div class="pr-card-em"><a href="mailto:${a.email}">${a.email}</a></div>` : ''}
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  }
+  return html;
+}
+
+function buildAgentPrintHTML(month, agentName){
+  // Normalize name comparison so trailing spaces or casing differences in the spreadsheet
+  // don't cause a listing to be missed (e.g. "Sam Patel" vs "Sam Patel ")
+  const norm = s => (s||'').trim().toLowerCase();
+  const target = norm(agentName);
+  const agentListings = allListings.filter(l => norm(l.agent)===target || norm(l.agent2)===target);
+  const ac = PR_CATS.filter(c => agentListings.some(l => l.category===c));
+  const ag = allAgents.find(a => norm(a.name)===target) || {name:agentName,title:'Associate · Commercial Division',phone:'',email:'',photo:'',website:''};
+  const titleLine = (ag.title || 'Associate · Commercial Division').replace(/\n/g, ' · ');
+  let html = `<div class="pr-agent-hdr">
+    <div class="pr-agent-hdr-photo">
+      ${ag.photo
+        ? `<img src="${ag.photo}" alt="${ag.name}" onerror="this.parentNode.innerHTML='<div class=&quot;pr-agent-hdr-photo-ph&quot;></div>'">`
+        : `<div class="pr-agent-hdr-photo-ph"></div>`}
+    </div>
+    <div class="pr-agent-hdr-info">
+      <div class="pr-agent-hdr-nm">${ag.name}</div>
+      <div class="pr-agent-hdr-tt">${titleLine}</div>
+      <div class="pr-agent-hdr-contact">
+        ${ag.phone ? `<div class="pr-agent-hdr-pn"><a href="tel:${ag.phone.replace(/[^0-9+]/g,'')}">${ag.phone}</a></div>` : ''}
+        ${ag.email ? `<div><a href="mailto:${ag.email}">${ag.email}</a></div>` : ''}
+        ${ag.website ? `<div><a href="${ag.website.startsWith('http')?ag.website:'https://'+ag.website}">${ag.website.replace(/https?:\/\//,'')}</a></div>` : ''}
+      </div>
+    </div>
+    <div class="pr-agent-hdr-meta">
+      <img class="pr-agent-hdr-logo" src="${LOGO_URL_DARK}" alt="Royal LePage Commercial" onerror="this.style.display='none'">
+      <div class="pr-agent-hdr-meta-month">${month}</div>
+    </div>
+  </div>`;
+  html += PR_COL_HDR;
+  ac.forEach(cat => {
+    html += `<div class="pr-cat-hdr">${PR_CLBL[cat]}</div>`;
+    agentListings.filter(l => l.category===cat).forEach(l => { html += prListingRow(l); });
+  });
+  return html;
+}
+
+function triggerPrint(html, suggestedTitle){
+  const printRoot = document.getElementById('printRoot');
+  if(!printRoot){ console.error('[print] #printRoot not found'); return; }
+  printRoot.innerHTML = html;
+  const originalParent = printRoot.parentNode;
+  const originalNextSibling = printRoot.nextSibling;
+  document.body.appendChild(printRoot);
+  const originalTitle = document.title;
+  document.title = suggestedTitle;
+  const cleanup = () => {
+    document.title = originalTitle;
+    if(originalParent){
+      if(originalNextSibling){
+        originalParent.insertBefore(printRoot, originalNextSibling);
+      } else {
+        originalParent.appendChild(printRoot);
+      }
+    }
+    window.removeEventListener('afterprint', cleanup);
+  };
+  window.addEventListener('afterprint', cleanup);
+  setTimeout(() => {
+    window.print();
+    setTimeout(() => {
+      if(document.title !== originalTitle) cleanup();
+    }, 2000);
+  }, 250);
+}
+
+function getMonthString(){
+  return CONFIG.REPORT_MONTH || (() => {
+    const n = new Date();
+    return n.toLocaleString('en-US',{month:'long'}) + ' ' + n.getFullYear();
+  })();
+}
+
+function saveFullPDF(){
+  const month = getMonthString();
+  const title = `RLP_Commercial_${month.replace(/\s+/g,'_')}_Full-Report`;
+  const html = buildFullPrintHTML(month);
+  triggerPrint(html, title);
+}
+
+function saveAgentPDF(agentName){
+  const month = getMonthString();
+  const title = `RLP_Commercial_${month.replace(/\s+/g,'_')}_${agentName.replace(/\s+/g,'-')}`;
+  const html = buildAgentPrintHTML(month, agentName);
+  triggerPrint(html, title);
+}
+
+init();
+</script>
+<div id="lightbox" onclick="closeLightbox()">
+  <span id="lightbox-close" onclick="closeLightbox()">×</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+<script>
+function openLightbox(src){
+  document.getElementById('lightbox-img').src=src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-img').src='';
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeLightbox(); });
+</script>
+</body>
+</html>
