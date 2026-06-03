@@ -8,11 +8,10 @@
        OFFICE LOCATION PAGE — MINIMAL TEMPLATE
        Royal LePage® Solutions
 
-       Deploy at the ROOT of a BoldTrail office subdomain
-       (e.g. https://canmore-banff.royallepage.ca/). The custom RLS
-       header is injected by the site-wide header.js; assets are also
-       loaded here so the page renders standalone (header.js is
-       idempotent and won't double-inject).
+       Deploy under the info site at  pages/canmore-banff/index.html
+       served from info.royallepagesolutions.com. The relative ../../assets/
+       paths resolve to the site's shared header CSS/JS — header.js injects
+       the RLS header automatically and is idempotent (won't double-inject).
 
        ── PER-OFFICE CUSTOMISATION ── search for  «EDIT»  and swap:
          1. <title> + meta description
@@ -32,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
-  <!-- Shared RLS assets (absolute URLs so they resolve on any office subdomain) -->
+  <!-- Shared RLS assets — relative ../../ paths resolve from pages/<slug>/index.html -->
   <link rel="stylesheet" href="../../assets/css/header.css?v=1010">
   <link rel="stylesheet" href="../../assets/css/styles.css?v=1001">
   <script defer src="../../assets/js/header.js?v=1009"></script>
