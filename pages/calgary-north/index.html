@@ -96,7 +96,7 @@
     /* ── Quick-contact bar ── */
     .office-page .ol-quickbar{ background:var(--rls-black,#000); }
     .office-page .ol-quickbar .ol-wrap{
-      display:grid; grid-template-columns:repeat(4,1fr);
+      display:grid; grid-template-columns:repeat(5,1fr);
       gap:1px; padding:0;
     }
     .office-page .ol-qb-item{
@@ -116,6 +116,12 @@
     .office-page .ol-qb-val{ font-family:var(--ol-body); font-size:.98rem; line-height:1.5; color:#fff; }
     .office-page .ol-qb-val a{ color:#fff; text-decoration:none; }
     .office-page .ol-qb-val a:hover{ color:var(--rls-red,#EA002A); }
+
+    /* Our Offices cell in the contact bar */
+    .office-page .ol-qb-offices{ display:flex; flex-direction:column; gap:.15rem; }
+    .office-page .ol-qb-offices a{ font-family:var(--ol-body); font-size:.92rem; color:#fff; text-decoration:none; line-height:1.5; transition:color .2s ease; }
+    .office-page .ol-qb-offices a:hover{ color:var(--rls-red,#EA002A); }
+    .office-page .ol-qb-offices a.is-active{ color:var(--rls-red,#EA002A); font-weight:600; }
 
     /* ── Map + directions ── */
     .office-page .ol-map-grid{
@@ -203,6 +209,18 @@
             <div class="ol-qb-label">Office Hours</div>
             <!-- «EDIT» hours -->
             <div class="ol-qb-val">Mon&ndash;Fri&nbsp;8:30&ndash;4:30</div>
+          </div>
+        </div>
+        <div class="ol-qb-item">
+          <span class="ol-qb-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/></svg></span>
+          <div>
+            <div class="ol-qb-label">Our Offices</div>
+            <nav class="ol-qb-offices" aria-label="Our offices">
+              <a href="https://info.royallepagesolutions.com/pages/calgary-south/">Calgary South</a>
+              <a href="https://info.royallepagesolutions.com/pages/calgary-north/" class="is-active" aria-current="page">Calgary North</a>
+              <a href="https://info.royallepagesolutions.com/pages/canmore-banff/">Canmore</a>
+              <a href="https://info.royallepagesolutions.com/pages/okotoks/">Okotoks</a>
+            </nav>
           </div>
         </div>
       </div>
