@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ============================================================
+       OFFICE LOCATION PAGE — MINIMAL TEMPLATE
+       Royal LePage® Solutions
+
+       Deploy at the ROOT of a BoldTrail office subdomain
+       (e.g. https://solutions-okotoks.royallepage.ca/). The custom RLS
+       header is injected by the site-wide header.js; assets are also
+       loaded here so the page renders standalone (header.js is
+       idempotent and won't double-inject).
+
+       ── PER-OFFICE CUSTOMISATION ── search for  «EDIT»  and swap:
+         1. <title> + meta description
+         2. Hero: office name, tagline, hero photo URL
+         3. Hero "Search Listings" button → area-filtered search URL
+         4. Quick-contact bar: address, phone, email, hours
+         5. Map: address query (iframe + Directions link, two spots)
+       Header, footer menu, and brand styling are shared.
+       ──────────────────────────────────────────────────────────── -->
+
+  <!-- «EDIT» title + description per office -->
+  <title>Okotoks Office — Royal LePage® Solutions</title>
+  <meta name="description" content="Royal LePage Solutions in Okotoks — local REALTORS® serving Okotoks and the Foothills. Visit or contact our office.">
+
+  <!-- Fonts: Raleway only (brand-approved digital font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Shared RLS assets (absolute URLs so they resolve on any office subdomain) -->
+  <link rel="stylesheet" href="https://royal-lepage.github.io/solutions/assets/css/header.css?v=1011">
+  <link rel="stylesheet" href="https://royal-lepage.github.io/solutions/assets/css/styles.css?v=1001">
+  <script defer src="https://royal-lepage.github.io/solutions/assets/js/header.js?v=1011"></script>
+
+  <style>
+    .office-page{
+      --ol-radius: 2px;            /* sharp corners per brand guidelines */
+      --ol-soft:   #f5f4f2;
+      --ol-line:   #e3e1dd;
+      --ol-muted:  #8a8a8a;
+    }
+
+    .office-page .ol-wrap{
+      max-width: var(--rls-max-width, 1200px);
+      margin: 0 auto;
+      padding: 0 2.5rem;
+    }
+    .office-page .ol-eyebrow{
+      font-size:.72rem; letter-spacing:.28em; text-transform:uppercase;
+      color:var(--rls-red,#EA002A); font-weight:600;
+    }
+    .office-page .ol-section{ padding:clamp(54px,7vw,90px) 0; }
+    .office-page .ol-rule{ width:54px; height:2px; background:var(--rls-red,#EA002A); margin:14px 0 24px; }
+
+    /* ── Hero ── */
+    .office-page .ol-hero{
+      position:relative;
+      min-height:clamp(360px,46vw,520px);
+      display:flex; align-items:center;
+      color:#fff;
+      background:
+        linear-gradient(rgba(15,15,15,.55),rgba(15,15,15,.7)),
+        /* «EDIT» hero photo */
+        url('https://royal-lepage.github.io/solutions/assets/images/Okotoks%20Train%20Bridge.jpeg') center/cover no-repeat;
+    }
+    .office-page .ol-hero-inner{ max-width:760px; }
+    .office-page .ol-hero .ol-eyebrow{ color:rgba(255,255,255,.85); }
+    .office-page .ol-hero h1{
+      color:#fff; font-weight:200;
+      font-size:clamp(2.4rem,6vw,4.6rem); line-height:1.04;
+      letter-spacing:-.02em; margin:.5rem 0 1rem;
+    }
+    .office-page .ol-hero h1 .accent{ color:var(--rls-red,#EA002A); font-weight:400; }
+    .office-page .ol-hero p{ color:rgba(255,255,255,.9); font-size:1.1rem; max-width:48ch; margin:0 0 1.8rem; }
+    .office-page .ol-hero-cta{ display:flex; gap:1rem; flex-wrap:wrap; }
+
+    /* Buttons — brand .rls-btn look, sharp corners */
+    .office-page .ol-btn{
+      display:inline-flex; align-items:center; gap:10px;
+      font-size:.8rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600;
+      padding:1rem 2rem; border-radius:var(--ol-radius);
+      background:var(--rls-red,#EA002A); color:#fff; border:1px solid var(--rls-red,#EA002A);
+      transition:background-color .25s ease, border-color .25s ease, color .25s ease;
+      cursor:pointer; text-decoration:none;
+    }
+    .office-page .ol-btn:hover{ background:var(--rls-red-dk,#C20023); border-color:var(--rls-red-dk,#C20023); color:#fff; }
+    .office-page .ol-btn svg{ width:16px; height:16px; }
+    .office-page .ol-btn-outline{ background:transparent; border-color:rgba(255,255,255,.7); color:#fff; }
+    .office-page .ol-btn-outline:hover{ background:#fff; border-color:#fff; color:var(--rls-black,#000); }
+
+    /* ── Quick-contact bar ── */
+    .office-page .ol-quickbar{ background:var(--rls-black,#000); }
+    .office-page .ol-quickbar .ol-wrap{
+      display:grid; grid-template-columns:repeat(4,1fr);
+      gap:1px; padding:0;
+    }
+    .office-page .ol-qb-item{
+      display:flex; align-items:flex-start; gap:14px;
+      padding:28px 30px; color:#fff;
+    }
+    .office-page .ol-qb-item + .ol-qb-item{ box-shadow:-1px 0 0 rgba(255,255,255,.12); }
+    .office-page .ol-qb-icon{
+      flex:0 0 auto; width:34px; height:34px;
+      color:var(--rls-red,#EA002A); margin-top:2px;
+    }
+    .office-page .ol-qb-icon svg{ width:34px; height:34px; }
+    .office-page .ol-qb-label{
+      font-size:.66rem; letter-spacing:.2em; text-transform:uppercase;
+      color:rgba(255,255,255,.55); margin-bottom:.35rem;
+    }
+    .office-page .ol-qb-val{ font-size:.98rem; line-height:1.5; color:#fff; }
+    .office-page .ol-qb-val a{ color:#fff; text-decoration:none; }
+    .office-page .ol-qb-val a:hover{ color:var(--rls-red,#EA002A); }
+
+    /* ── Map + directions ── */
+    .office-page .ol-map-grid{
+      display:grid; grid-template-columns:1.2fr .8fr; gap:0;
+      border:1px solid var(--ol-line); border-radius:var(--ol-radius); overflow:hidden;
+    }
+    .office-page .ol-map-frame{ width:100%; height:100%; min-height:380px; border:0; display:block; }
+    .office-page .ol-map-panel{ background:var(--rls-black,#000); color:#fff; padding:clamp(30px,4vw,44px); }
+    .office-page .ol-map-panel h3{ color:#fff; font-weight:500; font-size:1.4rem; margin:0 0 .6rem; }
+    .office-page .ol-map-panel p{ color:#cfcfcf; font-size:.96rem; margin:0 0 1.4rem; line-height:1.65; }
+    .office-page .ol-map-panel .ol-btn{ margin-top:.3rem; }
+
+    /* ── Disclaimer ── */
+    .office-page .ol-disclaimer{ background:var(--ol-soft); padding:clamp(26px,4vw,38px) 0; border-top:1px solid var(--ol-line); }
+    .office-page .ol-disclaimer .ol-wrap{ font-size:.76rem; color:var(--ol-muted); line-height:1.65; }
+    .office-page .ol-disclaimer a{ color:var(--ol-muted); text-decoration:underline; }
+
+    /* ── Responsive ── */
+    @media(max-width:960px){
+      .office-page .ol-quickbar .ol-wrap{ grid-template-columns:1fr 1fr; }
+      .office-page .ol-qb-item + .ol-qb-item{ box-shadow:none; }
+      .office-page .ol-map-grid{ grid-template-columns:1fr; }
+      .office-page .ol-map-frame{ min-height:320px; }
+    }
+    @media(max-width:600px){
+      .office-page .ol-wrap{ padding:0 1.5rem; }
+      .office-page .ol-quickbar .ol-wrap{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+
+<body class="office-page">
+  <!-- Header is injected automatically by header.js -->
+  <main>
+
+    <!-- ===================== HERO ===================== -->
+    <section class="ol-hero">
+      <div class="ol-wrap ol-hero-inner">
+        <span class="ol-eyebrow">Royal LePage&reg; Solutions</span>
+        <!-- «EDIT» office name + tagline -->
+        <h1>Okotoks</h1>
+        <p>Local REALTORS&reg; who live and work in Okotoks and the Foothills — backed
+        by the strength of Canada&rsquo;s most recognized real estate brand.</p>
+        <div class="ol-hero-cta">
+          <!-- «EDIT» area-filtered listings search URL -->
+          <a class="ol-btn" href="https://www.rlpsolutions.ca/index.php?showagency=1&amp;rtype=map">
+            Search Listings
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a class="ol-btn ol-btn-outline" href="https://info.royallepagesolutions.com/pages/contact/">Contact Us</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== QUICK CONTACT BAR ===================== -->
+    <section class="ol-quickbar">
+      <div class="ol-wrap">
+        <div class="ol-qb-item">
+          <span class="ol-qb-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <div>
+            <div class="ol-qb-label">Visit Us</div>
+            <!-- «EDIT» address -->
+            <div class="ol-qb-val">106-52 McRae Street<br>Okotoks, AB&nbsp;&nbsp;T1S 2H4</div>
+          </div>
+        </div>
+        <div class="ol-qb-item">
+          <span class="ol-qb-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+          <div>
+            <div class="ol-qb-label">Call Us</div>
+            <!-- «EDIT» phone (tel: + display) -->
+            <div class="ol-qb-val"><a href="tel:4039823838">403.982.3838</a></div>
+          </div>
+        </div>
+        <div class="ol-qb-item">
+          <span class="ol-qb-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 6l9 7 9-7"/></svg></span>
+          <div>
+            <div class="ol-qb-label">Email Us</div>
+            <!-- «EDIT» email -->
+            <div class="ol-qb-val"><a href="mailto:solutionssouth@royallepage.ca">solutionssouth@royallepage.ca</a></div>
+          </div>
+        </div>
+        <div class="ol-qb-item">
+          <span class="ol-qb-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div>
+            <div class="ol-qb-label">Office Hours</div>
+            <!-- «EDIT» hours -->
+            <div class="ol-qb-val">Mon&ndash;Fri&nbsp;8&ndash;4</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== MAP + DIRECTIONS ===================== -->
+    <section class="ol-section">
+      <div class="ol-wrap">
+        <span class="ol-eyebrow">Find Us</span>
+        <h2>Stop By the Office</h2>
+        <div class="ol-rule"></div>
+        <div class="ol-map-grid">
+          <!-- «EDIT» map address query (URL-encode the address) -->
+          <iframe class="ol-map-frame"
+                  title="Royal LePage Solutions office location map"
+                  loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                  src="https://maps.google.com/maps?q=52%20McRae%20Street%20Okotoks%20AB&output=embed"></iframe>
+          <div class="ol-map-panel">
+            <h3>Okotoks Office</h3>
+            <!-- «EDIT» address -->
+            <p>106-52 McRae Street<br>Okotoks, AB&nbsp;&nbsp;T1S 2H4</p>
+            <!-- «EDIT» directions destination (URL-encode the address) -->
+            <a class="ol-btn" href="https://www.google.com/maps/dir/?api=1&destination=52%20McRae%20Street%20Okotoks%20AB" target="_blank" rel="noopener">
+              Get Directions
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== DISCLAIMER ===================== -->
+    <section class="ol-disclaimer">
+      <div class="ol-wrap">
+        <p>Royal LePage&reg;, Royal LePage Solutions, and related marks are trademarks owned by
+        Royal Bank of Canada and used under licence. Each Royal LePage&reg; office is independently
+        owned and operated. Not intended to solicit properties currently listed for sale or buyers
+        under contract. View important disclosures and notices about Royal LePage trademarks at
+        <a href="https://www.rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.</p>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>
