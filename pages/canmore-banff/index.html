@@ -30,15 +30,16 @@
   <!-- Fonts: Raleway only (brand-approved digital font) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
   <!-- Shared RLS assets (absolute URLs so they resolve on any office subdomain) -->
-  <link rel="stylesheet" href="https://royal-lepage.github.io/solutions/assets/css/header.css?v=1011">
+  <link rel="stylesheet" href="https://royal-lepage.github.io/solutions/assets/css/header.css?v=1010">
   <link rel="stylesheet" href="https://royal-lepage.github.io/solutions/assets/css/styles.css?v=1001">
   <script defer src="https://royal-lepage.github.io/solutions/assets/js/header.js?v=1011"></script>
 
   <style>
     .office-page{
+      --ol-body: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
       --ol-radius: 2px;            /* sharp corners per brand guidelines */
       --ol-soft:   #f5f4f2;
       --ol-line:   #e3e1dd;
@@ -64,19 +65,19 @@
       display:flex; align-items:center;
       color:#fff;
       background:
-        linear-gradient(rgba(15,15,15,.55),rgba(15,15,15,.7)),
         /* «EDIT» hero photo */
         url('https://royal-lepage.github.io/solutions/assets/images/Lake%20Louise.jpeg') center/cover no-repeat;
     }
     .office-page .ol-hero-inner{ max-width:760px; }
-    .office-page .ol-hero .ol-eyebrow{ color:rgba(255,255,255,.85); }
+    .office-page .ol-hero .ol-eyebrow{ color:rgba(255,255,255,.92); text-shadow:0 1px 12px rgba(0,0,0,.55); }
     .office-page .ol-hero h1{
       color:#fff; font-weight:200;
       font-size:clamp(2.4rem,6vw,4.6rem); line-height:1.04;
       letter-spacing:-.02em; margin:.5rem 0 1rem;
+      text-shadow:0 2px 24px rgba(0,0,0,.5);
     }
     .office-page .ol-hero h1 .accent{ color:var(--rls-red,#EA002A); font-weight:400; }
-    .office-page .ol-hero p{ color:rgba(255,255,255,.9); font-size:1.1rem; max-width:48ch; margin:0 0 1.8rem; }
+    .office-page .ol-hero p{ font-family:var(--ol-body); color:rgba(255,255,255,.95); font-size:1.1rem; max-width:48ch; margin:0 0 1.8rem; text-shadow:0 1px 14px rgba(0,0,0,.55); }
     .office-page .ol-hero-cta{ display:flex; gap:1rem; flex-wrap:wrap; }
 
     /* Buttons — brand .rls-btn look, sharp corners */
@@ -113,7 +114,7 @@
       font-size:.66rem; letter-spacing:.2em; text-transform:uppercase;
       color:rgba(255,255,255,.55); margin-bottom:.35rem;
     }
-    .office-page .ol-qb-val{ font-size:.98rem; line-height:1.5; color:#fff; }
+    .office-page .ol-qb-val{ font-family:var(--ol-body); font-size:.98rem; line-height:1.5; color:#fff; }
     .office-page .ol-qb-val a{ color:#fff; text-decoration:none; }
     .office-page .ol-qb-val a:hover{ color:var(--rls-red,#EA002A); }
 
@@ -125,12 +126,12 @@
     .office-page .ol-map-frame{ width:100%; height:100%; min-height:380px; border:0; display:block; }
     .office-page .ol-map-panel{ background:var(--rls-black,#000); color:#fff; padding:clamp(30px,4vw,44px); }
     .office-page .ol-map-panel h3{ color:#fff; font-weight:500; font-size:1.4rem; margin:0 0 .6rem; }
-    .office-page .ol-map-panel p{ color:#cfcfcf; font-size:.96rem; margin:0 0 1.4rem; line-height:1.65; }
+    .office-page .ol-map-panel p{ font-family:var(--ol-body); color:#cfcfcf; font-size:.96rem; margin:0 0 1.4rem; line-height:1.65; }
     .office-page .ol-map-panel .ol-btn{ margin-top:.3rem; }
 
     /* ── Disclaimer ── */
     .office-page .ol-disclaimer{ background:var(--ol-soft); padding:clamp(26px,4vw,38px) 0; border-top:1px solid var(--ol-line); }
-    .office-page .ol-disclaimer .ol-wrap{ font-size:.76rem; color:var(--ol-muted); line-height:1.65; }
+    .office-page .ol-disclaimer .ol-wrap{ font-family:var(--ol-body); font-size:.76rem; color:var(--ol-muted); line-height:1.65; }
     .office-page .ol-disclaimer a{ color:var(--ol-muted); text-decoration:underline; }
 
     /* ── Responsive ── */
