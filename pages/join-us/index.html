@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page Title — Royal LePage Solutions</title>
-  <meta name="description" content="Page description goes here.">
+  <title>Join Our Brokerage — Royal LePage® Solutions</title>
+  <meta name="description" content="Build your real estate career with Royal LePage Solutions — Canada's most trusted brand paired with local Calgary, Okotoks and Canmore office accountability. Training, technology, in-house marketing and a non-competing broker model.">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 
   <!-- Header CSS -->
   <link rel="stylesheet" href="../../assets/css/header.css?v=1010">
@@ -20,19 +20,726 @@
 
   <!-- Page-specific styles -->
   <style>
-    /* Add your page-specific styles here */
+    /* =========================================================
+       Join Our Brokerage — page-scoped styles (ju- prefix)
+       Inherits brand tokens from header.css / styles.css.
+       Fallbacks included so the page degrades gracefully.
+       ========================================================= */
+    :root {
+      --ju-red:        var(--rls-red, #EA002A);
+      --ju-red-dk:     var(--rls-red-dk, #C20023);
+      --ju-black:      var(--rls-black, #000000);
+      --ju-white:      var(--rls-white, #FFFFFF);
+      --ju-dark-grey:  var(--rls-dark-grey, #2A2A2A);
+      --ju-warm-grey:  var(--rls-warm-grey, #6B6660);
+      --ju-light-grey: var(--rls-light-grey, #E8E6E3);
+      --ju-stone:      var(--rls-stone, #D8D3CB);
+      --ju-taupe:      var(--rls-taupe, #B8AC9C);
+      --ju-display:    var(--rls-sans, 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif);
+      --ju-body:       'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      --ju-script:     'Caveat', cursive;
+      --ju-ink:        #14110F;            /* near-black warm ink for light sections */
+      --ju-paper:      #F6F4F1;            /* warm off-white */
+    }
+
+    .ju-page { font-family: var(--ju-body); color: var(--ju-ink); -webkit-font-smoothing: antialiased; }
+    .ju-page *, .ju-page *::before, .ju-page *::after { box-sizing: border-box; }
+
+    .ju-wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+
+    .ju-eyebrow {
+      font-family: var(--ju-display);
+      font-weight: 600; font-size: .74rem; letter-spacing: .26em;
+      text-transform: uppercase; color: var(--ju-red);
+      margin: 0 0 18px;
+    }
+    .ju-eyebrow.is-light { color: var(--ju-red); }
+
+    .ju-h2 {
+      font-family: var(--ju-display); font-weight: 300;
+      font-size: clamp(1.9rem, 4.2vw, 3.1rem); line-height: 1.06;
+      letter-spacing: -.01em; margin: 0 0 22px;
+    }
+    .ju-h2 strong { font-weight: 600; }
+    .ju-lede { font-size: 1.06rem; line-height: 1.7; color: #4A453F; max-width: 60ch; }
+
+    .ju-divider { width: 56px; height: 3px; background: var(--ju-red); border: 0; margin: 0 0 26px; }
+    .ju-divider.is-center { margin-left: auto; margin-right: auto; }
+
+    /* ── Buttons ───────────────────────────────────────────── */
+    .ju-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--ju-display); font-weight: 600; font-size: .82rem;
+      letter-spacing: .14em; text-transform: uppercase; text-decoration: none;
+      padding: 16px 30px; border-radius: 2px; border: 1px solid transparent;
+      cursor: pointer; transition: transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
+    }
+    .ju-btn--solid { background: var(--ju-red); color: var(--ju-white); }
+    .ju-btn--solid:hover { background: var(--ju-red-dk); transform: translateY(-2px); }
+    .ju-btn--ghost { background: transparent; color: var(--ju-white); border-color: rgba(255,255,255,.45); }
+    .ju-btn--ghost:hover { border-color: var(--ju-white); background: rgba(255,255,255,.06); transform: translateY(-2px); }
+    .ju-btn--ink { background: var(--ju-ink); color: var(--ju-white); }
+    .ju-btn--ink:hover { background: #000; transform: translateY(-2px); }
+    .ju-btn .ju-arw { transition: transform .25s ease; }
+    .ju-btn:hover .ju-arw { transform: translateX(4px); }
+
+    /* ── HERO ──────────────────────────────────────────────── */
+    .ju-hero {
+      position: relative; overflow: hidden;
+      background: var(--ju-black); color: var(--ju-white);
+      padding-top: calc(var(--rls-header-h, 160px) + 84px);
+      padding-bottom: 110px;
+    }
+    .ju-hero::before {
+      content: ""; position: absolute; top: -10%; right: -8%;
+      width: 60vw; height: 60vw; max-width: 780px; max-height: 780px;
+      background: radial-gradient(circle at center, rgba(234,0,42,.32) 0%, rgba(234,0,42,0) 62%);
+      pointer-events: none;
+    }
+    .ju-hero::after {
+      content: ""; position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 100% 46px; opacity: .5; pointer-events: none;
+    }
+    .ju-hero .ju-wrap { position: relative; z-index: 2; }
+    .ju-hero-inner { max-width: 880px; }
+    .ju-hero .ju-eyebrow { color: #FF5A75; opacity: 0; animation: juRise .8s ease .05s forwards; }
+    .ju-h1 {
+      font-family: var(--ju-display); font-weight: 200;
+      font-size: clamp(2.6rem, 7vw, 5.4rem); line-height: .98;
+      letter-spacing: -.02em; margin: 0 0 26px;
+      opacity: 0; animation: juRise .9s ease .14s forwards;
+    }
+    .ju-h1 strong { font-weight: 600; }
+    .ju-h1 .ju-redword { color: var(--ju-red); }
+    .ju-hero-sub {
+      font-size: 1.18rem; line-height: 1.65; color: rgba(255,255,255,.78);
+      max-width: 56ch; margin: 0 0 38px; font-weight: 300;
+      opacity: 0; animation: juRise .9s ease .26s forwards;
+    }
+    .ju-hero-cta { display: flex; flex-wrap: wrap; gap: 16px; opacity: 0; animation: juRise .9s ease .38s forwards; }
+    .ju-hero-offices {
+      margin-top: 52px; padding-top: 26px; border-top: 1px solid rgba(255,255,255,.14);
+      font-family: var(--ju-display); font-size: .82rem; letter-spacing: .14em;
+      text-transform: uppercase; color: rgba(255,255,255,.6);
+      opacity: 0; animation: juRise .9s ease .5s forwards;
+    }
+    .ju-hero-offices b { color: var(--ju-white); font-weight: 500; }
+    @keyframes juRise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Generic section frame ─────────────────────────────── */
+    .ju-section { padding: 92px 0; }
+    .ju-section--paper { background: var(--ju-paper); }
+    .ju-section--ink { background: var(--ju-ink); color: var(--ju-white); }
+    .ju-section--ink .ju-lede { color: rgba(255,255,255,.74); }
+    .ju-section--ink .ju-h2 { color: var(--ju-white); }
+    .ju-section-head { max-width: 720px; margin-bottom: 54px; }
+    .ju-section-head.is-center { margin-left: auto; margin-right: auto; text-align: center; }
+
+    /* ── Intro split ───────────────────────────────────────── */
+    .ju-split { display: grid; grid-template-columns: 1.05fr .95fr; gap: 64px; align-items: start; }
+    .ju-offices { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .ju-office {
+      display: block; text-decoration: none; color: inherit;
+      background: var(--ju-white); border: 1px solid var(--ju-light-grey);
+      border-radius: 3px; padding: 22px 22px 24px;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .ju-office:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -22px rgba(0,0,0,.4); border-color: var(--ju-taupe); }
+    .ju-office .ju-office-k { font-family: var(--ju-display); font-weight: 600; font-size: 1.02rem; margin: 0 0 4px; }
+    .ju-office .ju-office-m { font-size: .86rem; color: var(--ju-warm-grey); margin: 0; }
+    .ju-office .ju-office-go { font-family: var(--ju-display); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ju-red); margin-top: 12px; display: inline-block; }
+
+    /* ── Stats / by the numbers ────────────────────────────── */
+    .ju-script { font-family: var(--ju-script); color: var(--ju-red); font-size: 2.1rem; line-height: 1; display: block; margin-bottom: 4px; }
+    .ju-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.12); }
+    .ju-stat { background: var(--ju-ink); padding: 34px 26px; }
+    .ju-stat-n { font-family: var(--ju-display); font-weight: 200; font-size: clamp(2.2rem, 4vw, 3rem); line-height: 1; color: var(--ju-white); }
+    .ju-stat-n b { color: var(--ju-red); font-weight: 600; }
+    .ju-stat-l { font-family: var(--ju-display); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.62); margin-top: 12px; line-height: 1.45; }
+    .ju-stat-foot { margin-top: 22px; font-size: .82rem; color: rgba(255,255,255,.5); }
+
+    /* ── Hybrid advantage split ────────────────────────────── */
+    .ju-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .ju-duo-card { padding: 38px 34px; border-radius: 4px; }
+    .ju-duo-card.is-national { background: var(--ju-black); color: var(--ju-white); }
+    .ju-duo-card.is-local { background: var(--ju-white); color: var(--ju-ink); border: 1px solid var(--ju-light-grey); }
+    .ju-duo-tag { font-family: var(--ju-display); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ju-red); margin: 0 0 14px; }
+    .ju-duo-h { font-family: var(--ju-display); font-weight: 400; font-size: 1.5rem; margin: 0 0 16px; line-height: 1.2; }
+    .ju-duo-card.is-national .ju-duo-h { color: var(--ju-white); }
+    .ju-duo-p { font-size: .98rem; line-height: 1.7; }
+    .ju-duo-card.is-national .ju-duo-p { color: rgba(255,255,255,.78); }
+    .ju-duo-card.is-local .ju-duo-p { color: #4A453F; }
+
+    /* ── Feature cards ─────────────────────────────────────── */
+    .ju-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .ju-card {
+      background: var(--ju-white); border: 1px solid var(--ju-light-grey);
+      border-radius: 4px; padding: 32px 28px; position: relative;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .ju-section--ink .ju-card { background: #211D1A; border-color: rgba(255,255,255,.1); }
+    .ju-card:hover { transform: translateY(-4px); box-shadow: 0 26px 50px -28px rgba(0,0,0,.45); }
+    .ju-card-k { font-family: var(--ju-display); font-weight: 600; font-size: 1.12rem; margin: 0 0 12px; line-height: 1.25; }
+    .ju-section--ink .ju-card-k { color: var(--ju-white); }
+    .ju-card-p { font-size: .95rem; line-height: 1.65; color: #4A453F; margin: 0; }
+    .ju-section--ink .ju-card-p { color: rgba(255,255,255,.74); }
+    .ju-card-num { font-family: var(--ju-script); color: var(--ju-red); font-size: 2rem; line-height: 1; position: absolute; top: 22px; right: 26px; opacity: .9; }
+
+    /* highlight band (e.g. $775 package) */
+    .ju-highlight {
+      margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px;
+      background: var(--ju-black); color: var(--ju-white); border-radius: 4px; padding: 30px 34px;
+    }
+    .ju-highlight .ju-hl-n { font-family: var(--ju-display); font-weight: 200; font-size: 2.6rem; color: var(--ju-red); line-height: 1; }
+    .ju-highlight .ju-hl-t { font-size: .98rem; line-height: 1.55; color: rgba(255,255,255,.82); max-width: 52ch; }
+
+    /* aspirational promo band — stands out on the dark (ink) sections */
+    .ju-promo {
+      margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 26px;
+      border-radius: 4px; padding: 30px 34px;
+      background: linear-gradient(120deg, rgba(234,0,42,.16), rgba(234,0,42,.03));
+      border: 1px solid rgba(234,0,42,.42);
+    }
+    .ju-promo .ju-promo-n { font-family: var(--ju-display); font-weight: 200; font-size: 2.3rem; color: var(--ju-red); line-height: 1; white-space: nowrap; }
+    .ju-promo .ju-promo-t { font-size: .98rem; line-height: 1.6; color: rgba(255,255,255,.84); max-width: 64ch; }
+    .ju-promo .ju-promo-t b { color: var(--ju-white); font-weight: 500; }
+
+    /* ── Licensing path steps ──────────────────────────────── */
+    .ju-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; counter-reset: justep; }
+    .ju-step { position: relative; padding: 0 18px; }
+    .ju-step::before {
+      counter-increment: justep; content: counter(justep);
+      font-family: var(--ju-display); font-weight: 200; font-size: 1.4rem;
+      width: 52px; height: 52px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--ju-white); color: var(--ju-red); border: 1px solid var(--ju-red);
+      margin-bottom: 18px; position: relative; z-index: 2;
+    }
+    .ju-step::after { content: ""; position: absolute; top: 26px; left: calc(50% + 26px); right: calc(-50% + 26px); height: 1px; background: var(--ju-taupe); z-index: 1; }
+    .ju-step:last-child::after { display: none; }
+    .ju-step-k { font-family: var(--ju-display); font-weight: 600; font-size: 1rem; margin: 0 0 8px; }
+    .ju-step-p { font-size: .88rem; line-height: 1.6; color: #4A453F; margin: 0; }
+
+    /* ── Perks ─────────────────────────────────────────────── */
+    .ju-perks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .ju-perk { display: flex; gap: 18px; align-items: flex-start; padding: 20px 4px; border-bottom: 1px solid rgba(255,255,255,.12); }
+    .ju-perk .ju-perk-n { font-family: var(--ju-display); font-weight: 600; font-size: 1.5rem; color: var(--ju-red); line-height: 1; min-width: 88px; }
+    .ju-perk .ju-perk-t b { color: var(--ju-white); font-weight: 500; }
+    .ju-perk .ju-perk-t { color: rgba(255,255,255,.72); font-size: .95rem; line-height: 1.55; }
+
+    /* ── Apply / closing CTA ───────────────────────────────── */
+    .ju-cta { max-width: 760px; margin: 0 auto; text-align: center; }
+    .ju-cta .ju-lede { margin-left: auto; margin-right: auto; color: rgba(255,255,255,.78); }
+    .ju-cta-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 28px 0 36px; }
+    .ju-cta-tags span {
+      font-family: var(--ju-display); font-size: .76rem; letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(255,255,255,.85); border: 1px solid rgba(255,255,255,.22);
+      border-radius: 999px; padding: 9px 18px;
+    }
+    .ju-btn--lg { padding: 20px 46px; font-size: .9rem; }
+    .ju-cta-note { margin-top: 22px; font-size: .82rem; color: rgba(255,255,255,.5); }
+
+    /* ── Reveal-on-scroll ──────────────────────────────────── */
+    .ju-reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+    .ju-reveal.is-in { opacity: 1; transform: translateY(0); }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .ju-hero { padding-top: calc(var(--rls-header-h-tablet, 130px) + 70px); }
+      .ju-stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .ju-steps { grid-template-columns: repeat(1, 1fr); gap: 26px; }
+      .ju-step { padding: 0; }
+      .ju-step::after { display: none; }
+    }
+    @media (max-width: 900px) {
+      .ju-split { grid-template-columns: 1fr; gap: 40px; }
+      .ju-duo { grid-template-columns: 1fr; }
+      .ju-cards { grid-template-columns: 1fr; }
+      .ju-perks { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .ju-hero { padding-top: calc(var(--rls-header-h-mobile, 96px) + 56px); padding-bottom: 76px; }
+      .ju-section { padding: 64px 0; }
+      .ju-wrap { padding: 0 20px; }
+      .ju-offices { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 
   <!-- ─────────────────────────────────────────────
-       Page content starts below.
-       The header is injected automatically by header.js
+       Header injected automatically by header.js.
+       The .rls-hero class on the first section tells
+       header.js to add body.rls-has-hero (transparent
+       header over the dark hero, no top padding).
        ───────────────────────────────────────────── -->
 
-  <main>
-    <!-- Your sections go here -->
+  <main class="ju-page">
+
+    <!-- ░░ HERO ░░ -->
+    <section class="rls-hero ju-hero">
+      <div class="ju-wrap">
+        <div class="ju-hero-inner">
+          <p class="ju-eyebrow">Careers &middot; Royal LePage<sup>&reg;</sup> Solutions</p>
+          <h1 class="ju-h1">Local roots.<br><span class="ju-redword">National</span> strength.</h1>
+          <p class="ju-hero-sub">
+            Build your real estate career with the brand 9 out of 10 Canadians know &mdash; backed by a
+            hands-on, non-competing local team across Calgary, Okotoks and the Bow Valley.
+          </p>
+          <div class="ju-hero-cta">
+            <a href="https://royallepage.talentnest.com/en/posting/210413/SBFxYV4" target="_blank" rel="noopener" class="ju-btn ju-btn--solid">Apply Now <span class="ju-arw">&rarr;</span></a>
+            <a href="#why" class="ju-btn ju-btn--ghost">Why Solutions</a>
+          </div>
+          <p class="ju-hero-offices">
+            Four offices &mdash; <b>Calgary South</b> &middot; <b>Calgary Northwest</b> &middot; <b>Okotoks</b> &middot; <b>Canmore / Bow Valley</b>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ INTRO / IDENTITY ░░ -->
+    <section class="ju-section ju-section--paper" id="why">
+      <div class="ju-wrap">
+        <div class="ju-split">
+          <div class="ju-reveal">
+            <p class="ju-eyebrow">Who we are</p>
+            <hr class="ju-divider">
+            <h2 class="ju-h2">A <strong>100% Canadian</strong> brand, run by a local team that actually answers the phone.</h2>
+            <p class="ju-lede">
+              Royal LePage<sup>&reg;</sup> has been Canada&rsquo;s Real Estate Company<sup>&trade;</sup> for more than a
+              century. Royal LePage Solutions opened its doors in <strong>2009</strong> and is independently owned and
+              operated &mdash; so you get the reach of a national name with the accountability of a brokerage where
+              leadership knows your name and your business.
+            </p>
+            <p class="ju-lede" style="margin-top:18px;">
+              Our mission is simple: to expand the possibilities of a successful real estate experience by inspiring
+              professional excellence. Leadership keeps an open door &mdash; this is a place built on competitive
+              collaboration, where agents genuinely support one another.
+            </p>
+          </div>
+          <div class="ju-reveal">
+            <div class="ju-offices">
+              <a class="ju-office" href="https://solutions-calgary.royallepage.ca" target="_blank" rel="noopener">
+                <p class="ju-office-k">Calgary South</p>
+                <p class="ju-office-m">Midnapore &middot; main branch since 2016</p>
+                <span class="ju-office-go">Visit office &rarr;</span>
+              </a>
+              <a class="ju-office" href="https://solutions-suboffice.royallepage.ca" target="_blank" rel="noopener">
+                <p class="ju-office-k">Calgary Northwest</p>
+                <p class="ju-office-m">Briar Hill</p>
+                <span class="ju-office-go">Visit office &rarr;</span>
+              </a>
+              <a class="ju-office" href="https://solutions-okotoks.royallepage.ca" target="_blank" rel="noopener">
+                <p class="ju-office-k">Okotoks</p>
+                <p class="ju-office-m">Foothills</p>
+                <span class="ju-office-go">Visit office &rarr;</span>
+              </a>
+              <a class="ju-office" href="https://canmore-banff.royallepage.ca" target="_blank" rel="noopener">
+                <p class="ju-office-k">Canmore</p>
+                <p class="ju-office-m">Banff &amp; the Bow Valley</p>
+                <span class="ju-office-go">Visit office &rarr;</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ BY THE NUMBERS ░░ -->
+    <section class="ju-section ju-section--ink">
+      <div class="ju-wrap">
+        <div class="ju-section-head ju-reveal">
+          <span class="ju-script">by the</span>
+          <h2 class="ju-h2"><strong>Numbers</strong> that move careers</h2>
+          <p class="ju-lede">The national engine behind every Solutions agent &mdash; current figures from the
+            Royal LePage<sup>&reg;</sup> February 2026 brand report.</p>
+        </div>
+        <div class="ju-stats-grid ju-reveal">
+          <div class="ju-stat">
+            <div class="ju-stat-n"><b>20,000</b></div>
+            <div class="ju-stat-l">REALTORS<sup>&reg;</sup> coast to coast</div>
+          </div>
+          <div class="ju-stat">
+            <div class="ju-stat-n"><b>9</b> / 10</div>
+            <div class="ju-stat-l">Canadians familiar with the Royal LePage<sup>&reg;</sup> brand</div>
+          </div>
+          <div class="ju-stat">
+            <div class="ju-stat-n"><b>200,000</b></div>
+            <div class="ju-stat-l">Leads a year from digital channels</div>
+          </div>
+          <div class="ju-stat">
+            <div class="ju-stat-n"><b>27</b>M</div>
+            <div class="ju-stat-l">Annual visits to royallepage.ca</div>
+          </div>
+          <div class="ju-stat">
+            <div class="ju-stat-n">~<b>$105</b>B</div>
+            <div class="ju-stat-l">~1/3 of all transactional dollar volume in Canada</div>
+          </div>
+          <div class="ju-stat">
+            <div class="ju-stat-n">every <b>3</b> min</div>
+            <div class="ju-stat-l">A Royal LePager sells a home</div>
+          </div>
+          <div class="ju-stat">
+            <div class="ju-stat-n"><b>#1</b></div>
+            <div class="ju-stat-l">In 250 markets nationwide</div>
+          </div>
+          <div class="ju-stat">
+            <div class="ju-stat-n"><b>$57</b>M+</div>
+            <div class="ju-stat-l">Raised since 1998 &mdash; Shelter Foundation<sup>&trade;</sup></div>
+          </div>
+        </div>
+        <p class="ju-stat-foot ju-reveal" style="margin-bottom:16px;">And here at Solutions, in our own backyard:</p>
+        <div class="ju-stats-grid ju-reveal">
+          <div class="ju-stat">
+            <div class="ju-stat-n"><b>$895</b>M</div>
+            <div class="ju-stat-l">In sales volume (2022)</div>
+          </div>
+          <div class="ju-stat">
+            <div class="ju-stat-n"><b>73</b>%</div>
+            <div class="ju-stat-l">Of agents have stayed 5+ years</div>
+          </div>
+          <div class="ju-stat">
+            <div class="ju-stat-n"><b>$139</b>K</div>
+            <div class="ju-stat-l">Average associate commission</div>
+          </div>
+          <div class="ju-stat">
+            <div class="ju-stat-n"><b>4</b></div>
+            <div class="ju-stat-l">Full-service offices &mdash; Calgary, Okotoks &amp; Canmore</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ THE HYBRID ADVANTAGE ░░ -->
+    <section class="ju-section">
+      <div class="ju-wrap">
+        <div class="ju-section-head is-center ju-reveal">
+          <p class="ju-eyebrow">The Solutions advantage</p>
+          <hr class="ju-divider is-center">
+          <h2 class="ju-h2">National brand. <strong>Local accountability.</strong></h2>
+        </div>
+        <div class="ju-duo ju-reveal" style="grid-template-columns:repeat(3,1fr);">
+          <div class="ju-duo-card is-local">
+            <p class="ju-duo-tag">Local roots</p>
+            <h3 class="ju-duo-h">A team invested in you</h3>
+            <p class="ju-duo-p">
+              A non-competing broker-owner model means leadership wins when you win &mdash; backed by an
+              open-door team across four offices that actually knows your business.
+            </p>
+          </div>
+          <div class="ju-duo-card is-national">
+            <p class="ju-duo-tag">National strength</p>
+            <h3 class="ju-duo-h">Reach you can&rsquo;t build alone</h3>
+            <p class="ju-duo-p">
+              A trusted name in 250 markets, a national lead and referral network, end-to-end Canadianized
+              technology and millions of Canadians engaging the Royal LePage<sup>&reg;</sup> brand every year.
+            </p>
+          </div>
+          <div class="ju-duo-card is-local">
+            <p class="ju-duo-tag">Real support</p>
+            <h3 class="ju-duo-h">The friction taken off your plate</h3>
+            <p class="ju-duo-p">
+              In-house marketing and design, genuine conveyancing and admin help, specialized divisions and
+              onboarding that gets you producing &mdash; so you can focus on clients.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ TRAINING & DEVELOPMENT ░░ -->
+    <section class="ju-section ju-section--paper">
+      <div class="ju-wrap">
+        <div class="ju-section-head ju-reveal">
+          <p class="ju-eyebrow">Training &amp; development</p>
+          <hr class="ju-divider">
+          <h2 class="ju-h2">A culture of <strong>competitive collaboration</strong></h2>
+          <p class="ju-lede">Whether you&rsquo;re newly licensed or a seasoned producer, you&rsquo;re set up to grow from day one.</p>
+        </div>
+        <div class="ju-cards ju-reveal">
+          <div class="ju-card">
+            <span class="ju-card-num">5</span>
+            <h3 class="ju-card-k">Five-week orientation</h3>
+            <p class="ju-card-p">A structured New Agent Orientation plus one-on-one team support gets you producing quickly.</p>
+          </div>
+          <div class="ju-card">
+            <h3 class="ju-card-k">Elite sales programs</h3>
+            <p class="ju-card-p">Industry-leading training including the Buffini Pathway to Mastery and Sell It Like Serhant modules.</p>
+          </div>
+          <div class="ju-card">
+            <h3 class="ju-card-k">Weekly business meetings</h3>
+            <p class="ju-card-p">Mondays at 10&nbsp;am, in person or by Zoom &mdash; guest speakers on legal, insurance, inspections and market trends.</p>
+          </div>
+          <div class="ju-card">
+            <h3 class="ju-card-k">Conferences &amp; symposiums</h3>
+            <p class="ju-card-p">The annual National Sales Conference each October, plus a dedicated Commercial Symposium for practitioners.</p>
+          </div>
+          <div class="ju-card">
+            <h3 class="ju-card-k">Compliance, handled</h3>
+            <p class="ju-card-p">Ongoing education for FINTRAC obligations and your annual re-licensing requirements &mdash; so nothing slips.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ TECHNOLOGY & LEADS ░░ -->
+    <section class="ju-section ju-section--ink">
+      <div class="ju-wrap">
+        <div class="ju-section-head ju-reveal">
+          <p class="ju-eyebrow">Technology &amp; lead generation</p>
+          <hr class="ju-divider">
+          <h2 class="ju-h2">An ecosystem that lets you <strong>work smarter</strong></h2>
+        </div>
+        <div class="ju-cards ju-reveal">
+          <div class="ju-card">
+            <h3 class="ju-card-k">rlpSPHERE<sup>&reg;</sup> Smart CRM</h3>
+            <p class="ju-card-p">An AI-powered CRM &mdash; with a mobile app &mdash; that nurtures leads automatically and follows up based on recent client activity.</p>
+          </div>
+          <div class="ju-card">
+            <h3 class="ju-card-k">On-call lead rotation</h3>
+            <p class="ju-card-p">Walk-ins and incoming office calls are routed to the agent on duty &mdash; real opportunities open to every agent in the rotation.</p>
+          </div>
+          <div class="ju-card">
+            <h3 class="ju-card-k">Tools that just work</h3>
+            <p class="ju-card-p">Google Workspace, rlpNetwork, the rlpOpenHouse app, and paperless transaction management with Deal Manager To Go and live status updates.</p>
+          </div>
+        </div>
+        <div class="ju-promo ju-reveal">
+          <span class="ju-promo-n">Earn your seat</span>
+          <span class="ju-promo-t"><b>Smart Leads<sup>&trade;</sup></b> is our private, invitation-only lead program reserved for top-producing agents (25% referral fee on closed leads). It&rsquo;s performance-driven &mdash; build your numbers with us and it becomes a real goal to grow into.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ DIVISIONS & SPECIALIZED SERVICES ░░ -->
+    <section class="ju-section ju-section--paper">
+      <div class="ju-wrap">
+        <div class="ju-section-head ju-reveal">
+          <p class="ju-eyebrow">Divisions &amp; specialized services</p>
+          <hr class="ju-divider">
+          <h2 class="ju-h2">Room to <strong>build a niche</strong></h2>
+          <p class="ju-lede">Grow beyond residential resale with full in-house divisions and partner services.</p>
+        </div>
+        <div class="ju-cards ju-reveal">
+          <div class="ju-card">
+            <h3 class="ju-card-k">Commercial division</h3>
+            <p class="ju-card-p">A full-service team across industrial, investment, land, multi-family, retail and office sectors.</p>
+          </div>
+          <div class="ju-card">
+            <h3 class="ju-card-k">Property management</h3>
+            <p class="ju-card-p">Licensed managers handling residential leasing, residential property management and commercial management.</p>
+          </div>
+          <div class="ju-card">
+            <h3 class="ju-card-k">Mortgage services</h3>
+            <p class="ju-card-p">A partnership with independent mortgage broker Gary Masur of Dominion Lending Centres for your clients.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ LOCAL SUPPORT & IN-HOUSE SERVICES ░░ -->
+    <section class="ju-section">
+      <div class="ju-wrap">
+        <div class="ju-section-head ju-reveal">
+          <p class="ju-eyebrow">Local support &amp; in-house services</p>
+          <hr class="ju-divider">
+          <h2 class="ju-h2">The friction-removing <strong>support team</strong> behind you</h2>
+        </div>
+        <div class="ju-cards ju-reveal">
+          <div class="ju-card">
+            <h3 class="ju-card-k">In-house design &amp; print hub</h3>
+            <p class="ju-card-p">A dedicated digital marketing, design and print department produces professional, brand-compliant materials &mdash; fast.</p>
+          </div>
+          <div class="ju-card">
+            <h3 class="ju-card-k">A team you can see</h3>
+            <p class="ju-card-p">Broker of Record, an Agent Success Specialist and office administrators &mdash; real people who handle the details.</p>
+          </div>
+          <div class="ju-card">
+            <h3 class="ju-card-k">Non-competing leadership</h3>
+            <p class="ju-card-p">Our broker-owner doesn&rsquo;t compete for listings, so leadership stays focused entirely on your success.</p>
+          </div>
+        </div>
+        <div class="ju-highlight ju-reveal">
+          <span class="ju-hl-n">$775</span>
+          <span class="ju-hl-t">value onboarding package for new agents &mdash; 100 business cards, personalized templates, yard signs and social-media set-up to get you to market on day one.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ AWARDS & RECOGNITION ░░ -->
+    <section class="ju-section ju-section--ink">
+      <div class="ju-wrap">
+        <div class="ju-section-head ju-reveal">
+          <p class="ju-eyebrow">Awards &amp; recognition</p>
+          <hr class="ju-divider">
+          <h2 class="ju-h2">Your <strong>wins, celebrated</strong></h2>
+        </div>
+        <div class="ju-cards ju-reveal">
+          <div class="ju-card">
+            <h3 class="ju-card-k">Local spotlight</h3>
+            <p class="ju-card-p">Monthly recognition of our Top 10 Individuals and Top 5 Teams across our social channels.</p>
+          </div>
+          <div class="ju-card">
+            <h3 class="ju-card-k">National award levels</h3>
+            <p class="ju-card-p">A full ladder of national honours, up to the Chairman&rsquo;s Club (Top 1%) with its exclusive annual retreat.</p>
+          </div>
+          <div class="ju-card">
+            <h3 class="ju-card-k">Annual celebration</h3>
+            <p class="ju-card-p">A brokerage-wide achievement event every spring to mark the year&rsquo;s milestones together.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ ALBERTA REGULATORY ADVANTAGE / LICENSING PATH ░░ -->
+    <section class="ju-section ju-section--paper">
+      <div class="ju-wrap">
+        <div class="ju-section-head ju-reveal">
+          <p class="ju-eyebrow">The Alberta advantage</p>
+          <hr class="ju-divider">
+          <h2 class="ju-h2">Compliance handled, so you can <strong>focus on clients</strong></h2>
+          <p class="ju-lede">
+            In Alberta, client agreements are brokerage-level relationships. We manage RECA compliance,
+            trust-account oversight and advertising supervision &mdash; protecting you and your clients.
+          </p>
+        </div>
+        <div class="ju-steps ju-reveal">
+          <div class="ju-step">
+            <h3 class="ju-step-k">Eligibility</h3>
+            <p class="ju-step-p">Confirm RECA eligibility requirements and get started.</p>
+          </div>
+          <div class="ju-step">
+            <h3 class="ju-step-k">Coursework</h3>
+            <p class="ju-step-p">Complete the required pre-licensing education.</p>
+          </div>
+          <div class="ju-step">
+            <h3 class="ju-step-k">Exams</h3>
+            <p class="ju-step-p">Pass your RECA licensing examinations.</p>
+          </div>
+          <div class="ju-step">
+            <h3 class="ju-step-k">Join Solutions</h3>
+            <p class="ju-step-p">Register your licence with the brokerage and meet your team.</p>
+          </div>
+          <div class="ju-step">
+            <h3 class="ju-step-k">Set up &amp; sell</h3>
+            <p class="ju-step-p">Get your tools, marketing and CRM ready &mdash; and start producing.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ GIVING BACK ░░ -->
+    <section class="ju-section ju-section--ink">
+      <div class="ju-wrap">
+        <div class="ju-split">
+          <div class="ju-reveal">
+            <p class="ju-eyebrow">Giving back</p>
+            <hr class="ju-divider">
+            <h2 class="ju-h2">The <strong>heart</strong> of the brokerage</h2>
+            <p class="ju-lede">
+              The Royal LePage<sup>&reg;</sup> Shelter Foundation<sup>&trade;</sup> is Canada&rsquo;s largest foundation
+              dedicated to ending family violence, raising more than $57 million since 1998.
+            </p>
+          </div>
+          <div class="ju-reveal">
+            <div class="ju-cards" style="grid-template-columns:1fr;">
+              <div class="ju-card">
+                <h3 class="ju-card-k">Local shelters we support</h3>
+                <p class="ju-card-p">FearIsNotLove, Rowan House and the Banff YWCA &mdash; the organizations protecting our own communities.</p>
+              </div>
+              <div class="ju-card">
+                <h3 class="ju-card-k">Commission Donor Program</h3>
+                <p class="ju-card-p">Become a Commission Donor and give a set amount &mdash; anywhere from $20 to $100 &mdash; from every deal to support local shelters.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ PERKS ░░ -->
+    <section class="ju-section ju-section--ink" style="padding-top:0;">
+      <div class="ju-wrap">
+        <div class="ju-section-head ju-reveal">
+          <p class="ju-eyebrow">Membership benefits</p>
+          <hr class="ju-divider">
+          <h2 class="ju-h2">Perks that <strong>add up</strong></h2>
+        </div>
+        <div class="ju-perks ju-reveal">
+          <div class="ju-perk">
+            <span class="ju-perk-n">Group</span>
+            <span class="ju-perk-t"><b>The Co-operators</b> &mdash; unbeatable group rates on home and auto insurance.</span>
+          </div>
+          <div class="ju-perk">
+            <span class="ju-perk-n">30%</span>
+            <span class="ju-perk-t"><b>GoodLife Fitness</b> &mdash; 30% off all membership types.</span>
+          </div>
+          <div class="ju-perk">
+            <span class="ju-perk-n">50%</span>
+            <span class="ju-perk-t"><b>The Brick</b> &mdash; savings of up to 50% on furniture and home goods.</span>
+          </div>
+          <div class="ju-perk">
+            <span class="ju-perk-n">Telus</span>
+            <span class="ju-perk-t"><b>Telus Business</b> &mdash; significant discounts on mobility plans.</span>
+          </div>
+          <div class="ju-perk">
+            <span class="ju-perk-n">Avis</span>
+            <span class="ju-perk-t"><b>Avis Car Rental</b> &mdash; negotiated preferred rates for members.</span>
+          </div>
+          <div class="ju-perk">
+            <span class="ju-perk-n">AREA</span>
+            <span class="ju-perk-t"><b>Alberta Real Estate Association</b> &mdash; fuel discounts plus a health and wellness plan.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ APPLY ░░ -->
+    <section class="ju-section ju-section--ink" id="apply">
+      <div class="ju-wrap">
+        <div class="ju-cta ju-reveal">
+          <p class="ju-eyebrow">Join us</p>
+          <hr class="ju-divider is-center">
+          <h2 class="ju-h2" style="font-size:clamp(2.2rem,5.5vw,3.8rem);">Ready to <strong>build something</strong>?</h2>
+          <p class="ju-lede">
+            Whether you&rsquo;re planning to get licensed, newly licensed, or an experienced pro after better
+            tools and economics &mdash; there&rsquo;s a place for you here.
+          </p>
+          <div class="ju-cta-tags">
+            <span>Planning to get licensed</span>
+            <span>Newly licensed</span>
+            <span>Experienced &amp; ready for more</span>
+          </div>
+          <a href="https://royallepage.talentnest.com/en/posting/210413/SBFxYV4" target="_blank" rel="noopener" class="ju-btn ju-btn--solid ju-btn--lg">Apply Now <span class="ju-arw">&rarr;</span></a>
+          <p class="ju-cta-note">Applications are handled through our careers portal &mdash; it only takes a few minutes.</p>
+        </div>
+      </div>
+    </section>
+
   </main>
+
+  <!-- ─────────────────────────────────────────────
+       Page scripts (IIFE — no global leakage)
+       ───────────────────────────────────────────── -->
+  <script>
+  (function () {
+    "use strict";
+
+    /* Scroll reveal */
+    var reveals = document.querySelectorAll('.ju-reveal');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      reveals.forEach(function (el) { io.observe(el); });
+    } else {
+      reveals.forEach(function (el) { el.classList.add('is-in'); });
+    }
+  })();
+  </script>
 
 </body>
 </html>
