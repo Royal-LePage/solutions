@@ -91,9 +91,7 @@
       padding-top: calc(var(--rls-header-h, 160px) + 84px);
       padding-bottom: 110px;
       background:
-        linear-gradient(96deg, rgba(0,0,0,.93) 0%, rgba(0,0,0,.68) 48%, rgba(0,0,0,.40) 100%),
-        linear-gradient(0deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.12) 46%),
-        var(--ju-hero-img) center 42% / cover no-repeat,
+        var(--ju-hero-img) center 60% / cover no-repeat,
         var(--ju-black);
     }
     .ju-hero::before {
@@ -109,6 +107,10 @@
     }
     .ju-hero .ju-wrap { position: relative; z-index: 2; }
     .ju-hero-inner { max-width: 880px; }
+    .ju-hero .ju-eyebrow,
+    .ju-h1,
+    .ju-hero-sub,
+    .ju-hero-offices { text-shadow: 0 2px 22px rgba(0,0,0,.8), 0 1px 3px rgba(0,0,0,.92); }
     .ju-hero .ju-eyebrow { color: #FF5A75; opacity: 0; animation: juRise .8s ease .05s forwards; }
     .ju-h1 {
       font-family: var(--ju-display); font-weight: 200;
@@ -119,7 +121,7 @@
     .ju-h1 strong { font-weight: 600; }
     .ju-h1 .ju-redword { color: var(--ju-red); }
     .ju-hero-sub {
-      font-size: 1.18rem; line-height: 1.65; color: rgba(255,255,255,.78);
+      font-size: 1.18rem; line-height: 1.65; color: rgba(255,255,255,.92);
       max-width: 56ch; margin: 0 0 38px; font-weight: 300;
       opacity: 0; animation: juRise .9s ease .26s forwards;
     }
