@@ -40,6 +40,8 @@
       --ju-script:     'Caveat', cursive;
       --ju-ink:        #14110F;            /* near-black warm ink for light sections */
       --ju-paper:      #F6F4F1;            /* warm off-white */
+      /* Hero background photo — "I ♥ Royal LePage" marquee, hosted in repo assets/images/ */
+      --ju-hero-img:   url('../../assets/images/PBL-RLPNSCWinnipeg2022-100001.jpg');
     }
 
     .ju-page { font-family: var(--ju-body); color: var(--ju-ink); -webkit-font-smoothing: antialiased; }
@@ -85,10 +87,14 @@
 
     /* ── HERO ──────────────────────────────────────────────── */
     .ju-hero {
-      position: relative; overflow: hidden;
-      background: var(--ju-black); color: var(--ju-white);
+      position: relative; overflow: hidden; color: var(--ju-white);
       padding-top: calc(var(--rls-header-h, 160px) + 84px);
       padding-bottom: 110px;
+      background:
+        linear-gradient(96deg, rgba(0,0,0,.93) 0%, rgba(0,0,0,.68) 48%, rgba(0,0,0,.40) 100%),
+        linear-gradient(0deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.12) 46%),
+        var(--ju-hero-img) center 42% / cover no-repeat,
+        var(--ju-black);
     }
     .ju-hero::before {
       content: ""; position: absolute; top: -10%; right: -8%;
