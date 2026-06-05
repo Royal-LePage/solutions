@@ -1,1 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Team — Royal LePage Solutions</title>
+  <meta name="description" content="Meet the team behind Royal LePage Solutions — the management, support staff, and marketing people who keep our offices running across Calgary, Canmore, and Okotoks.">
 
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Header CSS -->
+  <link rel="stylesheet" href="../../assets/css/header.css?v=1011">
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="../../assets/css/styles.css?v=1001">
+  <!-- Header JS (injects header markup) -->
+  <script defer src="../../assets/js/header.js?v=1011"></script>
+
+  <!-- Page-specific styles -->
+  <style>
+    .staff-page{
+      --staff-maxw: 1180px;
+      font-family: "Roboto", Arial, sans-serif;
+      color: var(--rls-dark-grey, #2A2A2A);
+    }
+
+    /* ── Hero ───────────────────────────────────────── */
+    .staff-hero{
+      background: var(--rls-black, #000);
+      color: var(--rls-white, #fff);
+      text-align: center;
+      padding: 5.5rem 1.5rem 5rem;
+    }
+    .staff-hero h1{
+      font-family: "Raleway", sans-serif;
+      font-weight: 200;
+      letter-spacing: -0.02em;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      margin: 0 0 1rem;
+      line-height: 1.05;
+    }
+    .staff-hero p{
+      font-weight: 300;
+      max-width: 640px;
+      margin: 0 auto;
+      font-size: clamp(1rem, 1.6vw, 1.15rem);
+      color: var(--rls-stone, #D8D3CB);
+      line-height: 1.6;
+    }
+    .staff-hero .staff-rule{
+      width: 54px; height: 3px;
+      background: var(--rls-red, #EA002A);
+      margin: 1.6rem auto 0;
+    }
+
+    /* ── Section wrap ───────────────────────────────── */
+    .staff-section{
+      max-width: var(--staff-maxw);
+      margin: 0 auto;
+      padding: 4rem 1.5rem 1.5rem;
+    }
+
+    /* ── Office filter chips ────────────────────────── */
+    .staff-filters{
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    .staff-chip{
+      font-family: "Raleway", sans-serif;
+      font-weight: 500; font-size: 0.82rem;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      padding: 0.55rem 1.1rem;
+      border: 1px solid var(--rls-stone, #D8D3CB);
+      border-radius: 999px;
+      background: var(--rls-white, #fff);
+      color: var(--rls-warm-grey, #6B6660);
+      cursor: pointer; transition: all .18s ease;
+    }
+    .staff-chip:hover{ border-color: var(--rls-black, #000); color: var(--rls-black,#000); }
+    .staff-chip.is-active{
+      background: var(--rls-black, #000);
+      border-color: var(--rls-black, #000);
+      color: var(--rls-white, #fff);
+    }
+
+    /* ── Department sections ────────────────────────── */
+    .staff-dept{ margin-bottom: 3.5rem; }
+    .staff-dept-title{
+      font-family: "Raleway", sans-serif;
+      font-weight: 300;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      color: var(--rls-black, #000);
+      text-align: center;
+      margin: 0;
+    }
+    .staff-dept-rule{
+      width: 54px; height: 3px;
+      background: var(--rls-red, #EA002A);
+      margin: 0.9rem auto 2rem;
+    }
+
+    /* ── Grid + cards ───────────────────────────────── */
+    .staff-grid{
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.75rem;
+    }
+    .staff-card{
+      background: var(--rls-white, #fff);
+      border: 1px solid var(--rls-light-grey, #E8E6E3);
+      border-radius: 14px;
+      padding: 2rem 1.6rem 1.7rem;
+      text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .staff-card:hover{
+      transform: translateY(-4px);
+      box-shadow: 0 14px 32px rgba(0,0,0,.08);
+      border-color: var(--rls-stone, #D8D3CB);
+    }
+    .staff-avatar{
+      width: 104px; height: 104px;
+      border-radius: 50%;
+      margin: 0 auto 1.2rem;
+      object-fit: cover;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--rls-black, #000);
+      color: var(--rls-white, #fff);
+      font-family: "Raleway", sans-serif;
+      font-weight: 500; font-size: 1.9rem; letter-spacing: 0.02em;
+      overflow: hidden;
+    }
+    img.staff-avatar{ display: block; }
+    .staff-name{
+      font-family: "Raleway", sans-serif;
+      font-weight: 600; font-size: 1.18rem;
+      color: var(--rls-black, #000);
+      margin: 0 0 0.25rem;
+    }
+    .staff-title{
+      font-family: "Raleway", sans-serif;
+      font-weight: 500; font-size: 0.82rem;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--rls-red, #EA002A);
+      margin: 0 0 0.65rem;
+    }
+    .staff-office{
+      display: inline-block;
+      font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--rls-warm-grey, #6B6660);
+      background: var(--rls-light-grey, #E8E6E3);
+      border-radius: 999px;
+      padding: 0.25rem 0.7rem;
+      margin-bottom: 0.9rem;
+    }
+    .staff-desc{
+      font-size: 0.94rem; line-height: 1.55;
+      color: var(--rls-dark-grey, #2A2A2A);
+      margin: 0 0 1.1rem;
+    }
+    .staff-contact{
+      display: flex; flex-direction: column; gap: 0.35rem;
+      border-top: 1px solid var(--rls-light-grey, #E8E6E3);
+      padding-top: 1rem;
+    }
+    .staff-contact a{
+      font-size: 0.88rem;
+      color: var(--rls-black, #000);
+      text-decoration: none;
+      transition: color .15s ease;
+      word-break: break-word;
+    }
+    .staff-contact a:hover{ color: var(--rls-red, #EA002A); }
+
+    /* ── States ─────────────────────────────────────── */
+    .staff-state{
+      text-align: center; padding: 3rem 1rem;
+      font-size: 1rem; color: var(--rls-warm-grey, #6B6660);
+    }
+    .staff-spinner{
+      width: 34px; height: 34px;
+      border: 3px solid var(--rls-light-grey, #E8E6E3);
+      border-top-color: var(--rls-red, #EA002A);
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      animation: staff-spin .8s linear infinite;
+    }
+    @keyframes staff-spin{ to{ transform: rotate(360deg); } }
+
+    /* ── CTA band ───────────────────────────────────── */
+    .staff-cta{
+      background: var(--rls-black, #000);
+      color: var(--rls-white, #fff);
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+    }
+    .staff-cta h2{
+      font-family: "Raleway", sans-serif;
+      font-weight: 300;
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      margin: 0 0 1.4rem;
+    }
+    .staff-btn{
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: "Raleway", sans-serif;
+      font-weight: 600; font-size: 0.95rem; letter-spacing: 0.03em;
+      background: var(--rls-red, #EA002A);
+      color: var(--rls-white, #fff);
+      text-decoration: none;
+      padding: 0.85rem 1.7rem; border-radius: 6px;
+      transition: background .18s ease;
+    }
+    .staff-btn:hover{ background: var(--rls-red-dk, #C20023); }
+    .staff-btn svg{ width: 18px; height: 18px; }
+
+    /* ── Disclaimer ─────────────────────────────────── */
+    .staff-disclaimer{
+      max-width: var(--staff-maxw);
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 3.5rem;
+      font-size: 0.78rem; line-height: 1.6;
+      color: var(--rls-warm-grey, #6B6660);
+      text-align: center;
+    }
+    .staff-disclaimer a{ color: var(--rls-warm-grey, #6B6660); }
+
+    @media (max-width: 640px){
+      .staff-hero{ padding: 4rem 1.25rem 3.5rem; }
+      .staff-section{ padding: 2.75rem 1.25rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="staff-page">
+
+    <!-- Hero -->
+    <section class="staff-hero">
+      <h1>Meet Our Team</h1>
+      <p>Behind every Royal LePage&reg; Solutions transaction is a team that keeps our offices moving &mdash; management, support staff, and marketing. Meet the people who make it happen.</p>
+      <div class="staff-rule"></div>
+    </section>
+
+    <!-- Roster -->
+    <section class="staff-section">
+      <div class="staff-filters" id="staffFilters" hidden></div>
+
+      <div class="staff-state" id="staffLoading">
+        <div class="staff-spinner"></div>
+        Loading our team&hellip;
+      </div>
+
+      <div class="staff-state" id="staffError" hidden>
+        We&rsquo;re having trouble loading the team right now. Please refresh, or reach us at
+        <a href="tel:+14032525900">403-252-5900</a>.
+      </div>
+
+      <div id="staffRoster"></div>
+    </section>
+
+    <!-- CTA -->
+    <section class="staff-cta">
+      <h2>Have a question for our team?</h2>
+      <a class="staff-btn" href="https://info.royallepagesolutions.com/pages/contact/">
+        Get In Touch
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M13 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </section>
+
+    <!-- Disclaimer -->
+    <div class="staff-disclaimer">
+      Royal LePage&reg; Solutions, Brokerage &mdash; independently owned and operated. Not intended to solicit
+      buyers or sellers currently under contract. View important disclosures and notices about Royal LePage&reg;
+      trademarks at <a href="https://rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.
+    </div>
+
+  </main>
+
+  <!-- Staff loader -->
+  <script>
+  (function () {
+    "use strict";
+
+    /* ──────────────────────────────────────────────────────────
+       1. PASTE YOUR PUBLISHED GOOGLE SHEET CSV URL HERE
+          (File ▸ Share ▸ Publish to web ▸ select the tab ▸ CSV)
+       ────────────────────────────────────────────────────────── */
+    var SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTF1GjZcEaMx0vzkSUiY6pAhgAh3JXvMgQCcivLRWTT-gForAOtku5ZgGw0YSauyu1BfHAZ0AahsPJP/pub?output=csv";
+
+    var roster  = document.getElementById("staffRoster");
+    var loading = document.getElementById("staffLoading");
+    var errorEl = document.getElementById("staffError");
+    var filters = document.getElementById("staffFilters");
+
+    /* ── Minimal RFC-4180 CSV parser (handles quotes, commas, newlines) ── */
+    function parseCSV(text) {
+      var rows = [], row = [], field = "", inQuotes = false, i = 0, c;
+      text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+      for (; i < text.length; i++) {
+        c = text[i];
+        if (inQuotes) {
+          if (c === '"') {
+            if (text[i + 1] === '"') { field += '"'; i++; }
+            else { inQuotes = false; }
+          } else { field += c; }
+        } else if (c === '"') { inQuotes = true; }
+        else if (c === ",") { row.push(field); field = ""; }
+        else if (c === "\n") { row.push(field); rows.push(row); row = []; field = ""; }
+        else { field += c; }
+      }
+      if (field.length || row.length) { row.push(field); rows.push(row); }
+      return rows;
+    }
+
+    function normalizeHeader(h) {
+      var k = (h || "").trim().toLowerCase();
+      if (k === "name" || k === "staff" || k === "full name") return "name";
+      if (k === "title" || k === "role" || k === "position") return "title";
+      if (k === "department" || k === "section" || k === "group" || k === "team" || k === "category") return "department";
+      if (k === "office" || k === "location" || k === "branch") return "office";
+      if (k === "description" || k === "what they do" || k === "bio" || k === "about" || k === "details") return "description";
+      if (k === "email" || k === "e-mail") return "email";
+      if (k === "phone" || k === "phone number" || k === "tel") return "phone";
+      if (k === "photo" || k === "image" || k === "headshot" || k === "photo url") return "photo";
+      if (k === "order" || k === "sort" || k === "rank") return "order";
+      return k;
+    }
+
+    function initials(name) {
+      var parts = (name || "").trim().split(/\s+/).slice(0, 2);
+      return parts.map(function (p) { return p.charAt(0).toUpperCase(); }).join("");
+    }
+    function escapeHTML(s) {
+      return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;")
+                      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function sortMembers(arr) {
+      return arr.slice().sort(function (a, b) {
+        var oa = parseFloat(a.order), ob = parseFloat(b.order);
+        if (!isNaN(oa) && !isNaN(ob)) return oa - ob;
+        if (!isNaN(oa)) return -1;
+        if (!isNaN(ob)) return 1;
+        return a.name.localeCompare(b.name);
+      });
+    }
+
+    function buildCard(p) {
+      var card = document.createElement("article");
+      card.className = "staff-card";
+      if (p.office) card.setAttribute("data-office", p.office.toLowerCase());
+
+      var avatar = p.photo
+        ? '<img class="staff-avatar" src="' + escapeHTML(p.photo) + '" alt="' + escapeHTML(p.name) + '">'
+        : '<div class="staff-avatar" aria-hidden="true">' + escapeHTML(initials(p.name)) + '</div>';
+
+      var contact = "";
+      if (p.email) contact += '<a href="mailto:' + escapeHTML(p.email) + '">' + escapeHTML(p.email) + '</a>';
+      if (p.phone) {
+        var tel = p.phone.replace(/[^\d+]/g, "");
+        contact += '<a href="tel:' + tel + '">' + escapeHTML(p.phone) + '</a>';
+      }
+
+      card.innerHTML =
+        avatar +
+        '<h3 class="staff-name">' + escapeHTML(p.name) + '</h3>' +
+        (p.title ? '<p class="staff-title">' + escapeHTML(p.title) + '</p>' : '') +
+        (p.office ? '<span class="staff-office">' + escapeHTML(p.office) + '</span>' : '') +
+        (p.description ? '<p class="staff-desc">' + escapeHTML(p.description) + '</p>' : '') +
+        (contact ? '<div class="staff-contact">' + contact + '</div>' : '');
+      return card;
+    }
+
+    function gridOf(members) {
+      var g = document.createElement("div");
+      g.className = "staff-grid";
+      sortMembers(members).forEach(function (p) { g.appendChild(buildCard(p)); });
+      return g;
+    }
+
+    function applyFilter(f) {
+      var blocks = roster.querySelectorAll(".staff-dept");
+      if (blocks.length) {
+        [].forEach.call(blocks, function (block) {
+          var visible = 0;
+          [].forEach.call(block.querySelectorAll(".staff-card"), function (card) {
+            var show = (f === "all" || card.getAttribute("data-office") === f);
+            card.style.display = show ? "" : "none";
+            if (show) visible++;
+          });
+          block.style.display = visible ? "" : "none";
+        });
+      } else {
+        [].forEach.call(roster.querySelectorAll(".staff-card"), function (card) {
+          card.style.display = (f === "all" || card.getAttribute("data-office") === f) ? "" : "none";
+        });
+      }
+    }
+
+    function buildFilters(people) {
+      var offices = [];
+      people.forEach(function (p) {
+        if (p.office && offices.indexOf(p.office) === -1) offices.push(p.office);
+      });
+      if (offices.length < 2) return;          // chips only earn their place with 2+ offices
+      filters.hidden = false;
+      ["All"].concat(offices).forEach(function (label, idx) {
+        var chip = document.createElement("button");
+        chip.className = "staff-chip" + (idx === 0 ? " is-active" : "");
+        chip.textContent = label;
+        var f = idx === 0 ? "all" : label.toLowerCase();
+        chip.addEventListener("click", function () {
+          [].forEach.call(filters.children, function (c) { c.classList.remove("is-active"); });
+          chip.classList.add("is-active");
+          applyFilter(f);
+        });
+        filters.appendChild(chip);
+      });
+    }
+
+    function render(people) {
+      loading.hidden = true;
+      if (!people.length) {
+        errorEl.hidden = false;
+        errorEl.textContent = "Our team listing is being updated. Please check back shortly.";
+        return;
+      }
+
+      // Department order follows first appearance in the sheet's row order
+      var deptOrder = [];
+      people.forEach(function (p) {
+        var d = p.department || "";
+        if (deptOrder.indexOf(d) === -1) deptOrder.push(d);
+      });
+      var hasDepartments = deptOrder.some(function (d) { return d !== ""; });
+
+      buildFilters(people);
+
+      if (!hasDepartments) {
+        roster.appendChild(gridOf(people));     // flat grid when no departments are set
+        return;
+      }
+
+      deptOrder.forEach(function (d) {
+        var members = people.filter(function (p) { return (p.department || "") === d; });
+        var block = document.createElement("section");
+        block.className = "staff-dept";
+        var heading = d || "Team";
+        block.innerHTML =
+          '<h2 class="staff-dept-title">' + escapeHTML(heading) + '</h2>' +
+          '<div class="staff-dept-rule"></div>';
+        block.appendChild(gridOf(members));
+        roster.appendChild(block);
+      });
+    }
+
+    function load() {
+      if (!SHEET_CSV_URL || SHEET_CSV_URL.indexOf("PASTE_") === 0) {
+        loading.hidden = true;
+        errorEl.hidden = false;
+        errorEl.textContent = "Sheet not configured yet — add your published CSV URL.";
+        return;
+      }
+      fetch(SHEET_CSV_URL, { cache: "no-store" })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+        .then(function (text) {
+          var rows = parseCSV(text).filter(function (r) {
+            return r.some(function (c) { return c.trim() !== ""; });
+          });
+          if (rows.length < 2) { render([]); return; }
+          var keys = rows[0].map(normalizeHeader);
+          var people = rows.slice(1).map(function (r) {
+            var obj = {};
+            keys.forEach(function (k, i) { obj[k] = (r[i] || "").trim(); });
+            return obj;
+          }).filter(function (p) { return p.name; });
+          render(people);                          // raw row order preserved for section ordering
+        })
+        .catch(function () {
+          loading.hidden = true;
+          errorEl.hidden = false;
+        });
+    }
+
+    load();
+  })();
+  </script>
+
+</body>
+</html>
