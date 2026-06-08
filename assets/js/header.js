@@ -56,8 +56,8 @@ console.log('RLS HEADER JS LOADED v1011');
           <div class="rls-menu-col">
             <h3>The Brokerage</h3>
             <ul>
-              <li><a href="https://info.royallepagesolutions.com/pages/about-us/">About Us</a></li>
-              <li><a href="https://www.rlpsolutions.ca/agents.php">Meet Our Team</a></li>
+              <li><a href="https://info.royallepagesolutions.com/pages/Support Staff/">About Us</a></li>
+              <li><a href="https://www.rlpsolutions.ca/agents.php">Meet Our Agents</a></li>
               <li><a href="https://info.royallepagesolutions.com/pages/join-us/">Join Us / Careers</a></li>
               <li><a href="https://info.royallepagesolutions.com/pages/deposit/">Deposit Instructions</a></li>
               <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact</a></li>
