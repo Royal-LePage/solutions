@@ -1,32 +1,38 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
-   v1012 - Added self-detecting SITE_BASE for nav links.
-           While the info.royallepagesolutions.com CNAME is
-           still propagating, all menu links resolve via the
-           GitHub Pages URL (royal-lepage.github.io/solutions)
-           — both on the GitHub preview AND on the live
-           BoldTrail site. When the custom domain goes live,
-           visitors served from info.royallepagesolutions.com
-           automatically get clean same-domain links. No flip
-           back required.
+   v1013 - BoldTrail primary site moved from rlpsolutions.ca
+           to royallepagesolutions.com. All BoldTrail links
+           (logo, Meet Our Agents, Search Listings, Our
+           Listings) now route through a BOLDTRAIL_BASE
+           constant. Info-site links still use the
+           self-detecting SITE_BASE introduced in v1012
+           (GitHub URL until the info.royallepagesolutions.com
+           CNAME propagates).
    ========================================================= */
 
-console.log('RLS HEADER JS LOADED v1012');
+console.log('RLS HEADER JS LOADED v1013');
 
 (function () {
-  const VERSION = '1012';
+  const VERSION = '1013';
 
   // Base URL where logo and other assets live.
   // GitHub-hosted; works regardless of custom-domain DNS status.
   const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
 
   /* ─────────────────────────────────────────────────────────
-     SITE_BASE — base for internal navigation links.
-     Self-detecting: only use the custom domain when the page
-     is actually being served from it (i.e. once the CNAME has
-     propagated). Everywhere else — GitHub preview, BoldTrail
-     (rlpsolutions.ca), local — fall back to the GitHub URL,
-     which always resolves.
+     BOLDTRAIL_BASE — the primary BoldTrail site.
+     Moved from rlpsolutions.ca to royallepagesolutions.com.
+     If your canonical is the bare apex (no www), drop the
+     "www." below — BoldTrail typically redirects either way.
+     ───────────────────────────────────────────────────────── */
+  const BOLDTRAIL_BASE = 'https://www.royallepagesolutions.com';
+
+  /* ─────────────────────────────────────────────────────────
+     SITE_BASE — base for the GitHub-hosted info-site links.
+     Self-detecting: only use the custom subdomain when the
+     page is actually served from it (i.e. once the CNAME has
+     propagated). Everywhere else — GitHub preview, BoldTrail,
+     local — fall back to the GitHub URL, which always resolves.
 
      To force one or the other manually, replace the line below
      with a hardcoded value, e.g.:
@@ -44,7 +50,7 @@ console.log('RLS HEADER JS LOADED v1012');
   function buildHeaderHTML() {
     return `
       <div class="rls-header-inner">
-        <a href="https://www.rlpsolutions.ca/" class="rls-logo" aria-label="Royal LePage Solutions Home">
+        <a href="${BOLDTRAIL_BASE}/" class="rls-logo" aria-label="Royal LePage Solutions Home">
           <img src="${LOGO_URL}" alt="Royal LePage Solutions">
         </a>
 
@@ -80,7 +86,7 @@ console.log('RLS HEADER JS LOADED v1012');
             <h3>The Brokerage</h3>
             <ul>
               <li><a href="${SITE_BASE}/pages/about-us">Support Staff</a></li>
-              <li><a href="https://www.rlpsolutions.ca/agents.php">Meet Our Agents</a></li>
+              <li><a href="${BOLDTRAIL_BASE}/agents.php">Meet Our Agents</a></li>
               <li><a href="${SITE_BASE}/pages/join-us/">Join Us / Careers</a></li>
               <li><a href="${SITE_BASE}/pages/deposit/">Deposit Instructions</a></li>
               <li><a href="${SITE_BASE}/pages/contact/">Contact</a></li>
@@ -92,8 +98,8 @@ console.log('RLS HEADER JS LOADED v1012');
           <div class="rls-menu-col">
             <h3>Search &amp; Services</h3>
             <ul>
-              <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1&rtype=map">Search Listings</a></li>
-              <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1#rslt">Our Listings</a></li>
+              <li><a href="${BOLDTRAIL_BASE}/index.php?showagency=1&rtype=map">Search Listings</a></li>
+              <li><a href="${BOLDTRAIL_BASE}/index.php?showagency=1#rslt">Our Listings</a></li>
               <li><a href="${SITE_BASE}/pages/commercial/">Commercial Listings</a></li>
               <li><a href="${SITE_BASE}/pages/buyers/">Buying</a></li>
               <li><a href="${SITE_BASE}/pages/seller/">Selling</a></li>
