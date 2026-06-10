@@ -1,17 +1,40 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
-   v1011 - Reconciled all menu links to info.royallepagesolutions.com
-           pages; added Commercial Listings + Find an Agent under
-           Search & Services; moved Commercial Listings under Our Listings
+   v1012 - Added self-detecting SITE_BASE for nav links.
+           While the info.royallepagesolutions.com CNAME is
+           still propagating, all menu links resolve via the
+           GitHub Pages URL (royal-lepage.github.io/solutions)
+           — both on the GitHub preview AND on the live
+           BoldTrail site. When the custom domain goes live,
+           visitors served from info.royallepagesolutions.com
+           automatically get clean same-domain links. No flip
+           back required.
    ========================================================= */
 
-console.log('RLS HEADER JS LOADED v1011');
+console.log('RLS HEADER JS LOADED v1012');
 
 (function () {
-  const VERSION = '1011';
+  const VERSION = '1012';
 
-  // Base URL where logo and other assets live
+  // Base URL where logo and other assets live.
+  // GitHub-hosted; works regardless of custom-domain DNS status.
   const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
+
+  /* ─────────────────────────────────────────────────────────
+     SITE_BASE — base for internal navigation links.
+     Self-detecting: only use the custom domain when the page
+     is actually being served from it (i.e. once the CNAME has
+     propagated). Everywhere else — GitHub preview, BoldTrail
+     (rlpsolutions.ca), local — fall back to the GitHub URL,
+     which always resolves.
+
+     To force one or the other manually, replace the line below
+     with a hardcoded value, e.g.:
+       const SITE_BASE = 'https://royal-lepage.github.io/solutions';
+     ───────────────────────────────────────────────────────── */
+  const SITE_BASE = (location.hostname === 'info.royallepagesolutions.com')
+    ? 'https://info.royallepagesolutions.com'
+    : 'https://royal-lepage.github.io/solutions';
 
   const DEPOSIT_URL = 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust';
   const DEPOSIT_INSTRUCTIONS_URL = ASSET_BASE + '/deposits/';
@@ -56,12 +79,12 @@ console.log('RLS HEADER JS LOADED v1011');
           <div class="rls-menu-col">
             <h3>The Brokerage</h3>
             <ul>
-              <li><a href="https://info.royallepagesolutions.com/pages/about-us">Support Staff</a></li>
+              <li><a href="${SITE_BASE}/pages/about-us">Support Staff</a></li>
               <li><a href="https://www.rlpsolutions.ca/agents.php">Meet Our Agents</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/join-us/">Join Us / Careers</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/deposit/">Deposit Instructions</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/blog/">Blog</a></li>
+              <li><a href="${SITE_BASE}/pages/join-us/">Join Us / Careers</a></li>
+              <li><a href="${SITE_BASE}/pages/deposit/">Deposit Instructions</a></li>
+              <li><a href="${SITE_BASE}/pages/contact/">Contact</a></li>
+              <li><a href="${SITE_BASE}/pages/blog/">Blog</a></li>
             </ul>
           </div>
 
@@ -71,11 +94,11 @@ console.log('RLS HEADER JS LOADED v1011');
             <ul>
               <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1&rtype=map">Search Listings</a></li>
               <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1#rslt">Our Listings</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/commercial/">Commercial Listings</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/buyers/">Buying</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/seller/">Selling</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/finance/">Finance</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/lead/">Find an Agent</a></li>
+              <li><a href="${SITE_BASE}/pages/commercial/">Commercial Listings</a></li>
+              <li><a href="${SITE_BASE}/pages/buyers/">Buying</a></li>
+              <li><a href="${SITE_BASE}/pages/seller/">Selling</a></li>
+              <li><a href="${SITE_BASE}/pages/finance/">Finance</a></li>
+              <li><a href="${SITE_BASE}/pages/lead/">Find an Agent</a></li>
             </ul>
           </div>
 
@@ -84,7 +107,7 @@ console.log('RLS HEADER JS LOADED v1011');
             <h3>Royal LePage</h3>
             <ul>
               <li><a href="https://www.royallepage.ca/en/realestate/about-us/">About Royal LePage</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/shelter/">Shelter Foundation</a></li>
+              <li><a href="${SITE_BASE}/pages/shelter/">Shelter Foundation</a></li>
             </ul>
           </div>
 
@@ -92,7 +115,7 @@ console.log('RLS HEADER JS LOADED v1011');
           <div class="rls-menu-col">
             <h3>Connect</h3>
             <ul>
-              <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact Us</a></li>
+              <li><a href="${SITE_BASE}/pages/contact/">Contact Us</a></li>
               <li><a href="https://www.facebook.com/RLPSolutions" target="_blank" rel="noopener">Facebook</a></li>
               <li><a href="http://www.instagram.com/royallepagesolutions" target="_blank" rel="noopener">Instagram</a></li>
               <li><a href="http://www.linkedin.com/company/royal-lepage-solutions" target="_blank" rel="noopener">LinkedIn</a></li>
