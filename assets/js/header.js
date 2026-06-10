@@ -1,5 +1,11 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
+   v1014 - Logo now loads from raw.githubusercontent.com
+           instead of the github.io Pages path. GitHub Pages
+           mishandles the "%2B" (the "+") in the logo filename
+           and 404s it; the raw host serves it correctly, and
+           it matches the hero / Proudly-Canadian images that
+           already work. All other links unchanged.
    v1013 - BoldTrail primary site moved from rlpsolutions.ca
            to royallepagesolutions.com. All BoldTrail links
            (logo, Meet Our Agents, Search Listings, Our
@@ -10,10 +16,10 @@
            CNAME propagates).
    ========================================================= */
 
-console.log('RLS HEADER JS LOADED v1013');
+console.log('RLS HEADER JS LOADED v1014');
 
 (function () {
-  const VERSION = '1013';
+  const VERSION = '1014';
 
   // Base URL where logo and other assets live.
   // GitHub-hosted; works regardless of custom-domain DNS status.
@@ -44,7 +50,10 @@ console.log('RLS HEADER JS LOADED v1013');
 
   const DEPOSIT_URL = 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust';
   const DEPOSIT_INSTRUCTIONS_URL = ASSET_BASE + '/deposits/';
-  const LOGO_URL = ASSET_BASE + '/assets/images/Solutions%20Logo%20Script_White%20%2B%20Red.png';
+  // Served from raw.githubusercontent.com — GitHub Pages 404s the "%2B"
+  // ("+") in this filename, but the raw host serves it fine (same host as
+  // the hero / Proudly-Canadian images).
+  const LOGO_URL = 'https://raw.githubusercontent.com/Royal-LePage/solutions/main/assets/images/Solutions%20Logo%20Script_White%20%2B%20Red.png';
 
   /* ─── Header markup ─── */
   function buildHeaderHTML() {
