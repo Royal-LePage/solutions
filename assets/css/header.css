@@ -1,5 +1,10 @@
 /* =========================================================
    Royal LePage Solutions - Custom Header
+   v1011 - Mobile header overlap fix: at <=600px, logo
+           shifts to left-aligned and the Deposit Instructions
+           button is hidden (still accessible via hamburger
+           menu). Previously the centered logo and the
+           right-side deposit button collided on phones.
    v1010 - Increased subpage #listings-map padding to 60px/40px
            so the red filter bar subtitle isn't clipped by header
    ========================================================= */
@@ -83,10 +88,6 @@ body.rls-header-ready:not(.rls-has-hero) {
 /* ─────────────────────────────────────────────────────────
    2b) Map/search results pages — push the full-bleed
        map+results layout below the fixed header.
-       BoldTrail's #listings-map breaks out of the body's
-       padded area, so it needs its own offset to keep the
-       red filter bar / pagination from sliding under the
-       fixed header.
    ───────────────────────────────────────────────────────── */
 body.rls-header-ready:not(.rls-has-hero) #listings-map {
   padding-top: 60px !important;
@@ -634,18 +635,28 @@ body.rls-has-hero #rls-header.is-transparent {
   }
 }
 
+/* ─────────────────────────────────────────────────────────
+   13) Mobile (<=600px) — fix logo/deposit-button overlap.
+   The Deposit Instructions button is hidden on phones — it
+   remains accessible through the hamburger menu (column 1).
+   Logo shifts from dead-center to left-aligned so it sits
+   comfortably next to the hamburger.
+   ───────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
   #rls-header .rls-header-inner {
     padding: 0 1rem;
     height: var(--rls-header-h-mobile);
+    justify-content: flex-end;
   }
-  #rls-header .rls-logo img { height: 72px; }
+  #rls-header .rls-logo {
+    /* Override the dead-center positioning from the base styles */
+    left: 1rem;
+    transform: translate(0, -50%);
+  }
+  #rls-header .rls-logo img { height: 56px; }
   #rls-header .rls-header-right { gap: 0.5rem; }
   #rls-header .rls-hamburger { width: 42px; height: 42px; }
-  /* Hide deposit button text on very small screens — could replace with icon if desired */
-  #rls-header .rls-deposit-btn {
-    font-size: 0.6rem;
-    padding: 0.55rem 0.7rem;
-    letter-spacing: 0.1em;
-  }
+
+  /* Hide deposit button on mobile — accessible via hamburger menu */
+  #rls-header .rls-deposit-btn { display: none; }
 }
