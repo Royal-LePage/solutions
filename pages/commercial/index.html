@@ -459,11 +459,15 @@
       margin-top:12px; font-family:var(--rls-sans);
       font-size:.7rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
       color:var(--rls-black,#000); border:1px solid var(--cm-line);
-      border-radius:40px; padding:.5rem 1rem;
-      text-decoration:none; transition:background .2s, border-color .2s, color .2s;
+      border-radius:40px; padding:.5rem 1rem; background:#fff;
+      text-decoration:none; cursor:pointer; appearance:none;
+      transition:background .2s, border-color .2s, color .2s, opacity .2s;
     }
     .cm-agent-listings-btn:hover{
       background:var(--rls-red,#EA002A); border-color:var(--rls-red,#EA002A); color:#fff;
+    }
+    .cm-agent-listings-btn:disabled{
+      opacity:.6; cursor:wait;
     }
     .cm-agent-listings-btn svg{ width:13px; height:13px; }
     .cm-agents-nav{
@@ -956,12 +960,28 @@
   <!-- ===================== AGENT CAROUSEL (Google Sheets CSV) ===================== -->
   <script>
   (function () {
-    var AGENTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTToAC7Jf5XxoV-vZe6K7jgMudt_3vJClps8j6qDW4wyET3Wj-BQRUwQqNpBA4rW1hjn7hNfbfh_Y9I/pub?gid=237844589&single=true&output=csv';
+    var AGENTS_CSV_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTToAC7Jf5XxoV-vZe6K7jgMudt_3vJClps8j6qDW4wyET3Wj-BQRUwQqNpBA4rW1hjn7hNfbfh_Y9I/pub?gid=237844589&single=true&output=csv';
+    var LISTINGS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTToAC7Jf5XxoV-vZe6K7jgMudt_3vJClps8j6qDW4wyET3Wj-BQRUwQqNpBA4rW1hjn7hNfbfh_Y9I/pub?gid=118750696&single=true&output=csv';
+
+    var LOGO_URL_DARK = 'https://royallepagesolutions.com/wp-content/uploads/2026/05/2024-RLP-Commercial-Logos_Black-Red-Brokerage.png';
 
     var track = document.getElementById('cmAgentsTrack');
     var prevBtn = document.getElementById('cmAgentsPrev');
     var nextBtn = document.getElementById('cmAgentsNext');
     if (!track) return;
+
+    var allAgents = [];
+    var allListings = [];
+
+    var PR_CLBL = {
+      Industrial:'Industrial For Sale / Lease',
+      Investment:'Investment For Sale / Lease',
+      Land:'Land For Sale / Lease',
+      Office:'Office For Sale / Lease',
+      Retail:'Retail For Sale / Lease',
+      Business:'Businesses For Sale / Lease'
+    };
+    var PR_CATS = ['Industrial','Investment','Land','Office','Retail','Business'];
 
     function csvToRows(text) {
       var rows = [], row = [], cell = '', inQ = false;
@@ -989,6 +1009,7 @@
       });
     }
 
+    /* ── Render agent carousel cards ── */
     function renderAgents(agents) {
       if (!agents.length) {
         track.innerHTML = '<div class="cm-agents-empty">Our advisor list is being updated &mdash; please check back shortly.</div>';
@@ -1005,8 +1026,12 @@
           ? '<a class="cm-agent-email" href="mailto:' + esc(a.email) + '">' + esc(a.email) + '</a>'
           : '';
         var title = (a.title || 'Commercial Advisor').replace(/\n/g, ' &middot; ');
-        var listingsUrl = 'https://info.royallepagesolutions.com/pages/commercial-listings/?agent=' + encodeURIComponent(a.name) + '#agentPdf';
-        var listingsBtn = '<a class="cm-agent-listings-btn" href="' + listingsUrl + '" target="_blank" rel="noopener">My Listings <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>';
+        var safeName = esc(a.name).replace(/"/g, '&quot;');
+        var listingsBtn =
+          '<button type="button" class="cm-agent-listings-btn" data-agent-name="' + safeName + '">' +
+            'My Listings ' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>' +
+          '</button>';
         return (
           '<div class="cm-agent-card">' +
             '<div class="cm-agent-photo-wrap">' + photo + '</div>' +
@@ -1019,21 +1044,40 @@
           '</div>'
         );
       }).join('');
+
+      track.querySelectorAll('.cm-agent-listings-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var name = btn.getAttribute('data-agent-name');
+          generateAgentPDF(name, btn);
+        });
+      });
     }
 
     function loadAgents() {
-      fetch(AGENTS_CSV_URL)
+      return fetch(AGENTS_CSV_URL)
         .then(function (r) { return r.text(); })
         .then(function (text) {
           var rows = csvToRows(text).slice(2).filter(function (r) { return r[0] && r[0] !== 'Agent Name'; });
-          var agents = rows.map(function (r) {
+          allAgents = rows.map(function (r) {
             return { name: r[0] || '', title: r[1] || '', phone: r[2] || '', email: r[3] || '', photo: r[4] || '', website: r[5] || '' };
           }).filter(function (a) { return a.name; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
-          renderAgents(agents);
+          renderAgents(allAgents);
         })
         .catch(function () {
           track.innerHTML = '<div class="cm-agents-empty">Our advisor list is being updated &mdash; please check back shortly.</div>';
         });
+    }
+
+    function loadListings() {
+      return fetch(LISTINGS_CSV_URL)
+        .then(function (r) { return r.text(); })
+        .then(function (text) {
+          var rows = csvToRows(text).slice(1).filter(function (r) { return r[0]; });
+          allListings = rows.map(function (r) {
+            return { category:r[0]||'', address:r[1]||'', mls:r[2]||'', size:r[3]||'', type:r[4]||'Sale', price:r[5]||'', comments:r[6]||'', agent:r[7]||'', agent2:r[8]||'', status:r[9]||'Active', photo:r[10]||'', brochure:r[11]||'' };
+          });
+        })
+        .catch(function () { allListings = []; });
     }
 
     function scrollByCards(dir) {
@@ -1045,9 +1089,274 @@
     if (prevBtn) prevBtn.addEventListener('click', function () { scrollByCards(-1); });
     if (nextBtn) nextBtn.addEventListener('click', function () { scrollByCards(1); });
 
+    /* ── PDF generation (mirrors the Commercial Listings page print format) ── */
+
+    function findAgentRecord(name) {
+      var norm = function (s) { return (s || '').trim().toLowerCase(); };
+      var target = norm(name);
+      return allAgents.find(function (a) { return norm(a.name) === target; }) || { name: name, title: '', phone: '', email: '', photo: '', website: '' };
+    }
+
+    function prContactBlock(name) {
+      var ag = findAgentRecord(name);
+      if (!ag || !ag.name) return '';
+      var photo = ag.photo
+        ? '<img class="pr-cn-photo" src="' + esc(ag.photo) + '" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'"><div class="pr-cn-photo-ph" style="display:none"></div>'
+        : '<div class="pr-cn-photo-ph"></div>';
+      var phone = ag.phone ? '<a class="pr-cn-phone" href="tel:' + esc(ag.phone.replace(/[^0-9+]/g, '')) + '">' + esc(ag.phone) + '</a>' : '';
+      var email = ag.email ? '<a class="pr-cn-email" href="mailto:' + esc(ag.email) + '">' + esc(ag.email) + '</a>' : '';
+      return photo + '<div class="pr-cn">' + esc(ag.name) + '</div>' + phone + email;
+    }
+
+    function prListingRow(l) {
+      var buls = (l.comments || '').split('|').filter(Boolean).map(function (b) {
+        return '<div class="pr-bul">' + esc(b.trim()) + '</div>';
+      }).join('');
+
+      var s = (l.status || '').trim().toLowerCase();
+      var t = (l.type || '').toLowerCase();
+      var statusLabel = 'Active', statusClass = 'pr-bdg-active', extraNote = '';
+      if (s === 'sold') { statusLabel = 'Sold'; statusClass = 'pr-bdg-sold'; }
+      else if (s === 'conditionally sold') { statusLabel = 'Cond. Sold'; statusClass = 'pr-bdg-cs'; }
+      else if (s === 'leased') { statusLabel = 'Leased'; statusClass = 'pr-bdg-leased'; extraNote = '<span class="pr-bdg-rm">Remains for Sale</span>'; }
+      else if (s === 'conditionally leased') { statusLabel = 'Cond. Leased'; statusClass = 'pr-bdg-cl'; }
+      else if (s === 'new') { statusLabel = 'New'; statusClass = 'pr-bdg-new'; }
+      else if (s === 'price reduction') { statusLabel = 'Price Reduction'; statusClass = 'pr-bdg-pr'; }
+      var statusBadge = '<span class="pr-bdg pr-bdg-status ' + statusClass + '">' + statusLabel + '</span>' + extraNote;
+
+      var saleClass = t === 'lease' ? 'pr-bdg-lease' : 'pr-bdg-sale';
+      var saleLabel = t === 'lease' ? 'For Lease' : (t === 'sale/lease' ? 'For Sale / Lease' : 'For Sale');
+      var saleBadge = '<span class="pr-bdg pr-bdg-saletype ' + saleClass + '">' + saleLabel + '</span>';
+
+      return (
+        '<div class="pr-row">' +
+          '<div class="pr-c-ph">' +
+            (l.photo
+              ? '<img class="pr-img" src="' + esc(l.photo) + '" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'"><div class="pr-img-ph" style="display:none"></div>'
+              : '<div class="pr-img-ph"></div>') +
+          '</div>' +
+          '<div class="pr-c-pr">' +
+            saleBadge +
+            '<div class="pr-addr">' + esc(l.address || '').replace(/\n/g, '<br>') + '</div>' +
+            (l.mls ? '<div class="pr-mls">MLS# ' + esc(l.mls) + '</div>' : '') +
+            (l.brochure ? '<a class="pr-broch" href="' + esc(l.brochure) + '">&#11015; Brochure</a>' : '') +
+          '</div>' +
+          '<div class="pr-c-sz">' + esc(l.size || '&mdash;').replace(/\n/g, '<br>') + '</div>' +
+          '<div class="pr-c-tp">' + statusBadge + '</div>' +
+          '<div class="pr-c-px"><div class="pr-pv">' + esc(l.price || '&mdash;').replace(/\n/g, '<br>') + '</div></div>' +
+          '<div class="pr-c-cm">' + buls + '</div>' +
+          '<div class="pr-c-ct">' +
+            (l.agent
+              ? '<div class="pr-cn-block">' + prContactBlock(l.agent) + (l.agent2 ? '<div class="pr-cn-divider"></div>' + prContactBlock(l.agent2) : '') + '</div>'
+              : '<div class="pr-cn">&mdash;</div>') +
+          '</div>' +
+        '</div>'
+      );
+    }
+
+    var PR_COL_HDR =
+      '<div class="pr-col-hdr">' +
+        '<div style="width:62pt;min-width:62pt;"></div>' +
+        '<div style="width:130pt;min-width:130pt;">Property</div>' +
+        '<div style="width:78pt;min-width:78pt;">Size</div>' +
+        '<div style="width:72pt;min-width:72pt;">Status</div>' +
+        '<div style="width:88pt;min-width:88pt;">Asking Price</div>' +
+        '<div style="flex:1;">Comments</div>' +
+        '<div style="width:100pt;min-width:100pt;">Contact</div>' +
+      '</div>';
+
+    function getMonthString() {
+      var n = new Date();
+      return n.toLocaleString('en-US', { month: 'long' }) + ' ' + n.getFullYear();
+    }
+
+    function buildAgentPrintHTML(month, agentName) {
+      var norm = function (s) { return (s || '').trim().toLowerCase(); };
+      var target = norm(agentName);
+      var agentListings = allListings.filter(function (l) { return norm(l.agent) === target || norm(l.agent2) === target; });
+      var ac = PR_CATS.filter(function (c) { return agentListings.some(function (l) { return l.category === c; }); });
+      var ag = allAgents.find(function (a) { return norm(a.name) === target; }) || { name: agentName, title: 'Associate &middot; Commercial Division', phone: '', email: '', photo: '', website: '' };
+      var titleLine = (ag.title || 'Associate &middot; Commercial Division').replace(/\n/g, ' &middot; ');
+
+      var html =
+        '<div class="pr-agent-hdr">' +
+          '<div class="pr-agent-hdr-photo">' +
+            (ag.photo
+              ? '<img src="' + esc(ag.photo) + '" alt="' + esc(ag.name) + '" onerror="this.parentNode.innerHTML=\'<div class=&quot;pr-agent-hdr-photo-ph&quot;></div>\'">'
+              : '<div class="pr-agent-hdr-photo-ph"></div>') +
+          '</div>' +
+          '<div class="pr-agent-hdr-info">' +
+            '<div class="pr-agent-hdr-nm">' + esc(ag.name) + '</div>' +
+            '<div class="pr-agent-hdr-tt">' + titleLine + '</div>' +
+            '<div class="pr-agent-hdr-contact">' +
+              (ag.phone ? '<div class="pr-agent-hdr-pn"><a href="tel:' + esc(ag.phone.replace(/[^0-9+]/g, '')) + '">' + esc(ag.phone) + '</a></div>' : '') +
+              (ag.email ? '<div><a href="mailto:' + esc(ag.email) + '">' + esc(ag.email) + '</a></div>' : '') +
+              (ag.website ? '<div><a href="' + (ag.website.indexOf('http') === 0 ? esc(ag.website) : 'https://' + esc(ag.website)) + '">' + esc(ag.website.replace(/https?:\/\//, '')) + '</a></div>' : '') +
+            '</div>' +
+          '</div>' +
+          '<div class="pr-agent-hdr-meta">' +
+            '<img class="pr-agent-hdr-logo" src="' + LOGO_URL_DARK + '" alt="Royal LePage Commercial" onerror="this.style.display=\'none\'">' +
+            '<div class="pr-agent-hdr-meta-month">' + month + '</div>' +
+          '</div>' +
+        '</div>';
+
+      html += PR_COL_HDR;
+      ac.forEach(function (cat) {
+        html += '<div class="pr-cat-hdr">' + PR_CLBL[cat] + '</div>';
+        agentListings.filter(function (l) { return l.category === cat; }).forEach(function (l) { html += prListingRow(l); });
+      });
+
+      if (!agentListings.length) {
+        html += '<div style="padding:24pt;text-align:center;font-family:\'Open Sans\',sans-serif;font-size:9pt;color:#999;">No active listings on file for this advisor right now.</div>';
+      }
+
+      return html;
+    }
+
+    function ensurePrintRoot() {
+      var root = document.getElementById('cmPrintRoot');
+      if (!root) {
+        root = document.createElement('div');
+        root.id = 'cmPrintRoot';
+        root.style.display = 'none';
+        document.body.appendChild(root);
+      }
+      return root;
+    }
+
+    function triggerPrint(html, suggestedTitle) {
+      var printRoot = ensurePrintRoot();
+      printRoot.innerHTML = html;
+      var originalTitle = document.title;
+      document.title = suggestedTitle;
+      var cleanup = function () {
+        document.title = originalTitle;
+        window.removeEventListener('afterprint', cleanup);
+      };
+      window.addEventListener('afterprint', cleanup);
+      setTimeout(function () {
+        window.print();
+        setTimeout(function () {
+          if (document.title !== originalTitle) cleanup();
+        }, 2000);
+      }, 250);
+    }
+
+    var dataReadyPromise = null;
+    function ensureDataLoaded() {
+      if (!dataReadyPromise) {
+        dataReadyPromise = Promise.all([
+          allAgents.length ? Promise.resolve() : loadAgents(),
+          loadListings()
+        ]);
+      }
+      return dataReadyPromise;
+    }
+
+    function generateAgentPDF(agentName, triggerBtn) {
+      var originalLabel = triggerBtn ? triggerBtn.innerHTML : '';
+      if (triggerBtn) {
+        triggerBtn.disabled = true;
+        triggerBtn.innerHTML = 'Preparing&hellip;';
+      }
+      ensureDataLoaded().then(function () {
+        var month = getMonthString();
+        var title = 'RLP_Commercial_' + month.replace(/\s+/g, '_') + '_' + agentName.replace(/\s+/g, '-');
+        var html = buildAgentPrintHTML(month, agentName);
+        triggerPrint(html, title);
+      }).finally(function () {
+        if (triggerBtn) {
+          triggerBtn.disabled = false;
+          triggerBtn.innerHTML = originalLabel;
+        }
+      });
+    }
+
     loadAgents();
+    loadListings(); // pre-fetch in background so the first PDF click is fast
   })();
   </script>
+
+  <!-- Print styles for the agent-listing PDF generated from this page -->
+  <style>
+    #cmPrintRoot { display:none; }
+    @media print {
+      @page { size:11in 8.5in; margin:0.25in; }
+      html, body { background:#fff !important; margin:0; padding:0; }
+      body > * { display:none !important; }
+      body > #cmPrintRoot { display:block !important; }
+      #cmPrintRoot, #cmPrintRoot * { visibility:visible !important; }
+      #cmPrintRoot { position:absolute !important; left:0 !important; top:0 !important; right:0 !important; width:100% !important; }
+      * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+      .pr-row { page-break-inside:avoid; }
+      .pr-cat-hdr, .pr-col-hdr { page-break-after:avoid; }
+    }
+
+    .pr-cat-hdr { background:#EA002A; padding:7pt 14pt; font-family:'Montserrat',sans-serif; font-weight:900; font-size:9pt; letter-spacing:2px; text-transform:uppercase; color:#fff; margin-top:6pt; }
+    .pr-cat-hdr:first-of-type { margin-top:0; }
+    .pr-col-hdr { display:flex; background:#2e2e2e; }
+    .pr-col-hdr > div { font-family:'Montserrat',sans-serif; font-weight:700; font-size:7pt; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,.6); padding:5pt 7pt; border-right:1px solid rgba(255,255,255,.06); box-sizing:border-box; }
+    .pr-col-hdr > div:last-child { border-right:none; }
+
+    .pr-row { display:flex; border-bottom:1px solid #e5e5e5; align-items:stretch; box-sizing:border-box; }
+    .pr-row:nth-child(even) { background:#fafafa; }
+    .pr-row > div { padding:5pt 7pt; border-right:1px solid #ebebeb; box-sizing:border-box; }
+    .pr-row > div:last-child { border-right:none; }
+    .pr-c-ph { width:62pt; min-width:62pt; flex-shrink:0; }
+    .pr-c-pr { width:130pt; min-width:130pt; flex-shrink:0; }
+    .pr-c-sz { width:78pt; min-width:78pt; flex-shrink:0; font-size:8pt; color:#555; line-height:1.4; }
+    .pr-c-tp { width:72pt; min-width:72pt; flex-shrink:0; }
+    .pr-c-px { width:88pt; min-width:88pt; flex-shrink:0; }
+    .pr-c-cm { flex:1; min-width:0; }
+    .pr-c-ct { width:100pt; min-width:100pt; flex-shrink:0; }
+
+    .pr-img { width:50pt; height:36pt; object-fit:cover; display:block; border-radius:1px; }
+    .pr-img-ph { width:50pt; height:36pt; background:#eee; border-radius:1px; }
+    .pr-addr { font-family:'Montserrat',sans-serif; font-weight:800; font-size:8pt; color:#111; line-height:1.3; margin-bottom:2px; }
+    .pr-mls  { font-size:7pt; color:#999; margin-bottom:2px; }
+    .pr-broch { display:inline-block; font-family:'Montserrat',sans-serif; font-weight:800; font-size:6.5pt; letter-spacing:.8px; text-transform:uppercase; color:#EA002A; text-decoration:none; border:1px solid #EA002A; padding:1px 5px; border-radius:1px; margin-top:2px; }
+    .pr-pv { font-family:'Montserrat',sans-serif; font-weight:800; font-size:9pt; color:#111; line-height:1.4; }
+    .pr-bul { padding-left:9px; position:relative; font-size:7.5pt; color:#444; line-height:1.45; margin-bottom:1px; }
+    .pr-bul::before { content:'\00b7'; position:absolute; left:0; color:#EA002A; font-weight:900; font-size:10pt; line-height:1.2; }
+
+    .pr-cn-block { display:flex; flex-direction:column; align-items:flex-start; }
+    .pr-cn-photo { width:32pt; height:32pt; border-radius:50%; object-fit:cover; object-position:center 25%; background:#eee; margin-bottom:3pt; }
+    .pr-cn-photo-ph { width:32pt; height:32pt; border-radius:50%; background:#eee; margin-bottom:3pt; }
+    .pr-cn  { font-family:'Montserrat',sans-serif; font-weight:800; font-size:7.5pt; color:#111; line-height:1.25; margin-bottom:1pt; }
+    .pr-cn-phone { font-family:'Montserrat',sans-serif; font-weight:700; font-size:7pt; color:#EA002A; text-decoration:none; line-height:1.25; }
+    .pr-cn-email { font-size:6pt; color:#888; text-decoration:none; line-height:1.25; word-break:break-all; margin-top:1pt; }
+    .pr-cn-divider { width:18pt; height:1px; background:#ddd; margin:4pt 0; }
+
+    .pr-bdg { display:inline-block; padding:2px 5px; font-family:'Montserrat',sans-serif; font-weight:800; font-size:6.5pt; letter-spacing:.8px; text-transform:uppercase; border-radius:2px; }
+    .pr-bdg-status { display:block; font-size:8pt; padding:3px 5px; text-align:center; }
+    .pr-bdg-saletype { display:inline-block; font-size:6.5pt; padding:1px 5px; margin-bottom:3pt; }
+    .pr-bdg-sale   { background:rgba(234,0,42,.08); color:#EA002A; }
+    .pr-bdg-lease  { background:rgba(0,100,200,.07); color:#0055aa; }
+    .pr-bdg-active { background:#e8f5e9; color:#2e7d32; }
+    .pr-bdg-sold   { background:#ffebee; color:#c62828; }
+    .pr-bdg-leased { background:#fff3e0; color:#e65100; }
+    .pr-bdg-cs     { background:#fce4ec; color:#880e4f; }
+    .pr-bdg-cl     { background:#ede7f6; color:#4527a0; }
+    .pr-bdg-new    { background:#e8f5e9; color:#2e7d32; }
+    .pr-bdg-pr     { background:#fff8e1; color:#f57f17; }
+    .pr-bdg-rm     { display:block; font-size:6pt; color:#999; margin-top:2px; text-align:center; }
+
+    .pr-agent-hdr { background:#fff; color:#111; display:flex; align-items:stretch; padding:0; margin-bottom:6pt; page-break-after:avoid; border-top:4px solid #EA002A; border-bottom:4px solid #EA002A; }
+    .pr-agent-hdr-photo { width:84pt; min-width:84pt; flex-shrink:0; background:#1a1a1a; overflow:hidden; }
+    .pr-agent-hdr-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+    .pr-agent-hdr-photo-ph { width:100%; height:100%; background:#2a2a2a; }
+    .pr-agent-hdr-info { flex:1; padding:10pt 16pt; display:flex; flex-direction:column; justify-content:center; min-width:0; }
+    .pr-agent-hdr-nm { font-family:'Montserrat',sans-serif; font-weight:900; font-size:20pt; color:#111; line-height:1.1; letter-spacing:-0.3px; margin-bottom:2pt; }
+    .pr-agent-hdr-tt { font-family:'Montserrat',sans-serif; font-weight:600; font-size:8pt; color:#777; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6pt; }
+    .pr-agent-hdr-contact { display:flex; gap:14pt; flex-wrap:wrap; align-items:center; }
+    .pr-agent-hdr-contact > div { font-size:9pt; color:#444; line-height:1.2; }
+    .pr-agent-hdr-contact a { color:#444; text-decoration:none; }
+    .pr-agent-hdr-contact .pr-agent-hdr-pn { font-family:'Montserrat',sans-serif; font-weight:800; font-size:11pt; }
+    .pr-agent-hdr-contact .pr-agent-hdr-pn a { color:#EA002A; }
+    .pr-agent-hdr-meta { width:200pt; min-width:200pt; flex-shrink:0; padding:10pt 16pt; display:flex; flex-direction:column; align-items:flex-end; justify-content:center; border-left:1px solid #e5e5e5; }
+    .pr-agent-hdr-logo { height:60pt; width:auto; max-width:100%; display:block; margin-bottom:6pt; }
+    .pr-agent-hdr-meta-month { font-family:'Montserrat',sans-serif; font-weight:800; font-size:10pt; color:#111; letter-spacing:2px; text-transform:uppercase; }
+  </style>
 
 </body>
 </html>
