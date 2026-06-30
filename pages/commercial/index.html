@@ -5,1111 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Commercial Real Estate — Royal LePage Solutions</title>
   <meta name="description" content="Royal LePage Solutions Commercial Division — full-service commercial real estate in Calgary and across Alberta. Investment sales, leasing, land and development, industrial, retail, office, and multi-family, backed by Canada's largest real estate network.">
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <!-- Header CSS (inlined for standalone preview) -->
-  <style>
-/* =========================================================
-   Royal LePage Solutions - Custom Header
-   v1010 - Increased subpage #listings-map padding to 60px/40px
-           so the red filter bar subtitle isn't clipped by header
-   ========================================================= */
 
-:root {
-  --rls-red:        #EA002A;
-  --rls-red-dk:     #C20023;
-  --rls-black:      #000000;
-  --rls-white:      #FFFFFF;
-  --rls-dark-grey:  #2A2A2A;
-  --rls-warm-grey:  #6B6660;
-  --rls-light-grey: #E8E6E3;
-  --rls-stone:      #D8D3CB;
-  --rls-taupe:      #B8AC9C;
+  <!-- Header CSS -->
+  <link rel="stylesheet" href="../../assets/css/header.css?v=1012">
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="../../assets/css/styles.css?v=1001">
+  <!-- Header JS (injects header markup) -->
+  <script defer src="../../assets/js/header.js?v=1014"></script>
 
-  --rls-header-h:        160px;
-  --rls-header-h-tablet: 130px;
-  --rls-header-h-mobile: 96px;
-
-  --rls-sans: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-}
-
-/* ─────────────────────────────────────────────────────────
-   0) Reset / page baseline
-   ───────────────────────────────────────────────────────── */
-html, body {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-body.rls-menu-open {
-  overflow: hidden !important;
-}
-
-/* ─────────────────────────────────────────────────────────
-   1) Hide BoldTrail's native header ONLY after ours injects
-   ───────────────────────────────────────────────────────── */
-body.has-rls-header #header,
-body.has-rls-header div#header,
-body.has-rls-header .site-header,
-body.has-rls-header .kv-header,
-body.has-rls-header #quick-search,
-body.has-rls-header #fixed-header-spacer,
-body.has-rls-header .page-wrapper > #header {
-  display: none !important;
-  visibility: hidden !important;
-  height: 0 !important;
-}
-
-body.has-rls-header #fixed-header-spacer,
-body.has-rls-header .header-spacer,
-body.has-rls-header .sticky-spacer,
-body.has-rls-header .kv-sticky-spacer {
-  position: static !important;
-  z-index: 0 !important;
-  height: 0 !important;
-  min-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-/* ─────────────────────────────────────────────────────────
-   2) Reserve header space (when not in hero mode)
-   ───────────────────────────────────────────────────────── */
-body.rls-header-ready:not(.rls-has-hero) {
-  padding-top: var(--rls-header-h) !important;
-}
-
-@media (max-width: 1024px) {
-  body.rls-header-ready:not(.rls-has-hero) {
-    padding-top: var(--rls-header-h-tablet) !important;
-  }
-}
-
-@media (max-width: 600px) {
-  body.rls-header-ready:not(.rls-has-hero) {
-    padding-top: var(--rls-header-h-mobile) !important;
-  }
-}
-
-/* ─────────────────────────────────────────────────────────
-   2b) Map/search results pages — push the full-bleed
-       map+results layout below the fixed header.
-       BoldTrail's #listings-map breaks out of the body's
-       padded area, so it needs its own offset to keep the
-       red filter bar / pagination from sliding under the
-       fixed header.
-   ───────────────────────────────────────────────────────── */
-body.rls-header-ready:not(.rls-has-hero) #listings-map {
-  padding-top: 60px !important;
-}
-
-@media (max-width: 768px) {
-  body.rls-header-ready:not(.rls-has-hero) #listings-map {
-    padding-top: 40px !important;
-  }
-}
-
-/* ─────────────────────────────────────────────────────────
-   3) Header container
-   ───────────────────────────────────────────────────────── */
-#rls-header {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  z-index: 9999 !important;
-  font-family: var(--rls-sans);
-  background: var(--rls-black);
-  color: var(--rls-white);
-  transition: background-color 0.35s ease, box-shadow 0.35s ease;
-  pointer-events: auto !important;
-}
-
-#rls-header * {
-  pointer-events: auto !important;
-}
-
-/* Transparent mode when over a hero, before scroll */
-body.rls-has-hero #rls-header.is-transparent {
-  background: transparent;
-  box-shadow: none;
-}
-
-#rls-header.is-scrolled {
-  background: var(--rls-black);
-  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
-}
-
-/* ─────────────────────────────────────────────────────────
-   4) Header inner layout
-   ───────────────────────────────────────────────────────── */
-#rls-header .rls-header-inner {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 2.5rem;
-  height: var(--rls-header-h);
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  position: relative;
-}
-
-/* ─────────────────────────────────────────────────────────
-   5) Logo - absolutely centered
-   ───────────────────────────────────────────────────────── */
-#rls-header .rls-logo {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  line-height: 1;
-  transition: opacity 0.25s ease;
-}
-
-#rls-header .rls-logo:hover {
-  opacity: 0.85;
-}
-
-#rls-header .rls-logo img {
-  height: 130px;
-  width: auto;
-  display: block;
-}
-
-/* ─────────────────────────────────────────────────────────
-   6) Header right (deposit button + phone + hamburger)
-   ───────────────────────────────────────────────────────── */
-#rls-header .rls-header-right {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-/* Deposit Instructions button — white outlined */
-#rls-header .rls-deposit-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  color: var(--rls-white);
-  font-family: var(--rls-sans);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  padding: 0.85rem 1.4rem;
-  border-radius: 2px;
-  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-#rls-header .rls-deposit-btn:hover {
-  background: var(--rls-red);
-  border-color: var(--rls-red);
-  color: var(--rls-white);
-}
-
-#rls-header .rls-phone {
-  text-decoration: none;
-  color: var(--rls-white);
-  font-family: var(--rls-sans);
-  font-size: 0.95rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  transition: color 0.25s ease;
-  white-space: nowrap;
-}
-
-#rls-header .rls-phone:hover {
-  color: var(--rls-red);
-}
-
-/* Hamburger button */
-#rls-header .rls-hamburger {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 2px;
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-  flex-shrink: 0;
-}
-
-#rls-header .rls-hamburger:hover {
-  background: var(--rls-red);
-  border-color: var(--rls-red);
-}
-
-#rls-header .rls-hamburger:focus {
-  outline: 2px solid var(--rls-red);
-  outline-offset: 2px;
-}
-
-#rls-header .rls-hamburger-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  width: 22px;
-}
-
-#rls-header .rls-hamburger-lines span {
-  display: block;
-  height: 1.5px;
-  background: var(--rls-white);
-  border-radius: 1px;
-  transition: width 0.35s ease;
-}
-
-#rls-header .rls-hamburger-lines span:nth-child(1) { width: 100%; }
-#rls-header .rls-hamburger-lines span:nth-child(2) { width: 65%; align-self: flex-end; }
-
-/* ─────────────────────────────────────────────────────────
-   7) Slide-out menu overlay
-   ───────────────────────────────────────────────────────── */
-#rls-menu-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.35s ease, visibility 0.35s ease;
-  z-index: 9998;
-}
-
-#rls-menu-overlay.is-open {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* ─────────────────────────────────────────────────────────
-   8) Slide-out menu (from right)
-   ───────────────────────────────────────────────────────── */
-#rls-slide-menu {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  width: min(720px, 100vw);
-  background: var(--rls-black);
-  transform: translateX(100%);
-  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-  z-index: 10000;
-  overflow-y: auto;
-  box-shadow: -4px 0 30px rgba(0, 0, 0, 0.4);
-  display: flex;
-  flex-direction: column;
-}
-
-#rls-slide-menu.is-open {
-  transform: translateX(0);
-}
-
-/* Subtle red accent at top edge */
-#rls-slide-menu::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--rls-red);
-}
-
-/* Close button */
-#rls-slide-menu .rls-menu-close {
-  position: absolute;
-  top: 1.75rem;
-  right: 2rem;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: var(--rls-white);
-  cursor: pointer;
-  width: 48px;
-  height: 48px;
-  border-radius: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
-  z-index: 2;
-}
-
-#rls-slide-menu .rls-menu-close:hover {
-  background: var(--rls-red);
-  border-color: var(--rls-red);
-  transform: rotate(90deg);
-}
-
-#rls-slide-menu .rls-menu-close svg {
-  width: 18px;
-  height: 18px;
-}
-
-/* ─────────────────────────────────────────────────────────
-   9) Menu content layout
-   ───────────────────────────────────────────────────────── */
-#rls-slide-menu .rls-menu-inner {
-  padding: 5rem 3.5rem 2rem;
-  flex: 1;
-}
-
-#rls-slide-menu .rls-menu-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2.5rem 3rem;
-}
-
-#rls-slide-menu .rls-menu-col h3 {
-  font-family: var(--rls-sans);
-  color: var(--rls-white);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  margin: 0 0 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-#rls-slide-menu .rls-menu-col ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-#rls-slide-menu .rls-menu-col a,
-#rls-slide-menu .rls-menu-col button {
-  font-family: var(--rls-sans);
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  padding: 0.5rem 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  position: relative;
-  transition: color 0.25s ease, padding-left 0.25s ease;
-}
-
-#rls-slide-menu .rls-menu-col a::before,
-#rls-slide-menu .rls-menu-col button::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 0;
-  height: 1px;
-  background: var(--rls-red);
-  transition: width 0.25s ease;
-  transform: translateY(-50%);
-}
-
-#rls-slide-menu .rls-menu-col a:hover,
-#rls-slide-menu .rls-menu-col button:hover {
-  color: var(--rls-red);
-  padding-left: 1.25rem;
-}
-
-#rls-slide-menu .rls-menu-col a:hover::before,
-#rls-slide-menu .rls-menu-col button:hover::before {
-  width: 0.85rem;
-}
-
-/* Submenu indicator arrow */
-#rls-slide-menu .rls-submenu-arrow {
-  font-size: 1.1rem;
-  font-weight: 300;
-  opacity: 0.6;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-}
-
-#rls-slide-menu .rls-menu-col button:hover .rls-submenu-arrow {
-  opacity: 1;
-  transform: translateX(3px);
-}
-
-/* ─────────────────────────────────────────────────────────
-   10) Contact strip at bottom of slide-out
-   ───────────────────────────────────────────────────────── */
-#rls-slide-menu .rls-menu-contact {
-  background: var(--rls-red);
-  color: var(--rls-white);
-  padding: 2rem 3.5rem;
-  font-family: var(--rls-sans);
-}
-
-#rls-slide-menu .rls-menu-contact .rls-contact-brand {
-  font-size: 1.1rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  margin-bottom: 1.25rem;
-}
-
-#rls-slide-menu .rls-menu-contact a,
-#rls-slide-menu .rls-menu-contact span {
-  color: var(--rls-white);
-  text-decoration: none;
-  font-size: 0.9rem;
-  letter-spacing: 0.03em;
-  line-height: 1.55;
-  transition: opacity 0.25s ease;
-}
-
-#rls-slide-menu .rls-menu-contact a:hover {
-  opacity: 0.78;
-}
-
-#rls-slide-menu .rls-contact-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.5rem 0;
-}
-
-#rls-slide-menu .rls-contact-row svg {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  margin-top: 4px;
-  opacity: 0.9;
-}
-
-/* ─────────────────────────────────────────────────────────
-   11) Mobile submenu panel (slides in over main menu)
-   ───────────────────────────────────────────────────────── */
-#rls-slide-menu .rls-submenu-panel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--rls-black);
-  padding: 5rem 3.5rem 2rem;
-  transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.77, 0, 0.175, 1);
-  overflow-y: auto;
-  z-index: 3;
-  display: none;
-}
-
-#rls-slide-menu .rls-submenu-panel.is-open {
-  transform: translateX(0);
-  display: block;
-}
-
-#rls-slide-menu .rls-submenu-back {
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.7);
-  font-family: var(--rls-sans);
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  cursor: pointer;
-  padding: 0.5rem 0;
-  margin-bottom: 1.5rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: color 0.25s ease;
-}
-
-#rls-slide-menu .rls-submenu-back:hover {
-  color: var(--rls-red);
-}
-
-#rls-slide-menu .rls-submenu-back::before {
-  content: '←';
-  font-size: 1.1rem;
-}
-
-#rls-slide-menu .rls-submenu-title {
-  font-family: var(--rls-sans);
-  color: var(--rls-white);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  margin: 0 0 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-#rls-slide-menu .rls-submenu-panel ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-#rls-slide-menu .rls-submenu-panel a {
-  font-family: var(--rls-sans);
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  padding: 0.6rem 0;
-  display: block;
-  transition: color 0.25s ease, padding-left 0.25s ease;
-  position: relative;
-}
-
-#rls-slide-menu .rls-submenu-panel a::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 0;
-  height: 1px;
-  background: var(--rls-red);
-  transition: width 0.25s ease;
-  transform: translateY(-50%);
-}
-
-#rls-slide-menu .rls-submenu-panel a:hover {
-  color: var(--rls-red);
-  padding-left: 1.25rem;
-}
-
-#rls-slide-menu .rls-submenu-panel a:hover::before {
-  width: 0.85rem;
-}
-
-/* ─────────────────────────────────────────────────────────
-   12) Responsive
-   ───────────────────────────────────────────────────────── */
-@media (max-width: 1200px) {
-  #rls-header .rls-deposit-btn {
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    padding: 0.75rem 1.1rem;
-  }
-}
-
-@media (max-width: 1024px) {
-  #rls-header .rls-header-inner {
-    padding: 0 1.75rem;
-    height: var(--rls-header-h-tablet);
-  }
-  #rls-header .rls-logo img { height: 105px; }
-  #rls-header .rls-header-right { gap: 0.85rem; }
-  #rls-header .rls-phone { display: none; }
-}
-
-@media (max-width: 768px) {
-  #rls-slide-menu .rls-menu-inner {
-    padding: 4.5rem 2rem 1.5rem;
-  }
-  #rls-slide-menu .rls-menu-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  #rls-slide-menu .rls-menu-contact {
-    padding: 1.75rem 2rem;
-  }
-  #rls-slide-menu .rls-submenu-panel {
-    padding: 4.5rem 2rem 1.5rem;
-  }
-  #rls-header .rls-deposit-btn {
-    font-size: 0.65rem;
-    padding: 0.6rem 0.85rem;
-    letter-spacing: 0.12em;
-  }
-}
-
-@media (max-width: 600px) {
-  #rls-header .rls-header-inner {
-    padding: 0 1rem;
-    height: var(--rls-header-h-mobile);
-  }
-  #rls-header .rls-logo img { height: 72px; }
-  #rls-header .rls-header-right { gap: 0.5rem; }
-  #rls-header .rls-hamburger { width: 42px; height: 42px; }
-  /* Hide deposit button text on very small screens — could replace with icon if desired */
-  #rls-header .rls-deposit-btn {
-    font-size: 0.6rem;
-    padding: 0.55rem 0.7rem;
-    letter-spacing: 0.1em;
-  }
-}
-
-  </style>
-  <!-- Site CSS (inlined for standalone preview) -->
-  <style>
-/* =========================================================
-   Royal LePage Solutions - Site-wide styles
-   v1001 - For pages hosted on info.royallepagesolutions.com
-   ========================================================= */
-
-:root {
-  --rls-red:        #EA002A;
-  --rls-red-dk:     #C20023;
-  --rls-black:      #000000;
-  --rls-white:      #FFFFFF;
-  --rls-dark-grey:  #2A2A2A;
-  --rls-warm-grey:  #6B6660;
-  --rls-light-grey: #E8E6E3;
-  --rls-stone:      #D8D3CB;
-  --rls-taupe:      #B8AC9C;
-
-  --rls-sans: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-
-  --rls-max-width: 1200px;
-}
-
-/* ─── Reset ─── */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  font-family: var(--rls-sans);
-  color: var(--rls-dark-grey);
-  background: var(--rls-white);
-  line-height: 1.65;
-  font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* ─── Typography ─── */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--rls-sans);
-  color: var(--rls-black);
-  font-weight: 300;
-  letter-spacing: -0.01em;
-  margin: 0 0 1rem;
-  line-height: 1.2;
-}
-
-h1 {
-  font-size: clamp(2.25rem, 5vw, 4rem);
-  font-weight: 200;
-  letter-spacing: -0.02em;
-}
-
-h2 {
-  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-  font-weight: 300;
-}
-
-h3 {
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
-  font-weight: 500;
-}
-
-p {
-  margin: 0 0 1rem;
-  color: var(--rls-warm-grey);
-}
-
-a {
-  color: var(--rls-red);
-  text-decoration: none;
-  transition: color 0.25s ease;
-}
-
-a:hover {
-  color: var(--rls-red-dk);
-}
-
-/* ─── Hero section ─── */
-.rls-hero {
-  position: relative;
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  background: var(--rls-black);
-  color: var(--rls-white);
-  overflow: hidden;
-}
-
-.rls-hero-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  opacity: 0.5;
-}
-
-.rls-hero-content {
-  position: relative;
-  max-width: var(--rls-max-width);
-  margin: 0 auto;
-  padding: 6rem 2.5rem 4rem;
-  width: 100%;
-  z-index: 2;
-}
-
-.rls-hero-eyebrow {
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 1.25rem;
-}
-
-.rls-hero h1 {
-  color: var(--rls-white);
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  font-weight: 200;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-  max-width: 18ch;
-  margin-bottom: 1.5rem;
-}
-
-.rls-hero h1 .accent {
-  color: var(--rls-red);
-  font-weight: 400;
-}
-
-/* ─── Container ─── */
-.rls-container {
-  max-width: var(--rls-max-width);
-  margin: 0 auto;
-  padding: 0 2.5rem;
-}
-
-.rls-section {
-  padding: 5rem 0;
-}
-
-/* ─── Buttons ─── */
-.rls-btn {
-  display: inline-block;
-  background: var(--rls-red);
-  color: var(--rls-white);
-  font-family: var(--rls-sans);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 1rem 2.25rem;
-  border: 1px solid var(--rls-red);
-  border-radius: 2px;
-  cursor: pointer;
-  transition: background-color 0.25s ease, border-color 0.25s ease;
-  text-decoration: none;
-}
-
-.rls-btn:hover {
-  background: var(--rls-red-dk);
-  border-color: var(--rls-red-dk);
-  color: var(--rls-white);
-}
-
-.rls-btn-outline {
-  background: transparent;
-  color: var(--rls-black);
-  border-color: var(--rls-black);
-}
-
-.rls-btn-outline:hover {
-  background: var(--rls-black);
-  color: var(--rls-white);
-}
-
-/* ─── Responsive ─── */
-@media (max-width: 768px) {
-  .rls-hero-content {
-    padding: 5rem 1.5rem 3rem;
-  }
-  .rls-container {
-    padding: 0 1.5rem;
-  }
-  .rls-section {
-    padding: 3.5rem 0;
-  }
-}
-
-  </style>
-  <!-- Header JS reference removed; inlined before   <!-- Header JS (inlined for standalone preview) -->
-  <script>
-/* =========================================================
-   Royal LePage Solutions - Header Injection & Behavior
-   v1011 - Reconciled all menu links to info.royallepagesolutions.com
-           pages; added Commercial Listings + Find an Agent under
-           Search & Services; moved Commercial Listings under Our Listings
-   ========================================================= */
-
-console.log('RLS HEADER JS LOADED v1011');
-
-(function () {
-  const VERSION = '1011';
-
-  // Base URL where logo and other assets live
-  const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
-
-  const DEPOSIT_URL = 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust';
-  const DEPOSIT_INSTRUCTIONS_URL = ASSET_BASE + '/deposits/';
-  const LOGO_URL = ASSET_BASE + '/assets/images/Solutions%20Logo%20Script_White%20%2B%20Red.png';
-
-  /* ─── Header markup ─── */
-  function buildHeaderHTML() {
-    return `
-      <div class="rls-header-inner">
-        <a href="https://www.rlpsolutions.ca/" class="rls-logo" aria-label="Royal LePage Solutions Home">
-          <img src="${LOGO_URL}" alt="Royal LePage Solutions">
-        </a>
-
-        <div class="rls-header-right">
-          <a class="rls-deposit-btn" href="${DEPOSIT_URL}">Deposit Instructions</a>
-          <a class="rls-phone" href="tel:4032525900">403.252.5900</a>
-          <button class="rls-hamburger" id="rls-hamburger" aria-label="Open menu" aria-expanded="false" type="button">
-            <span class="rls-hamburger-lines">
-              <span></span>
-              <span></span>
-            </span>
-          </button>
-        </div>
-      </div>
-    `;
-  }
-
-  /* ─── Slide-out menu markup ─── */
-  function buildMenuHTML() {
-    return `
-      <button class="rls-menu-close" id="rls-menu-close" aria-label="Close menu" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-          <line x1="6" y1="6" x2="18" y2="18"/>
-          <line x1="18" y1="6" x2="6" y2="18"/>
-        </svg>
-      </button>
-
-      <div class="rls-menu-inner">
-        <div class="rls-menu-grid">
-
-          <!-- Column 1: THE BROKERAGE -->
-          <div class="rls-menu-col">
-            <h3>The Brokerage</h3>
-            <ul>
-              <li><a href="https://info.royallepagesolutions.com/pages/about-us/">About Us</a></li>
-              <li><a href="https://www.rlpsolutions.ca/agents.php">Meet Our Team</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/join-us/">Join Us / Careers</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/deposit/">Deposit Instructions</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 2: SEARCH & SERVICES -->
-          <div class="rls-menu-col">
-            <h3>Search &amp; Services</h3>
-            <ul>
-              <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1&rtype=map">Search Listings</a></li>
-              <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1#rslt">Our Listings</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/commercial/">Commercial Listings</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/buyers/">Buying</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/seller/">Selling</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/finance/">Finance</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/lead/">Find an Agent</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 3: ROYAL LEPAGE -->
-          <div class="rls-menu-col">
-            <h3>Royal LePage</h3>
-            <ul>
-              <li><a href="https://info.royallepagesolutions.com/pages/about-rlp/">About Royal LePage</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/shelter/">Shelter Foundation</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 4: CONNECT -->
-          <div class="rls-menu-col">
-            <h3>Connect</h3>
-            <ul>
-              <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact Us</a></li>
-              <li><a href="https://www.facebook.com/RLPSolutions" target="_blank" rel="noopener">Facebook</a></li>
-              <li><a href="http://www.instagram.com/royallepagesolutions" target="_blank" rel="noopener">Instagram</a></li>
-              <li><a href="http://www.linkedin.com/company/royal-lepage-solutions" target="_blank" rel="noopener">LinkedIn</a></li>
-            </ul>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Contact strip -->
-      <div class="rls-menu-contact">
-        <div class="rls-contact-brand">Royal LePage&reg; Solutions</div>
-
-        <div class="rls-contact-row">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-          </svg>
-          <a href="tel:4032525900">403.252.5900</a>
-        </div>
-
-        <div class="rls-contact-row">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          <span>Calgary, Alberta</span>
-        </div>
-      </div>
-    `;
-  }
-
-  /* ─── Inject everything ─── */
-  function ensureInjected() {
-    document.body.classList.add('has-rls-header');
-
-    let header = document.getElementById('rls-header');
-    if (!header) {
-      header = document.createElement('header');
-      header.id = 'rls-header';
-      header.innerHTML = buildHeaderHTML();
-      document.body.insertAdjacentElement('afterbegin', header);
-    } else if (!header.querySelector('#rls-hamburger')) {
-      header.innerHTML = buildHeaderHTML();
-    }
-
-    let overlay = document.getElementById('rls-menu-overlay');
-    if (!overlay) {
-      overlay = document.createElement('div');
-      overlay.id = 'rls-menu-overlay';
-      document.body.appendChild(overlay);
-    }
-
-    let menu = document.getElementById('rls-slide-menu');
-    if (!menu) {
-      menu = document.createElement('aside');
-      menu.id = 'rls-slide-menu';
-      menu.setAttribute('aria-hidden', 'true');
-      menu.innerHTML = buildMenuHTML();
-      document.body.appendChild(menu);
-    } else if (!menu.querySelector('#rls-menu-close')) {
-      menu.innerHTML = buildMenuHTML();
-    }
-
-    bindHeaderBehavior(header, menu, overlay);
-
-    requestAnimationFrame(() => {
-      document.body.classList.add('rls-header-ready');
-    });
-
-    console.log('[RLS Header] Injected + bound OK - v' + VERSION);
-  }
-
-  /* ─── Behavior bindings ─── */
-  function bindHeaderBehavior(header, menu, overlay) {
-    if (header.dataset.rlsBound === '1') return;
-    header.dataset.rlsBound = '1';
-
-    const hamburger = document.getElementById('rls-hamburger');
-    const closeBtn = document.getElementById('rls-menu-close');
-
-    if (!hamburger || !closeBtn) return;
-
-    function openMenu() {
-      menu.classList.add('is-open');
-      overlay.classList.add('is-open');
-      document.body.classList.add('rls-menu-open');
-      hamburger.setAttribute('aria-expanded', 'true');
-      menu.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeMenu() {
-      menu.classList.remove('is-open');
-      overlay.classList.remove('is-open');
-      document.body.classList.remove('rls-menu-open');
-      hamburger.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-hidden', 'true');
-      menu.querySelectorAll('.rls-submenu-panel').forEach(p => {
-        p.classList.remove('is-open');
-        p.setAttribute('aria-hidden', 'true');
-      });
-    }
-
-    hamburger.addEventListener('click', openMenu);
-    closeBtn.addEventListener('click', closeMenu);
-    overlay.addEventListener('click', closeMenu);
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && menu.classList.contains('is-open')) closeMenu();
-    });
-
-    menu.querySelectorAll('.rls-submenu-trigger').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const id = btn.getAttribute('data-submenu');
-        const panel = document.getElementById('rls-submenu-' + id);
-        if (panel) {
-          panel.classList.add('is-open');
-          panel.setAttribute('aria-hidden', 'false');
-        }
-      });
-    });
-
-    menu.querySelectorAll('[data-submenu-back]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-submenu-back');
-        const panel = document.getElementById('rls-submenu-' + id);
-        if (panel) {
-          panel.classList.remove('is-open');
-          panel.setAttribute('aria-hidden', 'true');
-        }
-      });
-    });
-
-    menu.addEventListener('click', (e) => {
-      if (e.target.closest('a')) closeMenu();
-    });
-  }
-
-  function run() {
-    ensureInjected();
-    setTimeout(ensureInjected, 500);
-    setTimeout(ensureInjected, 1500);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run);
-    window.addEventListener('load', run);
-  } else {
-    run();
-  }
-})();
-
-  </script>
-</body> for standalone preview -->
   <!-- Page-specific styles -->
   <style>
     /* ============================================================
@@ -1184,7 +92,7 @@ console.log('RLS HEADER JS LOADED v1011');
       background:var(--rls-red,#EA002A); color:#fff; font-weight:600;
       border:1px solid var(--rls-red,#EA002A);
       transition:transform .2s, background .2s, border-color .2s;
-      cursor:pointer;
+      cursor:pointer; text-decoration:none;
     }
     .cm-btn:hover{
       transform:translateY(-2px);
@@ -1404,21 +312,7 @@ console.log('RLS HEADER JS LOADED v1011');
     .cm-disclaimer{ background:var(--cm-soft); padding:clamp(26px,4vw,38px) 0; }
     .cm-disclaimer .cm-wrap{ font-family:var(--cm-body); font-size:.76rem; color:var(--cm-muted); line-height:1.65; }
 
-    /* ── Responsive ── */
-    @media(max-width:980px){
-      .cm-sectors{ grid-template-columns:1fr 1fr; }
-      .cm-stats-grid{ grid-template-columns:1fr 1fr; }
-      .cm-offices{ grid-template-columns:1fr 1fr; }
-    }
-    @media(max-width:760px){
-      .cm-wrap{ padding:0 1.5rem; }
-      .cm-sectors{ grid-template-columns:1fr; }
-      .cm-svc-grid{ grid-template-columns:1fr; }
-      .cm-split{ grid-template-columns:1fr; }
-      .cm-stats-grid{ grid-template-columns:1fr 1fr; }
-      .cm-offices{ grid-template-columns:1fr 1fr; }
-    }
-    /* ── Commercial search bar (LoopNet-backed) ── */
+    /* ── Commercial search bar ── */
     .cm-search-band{
       background:var(--cm-soft);
       padding:0 0 clamp(40px,6vw,72px);
@@ -1431,7 +325,6 @@ console.log('RLS HEADER JS LOADED v1011');
       box-shadow:0 24px 60px rgba(0,0,0,.16);
       padding:clamp(22px,3vw,34px) clamp(20px,3vw,34px) clamp(20px,2.6vw,28px);
     }
-    /* tabs */
     .cm-search-tabs{
       display:flex; gap:6px; flex-wrap:wrap;
       border-bottom:1px solid var(--cm-line);
@@ -1453,7 +346,6 @@ console.log('RLS HEADER JS LOADED v1011');
     .cm-tab:hover{ color:var(--rls-black,#000); }
     .cm-tab.is-active{ color:var(--rls-black,#000); }
     .cm-tab.is-active::after{ transform:scaleX(1); }
-    /* property-type chips */
     .cm-search-types{
       display:flex; gap:9px; flex-wrap:nowrap; overflow-x:auto;
       padding-bottom:.4rem; margin-bottom:1.3rem;
@@ -1474,7 +366,6 @@ console.log('RLS HEADER JS LOADED v1011');
     .cm-chip.is-active{
       background:var(--rls-red,#EA002A); border-color:var(--rls-red,#EA002A); color:#fff;
     }
-    /* location + submit row */
     .cm-search-row{
       display:flex; gap:14px; align-items:stretch;
     }
@@ -1516,17 +407,93 @@ console.log('RLS HEADER JS LOADED v1011');
       margin:1rem 0 0; text-align:center;
       font-size:.76rem; letter-spacing:.04em; color:var(--cm-muted);
     }
+
+    /* ── Agent carousel ── */
+    .cm-agents{ background:var(--rls-white,#fff); }
+    .cm-agents-shell{ position:relative; margin-top:2.4rem; }
+    .cm-agents-track{
+      display:flex; gap:20px; overflow-x:auto; scroll-snap-type:x mandatory;
+      padding:6px 2px 18px; scrollbar-width:none; -webkit-overflow-scrolling:touch;
+    }
+    .cm-agents-track::-webkit-scrollbar{ display:none; }
+    .cm-agent-card{
+      flex:0 0 auto; width:240px; scroll-snap-align:start;
+      background:var(--cm-soft); border-radius:6px; overflow:hidden;
+      border-top:2px solid transparent; transition:transform .22s, border-color .22s, box-shadow .22s;
+    }
+    .cm-agent-card:hover{
+      transform:translateY(-4px); border-top-color:var(--rls-red,#EA002A);
+      box-shadow:0 14px 40px rgba(0,0,0,.08);
+    }
+    .cm-agent-photo-wrap{
+      width:100%; aspect-ratio:4/5; background:var(--rls-black,#000);
+      overflow:hidden; position:relative;
+    }
+    .cm-agent-photo-wrap img{ width:100%; height:100%; object-fit:cover; object-position:center 20%; display:block; }
+    .cm-agent-photo-ph{
+      width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+      background:#2a2a2a; color:rgba(255,255,255,.25); font-size:2.4rem; font-family:var(--cm-display);
+    }
+    .cm-agent-card-body{ padding:18px 18px 22px; }
+    .cm-agent-name{
+      font-family:var(--cm-display); font-size:1.05rem; font-weight:600;
+      color:var(--rls-black,#000); margin:0 0 .2rem; line-height:1.25;
+    }
+    .cm-agent-title{
+      font-family:var(--cm-body); font-size:.78rem; color:var(--cm-muted);
+      line-height:1.45; margin:0 0 .7rem; min-height:1.1em;
+    }
+    .cm-agent-links{ display:flex; flex-direction:column; gap:3px; }
+    .cm-agent-phone{
+      font-family:var(--cm-display); font-weight:700; font-size:.86rem;
+      color:var(--rls-red,#EA002A); text-decoration:none;
+    }
+    .cm-agent-phone:hover{ color:var(--rls-red-dk,#C20023); }
+    .cm-agent-email{
+      font-family:var(--cm-body); font-size:.74rem; color:var(--cm-muted);
+      text-decoration:none; word-break:break-all;
+    }
+    .cm-agent-email:hover{ color:var(--rls-red,#EA002A); }
+    .cm-agents-nav{
+      display:flex; gap:10px; justify-content:center; margin-top:.4rem;
+    }
+    .cm-agents-arrow{
+      width:42px; height:42px; border-radius:50%; border:1px solid var(--cm-line);
+      background:#fff; color:var(--rls-black,#000); cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:border-color .2s, background .2s, color .2s;
+    }
+    .cm-agents-arrow:hover{ border-color:var(--rls-red,#EA002A); background:var(--rls-red,#EA002A); color:#fff; }
+    .cm-agents-arrow svg{ width:18px; height:18px; }
+    .cm-agents-empty{
+      text-align:center; padding:2.5rem 1rem; font-family:var(--cm-body);
+      color:var(--cm-muted); font-size:.9rem;
+    }
+
+    /* ── Responsive ── */
+    @media(max-width:980px){
+      .cm-sectors{ grid-template-columns:1fr 1fr; }
+      .cm-stats-grid{ grid-template-columns:1fr 1fr; }
+      .cm-offices{ grid-template-columns:1fr 1fr; }
+    }
+    @media(max-width:760px){
+      .cm-wrap{ padding:0 1.5rem; }
+      .cm-sectors{ grid-template-columns:1fr; }
+      .cm-svc-grid{ grid-template-columns:1fr; }
+      .cm-split{ grid-template-columns:1fr; }
+      .cm-stats-grid{ grid-template-columns:1fr 1fr; }
+      .cm-offices{ grid-template-columns:1fr 1fr; }
+    }
     @media(max-width:620px){
       .cm-search-row{ flex-direction:column; }
       .cm-search-btn{ padding:.95rem 2rem; justify-content:center; }
     }
-
   </style>
 </head>
 <body>
-  <!-- ─────────────────────────────────────────────
-       Header is injected automatically by header.js
-       ───────────────────────────────────────────── -->
+
+  <!-- Header injected automatically by header.js -->
+
   <main>
 
     <!-- ===================== HERO ===================== -->
@@ -1540,13 +507,13 @@ console.log('RLS HEADER JS LOADED v1011');
         <div class="cm-hero-cta">
           <a class="cm-btn cm-btn-light" href="https://info.royallepagesolutions.com/pages/contact/">
             Speak With Our Commercial Team
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 5l7 7-7 7"/>
             </svg>
           </a>
           <a class="cm-btn cm-btn-outline" href="https://info.royallepagesolutions.com/pages/vacancy-report/">
             View Our Vacancy Report
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/>
             </svg>
           </a>
@@ -1557,27 +524,26 @@ console.log('RLS HEADER JS LOADED v1011');
     <!-- ===================== SEARCH BAR ===================== -->
     <section class="cm-search-band">
       <div class="cm-wrap">
-        <form class="cm-search" id="cmSearchForm" method="post" action="https://www.loopnet.ca/search">
+        <form class="cm-search" id="cmSearchForm" method="get" action="https://www.loopnet.ca/search/commercial-real-estate/calgary-ab--canada/for-lease/">
 
           <!-- For Lease / For Sale / Businesses -->
           <div class="cm-search-tabs" role="tablist">
-            <button type="button" class="cm-tab is-active" data-listingtype="2" data-bbs="">For Lease</button>
-            <button type="button" class="cm-tab" data-listingtype="1" data-bbs="">For Sale</button>
-            <button type="button" class="cm-tab" data-listingtype="" data-bbs="true">Businesses For Sale</button>
+            <button type="button" class="cm-tab is-active" data-path="for-lease">For Lease</button>
+            <button type="button" class="cm-tab" data-path="for-sale">For Sale</button>
+            <button type="button" class="cm-tab" data-path="businesses-for-sale">Businesses For Sale</button>
           </div>
 
           <!-- Property types -->
           <div class="cm-search-types" id="cmTypes">
-            <button type="button" class="cm-chip is-active" data-cat="">All Types</button>
-            <button type="button" class="cm-chip" data-cat="8">Office</button>
-            <button type="button" class="cm-chip" data-cat="16">Retail</button>
-            <button type="button" class="cm-chip" data-cat="2">Industrial</button>
-            <button type="button" class="cm-chip" data-cat="4">Land</button>
-            <button type="button" class="cm-chip" data-cat="32">Flex</button>
-            <button type="button" class="cm-chip" data-cat="512">Medical</button>
-            <button type="button" class="cm-chip" data-cat="4096">Restaurant</button>
-            <button type="button" class="cm-chip" data-cat="1073741824">Coworking</button>
-            <button type="button" class="cm-chip" data-cat="8192">Lab</button>
+            <button type="button" class="cm-chip is-active" data-slug="">All Types</button>
+            <button type="button" class="cm-chip" data-slug="office-space">Office</button>
+            <button type="button" class="cm-chip" data-slug="retail-space">Retail</button>
+            <button type="button" class="cm-chip" data-slug="industrial-space">Industrial</button>
+            <button type="button" class="cm-chip" data-slug="land">Land</button>
+            <button type="button" class="cm-chip" data-slug="flex-space">Flex</button>
+            <button type="button" class="cm-chip" data-slug="medical-space">Medical</button>
+            <button type="button" class="cm-chip" data-slug="restaurant-space">Restaurant</button>
+            <button type="button" class="cm-chip" data-slug="coworking-space">Coworking</button>
           </div>
 
           <!-- Location + submit -->
@@ -1587,7 +553,7 @@ console.log('RLS HEADER JS LOADED v1011');
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
               </svg>
               <input type="text" id="cmLocation" aria-label="Search location"
-                     placeholder="City, area, or address" value="Calgary, AB, Canada" autocomplete="off" spellcheck="false">
+                     placeholder="City, area, or address" value="Calgary, AB" autocomplete="off" spellcheck="false">
             </label>
             <button type="submit" class="cm-search-btn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1596,16 +562,32 @@ console.log('RLS HEADER JS LOADED v1011');
               Search
             </button>
           </div>
-
-          <!-- Hidden fields read by LoopNet's /search endpoint -->
-          <input type="hidden" name="listingtypes"     id="cmListingTypes" value="2">
-          <input type="hidden" name="categories"       id="cmCategories"   value="">
-          <input type="hidden" name="BBSType"          id="cmBBS"          value="">
-          <input type="hidden" name="CountryCode"      value="CA">
-          <input type="hidden" name="geographyplaceid" id="cmPlaceId"      value="ChIJ1T-EnwNwcVMROrZStrE7bSY">
-          <input type="hidden" name="geographydisplay" id="cmGeoDisplay"   value="Calgary, AB, Canada">
         </form>
         <p class="cm-search-note">Listings powered by LoopNet&reg; &mdash; Canada&rsquo;s commercial real estate marketplace.</p>
+      </div>
+    </section>
+
+    <!-- ===================== AGENT CAROUSEL ===================== -->
+    <section class="cm-section cm-agents" style="padding-top:0;">
+      <div class="cm-wrap">
+        <div style="text-align:center;">
+          <span class="cm-eyebrow">Meet The Team</span>
+          <h2 class="cm-h2">Our Commercial Advisors</h2>
+          <div class="cm-rule is-center"></div>
+        </div>
+        <div class="cm-agents-shell">
+          <div class="cm-agents-track" id="cmAgentsTrack">
+            <div class="cm-agents-empty">Loading our commercial team&hellip;</div>
+          </div>
+        </div>
+        <div class="cm-agents-nav">
+          <button type="button" class="cm-agents-arrow" id="cmAgentsPrev" aria-label="Previous advisors">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button type="button" class="cm-agents-arrow" id="cmAgentsNext" aria-label="Next advisors">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -1893,7 +875,7 @@ console.log('RLS HEADER JS LOADED v1011');
         <div class="cm-cta-actions">
           <a class="cm-btn cm-btn-light" href="https://info.royallepagesolutions.com/pages/contact/">
             Contact the Commercial Team
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 5l7 7-7 7"/>
             </svg>
           </a>
@@ -1903,21 +885,15 @@ console.log('RLS HEADER JS LOADED v1011');
         </div>
         <p class="cm-cta-note">Prefer email? Reach us through our
         <a href="https://info.royallepagesolutions.com/pages/contact/">contact page</a>
-        and we&rsquo;ll connect you with the right advisor.</p>
+        and we&rsquo;ll connect you with the right advisor. Researching the market first?
+        Check our <a href="https://info.royallepagesolutions.com/pages/vacancy-report/">Vacancy Report</a>.</p>
       </div>
     </section>
 
     <!-- ===================== DISCLAIMER ===================== -->
     <section class="cm-disclaimer">
       <div class="cm-wrap">
-        <p>Royal LePage&reg; is a trademark used under licence. Network figures
-        reflect Royal LePage&reg; and Royal LePage&reg; Commercial program data
-        as published by Royal LePage and are subject to change. Award recognition
-        refers to honours earned within the Royal LePage&reg; network. This page
-        is for general information only and does not constitute an offer of
-        service, valuation, or professional advice for any specific property or
-        transaction. Royal LePage Solutions is operated by Solution One Real
-        Estate Ltd.</p>
+        <p>Royal LePage&reg; is a trademark used under licence. Network figures reflect Royal LePage&reg; and Royal LePage&reg; Commercial program data as published by Royal LePage and are subject to change. Award recognition refers to honours earned within the Royal LePage&reg; network. This page is for general information only and does not constitute an offer of service, valuation, or professional advice for any specific property or transaction. Royal LePage Solutions is independently owned and operated by Solution One Real Estate Ltd. Not intended to solicit buyers or sellers currently under contract with a brokerage. See <a href="https://rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a> for important trademark and ownership information.</p>
       </div>
     </section>
 
@@ -1926,298 +902,137 @@ console.log('RLS HEADER JS LOADED v1011');
   <!-- ===================== SEARCH BAR BEHAVIOR ===================== -->
   <script>
   (function () {
-    var form = document.getElementById('cmSearchForm');
+    var form    = document.getElementById('cmSearchForm');
     if (!form) return;
 
-    var DEFAULT_PLACEID = 'ChIJ1T-EnwNwcVMROrZStrE7bSY'; // Calgary, AB
-    var DEFAULT_DISPLAY  = 'Calgary, AB, Canada';
+    var BASE    = 'https://www.loopnet.ca/search/';
+    var CITY    = 'calgary-ab--canada';
 
-    var tabs       = form.querySelectorAll('.cm-tab');
-    var chips      = form.querySelectorAll('.cm-chip');
-    var listingEl  = document.getElementById('cmListingTypes');
-    var bbsEl      = document.getElementById('cmBBS');
-    var catEl      = document.getElementById('cmCategories');
-    var placeEl    = document.getElementById('cmPlaceId');
-    var displayEl  = document.getElementById('cmGeoDisplay');
-    var locInput   = document.getElementById('cmLocation');
+    var activePath = 'for-lease'; // tracks currently selected tab path
+    var activeSlug = '';          // tracks currently selected type slug
 
-    // Listing-type tabs
+    var tabs  = form.querySelectorAll('.cm-tab');
+    var chips = form.querySelectorAll('.cm-chip');
+
+    function updateAction() {
+      // Build path: /search/{type-slug|commercial-real-estate}/{city}/{for-lease|for-sale|...}/
+      var typePart = activeSlug || 'commercial-real-estate';
+      form.action = BASE + typePart + '/' + CITY + '/' + activePath + '/';
+    }
+
     tabs.forEach(function (tab) {
       tab.addEventListener('click', function () {
         tabs.forEach(function (t) { t.classList.remove('is-active'); });
         tab.classList.add('is-active');
-        listingEl.value = tab.getAttribute('data-listingtype') || '';
-        bbsEl.value     = tab.getAttribute('data-bbs') || '';
+        activePath = tab.getAttribute('data-path');
+        updateAction();
       });
     });
 
-    // Property-type chips (single select)
     chips.forEach(function (chip) {
       chip.addEventListener('click', function () {
         chips.forEach(function (c) { c.classList.remove('is-active'); });
         chip.classList.add('is-active');
-        catEl.value = chip.getAttribute('data-cat') || '';
+        activeSlug = chip.getAttribute('data-slug');
+        updateAction();
       });
     });
 
-    // Keep geographydisplay in sync; only ship the known place id when the
-    // location is left as the Calgary default. For anything else, clear the
-    // place id and let LoopNet geocode the typed text.
-    form.addEventListener('submit', function () {
-      var typed = (locInput.value || '').trim();
-      displayEl.value = typed || DEFAULT_DISPLAY;
-      placeEl.value = (typed === DEFAULT_DISPLAY) ? DEFAULT_PLACEID : '';
-    });
+    updateAction(); // set initial action
   })();
   </script>
-  <!-- Header JS (inlined for standalone preview) -->
+  <!-- ===================== AGENT CAROUSEL (Google Sheets CSV) ===================== -->
   <script>
-/* =========================================================
-   Royal LePage Solutions - Header Injection & Behavior
-   v1011 - Reconciled all menu links to info.royallepagesolutions.com
-           pages; added Commercial Listings + Find an Agent under
-           Search & Services; moved Commercial Listings under Our Listings
-   ========================================================= */
+  (function () {
+    var AGENTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTToAC7Jf5XxoV-vZe6K7jgMudt_3vJClps8j6qDW4wyET3Wj-BQRUwQqNpBA4rW1hjn7hNfbfh_Y9I/pub?gid=237844589&single=true&output=csv';
 
-console.log('RLS HEADER JS LOADED v1011');
+    var track = document.getElementById('cmAgentsTrack');
+    var prevBtn = document.getElementById('cmAgentsPrev');
+    var nextBtn = document.getElementById('cmAgentsNext');
+    if (!track) return;
 
-(function () {
-  const VERSION = '1011';
-
-  // Base URL where logo and other assets live
-  const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
-
-  const DEPOSIT_URL = 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust';
-  const DEPOSIT_INSTRUCTIONS_URL = ASSET_BASE + '/deposits/';
-  const LOGO_URL = ASSET_BASE + '/assets/images/Solutions%20Logo%20Script_White%20%2B%20Red.png';
-
-  /* ─── Header markup ─── */
-  function buildHeaderHTML() {
-    return `
-      <div class="rls-header-inner">
-        <a href="https://www.rlpsolutions.ca/" class="rls-logo" aria-label="Royal LePage Solutions Home">
-          <img src="${LOGO_URL}" alt="Royal LePage Solutions">
-        </a>
-
-        <div class="rls-header-right">
-          <a class="rls-deposit-btn" href="${DEPOSIT_URL}">Deposit Instructions</a>
-          <a class="rls-phone" href="tel:4032525900">403.252.5900</a>
-          <button class="rls-hamburger" id="rls-hamburger" aria-label="Open menu" aria-expanded="false" type="button">
-            <span class="rls-hamburger-lines">
-              <span></span>
-              <span></span>
-            </span>
-          </button>
-        </div>
-      </div>
-    `;
-  }
-
-  /* ─── Slide-out menu markup ─── */
-  function buildMenuHTML() {
-    return `
-      <button class="rls-menu-close" id="rls-menu-close" aria-label="Close menu" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-          <line x1="6" y1="6" x2="18" y2="18"/>
-          <line x1="18" y1="6" x2="6" y2="18"/>
-        </svg>
-      </button>
-
-      <div class="rls-menu-inner">
-        <div class="rls-menu-grid">
-
-          <!-- Column 1: THE BROKERAGE -->
-          <div class="rls-menu-col">
-            <h3>The Brokerage</h3>
-            <ul>
-              <li><a href="https://info.royallepagesolutions.com/pages/about-us/">About Us</a></li>
-              <li><a href="https://www.rlpsolutions.ca/agents.php">Meet Our Team</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/join-us/">Join Us / Careers</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/deposit/">Deposit Instructions</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 2: SEARCH & SERVICES -->
-          <div class="rls-menu-col">
-            <h3>Search &amp; Services</h3>
-            <ul>
-              <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1&rtype=map">Search Listings</a></li>
-              <li><a href="https://www.rlpsolutions.ca/index.php?showagency=1#rslt">Our Listings</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/commercial/">Commercial Listings</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/buyers/">Buying</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/seller/">Selling</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/finance/">Finance</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/lead/">Find an Agent</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 3: ROYAL LEPAGE -->
-          <div class="rls-menu-col">
-            <h3>Royal LePage</h3>
-            <ul>
-              <li><a href="https://info.royallepagesolutions.com/pages/about-rlp/">About Royal LePage</a></li>
-              <li><a href="https://info.royallepagesolutions.com/pages/shelter/">Shelter Foundation</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 4: CONNECT -->
-          <div class="rls-menu-col">
-            <h3>Connect</h3>
-            <ul>
-              <li><a href="https://info.royallepagesolutions.com/pages/contact/">Contact Us</a></li>
-              <li><a href="https://www.facebook.com/RLPSolutions" target="_blank" rel="noopener">Facebook</a></li>
-              <li><a href="http://www.instagram.com/royallepagesolutions" target="_blank" rel="noopener">Instagram</a></li>
-              <li><a href="http://www.linkedin.com/company/royal-lepage-solutions" target="_blank" rel="noopener">LinkedIn</a></li>
-            </ul>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Contact strip -->
-      <div class="rls-menu-contact">
-        <div class="rls-contact-brand">Royal LePage&reg; Solutions</div>
-
-        <div class="rls-contact-row">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-          </svg>
-          <a href="tel:4032525900">403.252.5900</a>
-        </div>
-
-        <div class="rls-contact-row">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          <span>Calgary, Alberta</span>
-        </div>
-      </div>
-    `;
-  }
-
-  /* ─── Inject everything ─── */
-  function ensureInjected() {
-    document.body.classList.add('has-rls-header');
-
-    let header = document.getElementById('rls-header');
-    if (!header) {
-      header = document.createElement('header');
-      header.id = 'rls-header';
-      header.innerHTML = buildHeaderHTML();
-      document.body.insertAdjacentElement('afterbegin', header);
-    } else if (!header.querySelector('#rls-hamburger')) {
-      header.innerHTML = buildHeaderHTML();
-    }
-
-    let overlay = document.getElementById('rls-menu-overlay');
-    if (!overlay) {
-      overlay = document.createElement('div');
-      overlay.id = 'rls-menu-overlay';
-      document.body.appendChild(overlay);
-    }
-
-    let menu = document.getElementById('rls-slide-menu');
-    if (!menu) {
-      menu = document.createElement('aside');
-      menu.id = 'rls-slide-menu';
-      menu.setAttribute('aria-hidden', 'true');
-      menu.innerHTML = buildMenuHTML();
-      document.body.appendChild(menu);
-    } else if (!menu.querySelector('#rls-menu-close')) {
-      menu.innerHTML = buildMenuHTML();
-    }
-
-    bindHeaderBehavior(header, menu, overlay);
-
-    requestAnimationFrame(() => {
-      document.body.classList.add('rls-header-ready');
-    });
-
-    console.log('[RLS Header] Injected + bound OK - v' + VERSION);
-  }
-
-  /* ─── Behavior bindings ─── */
-  function bindHeaderBehavior(header, menu, overlay) {
-    if (header.dataset.rlsBound === '1') return;
-    header.dataset.rlsBound = '1';
-
-    const hamburger = document.getElementById('rls-hamburger');
-    const closeBtn = document.getElementById('rls-menu-close');
-
-    if (!hamburger || !closeBtn) return;
-
-    function openMenu() {
-      menu.classList.add('is-open');
-      overlay.classList.add('is-open');
-      document.body.classList.add('rls-menu-open');
-      hamburger.setAttribute('aria-expanded', 'true');
-      menu.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeMenu() {
-      menu.classList.remove('is-open');
-      overlay.classList.remove('is-open');
-      document.body.classList.remove('rls-menu-open');
-      hamburger.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-hidden', 'true');
-      menu.querySelectorAll('.rls-submenu-panel').forEach(p => {
-        p.classList.remove('is-open');
-        p.setAttribute('aria-hidden', 'true');
-      });
-    }
-
-    hamburger.addEventListener('click', openMenu);
-    closeBtn.addEventListener('click', closeMenu);
-    overlay.addEventListener('click', closeMenu);
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && menu.classList.contains('is-open')) closeMenu();
-    });
-
-    menu.querySelectorAll('.rls-submenu-trigger').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const id = btn.getAttribute('data-submenu');
-        const panel = document.getElementById('rls-submenu-' + id);
-        if (panel) {
-          panel.classList.add('is-open');
-          panel.setAttribute('aria-hidden', 'false');
+    function csvToRows(text) {
+      var rows = [], row = [], cell = '', inQ = false;
+      for (var i = 0; i < text.length; i++) {
+        var c = text[i];
+        if (c === '"') {
+          if (inQ && text[i + 1] === '"') { cell += '"'; i++; }
+          else inQ = !inQ;
+        } else if (c === ',' && !inQ) {
+          row.push(cell); cell = '';
+        } else if ((c === '\n' || c === '\r') && !inQ) {
+          if (c === '\r' && text[i + 1] === '\n') i++;
+          row.push(cell); rows.push(row); row = []; cell = '';
+        } else {
+          cell += c;
         }
+      }
+      if (cell || row.length) { row.push(cell); rows.push(row); }
+      return rows;
+    }
+
+    function esc(s) {
+      return (s || '').replace(/[&<>"']/g, function (m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
       });
-    });
+    }
 
-    menu.querySelectorAll('[data-submenu-back]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-submenu-back');
-        const panel = document.getElementById('rls-submenu-' + id);
-        if (panel) {
-          panel.classList.remove('is-open');
-          panel.setAttribute('aria-hidden', 'true');
-        }
-      });
-    });
+    function renderAgents(agents) {
+      if (!agents.length) {
+        track.innerHTML = '<div class="cm-agents-empty">Our advisor list is being updated &mdash; please check back shortly.</div>';
+        return;
+      }
+      track.innerHTML = agents.map(function (a) {
+        var photo = a.photo
+          ? '<img src="' + esc(a.photo) + '" alt="' + esc(a.name) + '" loading="lazy" onerror="this.parentNode.innerHTML=\'<div class=&quot;cm-agent-photo-ph&quot;>' + esc((a.name || '?').charAt(0)) + '</div>\'">'
+          : '<div class="cm-agent-photo-ph">' + esc((a.name || '?').charAt(0)) + '</div>';
+        var phone = a.phone
+          ? '<a class="cm-agent-phone" href="tel:' + esc(a.phone.replace(/[^0-9+]/g, '')) + '">' + esc(a.phone) + '</a>'
+          : '';
+        var email = a.email
+          ? '<a class="cm-agent-email" href="mailto:' + esc(a.email) + '">' + esc(a.email) + '</a>'
+          : '';
+        var title = (a.title || 'Commercial Advisor').replace(/\n/g, ' &middot; ');
+        return (
+          '<div class="cm-agent-card">' +
+            '<div class="cm-agent-photo-wrap">' + photo + '</div>' +
+            '<div class="cm-agent-card-body">' +
+              '<div class="cm-agent-name">' + esc(a.name) + '</div>' +
+              '<div class="cm-agent-title">' + title + '</div>' +
+              '<div class="cm-agent-links">' + phone + email + '</div>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
 
-    menu.addEventListener('click', (e) => {
-      if (e.target.closest('a')) closeMenu();
-    });
-  }
+    function loadAgents() {
+      fetch(AGENTS_CSV_URL)
+        .then(function (r) { return r.text(); })
+        .then(function (text) {
+          var rows = csvToRows(text).slice(2).filter(function (r) { return r[0] && r[0] !== 'Agent Name'; });
+          var agents = rows.map(function (r) {
+            return { name: r[0] || '', title: r[1] || '', phone: r[2] || '', email: r[3] || '', photo: r[4] || '', website: r[5] || '' };
+          }).filter(function (a) { return a.name; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+          renderAgents(agents);
+        })
+        .catch(function () {
+          track.innerHTML = '<div class="cm-agents-empty">Our advisor list is being updated &mdash; please check back shortly.</div>';
+        });
+    }
 
-  function run() {
-    ensureInjected();
-    setTimeout(ensureInjected, 500);
-    setTimeout(ensureInjected, 1500);
-  }
+    function scrollByCards(dir) {
+      var card = track.querySelector('.cm-agent-card');
+      var step = card ? (card.offsetWidth + 20) * 2 : 480;
+      track.scrollBy({ left: dir * step, behavior: 'smooth' });
+    }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run);
-    window.addEventListener('load', run);
-  } else {
-    run();
-  }
-})();
+    if (prevBtn) prevBtn.addEventListener('click', function () { scrollByCards(-1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { scrollByCards(1); });
 
+    loadAgents();
+  })();
   </script>
+
 </body>
 </html>
