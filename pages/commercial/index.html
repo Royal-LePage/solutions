@@ -454,6 +454,18 @@
       text-decoration:none; word-break:break-all;
     }
     .cm-agent-email:hover{ color:var(--rls-red,#EA002A); }
+    .cm-agent-listings-btn{
+      display:inline-flex; align-items:center; gap:7px;
+      margin-top:12px; font-family:var(--rls-sans);
+      font-size:.7rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+      color:var(--rls-black,#000); border:1px solid var(--cm-line);
+      border-radius:40px; padding:.5rem 1rem;
+      text-decoration:none; transition:background .2s, border-color .2s, color .2s;
+    }
+    .cm-agent-listings-btn:hover{
+      background:var(--rls-red,#EA002A); border-color:var(--rls-red,#EA002A); color:#fff;
+    }
+    .cm-agent-listings-btn svg{ width:13px; height:13px; }
     .cm-agents-nav{
       display:flex; gap:10px; justify-content:center; margin-top:.4rem;
     }
@@ -993,6 +1005,8 @@
           ? '<a class="cm-agent-email" href="mailto:' + esc(a.email) + '">' + esc(a.email) + '</a>'
           : '';
         var title = (a.title || 'Commercial Advisor').replace(/\n/g, ' &middot; ');
+        var listingsUrl = 'https://info.royallepagesolutions.com/pages/commercial-listings/?agent=' + encodeURIComponent(a.name) + '#agentPdf';
+        var listingsBtn = '<a class="cm-agent-listings-btn" href="' + listingsUrl + '" target="_blank" rel="noopener">My Listings <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>';
         return (
           '<div class="cm-agent-card">' +
             '<div class="cm-agent-photo-wrap">' + photo + '</div>' +
@@ -1000,6 +1014,7 @@
               '<div class="cm-agent-name">' + esc(a.name) + '</div>' +
               '<div class="cm-agent-title">' + title + '</div>' +
               '<div class="cm-agent-links">' + phone + email + '</div>' +
+              listingsBtn +
             '</div>' +
           '</div>'
         );
