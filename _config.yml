@@ -1,0 +1,36 @@
+# =========================================================
+# Royal LePage Solutions — Jekyll Configuration
+# info.royallepagesolutions.com
+# =========================================================
+
+title:       "Royal LePage Solutions"
+description: "Calgary real estate brokerage serving South, North, Canmore/Banff, and Okotoks."
+url:         "https://info.royallepagesolutions.com"
+baseurl:     ""
+
+# ── Build settings ──────────────────────────────────────
+markdown:    kramdown
+highlighter: rouge
+permalink:   /pages/blog/:slug/
+
+# ── Exclude from build ──────────────────────────────────
+# These files/folders are copied through as-is by GitHub Pages.
+# Listing them here prevents Jekyll from double-processing them.
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# ── Collections ─────────────────────────────────────────
+# We are not using Jekyll collections for posts —
+# the standard _posts/ folder + permalink above handles routing.
+
+# ── Front matter defaults ───────────────────────────────
+defaults:
+  - scope:
+      path: "_posts"
+      type: "posts"
+    values:
+      layout: "post"
