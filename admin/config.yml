@@ -1,4 +1,3 @@
-#V2
 # =========================================================
 # Royal LePage Solutions — Decap CMS Configuration
 # info.royallepagesolutions.com/admin
@@ -8,14 +7,13 @@ backend:
   name: github
   repo: Royal-LePage/solutions
   branch: main
-  base_url: https://taupe-biscotti-c1092e.netlify.app
-  auth_endpoint: /api/auth
 
 # Media uploads — stored in assets/images/blog/
 media_folder: "assets/images/blog"
 public_folder: "/assets/images/blog"
 
 # Editorial workflow — posts save as drafts until approved
+publish_mode: editorial_workflow
 
 collections:
   - name: "posts"
