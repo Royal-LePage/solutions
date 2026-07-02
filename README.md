@@ -1,4 +1,4 @@
-# Royal LePage Solutions — info subdomain
+#  Royal LePage Solutions — info subdomain
 
 Companion site to royallepagesolutions.com (Bold Trail).
 
