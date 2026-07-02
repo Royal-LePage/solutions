@@ -7,6 +7,8 @@ backend:
   name: github
   repo: Royal-LePage/solutions
   branch: main
+  auth_type: implicit
+  app_id: Ov23liAHIh6qcSbNtb54
 
 # Media uploads — stored in assets/images/blog/
 media_folder: "assets/images/blog"
