@@ -16,7 +16,6 @@ media_folder: "assets/images/blog"
 public_folder: "/assets/images/blog"
 
 # Editorial workflow — posts save as drafts until approved
-publish_mode: editorial_workflow
 
 collections:
   - name: "posts"
