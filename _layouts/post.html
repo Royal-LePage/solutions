@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} — Royal LePage Solutions</title>
+  <meta name="description" content="{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}">
+
+  <!-- Open Graph (for social sharing previews) -->
+  <meta property="og:title"       content="{{ page.title }}">
+  <meta property="og:description" content="{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}">
+  <meta property="og:type"        content="article">
+  <meta property="og:url"         content="{{ page.url | absolute_url }}">
+  {% if page.image %}
+  <meta property="og:image"       content="{{ page.image | absolute_url }}">
+  {% endif %}
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Header CSS -->
+  <link rel="stylesheet" href="/assets/css/header.css?v=1015">
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="/assets/css/styles.css?v=1001">
+  <!-- Header JS -->
+  <script defer src="/assets/js/header.js?v=1014"></script>
+
+  <style>
+    /* ── Post page tokens ── */
+    :root {
+      --bp-red:        #EA002A;
+      --bp-black:      #000000;
+      --bp-white:      #FFFFFF;
+      --bp-stone:      #D6D1C8;
+      --bp-light-grey: #EFEFEF;
+      --bp-taupe:      #A89E92;
+      --bp-dark-grey:  #2A2A2A;
+      --bp-warm-grey:  #6B6660;
+      --bp-sans:       'Raleway', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+      --bp-body:       'Roboto', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: var(--bp-body);
+      background: var(--bp-white);
+      color: var(--bp-black);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ── Post hero ── */
+    .bp-hero {
+      background: var(--bp-black);
+      color: var(--bp-white);
+      padding: 4rem 2rem 3.5rem;
+      text-align: center;
+    }
+
+    .bp-hero__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--bp-sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      margin-bottom: 2rem;
+      transition: color 0.2s;
+    }
+
+    .bp-hero__back::before { content: '←'; }
+
+    .bp-hero__back:hover { color: var(--bp-white); }
+
+    .bp-hero__category {
+      display: inline-block;
+      font-family: var(--bp-sans);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      background: var(--bp-red);
+      color: var(--bp-white);
+      padding: 0.3rem 0.8rem;
+      border-radius: 2px;
+      margin-bottom: 1.25rem;
+    }
+
+    .bp-hero__title {
+      font-family: var(--bp-sans);
+      font-size: clamp(1.6rem, 4vw, 2.75rem);
+      font-weight: 300;
+      letter-spacing: 0.03em;
+      line-height: 1.2;
+      margin: 0 auto 1.25rem;
+      max-width: 760px;
+    }
+
+    .bp-hero__title strong { font-weight: 600; }
+
+    .bp-hero__meta {
+      font-family: var(--bp-sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--bp-taupe);
+    }
+
+    /* ── Featured image ── */
+    .bp-featured-image {
+      width: 100%;
+      max-height: 520px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Post body ── */
+    .bp-article {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 3.5rem 2rem 5rem;
+    }
+
+    /* Typography for post content */
+    .bp-content {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--bp-dark-grey);
+    }
+
+    .bp-content p { margin: 0 0 1.5rem; }
+
+    .bp-content h2 {
+      font-family: var(--bp-sans);
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--bp-black);
+      margin: 2.5rem 0 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--bp-red);
+      display: inline-block;
+    }
+
+    .bp-content h3 {
+      font-family: var(--bp-sans);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--bp-black);
+      margin: 2rem 0 0.75rem;
+    }
+
+    .bp-content ul,
+    .bp-content ol {
+      margin: 0 0 1.5rem 1.5rem;
+      padding: 0;
+    }
+
+    .bp-content li { margin-bottom: 0.5rem; }
+
+    .bp-content strong { font-weight: 500; color: var(--bp-black); }
+
+    .bp-content a {
+      color: var(--bp-red);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: opacity 0.2s;
+    }
+
+    .bp-content a:hover { opacity: 0.75; }
+
+    .bp-content blockquote {
+      border-left: 3px solid var(--bp-red);
+      margin: 2rem 0;
+      padding: 0.75rem 1.5rem;
+      background: var(--bp-light-grey);
+      font-style: normal;
+      color: var(--bp-warm-grey);
+    }
+
+    .bp-content img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 2rem auto;
+      border-radius: 2px;
+    }
+
+    .bp-content hr {
+      border: none;
+      border-top: 1px solid var(--bp-stone);
+      margin: 2.5rem 0;
+    }
+
+    /* ── Back to blog CTA ── */
+    .bp-back-cta {
+      border-top: 1px solid var(--bp-stone);
+      margin-top: 3rem;
+      padding-top: 2.5rem;
+      text-align: center;
+    }
+
+    .bp-back-cta a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--bp-sans);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bp-white);
+      background: var(--bp-black);
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-radius: 2px;
+      transition: background 0.2s;
+    }
+
+    .bp-back-cta a:hover { background: var(--bp-red); }
+
+    .bp-back-cta a::before { content: '←'; }
+
+    /* ── Footer ── */
+    .bp-footer {
+      background: var(--bp-black);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 2.5rem 2rem;
+      font-family: var(--bp-sans);
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      line-height: 1.8;
+    }
+
+    .bp-footer a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .bp-footer a:hover { color: var(--bp-white); }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .bp-hero  { padding: 3rem 1.25rem 2.5rem; }
+      .bp-article { padding: 2.5rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Post hero ─── -->
+  <section class="bp-hero">
+    <a class="bp-hero__back" href="/pages/blog/">Back to Blog</a>
+    {% if page.category %}
+    <div>
+      <span class="bp-hero__category">{{ page.category }}</span>
+    </div>
+    {% endif %}
+    <h1 class="bp-hero__title"><strong>{{ page.title }}</strong></h1>
+    <p class="bp-hero__meta">
+      {{ page.date | date: "%B %-d, %Y" }}
+      &nbsp;&middot;&nbsp;
+      Royal LePage&reg; Solutions
+    </p>
+  </section>
+
+  <!-- ─── Featured image (optional) ─── -->
+  {% if page.image %}
+  <img
+    class="bp-featured-image"
+    src="{{ page.image }}"
+    alt="{{ page.image_alt | default: page.title }}"
+  >
+  {% endif %}
+
+  <!-- ─── Post content ─── -->
+  <article class="bp-article">
+    <div class="bp-content">
+      {{ content }}
+    </div>
+
+    <!-- Back to blog -->
+    <div class="bp-back-cta">
+      <a href="/pages/blog/">Back to Blog</a>
+    </div>
+  </article>
+
+  <!-- ─── Footer ─── -->
+  <footer class="bp-footer">
+    <p>
+      &copy; <script>document.write(new Date().getFullYear())</script> Royal LePage&reg; Solutions &nbsp;&middot;&nbsp;
+      <a href="https://www.royallepagesolutions.com">royallepagesolutions.com</a> &nbsp;&middot;&nbsp;
+      <a href="tel:4032525900">403.252.5900</a>
+    </p>
+    <p style="margin-top:0.4rem; font-size:0.68rem; opacity:0.6;">
+      &copy;<script>document.write(new Date().getFullYear())</script> Bridgemarq Real Estate Services&reg;. All rights reserved.
+      Trademarks owned or controlled by The Canadian Real Estate Association. Used under licence.
+    </p>
+  </footer>
+
+</body>
+</html>
