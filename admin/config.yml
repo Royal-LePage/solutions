@@ -7,6 +7,8 @@ backend:
   name: github
   repo: Royal-LePage/solutions
   branch: main
+  base_url: https://taupe-biscotti-c1092e.netlify.app
+  auth_endpoint: /api/auth
 
 # Media uploads — stored in assets/images/blog/
 media_folder: "assets/images/blog"
