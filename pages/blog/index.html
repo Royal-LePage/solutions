@@ -1,3 +1,6 @@
+---
+layout: none
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,20 +9,15 @@
   <title>Blog — Royal LePage Solutions</title>
   <meta name="description" content="Market updates, neighbourhood guides, agent spotlights, and real estate tips from the team at Royal LePage Solutions in Calgary.">
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Header CSS -->
   <link rel="stylesheet" href="../../assets/css/header.css?v=1015">
-  <!-- Site CSS -->
   <link rel="stylesheet" href="../../assets/css/styles.css?v=1001">
-  <!-- Header JS -->
   <script defer src="../../assets/js/header.js?v=1014"></script>
 
   <style>
-    /* ── Page tokens ── */
     :root {
       --bl-red:        #EA002A;
       --bl-black:      #000000;
@@ -42,7 +40,6 @@
       padding: 0;
     }
 
-    /* ── Hero ── */
     .bl-hero {
       background: var(--bl-black);
       color: var(--bl-white);
@@ -67,9 +64,7 @@
       line-height: 1.15;
     }
 
-    .bl-hero__title strong {
-      font-weight: 600;
-    }
+    .bl-hero__title strong { font-weight: 600; }
 
     .bl-hero__sub {
       font-size: 1rem;
@@ -80,7 +75,6 @@
       line-height: 1.65;
     }
 
-    /* ── Filter bar ── */
     .bl-filters {
       background: var(--bl-light-grey);
       border-bottom: 1px solid var(--bl-stone);
@@ -118,7 +112,6 @@
       border-color: var(--bl-red);
     }
 
-    /* ── Post grid ── */
     .bl-main {
       max-width: 1280px;
       margin: 0 auto;
@@ -131,7 +124,6 @@
       gap: 2rem;
     }
 
-    /* ── Post card ── */
     .bl-card {
       display: flex;
       flex-direction: column;
@@ -164,11 +156,8 @@
       transition: transform 0.35s ease;
     }
 
-    .bl-card:hover .bl-card__thumb img {
-      transform: scale(1.03);
-    }
+    .bl-card:hover .bl-card__thumb img { transform: scale(1.03); }
 
-    /* Placeholder when no image */
     .bl-card__thumb--placeholder {
       display: flex;
       align-items: center;
@@ -242,15 +231,9 @@
       text-decoration: none;
     }
 
-    .bl-card:hover .bl-card__read-more {
-      gap: 0.7rem;
-    }
+    .bl-card:hover .bl-card__read-more { gap: 0.7rem; }
+    .bl-card__read-more::after { content: '→'; }
 
-    .bl-card__read-more::after {
-      content: '→';
-    }
-
-    /* ── Empty state (when filter returns 0) ── */
     .bl-empty {
       display: none;
       text-align: center;
@@ -258,16 +241,9 @@
       color: var(--bl-taupe);
     }
 
-    .bl-empty.is-visible {
-      display: block;
-    }
+    .bl-empty.is-visible { display: block; }
+    .bl-empty p { font-size: 1rem; margin: 0; }
 
-    .bl-empty p {
-      font-size: 1rem;
-      margin: 0;
-    }
-
-    /* ── Footer ── */
     .bl-footer {
       background: var(--bl-black);
       color: rgba(255,255,255,0.5);
@@ -285,11 +261,8 @@
       transition: color 0.2s;
     }
 
-    .bl-footer a:hover {
-      color: var(--bl-white);
-    }
+    .bl-footer a:hover { color: var(--bl-white); }
 
-    /* ── Responsive ── */
     @media (max-width: 640px) {
       .bl-hero { padding: 3rem 1.25rem 2.5rem; }
       .bl-filters { padding: 1rem 1.25rem; }
@@ -300,14 +273,12 @@
 </head>
 <body class="rls-has-hero">
 
-  <!-- ─── Hero ─── -->
   <section class="bl-hero">
     <p class="bl-hero__eyebrow">Royal LePage Solutions</p>
     <h1 class="bl-hero__title">The <strong>Blog</strong></h1>
     <p class="bl-hero__sub">Market updates, neighbourhood guides, agent spotlights, and tips for buyers and sellers across Calgary and beyond.</p>
   </section>
 
-  <!-- ─── Category filters ─── -->
   <nav class="bl-filters" aria-label="Filter posts by category">
     <button class="bl-filter-btn is-active" data-filter="all">All Posts</button>
     <button class="bl-filter-btn" data-filter="market-updates">Market Updates</button>
@@ -317,41 +288,57 @@
     <button class="bl-filter-btn" data-filter="brokerage-news">Brokerage News</button>
   </nav>
 
-  <!-- ─── Post grid ─── -->
   <main class="bl-main">
     <div class="bl-grid" id="bl-post-grid">
 
-      <!-- Posts will appear here once published -->
+      {% assign posts = site.posts | where_exp: "post", "post.published != false" %}
+      {% for post in posts %}
+      <a class="bl-card" href="{{ post.url }}" data-category="{{ post.category }}">
+        <div class="bl-card__thumb {% unless post.image %}bl-card__thumb--placeholder{% endunless %}">
+          {% if post.image %}
+            <img src="{{ post.image }}" alt="{{ post.title }}">
+          {% else %}
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+          {% endif %}
+          {% if post.category %}
+          <span class="bl-card__category">{{ post.category | replace: '-', ' ' }}</span>
+          {% endif %}
+        </div>
+        <div class="bl-card__body">
+          <p class="bl-card__date">{{ post.date | date: "%B %-d, %Y" }}</p>
+          <h2 class="bl-card__title">{{ post.title }}</h2>
+          {% if post.excerpt %}
+          <p class="bl-card__excerpt">{{ post.excerpt }}</p>
+          {% endif %}
+          <span class="bl-card__read-more">Read More</span>
+        </div>
+      </a>
+      {% endfor %}
 
     </div>
 
-    <!-- Empty state (shown by JS when no cards match a filter) -->
-    <div class="bl-empty is-visible" id="bl-empty" aria-live="polite">
-      <p>No posts in this category yet — check back soon.</p>
+    <div class="bl-empty {% if site.posts.size == 0 %}is-visible{% endif %}" id="bl-empty" aria-live="polite">
+      <p>No posts yet — check back soon.</p>
     </div>
   </main>
 
-  <!-- ─── Footer ─── -->
   <footer class="bl-footer">
     <p>
-      &copy; <span id="bl-year"></span> Royal LePage&reg; Solutions &nbsp;&middot;&nbsp;
+      &copy; {{ "now" | date: "%Y" }} Royal LePage&reg; Solutions &nbsp;&middot;&nbsp;
       <a href="https://www.royallepagesolutions.com">royallepagesolutions.com</a> &nbsp;&middot;&nbsp;
       <a href="tel:4032525900">403.252.5900</a>
     </p>
     <p style="margin-top:0.4rem; font-size:0.68rem; opacity:0.6;">
-      &copy;<span id="bl-year2"></span> Bridgemarq Real Estate Services&reg;. All rights reserved.
+      &copy;{{ "now" | date: "%Y" }} Bridgemarq Real Estate Services&reg;. All rights reserved.
       Trademarks owned or controlled by The Canadian Real Estate Association. Used under licence.
     </p>
   </footer>
 
   <script>
   (function () {
-    /* ── Year ── */
-    const yr = new Date().getFullYear();
-    document.getElementById('bl-year').textContent  = yr;
-    document.getElementById('bl-year2').textContent = yr;
-
-    /* ── Category filter ── */
     const btns  = document.querySelectorAll('.bl-filter-btn');
     const cards = document.querySelectorAll('#bl-post-grid .bl-card');
     const empty = document.getElementById('bl-empty');
@@ -359,7 +346,6 @@
     btns.forEach(function (btn) {
       btn.addEventListener('click', function () {
         const filter = btn.getAttribute('data-filter');
-
         btns.forEach(function (b) { b.classList.remove('is-active'); });
         btn.classList.add('is-active');
 
