@@ -60,16 +60,18 @@
     }
 
     .hub-hero__title {
-      font-family: 'Raleway', sans-serif;
-      font-weight: 700;
-      font-size: clamp(2.2rem, 5vw, 3.5rem);
-      letter-spacing: -0.01em;
-      line-height: 1.1;
-      margin-bottom: 0.5rem;
+      font-family: 'Raleway', sans-serif !important;
+      font-weight: 700 !important;
+      font-size: clamp(2.2rem, 5vw, 3.5rem) !important;
+      letter-spacing: -0.01em !important;
+      line-height: 1.1 !important;
+      margin-bottom: 0.5rem !important;
+      color: var(--rls-white) !important;
     }
 
-    .hub-hero__title span {
-      color: var(--rls-red);
+    .hub-hero__title .hub-title-accent {
+      color: var(--rls-red) !important;
+      display: inline !important;
     }
 
     .hub-hero__sub {
@@ -242,7 +244,7 @@
     <!-- Hero -->
     <section class="hub-hero">
       <p class="hub-hero__eyebrow">Royal LePage Solutions®</p>
-      <h1 class="hub-hero__title">Agent <span>Hub</span></h1>
+      <h1 class="hub-hero__title">Agent <span class="hub-title-accent">Hub</span></h1>
       <div class="hub-rule">
         <div class="hub-rule__line"></div>
         <div class="hub-rule__line"></div>
