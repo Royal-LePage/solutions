@@ -19,7 +19,6 @@
   <script defer src="../../../../assets/js/header.js?v=1014"></script>
 
   <style>
-    /* ── Variables ─────────────────────────────── */
     :root {
       --rls-red:        #EA002A;
       --rls-black:      #000000;
@@ -38,14 +37,13 @@
       color: var(--rls-black);
     }
 
-    /* ── Page Hero ──────────────────────────────── */
+    /* ── Hero ───────────────────────────────────── */
     .ps-hero {
       background: var(--rls-black);
       color: var(--rls-white);
       padding: 5rem 2rem 3.5rem;
       text-align: center;
     }
-
     .ps-hero__back {
       display: inline-flex;
       align-items: center;
@@ -61,7 +59,6 @@
       transition: color 0.2s;
     }
     .ps-hero__back:hover { color: var(--rls-white); }
-
     .ps-hero__eyebrow {
       font-family: 'Roboto', sans-serif;
       font-weight: 300;
@@ -71,7 +68,6 @@
       color: var(--rls-taupe);
       margin-bottom: 0.75rem;
     }
-
     .ps-hero__title {
       font-family: 'Raleway', sans-serif !important;
       font-weight: 700 !important;
@@ -81,12 +77,10 @@
       line-height: 1.1 !important;
       margin-bottom: 0 !important;
     }
-
     .ps-hero__title .ps-accent {
       color: var(--rls-red) !important;
       display: inline !important;
     }
-
     .ps-hero__rule {
       display: flex;
       align-items: center;
@@ -101,7 +95,6 @@
       background: var(--rls-red);
       display: block;
     }
-
     .ps-hero__sub {
       font-family: 'Roboto', sans-serif;
       font-weight: 300;
@@ -112,15 +105,18 @@
       line-height: 1.65;
     }
 
-    /* ── Order note banner ──────────────────────── */
+    /* ── Order note ─────────────────────────────── */
+    .ps-wrap {
+      max-width: var(--ps-max);
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
     .ps-order-note {
       background: var(--rls-light-grey);
       border-left: 4px solid var(--rls-red);
       padding: 1rem 1.5rem;
-      max-width: var(--ps-max);
-      margin: 2.5rem auto 0;
+      margin: 2.5rem 0 0;
       font-size: 0.875rem;
-      font-weight: 400;
       line-height: 1.6;
       color: #333;
     }
@@ -128,14 +124,14 @@
     .ps-order-note a { color: var(--rls-red); text-decoration: none; }
     .ps-order-note a:hover { text-decoration: underline; }
 
-    /* ── Main content ───────────────────────────── */
+    /* ── Main ───────────────────────────────────── */
     .ps-main {
       max-width: var(--ps-max);
       margin: 0 auto;
       padding: 2rem 2rem 5rem;
     }
 
-    /* ── Loading / Error states ─────────────────── */
+    /* ── States ─────────────────────────────────── */
     .ps-state {
       text-align: center;
       padding: 4rem 2rem;
@@ -153,11 +149,8 @@
     }
     @keyframes ps-spin { to { transform: rotate(360deg); } }
 
-    /* ── Category section ───────────────────────── */
-    .ps-category {
-      margin-top: 3rem;
-    }
-
+    /* ── Category ───────────────────────────────── */
+    .ps-category { margin-top: 3rem; }
     .ps-category__header {
       display: flex;
       align-items: center;
@@ -166,16 +159,13 @@
       padding-bottom: 0.75rem;
       border-bottom: 2px solid var(--rls-black);
     }
-
     .ps-category__title {
       font-family: 'Raleway', sans-serif;
       font-weight: 700;
       font-size: 1.1rem;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      color: var(--rls-black);
     }
-
     .ps-category__count {
       font-family: 'Roboto', sans-serif;
       font-size: 0.7rem;
@@ -188,75 +178,144 @@
       border-radius: 2px;
     }
 
-    /* ── Item cards grid ────────────────────────── */
+    /* ── Grid ───────────────────────────────────── */
     .ps-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
     }
 
-    /* ── Item card ──────────────────────────────── */
+    /* ── Card ───────────────────────────────────── */
     .ps-card {
       background: var(--rls-white);
       border: 1px solid var(--rls-stone);
       display: flex;
       flex-direction: column;
-      position: relative;
       transition: box-shadow 0.2s ease, border-color 0.2s ease;
     }
-
     .ps-card:hover {
       box-shadow: 0 4px 20px rgba(0,0,0,0.08);
       border-color: var(--rls-taupe);
     }
 
+    /* ── Carousel ───────────────────────────────── */
+    .ps-carousel {
+      position: relative;
+      background: var(--rls-light-grey);
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+    }
+    .ps-carousel__slides {
+      display: flex;
+      height: 100%;
+      transition: transform 0.3s ease;
+    }
+    .ps-carousel__slide {
+      min-width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ps-carousel__slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Placeholder when no images */
+    .ps-carousel__placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--rls-stone);
+    }
+    /* Arrows */
+    .ps-carousel__btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.45);
+      color: #fff;
+      border: none;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+      transition: background 0.2s;
+      padding: 0;
+    }
+    .ps-carousel__btn:hover { background: rgba(0,0,0,0.75); }
+    .ps-carousel__btn--prev { left: 6px; }
+    .ps-carousel__btn--next { right: 6px; }
+    /* Dots */
+    .ps-carousel__dots {
+      position: absolute;
+      bottom: 7px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+    }
+    .ps-carousel__dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.2s;
+    }
+    .ps-carousel__dot.is-active { background: #fff; }
+
+    /* ── Card body ──────────────────────────────── */
     .ps-card__body {
-      padding: 1.25rem 1.25rem 0.75rem;
+      padding: 1.1rem 1.25rem 0.5rem;
       flex: 1;
     }
-
     .ps-card__name {
       font-family: 'Raleway', sans-serif;
       font-weight: 600;
       font-size: 0.95rem;
       line-height: 1.3;
-      margin-bottom: 0.4rem;
-      color: var(--rls-black);
+      margin-bottom: 0.35rem;
     }
-
     .ps-card__desc {
       font-family: 'Roboto', sans-serif;
       font-weight: 300;
       font-size: 0.82rem;
       line-height: 1.55;
       color: #555;
-      margin-bottom: 0.5rem;
     }
-
     .ps-card__notes {
       font-family: 'Roboto', sans-serif;
       font-size: 0.75rem;
       font-style: italic;
       color: var(--rls-taupe);
-      margin-top: 0.25rem;
+      margin-top: 0.4rem;
     }
 
+    /* ── Card footer ────────────────────────────── */
     .ps-card__footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0.75rem 1.25rem 1rem;
       border-top: 1px solid var(--rls-light-grey);
-      margin-top: auto;
+      margin-top: 0.75rem;
     }
-
     .ps-card__price {
       font-family: 'Raleway', sans-serif;
       font-weight: 700;
       font-size: 1.05rem;
-      color: var(--rls-black);
     }
-
     .ps-card__unit {
       font-family: 'Roboto', sans-serif;
       font-weight: 300;
@@ -264,7 +323,6 @@
       color: var(--rls-taupe);
       margin-left: 0.3rem;
     }
-
     .ps-card__order {
       display: inline-flex;
       align-items: center;
@@ -280,13 +338,10 @@
       padding: 0.5rem 0.9rem;
       cursor: pointer;
       text-decoration: none;
-      transition: background 0.2s ease;
+      transition: background 0.2s;
       white-space: nowrap;
     }
-
-    .ps-card__order:hover {
-      background: #c20024;
-    }
+    .ps-card__order:hover { background: #c20024; }
 
     /* ── Footer note ─────────────────────────────── */
     .ps-footer-note {
@@ -308,7 +363,6 @@
 
   <main>
 
-    <!-- Hero -->
     <section class="ps-hero">
       <a class="ps-hero__back" href="../../">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -320,19 +374,16 @@
       <p class="ps-hero__sub">In-house print items and branded supplies. Charges are added to your monthly account.</p>
     </section>
 
-    <!-- Order note -->
-    <div class="ps-main" style="padding-bottom:0; padding-top:2rem;">
+    <div class="ps-wrap">
       <div class="ps-order-note">
-        <strong>How to order:</strong> Click <em>Order Item</em> on any card to send a request to Eliana at
+        <strong>How to order:</strong> Click <em>Order</em> on any item to send a request to Eliana at
         <a href="mailto:solutionsdesign@royallepage.ca">solutionsdesign@royallepage.ca</a>.
         Your order will be confirmed and the cost added to your monthly account statement.
       </div>
     </div>
 
-    <!-- Catalogue -->
     <div class="ps-main">
       <div id="ps-catalogue">
-        <!-- Loading state -->
         <div class="ps-state" id="ps-loading">
           <div class="ps-state__spinner"></div>
           Loading catalogue…
@@ -340,7 +391,6 @@
       </div>
     </div>
 
-    <!-- Footer note -->
     <p class="ps-footer-note">
       Royal LePage® Solutions is independently owned and operated. Not intended to solicit buyers or sellers currently under contract with a brokerage.
       View important notices at <a href="https://rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.
@@ -350,9 +400,10 @@
 
   <script>
   (function () {
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRfsEecQOusUd7yrAombGo4m87-vWVcmP2Z94_YrOPvKE9nkOxinB-44KgM1fjamT8GxZshMrlb1aju/pub?gid=1843119321&single=true&output=csv';
+    const CSV_URL     = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRfsEecQOusUd7yrAombGo4m87-vWVcmP2Z94_YrOPvKE9nkOxinB-44KgM1fjamT8GxZshMrlb1aju/pub?gid=1459472759&single=true&output=csv';
     const ORDER_EMAIL = 'solutionsdesign@royallepage.ca';
-    const catalogue = document.getElementById('ps-catalogue');
+    const IMG_BASE    = '../../../../assets/images/supplies/';
+    const catalogue   = document.getElementById('ps-catalogue');
 
     /* ── CSV parser ─────────────────────────────── */
     function parseCSV(text) {
@@ -382,17 +433,68 @@
       return '$' + n.toFixed(2);
     }
 
-    /* ── Build order mailto ─────────────────────── */
+    /* ── Escape HTML ────────────────────────────── */
+    function esc(str) {
+      return String(str || '')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    /* ── Order mailto ───────────────────────────── */
     function orderMailto(item, price, unit) {
       const subject = encodeURIComponent('Supply Order Request — ' + item);
       const body = encodeURIComponent(
-        'Hi Eliana,\n\nI would like to order the following supply item:\n\n' +
+        'Hi Eliana,\n\nI would like to order the following:\n\n' +
         'Item: ' + item + '\n' +
         'Price: ' + formatPrice(price) + ' ' + unit + '\n' +
         'Quantity: \n\n' +
         'Please add to my monthly account.\n\nThank you,'
       );
       return 'mailto:' + ORDER_EMAIL + '?subject=' + subject + '&body=' + body;
+    }
+
+    /* ── Build carousel HTML ────────────────────── */
+    function buildCarousel(images) {
+      const imgs = images.filter(Boolean);
+
+      if (!imgs.length) {
+        return `<div class="ps-carousel">
+          <div class="ps-carousel__placeholder">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="10" width="36" height="28" rx="2" stroke="#D6D1C8" stroke-width="2"/>
+              <circle cx="17" cy="21" r="4" stroke="#D6D1C8" stroke-width="2"/>
+              <path d="M6 34l10-8 8 6 6-8 12 10" stroke="#D6D1C8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>`;
+      }
+
+      const slides = imgs.map(f =>
+        `<div class="ps-carousel__slide">
+          <img src="${IMG_BASE}${esc(f)}" alt="" loading="lazy" onerror="this.parentElement.style.background='var(--rls-light-grey)';this.style.display='none'">
+        </div>`
+      ).join('');
+
+      const dots = imgs.length > 1
+        ? `<div class="ps-carousel__dots">
+            ${imgs.map((_,i) => `<button class="ps-carousel__dot${i===0?' is-active':''}" data-index="${i}" aria-label="Image ${i+1}"></button>`).join('')}
+          </div>`
+        : '';
+
+      const arrows = imgs.length > 1
+        ? `<button class="ps-carousel__btn ps-carousel__btn--prev" aria-label="Previous">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="ps-carousel__btn ps-carousel__btn--next" aria-label="Next">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>`
+        : '';
+
+      return `<div class="ps-carousel" data-total="${imgs.length}" data-current="0">
+        <div class="ps-carousel__slides">${slides}</div>
+        ${arrows}
+        ${dots}
+      </div>`;
     }
 
     /* ── Render catalogue ───────────────────────── */
@@ -402,89 +504,110 @@
         return;
       }
 
-      // Normalise headers
       const headers = rows[0].map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
       const idx = {
-        category:    headers.indexOf('category'),
-        item:        headers.indexOf('item'),
-        description: headers.indexOf('description'),
-        price:       headers.indexOf('price'),
-        unit:        headers.indexOf('unit'),
-        notes:       headers.indexOf('notes'),
+        category: headers.indexOf('category'),
+        item:     headers.indexOf('item'),
+        desc:     headers.indexOf('description'),
+        price:    headers.indexOf('price'),
+        unit:     headers.indexOf('unit'),
+        notes:    headers.indexOf('notes'),
+        img1:     headers.indexOf('image1'),
+        img2:     headers.indexOf('image2'),
+        img3:     headers.indexOf('image3'),
+        img4:     headers.indexOf('image4'),
       };
 
-      // Group by category (preserve order of first appearance)
       const categories = [];
       const groups = {};
+
       for (let i = 1; i < rows.length; i++) {
-        const row = rows[i];
-        if (!row || row.every(c => !c)) continue;
-        const cat  = (row[idx.category] || 'Other').trim();
-        const item = (row[idx.item]     || '').trim();
+        const r = rows[i];
+        if (!r || r.every(c => !c)) continue;
+        const cat  = (r[idx.category] || 'Other').trim();
+        const item = (r[idx.item]     || '').trim();
         if (!item) continue;
         if (!groups[cat]) { groups[cat] = []; categories.push(cat); }
         groups[cat].push({
           item,
-          desc:  (row[idx.description] || '').trim(),
-          price: (row[idx.price]       || '').trim(),
-          unit:  (row[idx.unit]        || '').trim(),
-          notes: (row[idx.notes]       || '').trim(),
+          desc:   (r[idx.desc]  || '').trim(),
+          price:  (r[idx.price] || '').trim(),
+          unit:   (r[idx.unit]  || '').trim(),
+          notes:  (r[idx.notes] || '').trim(),
+          images: [
+            (r[idx.img1] || '').trim(),
+            (r[idx.img2] || '').trim(),
+            (r[idx.img3] || '').trim(),
+            (r[idx.img4] || '').trim(),
+          ],
         });
       }
 
-      // Build HTML
       let html = '';
       categories.forEach(cat => {
         const items = groups[cat];
-        html += `
-          <div class="ps-category">
-            <div class="ps-category__header">
-              <h2 class="ps-category__title">${escHtml(cat)}</h2>
-              <span class="ps-category__count">${items.length} item${items.length !== 1 ? 's' : ''}</span>
-            </div>
-            <div class="ps-grid">
-              ${items.map(p => `
-                <div class="ps-card">
-                  <div class="ps-card__body">
-                    <p class="ps-card__name">${escHtml(p.item)}</p>
-                    ${p.desc  ? `<p class="ps-card__desc">${escHtml(p.desc)}</p>` : ''}
-                    ${p.notes ? `<p class="ps-card__notes">${escHtml(p.notes)}</p>` : ''}
-                  </div>
-                  <div class="ps-card__footer">
-                    <div>
-                      <span class="ps-card__price">${escHtml(formatPrice(p.price))}</span>
-                      ${p.unit ? `<span class="ps-card__unit">${escHtml(p.unit)}</span>` : ''}
-                    </div>
-                    <a class="ps-card__order" href="${orderMailto(p.item, p.price, p.unit)}">
-                      Order
-                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M10 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
-                  </div>
+        html += `<div class="ps-category">
+          <div class="ps-category__header">
+            <h2 class="ps-category__title">${esc(cat)}</h2>
+            <span class="ps-category__count">${items.length} item${items.length !== 1 ? 's' : ''}</span>
+          </div>
+          <div class="ps-grid">
+            ${items.map(p => `
+              <div class="ps-card">
+                ${buildCarousel(p.images)}
+                <div class="ps-card__body">
+                  <p class="ps-card__name">${esc(p.item)}</p>
+                  ${p.desc  ? `<p class="ps-card__desc">${esc(p.desc)}</p>`   : ''}
+                  ${p.notes ? `<p class="ps-card__notes">${esc(p.notes)}</p>` : ''}
                 </div>
-              `).join('')}
-            </div>
-          </div>`;
+                <div class="ps-card__footer">
+                  <div>
+                    <span class="ps-card__price">${esc(formatPrice(p.price))}</span>
+                    ${p.unit ? `<span class="ps-card__unit">${esc(p.unit)}</span>` : ''}
+                  </div>
+                  <a class="ps-card__order" href="${orderMailto(p.item, p.price, p.unit)}">
+                    Order
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M10 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </a>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>`;
       });
 
       catalogue.innerHTML = html;
+      initCarousels();
     }
 
-    /* ── Escape HTML ────────────────────────────── */
-    function escHtml(str) {
-      return String(str)
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;')
-        .replace(/"/g,'&quot;');
+    /* ── Carousel interaction ───────────────────── */
+    function initCarousels() {
+      document.querySelectorAll('.ps-carousel[data-total]').forEach(car => {
+        const total   = parseInt(car.dataset.total, 10);
+        if (total < 2) return;
+        const track   = car.querySelector('.ps-carousel__slides');
+        const dots    = car.querySelectorAll('.ps-carousel__dot');
+        let current   = 0;
+
+        function goTo(n) {
+          current = (n + total) % total;
+          track.style.transform = `translateX(-${current * 100}%)`;
+          dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
+        }
+
+        car.querySelector('.ps-carousel__btn--prev').addEventListener('click', () => goTo(current - 1));
+        car.querySelector('.ps-carousel__btn--next').addEventListener('click', () => goTo(current + 1));
+        dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+      });
     }
 
     /* ── Fetch ──────────────────────────────────── */
     fetch(CSV_URL)
       .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-      .then(text => { render(parseCSV(text)); })
+      .then(text => render(parseCSV(text)))
       .catch(err => {
         catalogue.innerHTML = `<div class="ps-state">
-          Unable to load catalogue. Please try refreshing the page.<br>
+          Unable to load catalogue. Please try refreshing.<br>
           <small style="color:#999;margin-top:0.5rem;display:block;">${err.message}</small>
         </div>`;
       });
