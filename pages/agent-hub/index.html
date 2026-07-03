@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Hub — Royal LePage Solutions</title>
+  <meta name="description" content="Your central resource for brand assets, print supplies, preferred suppliers, and tools — Royal LePage Solutions.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Header CSS -->
+  <link rel="stylesheet" href="../../assets/css/header.css?v=1015">
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="../../assets/css/styles.css?v=1001">
+  <!-- Header JS -->
+  <script defer src="../../assets/js/header.js?v=1014"></script>
+
+  <style>
+    /* ── Variables ─────────────────────────────── */
+    :root {
+      --rls-red:        #EA002A;
+      --rls-black:      #000000;
+      --rls-white:      #FFFFFF;
+      --rls-taupe:      #A89E92;
+      --rls-stone:      #D6D1C8;
+      --rls-light-grey: #EFEFEF;
+
+      --hub-max:        1100px;
+      --hub-gap:        2rem;
+    }
+
+    /* ── Reset / Base ───────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--rls-white);
+      color: var(--rls-black);
+    }
+
+    /* ── Hero ───────────────────────────────────── */
+    .hub-hero {
+      background: var(--rls-black);
+      color: var(--rls-white);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+
+    .hub-hero__eyebrow {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rls-taupe);
+      margin-bottom: 1rem;
+    }
+
+    .hub-hero__title {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+
+    .hub-hero__title span {
+      color: var(--rls-red);
+    }
+
+    .hub-hero__sub {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
+      font-size: 1rem;
+      color: var(--rls-stone);
+      margin-top: 1rem;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    /* ── Rule accent ────────────────────────────── */
+    .hub-rule {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      justify-content: center;
+      margin: 1.5rem auto 0;
+      width: fit-content;
+    }
+
+    .hub-rule__line {
+      width: 40px;
+      height: 2px;
+      background: var(--rls-red);
+    }
+
+    /* ── Grid ───────────────────────────────────── */
+    .hub-grid-section {
+      padding: 4rem 2rem 5rem;
+      max-width: var(--hub-max);
+      margin: 0 auto;
+    }
+
+    .hub-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--hub-gap);
+    }
+
+    @media (max-width: 640px) {
+      .hub-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── Cards ──────────────────────────────────── */
+    .hub-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--rls-white);
+      border: 1px solid var(--rls-stone);
+      text-decoration: none;
+      color: var(--rls-black);
+      transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hub-card::before {
+      content: '';
+      display: block;
+      height: 4px;
+      background: var(--rls-red);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+
+    .hub-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .hub-card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      border-color: var(--rls-taupe);
+      transform: translateY(-2px);
+    }
+
+    .hub-card__icon {
+      padding: 2rem 2rem 0;
+      font-size: 2rem;
+      line-height: 1;
+      color: var(--rls-red);
+    }
+
+    .hub-card__body {
+      padding: 1.25rem 2rem 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hub-card__label {
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rls-taupe);
+      margin-bottom: 0.4rem;
+    }
+
+    .hub-card__title {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    .hub-card__desc {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: #444;
+      flex: 1;
+    }
+
+    .hub-card__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1.5rem;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--rls-red);
+    }
+
+    .hub-card__cta svg {
+      transition: transform 0.2s ease;
+    }
+
+    .hub-card:hover .hub-card__cta svg {
+      transform: translateX(4px);
+    }
+
+    /* ── Footer note ─────────────────────────────── */
+    .hub-footer-note {
+      text-align: center;
+      padding: 0 2rem 3rem;
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: var(--rls-taupe);
+    }
+
+    .hub-footer-note a {
+      color: var(--rls-taupe);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hub-hero">
+      <p class="hub-hero__eyebrow">Royal LePage Solutions®</p>
+      <h1 class="hub-hero__title">Agent <span>Hub</span></h1>
+      <div class="hub-rule">
+        <div class="hub-rule__line"></div>
+        <div class="hub-rule__line"></div>
+      </div>
+      <p class="hub-hero__sub">Everything you need to market yourself and your listings — in one place.</p>
+    </section>
+
+    <!-- Hub Cards -->
+    <section class="hub-grid-section">
+      <div class="hub-grid">
+
+        <!-- Brand Assets -->
+        <a class="hub-card" href="../agent-hub-brand-assets/">
+          <div class="hub-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="6" width="20" height="14" rx="1" stroke="#EA002A" stroke-width="2"/>
+              <path d="M6 20v4h20V10h-2" stroke="#EA002A" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="9" cy="12" r="2" stroke="#EA002A" stroke-width="1.5"/>
+              <path d="M2 18l5-4 4 3 4-5 7 7" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="hub-card__body">
+            <p class="hub-card__label">Section 01</p>
+            <h2 class="hub-card__title">Brand Assets</h2>
+            <p class="hub-card__desc">Download approved Royal LePage Solutions logos, brand colours, fonts, and guidelines for use in your marketing materials.</p>
+            <span class="hub-card__cta">
+              Browse Assets
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- Print & Supplies -->
+        <a class="hub-card" href="../agent-hub-print-supplies/">
+          <div class="hub-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="8" y="2" width="16" height="20" rx="1" stroke="#EA002A" stroke-width="2"/>
+              <path d="M4 10h4M4 22h4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round"/>
+              <rect x="4" y="10" width="24" height="14" rx="1" stroke="#EA002A" stroke-width="2"/>
+              <path d="M8 28h16" stroke="#EA002A" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="22" cy="17" r="2" fill="#EA002A"/>
+            </svg>
+          </div>
+          <div class="hub-card__body">
+            <p class="hub-card__label">Section 02</p>
+            <h2 class="hub-card__title">Print &amp; Supplies</h2>
+            <p class="hub-card__desc">Order paper, presentation folders, signs, CREB supplies, and other in-house items. Charges are added to your monthly account.</p>
+            <span class="hub-card__cta">
+              View Catalogue
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- Preferred Suppliers -->
+        <a class="hub-card" href="../agent-hub-suppliers/">
+          <div class="hub-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="10" r="4" stroke="#EA002A" stroke-width="2"/>
+              <circle cx="6" cy="22" r="3" stroke="#EA002A" stroke-width="2"/>
+              <circle cx="26" cy="22" r="3" stroke="#EA002A" stroke-width="2"/>
+              <path d="M9 21c1-4 4-6 7-6s6 2 7 6" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="hub-card__body">
+            <p class="hub-card__label">Section 03</p>
+            <h2 class="hub-card__title">Preferred Suppliers</h2>
+            <p class="hub-card__desc">Trusted vendors recommended by Royal LePage Solutions — photographers, home stagers, lawyers, mortgage partners, and more.</p>
+            <span class="hub-card__cta">
+              View Directory
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- Tools & Resources -->
+        <a class="hub-card" href="../agent-hub-tools/">
+          <div class="hub-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="5" width="26" height="18" rx="2" stroke="#EA002A" stroke-width="2"/>
+              <path d="M3 9h26" stroke="#EA002A" stroke-width="1.5"/>
+              <circle cx="7" cy="7" r="1" fill="#EA002A"/>
+              <circle cx="11" cy="7" r="1" fill="#EA002A"/>
+              <path d="M8 15l4 4 8-6" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M13 23v4M9 27h14" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="hub-card__body">
+            <p class="hub-card__label">Section 04</p>
+            <h2 class="hub-card__title">Tools &amp; Resources</h2>
+            <p class="hub-card__desc">Quick links to the platforms and tools you use every day — Canva, Matrix, Smart Leads, RLP Connect, and more.</p>
+            <span class="hub-card__cta">
+              Open Tools
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- Footer note -->
+    <p class="hub-footer-note">
+      Royal LePage® Solutions is independently owned and operated. Not intended to solicit buyers or sellers currently under contract with a brokerage.
+      View important notices at <a href="https://rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.
+    </p>
+
+  </main>
+
+</body>
+</html>
