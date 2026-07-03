@@ -6,16 +6,12 @@
   <title>Print &amp; Supplies — Agent Hub — Royal LePage Solutions</title>
   <meta name="description" content="Order in-house print supplies and branded materials. Charges are added to your monthly account.">
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
-  <!-- Header CSS -->
   <link rel="stylesheet" href="../../../../assets/css/header.css?v=1015">
-  <!-- Site CSS -->
   <link rel="stylesheet" href="../../../../assets/css/styles.css?v=1001">
-  <!-- Header JS -->
   <script defer src="../../../../assets/js/header.js?v=1014"></script>
 
   <style>
@@ -28,341 +24,161 @@
       --rls-light-grey: #EFEFEF;
       --ps-max:         1100px;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: var(--rls-white);
-      color: var(--rls-black);
-    }
+    body { font-family: 'Roboto', sans-serif; background: var(--rls-white); color: var(--rls-black); }
 
     /* ── Hero ───────────────────────────────────── */
-    .ps-hero {
-      background: var(--rls-black);
-      color: var(--rls-white);
-      padding: 5rem 2rem 3.5rem;
-      text-align: center;
-    }
+    .ps-hero { background: var(--rls-black); color: var(--rls-white); padding: 5rem 2rem 3.5rem; text-align: center; }
     .ps-hero__back {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: 'Roboto', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 400;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--rls-taupe);
-      text-decoration: none;
-      margin-bottom: 1.5rem;
-      transition: color 0.2s;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'Roboto', sans-serif; font-size: 0.75rem; font-weight: 400;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--rls-taupe);
+      text-decoration: none; margin-bottom: 1.5rem; transition: color 0.2s;
     }
     .ps-hero__back:hover { color: var(--rls-white); }
     .ps-hero__eyebrow {
-      font-family: 'Roboto', sans-serif;
-      font-weight: 300;
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--rls-taupe);
-      margin-bottom: 0.75rem;
+      font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 0.75rem;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--rls-taupe); margin-bottom: 0.75rem;
     }
     .ps-hero__title {
-      font-family: 'Raleway', sans-serif !important;
-      font-weight: 700 !important;
-      font-size: clamp(2rem, 4vw, 3rem) !important;
-      color: var(--rls-white) !important;
-      letter-spacing: -0.01em !important;
-      line-height: 1.1 !important;
-      margin-bottom: 0 !important;
+      font-family: 'Raleway', sans-serif !important; font-weight: 700 !important;
+      font-size: clamp(2rem, 4vw, 3rem) !important; color: var(--rls-white) !important;
+      letter-spacing: -0.01em !important; line-height: 1.1 !important; margin-bottom: 0 !important;
     }
-    .ps-hero__title .ps-accent {
-      color: var(--rls-red) !important;
-      display: inline !important;
-    }
-    .ps-hero__rule {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      justify-content: center;
-      margin: 1.25rem auto;
-      width: fit-content;
-    }
-    .ps-hero__rule span {
-      width: 36px;
-      height: 2px;
-      background: var(--rls-red);
-      display: block;
-    }
-    .ps-hero__sub {
-      font-family: 'Roboto', sans-serif;
-      font-weight: 300;
-      font-size: 0.95rem;
-      color: var(--rls-stone);
-      max-width: 480px;
-      margin: 0 auto;
-      line-height: 1.65;
-    }
+    .ps-hero__title .ps-accent { color: var(--rls-red) !important; display: inline !important; }
+    .ps-hero__rule { display: flex; align-items: center; gap: 0.75rem; justify-content: center; margin: 1.25rem auto; width: fit-content; }
+    .ps-hero__rule span { width: 36px; height: 2px; background: var(--rls-red); display: block; }
+    .ps-hero__sub { font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 0.95rem; color: var(--rls-stone); max-width: 480px; margin: 0 auto; line-height: 1.65; }
 
     /* ── Order note ─────────────────────────────── */
-    .ps-wrap {
-      max-width: var(--ps-max);
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
+    .ps-wrap { max-width: var(--ps-max); margin: 0 auto; padding: 0 2rem; }
     .ps-order-note {
-      background: var(--rls-light-grey);
-      border-left: 4px solid var(--rls-red);
-      padding: 1rem 1.5rem;
-      margin: 2.5rem 0 0;
-      font-size: 0.875rem;
-      line-height: 1.6;
-      color: #333;
+      background: var(--rls-light-grey); border-left: 4px solid var(--rls-red);
+      padding: 1rem 1.5rem; margin: 2.5rem 0 0; font-size: 0.875rem; line-height: 1.6; color: #333;
     }
     .ps-order-note strong { font-weight: 600; }
     .ps-order-note a { color: var(--rls-red); text-decoration: none; }
     .ps-order-note a:hover { text-decoration: underline; }
 
     /* ── Main ───────────────────────────────────── */
-    .ps-main {
-      max-width: var(--ps-max);
-      margin: 0 auto;
-      padding: 2rem 2rem 5rem;
-    }
+    .ps-main { max-width: var(--ps-max); margin: 0 auto; padding: 2rem 2rem 5rem; }
 
     /* ── States ─────────────────────────────────── */
-    .ps-state {
-      text-align: center;
-      padding: 4rem 2rem;
-      color: var(--rls-taupe);
-      font-size: 0.95rem;
-    }
+    .ps-state { text-align: center; padding: 4rem 2rem; color: var(--rls-taupe); font-size: 0.95rem; }
     .ps-state__spinner {
-      width: 32px;
-      height: 32px;
-      border: 3px solid var(--rls-stone);
-      border-top-color: var(--rls-red);
-      border-radius: 50%;
-      animation: ps-spin 0.8s linear infinite;
-      margin: 0 auto 1rem;
+      width: 32px; height: 32px; border: 3px solid var(--rls-stone);
+      border-top-color: var(--rls-red); border-radius: 50%;
+      animation: ps-spin 0.8s linear infinite; margin: 0 auto 1rem;
     }
     @keyframes ps-spin { to { transform: rotate(360deg); } }
 
     /* ── Category ───────────────────────────────── */
     .ps-category { margin-top: 3rem; }
-    .ps-category__header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 2px solid var(--rls-black);
-    }
-    .ps-category__title {
-      font-family: 'Raleway', sans-serif;
-      font-weight: 700;
-      font-size: 1.1rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-    .ps-category__count {
-      font-family: 'Roboto', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--rls-taupe);
-      background: var(--rls-light-grey);
-      padding: 0.2rem 0.6rem;
-      border-radius: 2px;
-    }
+    .ps-category__header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--rls-black); }
+    .ps-category__title { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    .ps-category__count { font-family: 'Roboto', sans-serif; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rls-taupe); background: var(--rls-light-grey); padding: 0.2rem 0.6rem; border-radius: 2px; }
 
     /* ── Grid ───────────────────────────────────── */
-    .ps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.25rem;
-    }
+    .ps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; }
 
     /* ── Card ───────────────────────────────────── */
-    .ps-card {
-      background: var(--rls-white);
-      border: 1px solid var(--rls-stone);
-      display: flex;
-      flex-direction: column;
-      transition: box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-    .ps-card:hover {
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      border-color: var(--rls-taupe);
-    }
+    .ps-card { background: var(--rls-white); border: 1px solid var(--rls-stone); display: flex; flex-direction: column; transition: box-shadow 0.2s ease, border-color 0.2s ease; }
+    .ps-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-color: var(--rls-taupe); }
 
     /* ── Carousel ───────────────────────────────── */
-    .ps-carousel {
-      position: relative;
-      background: var(--rls-light-grey);
-      aspect-ratio: 4 / 3;
-      overflow: hidden;
-    }
-    .ps-carousel__slides {
-      display: flex;
-      height: 100%;
-      transition: transform 0.3s ease;
-    }
-    .ps-carousel__slide {
-      min-width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .ps-carousel__slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    /* Placeholder when no images */
-    .ps-carousel__placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--rls-stone);
-    }
-    /* Arrows */
+    .ps-carousel { position: relative; background: var(--rls-light-grey); aspect-ratio: 4/3; overflow: hidden; }
+    .ps-carousel__slides { display: flex; height: 100%; transition: transform 0.3s ease; will-change: transform; }
+    .ps-carousel__slide { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
+    .ps-carousel__slide img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease; }
+    .ps-carousel__slide:hover img { transform: scale(1.03); }
+    .ps-carousel__placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--rls-stone); }
     .ps-carousel__btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,0.45);
-      color: #fff;
-      border: none;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 2;
-      transition: background 0.2s;
-      padding: 0;
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.45); color: #fff; border: none;
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 2; transition: background 0.2s; padding: 0;
     }
     .ps-carousel__btn:hover { background: rgba(0,0,0,0.75); }
     .ps-carousel__btn--prev { left: 6px; }
     .ps-carousel__btn--next { right: 6px; }
-    /* Dots */
-    .ps-carousel__dots {
-      position: absolute;
-      bottom: 7px;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-      gap: 5px;
-    }
-    .ps-carousel__dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.5);
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      transition: background 0.2s;
-    }
+    .ps-carousel__dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 5px; }
+    .ps-carousel__dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.5); border: none; cursor: pointer; padding: 0; transition: background 0.2s; }
     .ps-carousel__dot.is-active { background: #fff; }
+    .ps-carousel__zoom-hint {
+      position: absolute; bottom: 8px; right: 10px;
+      font-size: 0.65rem; color: rgba(255,255,255,0.7);
+      font-family: 'Roboto', sans-serif; letter-spacing: 0.05em;
+      pointer-events: none; opacity: 0; transition: opacity 0.2s;
+    }
+    .ps-carousel:hover .ps-carousel__zoom-hint { opacity: 1; }
 
-    /* ── Card body ──────────────────────────────── */
-    .ps-card__body {
-      padding: 1.1rem 1.25rem 0.5rem;
-      flex: 1;
-    }
-    .ps-card__name {
-      font-family: 'Raleway', sans-serif;
-      font-weight: 600;
-      font-size: 0.95rem;
-      line-height: 1.3;
-      margin-bottom: 0.35rem;
-    }
-    .ps-card__desc {
-      font-family: 'Roboto', sans-serif;
-      font-weight: 300;
-      font-size: 0.82rem;
-      line-height: 1.55;
-      color: #555;
-    }
-    .ps-card__notes {
-      font-family: 'Roboto', sans-serif;
-      font-size: 0.75rem;
-      font-style: italic;
-      color: var(--rls-taupe);
-      margin-top: 0.4rem;
-    }
-
-    /* ── Card footer ────────────────────────────── */
-    .ps-card__footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem 1.25rem 1rem;
-      border-top: 1px solid var(--rls-light-grey);
-      margin-top: 0.75rem;
-    }
-    .ps-card__price {
-      font-family: 'Raleway', sans-serif;
-      font-weight: 700;
-      font-size: 1.05rem;
-    }
-    .ps-card__unit {
-      font-family: 'Roboto', sans-serif;
-      font-weight: 300;
-      font-size: 0.72rem;
-      color: var(--rls-taupe);
-      margin-left: 0.3rem;
-    }
+    /* ── Card body / footer ─────────────────────── */
+    .ps-card__body { padding: 1.1rem 1.25rem 0.5rem; flex: 1; }
+    .ps-card__name { font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.95rem; line-height: 1.3; margin-bottom: 0.35rem; }
+    .ps-card__desc { font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 0.82rem; line-height: 1.55; color: #555; }
+    .ps-card__notes { font-family: 'Roboto', sans-serif; font-size: 0.75rem; font-style: italic; color: var(--rls-taupe); margin-top: 0.4rem; }
+    .ps-card__footer { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem 1rem; border-top: 1px solid var(--rls-light-grey); margin-top: 0.75rem; }
+    .ps-card__price { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.05rem; }
+    .ps-card__unit { font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 0.72rem; color: var(--rls-taupe); margin-left: 0.3rem; }
     .ps-card__order {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      background: var(--rls-red);
-      color: var(--rls-white);
-      border: none;
-      font-family: 'Raleway', sans-serif;
-      font-weight: 600;
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.5rem 0.9rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.2s;
-      white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: var(--rls-red); color: var(--rls-white); border: none;
+      font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.72rem;
+      letter-spacing: 0.08em; text-transform: uppercase; padding: 0.5rem 0.9rem;
+      cursor: pointer; text-decoration: none; transition: background 0.2s; white-space: nowrap;
     }
     .ps-card__order:hover { background: #c20024; }
 
-    /* ── Footer note ─────────────────────────────── */
-    .ps-footer-note {
-      text-align: center;
-      padding: 0 2rem 3rem;
-      font-family: 'Roboto', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 300;
-      color: var(--rls-taupe);
+    /* ── Lightbox ───────────────────────────────── */
+    .ps-lightbox {
+      display: none;
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.92);
+      align-items: center; justify-content: center;
+      padding: 1rem;
     }
+    .ps-lightbox.is-open { display: flex; }
+    .ps-lightbox__img {
+      max-width: min(90vw, 900px);
+      max-height: 85vh;
+      object-fit: contain;
+      display: block;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.6);
+    }
+    .ps-lightbox__close {
+      position: fixed; top: 1.25rem; right: 1.25rem;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+      color: #fff; width: 40px; height: 40px; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; z-index: 1;
+    }
+    .ps-lightbox__close:hover { background: rgba(255,255,255,0.25); }
+    .ps-lightbox__btn {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+      color: #fff; width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background 0.2s; z-index: 1; border-radius: 2px;
+    }
+    .ps-lightbox__btn:hover { background: rgba(255,255,255,0.25); }
+    .ps-lightbox__btn--prev { left: 1.25rem; }
+    .ps-lightbox__btn--next { right: 1.25rem; }
+    .ps-lightbox__counter {
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      font-family: 'Roboto', sans-serif; font-size: 0.8rem; color: rgba(255,255,255,0.6);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── Footer note ─────────────────────────────── */
+    .ps-footer-note { text-align: center; padding: 0 2rem 3rem; font-family: 'Roboto', sans-serif; font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); }
     .ps-footer-note a { color: var(--rls-taupe); text-decoration: underline; }
 
-    @media (max-width: 600px) {
-      .ps-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 600px) { .ps-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
   <main>
-
     <section class="ps-hero">
       <a class="ps-hero__back" href="../../">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -384,7 +200,7 @@
 
     <div class="ps-main">
       <div id="ps-catalogue">
-        <div class="ps-state" id="ps-loading">
+        <div class="ps-state">
           <div class="ps-state__spinner"></div>
           Loading catalogue…
         </div>
@@ -395,8 +211,22 @@
       Royal LePage® Solutions is independently owned and operated. Not intended to solicit buyers or sellers currently under contract with a brokerage.
       View important notices at <a href="https://rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.
     </p>
-
   </main>
+
+  <!-- Lightbox -->
+  <div class="ps-lightbox" id="ps-lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="ps-lightbox__close" id="ps-lb-close" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 2l14 14M16 2L2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <button class="ps-lightbox__btn ps-lightbox__btn--prev" id="ps-lb-prev" aria-label="Previous image">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 3L5 9l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <img class="ps-lightbox__img" id="ps-lb-img" src="" alt="">
+    <button class="ps-lightbox__btn ps-lightbox__btn--next" id="ps-lb-next" aria-label="Next image">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 3l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="ps-lightbox__counter" id="ps-lb-counter"></div>
+  </div>
 
   <script>
   (function () {
@@ -405,6 +235,43 @@
     const IMG_BASE    = '../../../../assets/images/supplies/';
     const catalogue   = document.getElementById('ps-catalogue');
 
+    /* ── Lightbox state ─────────────────────────── */
+    const lb        = document.getElementById('ps-lightbox');
+    const lbImg     = document.getElementById('ps-lb-img');
+    const lbCounter = document.getElementById('ps-lb-counter');
+    const lbClose   = document.getElementById('ps-lb-close');
+    const lbPrev    = document.getElementById('ps-lb-prev');
+    const lbNext    = document.getElementById('ps-lb-next');
+    let lbImages = [], lbIndex = 0;
+
+    function lbOpen(images, index) {
+      lbImages = images;
+      lbIndex  = index;
+      lbShow();
+      lb.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function lbClose_() {
+      lb.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+    function lbShow() {
+      lbImg.src = lbImages[lbIndex];
+      lbCounter.textContent = lbImages.length > 1 ? (lbIndex + 1) + ' / ' + lbImages.length : '';
+      lbPrev.style.display = lbImages.length > 1 ? 'flex' : 'none';
+      lbNext.style.display = lbImages.length > 1 ? 'flex' : 'none';
+    }
+    lbClose.addEventListener('click', lbClose_);
+    lbPrev.addEventListener('click', () => { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; lbShow(); });
+    lbNext.addEventListener('click', () => { lbIndex = (lbIndex + 1) % lbImages.length; lbShow(); });
+    lb.addEventListener('click', e => { if (e.target === lb) lbClose_(); });
+    document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('is-open')) return;
+      if (e.key === 'Escape') lbClose_();
+      if (e.key === 'ArrowLeft')  { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; lbShow(); }
+      if (e.key === 'ArrowRight') { lbIndex = (lbIndex + 1) % lbImages.length; lbShow(); }
+    });
+
     /* ── CSV parser ─────────────────────────────── */
     function parseCSV(text) {
       const rows = [];
@@ -412,8 +279,7 @@
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
         if (!line) continue;
-        const cols = [];
-        let cur = '', inQuote = false;
+        const cols = []; let cur = '', inQuote = false;
         for (let j = 0; j < line.length; j++) {
           const ch = line[j];
           if (ch === '"') { inQuote = !inQuote; }
@@ -426,41 +292,26 @@
       return rows;
     }
 
-    /* ── Format price ───────────────────────────── */
-    function formatPrice(raw) {
-      const n = parseFloat(raw);
-      if (isNaN(n)) return raw;
-      return '$' + n.toFixed(2);
-    }
+    function formatPrice(raw) { const n = parseFloat(raw); return isNaN(n) ? raw : '$' + n.toFixed(2); }
 
-    /* ── Escape HTML ────────────────────────────── */
     function esc(str) {
-      return String(str || '')
-        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
-    /* ── Order mailto ───────────────────────────── */
     function orderMailto(item, price, unit) {
       const subject = encodeURIComponent('Supply Order Request — ' + item);
-      const body = encodeURIComponent(
-        'Hi Eliana,\n\nI would like to order the following:\n\n' +
-        'Item: ' + item + '\n' +
-        'Price: ' + formatPrice(price) + ' ' + unit + '\n' +
-        'Quantity: \n\n' +
-        'Please add to my monthly account.\n\nThank you,'
-      );
+      const body = encodeURIComponent('Hi Eliana,\n\nI would like to order the following:\n\nItem: ' + item + '\nPrice: ' + formatPrice(price) + ' ' + unit + '\nQuantity: \n\nPlease add to my monthly account.\n\nThank you,');
       return 'mailto:' + ORDER_EMAIL + '?subject=' + subject + '&body=' + body;
     }
 
-    /* ── Build carousel HTML ────────────────────── */
+    /* ── Build carousel ─────────────────────────── */
     function buildCarousel(images) {
       const imgs = images.filter(Boolean);
 
       if (!imgs.length) {
         return `<div class="ps-carousel">
           <div class="ps-carousel__placeholder">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
               <rect x="6" y="10" width="36" height="28" rx="2" stroke="#D6D1C8" stroke-width="2"/>
               <circle cx="17" cy="21" r="4" stroke="#D6D1C8" stroke-width="2"/>
               <path d="M6 34l10-8 8 6 6-8 12 10" stroke="#D6D1C8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -469,42 +320,41 @@
         </div>`;
       }
 
-      const slides = imgs.map(f =>
-        `<div class="ps-carousel__slide">
-          <img src="${IMG_BASE}${esc(f)}" alt="" loading="lazy" onerror="this.parentElement.style.background='var(--rls-light-grey)';this.style.display='none'">
+      const fullPaths = imgs.map(f => IMG_BASE + f);
+
+      const slides = imgs.map((f, i) =>
+        `<div class="ps-carousel__slide" data-index="${i}">
+          <img src="${IMG_BASE}${esc(f)}" alt="" loading="lazy"
+            onerror="this.style.display='none';console.warn('Image not found:','${IMG_BASE}${f}')">
         </div>`
       ).join('');
 
       const dots = imgs.length > 1
-        ? `<div class="ps-carousel__dots">
-            ${imgs.map((_,i) => `<button class="ps-carousel__dot${i===0?' is-active':''}" data-index="${i}" aria-label="Image ${i+1}"></button>`).join('')}
-          </div>`
+        ? `<div class="ps-carousel__dots">${imgs.map((_,i) => `<button class="ps-carousel__dot${i===0?' is-active':''}" data-index="${i}" aria-label="Image ${i+1}"></button>`).join('')}</div>`
         : '';
 
       const arrows = imgs.length > 1
         ? `<button class="ps-carousel__btn ps-carousel__btn--prev" aria-label="Previous">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button class="ps-carousel__btn ps-carousel__btn--next" aria-label="Next">
+           </button>
+           <button class="ps-carousel__btn ps-carousel__btn--next" aria-label="Next">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>`
+           </button>`
         : '';
 
-      return `<div class="ps-carousel" data-total="${imgs.length}" data-current="0">
+      const hint = `<span class="ps-carousel__zoom-hint">click to enlarge</span>`;
+
+      return `<div class="ps-carousel" data-total="${imgs.length}" data-current="0" data-images='${JSON.stringify(fullPaths)}'>
         <div class="ps-carousel__slides">${slides}</div>
-        ${arrows}
-        ${dots}
+        ${arrows}${dots}${hint}
       </div>`;
     }
 
-    /* ── Render catalogue ───────────────────────── */
+    /* ── Render ─────────────────────────────────── */
     function render(rows) {
-      if (rows.length < 2) {
-        catalogue.innerHTML = '<div class="ps-state">No items found. Check back soon.</div>';
-        return;
-      }
+      if (rows.length < 2) { catalogue.innerHTML = '<div class="ps-state">No items found. Check back soon.</div>'; return; }
 
-      const headers = rows[0].map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+      const headers = rows[0].map(h => h.toLowerCase().replace(/[^a-z0-9]/g,''));
       const idx = {
         category: headers.indexOf('category'),
         item:     headers.indexOf('item'),
@@ -518,28 +368,18 @@
         img4:     headers.indexOf('image4'),
       };
 
-      const categories = [];
-      const groups = {};
-
+      const categories = [], groups = {};
       for (let i = 1; i < rows.length; i++) {
         const r = rows[i];
         if (!r || r.every(c => !c)) continue;
-        const cat  = (r[idx.category] || 'Other').trim();
-        const item = (r[idx.item]     || '').trim();
+        const cat = (r[idx.category] || 'Other').trim();
+        const item = (r[idx.item] || '').trim();
         if (!item) continue;
         if (!groups[cat]) { groups[cat] = []; categories.push(cat); }
         groups[cat].push({
-          item,
-          desc:   (r[idx.desc]  || '').trim(),
-          price:  (r[idx.price] || '').trim(),
-          unit:   (r[idx.unit]  || '').trim(),
-          notes:  (r[idx.notes] || '').trim(),
-          images: [
-            (r[idx.img1] || '').trim(),
-            (r[idx.img2] || '').trim(),
-            (r[idx.img3] || '').trim(),
-            (r[idx.img4] || '').trim(),
-          ],
+          item, price: (r[idx.price]||'').trim(), unit: (r[idx.unit]||'').trim(),
+          desc: (r[idx.desc]||'').trim(), notes: (r[idx.notes]||'').trim(),
+          images: [r[idx.img1]||'', r[idx.img2]||'', r[idx.img3]||'', r[idx.img4]||''].map(s=>s.trim()),
         });
       }
 
@@ -549,7 +389,7 @@
         html += `<div class="ps-category">
           <div class="ps-category__header">
             <h2 class="ps-category__title">${esc(cat)}</h2>
-            <span class="ps-category__count">${items.length} item${items.length !== 1 ? 's' : ''}</span>
+            <span class="ps-category__count">${items.length} item${items.length!==1?'s':''}</span>
           </div>
           <div class="ps-grid">
             ${items.map(p => `
@@ -557,7 +397,7 @@
                 ${buildCarousel(p.images)}
                 <div class="ps-card__body">
                   <p class="ps-card__name">${esc(p.item)}</p>
-                  ${p.desc  ? `<p class="ps-card__desc">${esc(p.desc)}</p>`   : ''}
+                  ${p.desc  ? `<p class="ps-card__desc">${esc(p.desc)}</p>` : ''}
                   ${p.notes ? `<p class="ps-card__notes">${esc(p.notes)}</p>` : ''}
                 </div>
                 <div class="ps-card__footer">
@@ -570,8 +410,7 @@
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M10 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   </a>
                 </div>
-              </div>
-            `).join('')}
+              </div>`).join('')}
           </div>
         </div>`;
       });
@@ -583,11 +422,11 @@
     /* ── Carousel interaction ───────────────────── */
     function initCarousels() {
       document.querySelectorAll('.ps-carousel[data-total]').forEach(car => {
-        const total   = parseInt(car.dataset.total, 10);
-        if (total < 2) return;
-        const track   = car.querySelector('.ps-carousel__slides');
-        const dots    = car.querySelectorAll('.ps-carousel__dot');
-        let current   = 0;
+        const total  = parseInt(car.dataset.total, 10);
+        const track  = car.querySelector('.ps-carousel__slides');
+        const dots   = car.querySelectorAll('.ps-carousel__dot');
+        const images = JSON.parse(car.dataset.images || '[]');
+        let current  = 0;
 
         function goTo(n) {
           current = (n + total) % total;
@@ -595,9 +434,18 @@
           dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
         }
 
-        car.querySelector('.ps-carousel__btn--prev').addEventListener('click', () => goTo(current - 1));
-        car.querySelector('.ps-carousel__btn--next').addEventListener('click', () => goTo(current + 1));
-        dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+        if (total > 1) {
+          car.querySelector('.ps-carousel__btn--prev').addEventListener('click', e => { e.stopPropagation(); goTo(current - 1); });
+          car.querySelector('.ps-carousel__btn--next').addEventListener('click', e => { e.stopPropagation(); goTo(current + 1); });
+          dots.forEach((d, i) => d.addEventListener('click', e => { e.stopPropagation(); goTo(i); }));
+        }
+
+        // Click slide to open lightbox
+        if (images.length) {
+          car.querySelectorAll('.ps-carousel__slide').forEach((slide, i) => {
+            slide.addEventListener('click', () => lbOpen(images, i));
+          });
+        }
       });
     }
 
@@ -606,10 +454,7 @@
       .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
       .then(text => render(parseCSV(text)))
       .catch(err => {
-        catalogue.innerHTML = `<div class="ps-state">
-          Unable to load catalogue. Please try refreshing.<br>
-          <small style="color:#999;margin-top:0.5rem;display:block;">${err.message}</small>
-        </div>`;
+        catalogue.innerHTML = `<div class="ps-state">Unable to load catalogue. Please try refreshing.<br><small style="color:#999;margin-top:0.5rem;display:block;">${err.message}</small></div>`;
       });
   })();
   </script>
