@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preferred Suppliers — Agent Hub — Royal LePage Solutions</title>
+  <meta name="description" content="Trusted vendors and Royal LePage national preferred suppliers for Royal LePage Solutions agents.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../assets/css/header.css?v=1015">
+  <link rel="stylesheet" href="../../../../assets/css/styles.css?v=1001">
+  <script defer src="../../../../assets/js/header.js?v=1014"></script>
+  <style>
+    :root { --rls-red:#EA002A; --rls-black:#000000; --rls-white:#FFFFFF; --rls-taupe:#A89E92; --rls-stone:#D6D1C8; --rls-light-grey:#EFEFEF; --sp-max:1100px; }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Roboto',sans-serif; background:var(--rls-white); color:var(--rls-black); }
+    .sp-hero { background:var(--rls-black); color:var(--rls-white); padding:5rem 2rem 3.5rem; text-align:center; }
+    .sp-hero__back { display:inline-flex; align-items:center; gap:0.4rem; font-family:'Roboto',sans-serif; font-size:0.75rem; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:var(--rls-taupe); text-decoration:none; margin-bottom:1.5rem; transition:color 0.2s; }
+    .sp-hero__back:hover { color:var(--rls-white); }
+    .sp-hero__eyebrow { font-family:'Roboto',sans-serif; font-weight:300; font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--rls-taupe); margin-bottom:0.75rem; }
+    .sp-hero__title { font-family:'Raleway',sans-serif!important; font-weight:700!important; font-size:clamp(2rem,4vw,3rem)!important; color:var(--rls-white)!important; letter-spacing:-0.01em!important; line-height:1.1!important; margin-bottom:0!important; }
+    .sp-hero__title .sp-accent { color:var(--rls-red)!important; display:inline!important; }
+    .sp-hero__rule { display:flex; align-items:center; gap:0.75rem; justify-content:center; margin:1.25rem auto; width:fit-content; }
+    .sp-hero__rule span { width:36px; height:2px; background:var(--rls-red); display:block; }
+    .sp-hero__sub { font-family:'Roboto',sans-serif; font-weight:300; font-size:0.95rem; color:var(--rls-stone); max-width:520px; margin:0 auto; line-height:1.65; }
+    .sp-tabs-wrap { background:var(--rls-black); padding:0 2rem 1.5rem; display:flex; justify-content:center; }
+    .sp-tabs { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; }
+    .sp-tab { font-family:'Raleway',sans-serif; font-weight:600; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.55rem 1.25rem; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.6); background:transparent; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+    .sp-tab:hover { border-color:rgba(255,255,255,0.5); color:var(--rls-white); }
+    .sp-tab.is-active { background:var(--rls-red); border-color:var(--rls-red); color:var(--rls-white); }
+    .sp-search-wrap { max-width:var(--sp-max); margin:2rem auto 0; padding:0 2rem; }
+    .sp-search { width:100%; padding:0.75rem 1rem; border:1px solid var(--rls-stone); font-family:'Roboto',sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.2s; }
+    .sp-search:focus { border-color:var(--rls-red); }
+    .sp-main { max-width:var(--sp-max); margin:0 auto; padding:1.5rem 2rem 5rem; }
+    .sp-state { text-align:center; padding:4rem 2rem; color:var(--rls-taupe); font-size:0.95rem; }
+    .sp-state__spinner { width:32px; height:32px; border:3px solid var(--rls-stone); border-top-color:var(--rls-red); border-radius:50%; animation:sp-spin 0.8s linear infinite; margin:0 auto 1rem; }
+    @keyframes sp-spin { to { transform:rotate(360deg); } }
+    .sp-category { margin-top:2.5rem; }
+    .sp-category__header { display:flex; align-items:center; gap:1rem; margin-bottom:1.1rem; padding-bottom:0.6rem; border-bottom:2px solid var(--rls-black); }
+    .sp-category__title { font-family:'Raleway',sans-serif; font-weight:700; font-size:1rem; letter-spacing:0.04em; text-transform:uppercase; }
+    .sp-category__count { font-family:'Roboto',sans-serif; font-size:0.68rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--rls-taupe); background:var(--rls-light-grey); padding:0.2rem 0.55rem; border-radius:2px; }
+    .sp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1rem; }
+    .sp-card { background:var(--rls-white); border:1px solid var(--rls-stone); display:flex; flex-direction:column; transition:box-shadow 0.2s,border-color 0.2s; position:relative; overflow:hidden; }
+    .sp-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--rls-red); transform:scaleX(0); transform-origin:left; transition:transform 0.25s; }
+    .sp-card:hover::before { transform:scaleX(1); }
+    .sp-card:hover { box-shadow:0 4px 20px rgba(0,0,0,0.08); border-color:var(--rls-taupe); }
+    .sp-card__body { padding:1.1rem 1.25rem 0.75rem; flex:1; }
+    .sp-card__name { font-family:'Raleway',sans-serif; font-weight:700; font-size:0.95rem; line-height:1.3; margin-bottom:0.2rem; }
+    .sp-card__contact { font-family:'Roboto',sans-serif; font-size:0.78rem; font-weight:300; color:var(--rls-taupe); margin-bottom:0.4rem; }
+    .sp-card__offer { font-family:'Roboto',sans-serif; font-size:0.8rem; font-weight:400; color:var(--rls-red); margin-top:0.4rem; line-height:1.45; }
+    .sp-card__footer { display:flex; flex-wrap:wrap; align-items:center; gap:0.5rem 1rem; padding:0.65rem 1.25rem 0.9rem; border-top:1px solid var(--rls-light-grey); margin-top:0.5rem; }
+    .sp-card__phone { font-family:'Roboto',sans-serif; font-size:0.82rem; color:#444; flex:1 1 100%; }
+    .sp-card__link { display:inline-flex; align-items:center; gap:0.3rem; font-family:'Raleway',sans-serif; font-weight:600; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--rls-red); text-decoration:none; transition:opacity 0.2s; }
+    .sp-card__link:hover { opacity:0.75; }
+    .sp-card__link--email { color:var(--rls-taupe); }
+    .sp-no-results { text-align:center; padding:3rem 2rem; color:var(--rls-taupe); font-size:0.9rem; }
+    .sp-footer-note { text-align:center; padding:0 2rem 3rem; font-family:'Roboto',sans-serif; font-size:0.78rem; font-weight:300; color:var(--rls-taupe); }
+    .sp-footer-note a { color:var(--rls-taupe); text-decoration:underline; }
+    @media (max-width:600px) { .sp-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="sp-hero">
+      <a class="sp-hero__back" href="../../">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Agent Hub
+      </a>
+      <p class="sp-hero__eyebrow">Royal LePage Solutions®</p>
+      <h1 class="sp-hero__title">Preferred <span class="sp-accent">Suppliers</span></h1>
+      <div class="sp-hero__rule"><span></span><span></span></div>
+      <p class="sp-hero__sub">Trusted vendors recommended by Royal LePage Solutions, plus exclusive national supplier programs available to all Royal LePagers.</p>
+    </section>
+    <div class="sp-tabs-wrap">
+      <div class="sp-tabs">
+        <button class="sp-tab is-active" data-list="all">All</button>
+        <button class="sp-tab" data-list="Calgary">Calgary</button>
+        <button class="sp-tab" data-list="Canmore/Banff">Canmore / Banff</button>
+        <button class="sp-tab" data-list="RLP National">RLP National</button>
+      </div>
+    </div>
+    <div class="sp-search-wrap">
+      <input class="sp-search" type="search" id="sp-search" placeholder="Search by name, category, or keyword…" autocomplete="off">
+    </div>
+    <div class="sp-main">
+      <div id="sp-catalogue">
+        <div class="sp-state"><div class="sp-state__spinner"></div>Loading suppliers…</div>
+      </div>
+    </div>
+    <p class="sp-footer-note">
+      Royal LePage® Solutions is independently owned and operated. Not intended to solicit buyers or sellers currently under contract with a brokerage.
+      View important notices at <a href="https://rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.
+    </p>
+  </main>
+
+  <script>
+  (function(){
+    const CSV_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRfsEecQOusUd7yrAombGo4m87-vWVcmP2Z94_YrOPvKE9nkOxinB-44KgM1fjamT8GxZshMrlb1aju/pub?gid=1791306164&single=true&output=csv';
+    const catalogue = document.getElementById('sp-catalogue');
+    const searchEl  = document.getElementById('sp-search');
+    const tabs      = document.querySelectorAll('.sp-tab');
+    let allSuppliers=[], activeList='all', searchQuery='';
+
+    function parseCSV(text){
+      const rows=[];
+      const lines=text.split(/\r?\n/);
+      for(let i=0;i<lines.length;i++){
+        const line=lines[i].trim(); if(!line)continue;
+        const cols=[]; let cur='',inQ=false;
+        for(let j=0;j<line.length;j++){
+          const ch=line[j];
+          if(ch==='"'){inQ=!inQ;}
+          else if(ch===','&&!inQ){cols.push(cur.trim());cur='';}
+          else{cur+=ch;}
+        }
+        cols.push(cur.trim()); rows.push(cols);
+      }
+      return rows;
+    }
+
+    function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    function url(s){
+      if(!s||s==='-')return '';
+      return /^https?:\/\//i.test(s)?s:'https://'+s;
+    }
+
+    function render(){
+      const q=searchQuery.toLowerCase();
+      const filtered=allSuppliers.filter(s=>{
+        const lm=activeList==='all'||s.list===activeList;
+        if(!lm)return false;
+        if(!q)return true;
+        return(s.list+s.category+s.company+s.contact+s.offer).toLowerCase().includes(q);
+      });
+
+      if(!filtered.length){ catalogue.innerHTML='<div class="sp-no-results">No suppliers found. Try a different search or filter.</div>'; return; }
+
+      const seen=new Set(), cats=[], groups={};
+      filtered.forEach(s=>{
+        const key=s.list==='RLP National'?'RLP National — '+s.category:s.category;
+        if(!seen.has(key)){seen.add(key);cats.push(key);}
+        if(!groups[key])groups[key]=[];
+        groups[key].push(s);
+      });
+
+      let html='';
+      cats.forEach(cat=>{
+        const items=groups[cat];
+        html+=`<div class="sp-category">
+          <div class="sp-category__header">
+            <h2 class="sp-category__title">${esc(cat)}</h2>
+            <span class="sp-category__count">${items.length} supplier${items.length!==1?'s':''}</span>
+          </div>
+          <div class="sp-grid">
+            ${items.map(s=>{
+              const wu=url(s.website);
+              const em=s.email&&s.email!=='-'?s.email.trim():'';
+              const ph=s.phone&&s.phone!=='-'?s.phone.trim():'';
+              return`<div class="sp-card">
+                <div class="sp-card__body">
+                  <p class="sp-card__name">${esc(s.company)}</p>
+                  ${(s.contact&&s.contact!=='-')||(s.title&&s.title!=='-')?`<p class="sp-card__contact">${esc([s.contact!=='-'?s.contact:'',s.title!=='-'?s.title:''].filter(Boolean).join(' — '))}</p>`:''}
+                  ${s.offer?`<p class="sp-card__offer">${esc(s.offer)}</p>`:''}
+                </div>
+                <div class="sp-card__footer">
+                  ${ph?`<span class="sp-card__phone">${esc(ph)}</span>`:''}
+                  ${wu?`<a class="sp-card__link" href="${esc(wu)}" target="_blank" rel="noopener">Website <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`:''}
+                  ${em?`<a class="sp-card__link sp-card__link--email" href="mailto:${esc(em)}">Email</a>`:''}
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+      });
+
+      catalogue.innerHTML=html;
+    }
+
+    tabs.forEach(t=>t.addEventListener('click',()=>{
+      tabs.forEach(x=>x.classList.remove('is-active'));
+      t.classList.add('is-active');
+      activeList=t.dataset.list;
+      render();
+    }));
+
+    searchEl.addEventListener('input',()=>{ searchQuery=searchEl.value; render(); });
+
+    fetch(CSV_URL)
+      .then(r=>{ if(!r.ok)throw new Error('HTTP '+r.status); return r.text(); })
+      .then(text=>{
+        const rows=parseCSV(text);
+        if(rows.length<2){ catalogue.innerHTML='<div class="sp-state">No data found.</div>'; return; }
+        const h=rows[0].map(x=>x.toLowerCase().replace(/[^a-z0-9]/g,''));
+        const idx={ list:h.indexOf('list'), cat:h.indexOf('category'), co:h.indexOf('companyname'), cn:h.indexOf('contactname'), ct:h.indexOf('contacttitle'), ph:h.indexOf('phone'), web:h.indexOf('website'), em:h.indexOf('emailaddress'), of:h.indexOf('offernotes') };
+        allSuppliers=rows.slice(1).filter(r=>r.some(c=>c)).map(r=>({
+          list:(r[idx.list]||'').trim(), category:(r[idx.cat]||'').trim(),
+          company:(r[idx.co]||'').trim(), contact:(r[idx.cn]||'').trim(),
+          title:(r[idx.ct]||'').trim(), phone:(r[idx.ph]||'').trim(),
+          website:(r[idx.web]||'').trim(), email:(r[idx.em]||'').trim(),
+          offer:(r[idx.of]||'').trim(),
+        })).filter(s=>s.company);
+        render();
+      })
+      .catch(err=>{ catalogue.innerHTML=`<div class="sp-state">Unable to load. Please refresh.<br><small style="color:#999;margin-top:0.5rem;display:block;">${err.message}</small></div>`; });
+  })();
+  </script>
+</body>
+</html>
