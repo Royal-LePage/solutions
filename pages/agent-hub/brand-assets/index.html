@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand Assets — Agent Hub — Royal LePage Solutions</title>
+  <meta name="description" content="Download approved Royal LePage Solutions logos and access brand guidelines, colours, and fonts.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../../../assets/css/header.css?v=1015">
+  <link rel="stylesheet" href="../../../../assets/css/styles.css?v=1001">
+  <script defer src="../../../../assets/js/header.js?v=1014"></script>
+
+  <style>
+    :root {
+      --rls-red:        #EA002A;
+      --rls-black:      #000000;
+      --rls-white:      #FFFFFF;
+      --rls-taupe:      #A89E92;
+      --rls-stone:      #D6D1C8;
+      --rls-light-grey: #EFEFEF;
+      --ba-max:         1100px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Roboto', sans-serif; background: var(--rls-white); color: var(--rls-black); }
+
+    /* ── Hero ───────────────────────────────────── */
+    .ba-hero { background: var(--rls-black); color: var(--rls-white); padding: 5rem 2rem 3.5rem; text-align: center; }
+    .ba-hero__back { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'Roboto', sans-serif; font-size: 0.75rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rls-taupe); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.2s; }
+    .ba-hero__back:hover { color: var(--rls-white); }
+    .ba-hero__eyebrow { font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rls-taupe); margin-bottom: 0.75rem; }
+    .ba-hero__title { font-family: 'Raleway', sans-serif !important; font-weight: 700 !important; font-size: clamp(2rem, 4vw, 3rem) !important; color: var(--rls-white) !important; letter-spacing: -0.01em !important; line-height: 1.1 !important; margin-bottom: 0 !important; }
+    .ba-hero__title .ba-accent { color: var(--rls-red) !important; display: inline !important; }
+    .ba-hero__rule { display: flex; align-items: center; gap: 0.75rem; justify-content: center; margin: 1.25rem auto; width: fit-content; }
+    .ba-hero__rule span { width: 36px; height: 2px; background: var(--rls-red); display: block; }
+    .ba-hero__sub { font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 0.95rem; color: var(--rls-stone); max-width: 520px; margin: 0 auto; line-height: 1.65; }
+
+    /* ── Layout ─────────────────────────────────── */
+    .ba-main { max-width: var(--ba-max); margin: 0 auto; padding: 3rem 2rem 5rem; }
+
+    /* ── Section headers ────────────────────────── */
+    .ba-section { margin-top: 3.5rem; }
+    .ba-section:first-child { margin-top: 0; }
+    .ba-section__header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--rls-black); }
+    .ba-section__title { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.04em; text-transform: uppercase; }
+
+    /* ── Logo grid ──────────────────────────────── */
+    .ba-logo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+    .ba-logo-card { border: 1px solid var(--rls-stone); display: flex; flex-direction: column; transition: box-shadow 0.2s, border-color 0.2s; }
+    .ba-logo-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-color: var(--rls-taupe); }
+    .ba-logo-card__preview {
+      aspect-ratio: 16/9;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Raleway', sans-serif; font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--rls-taupe);
+    }
+    .ba-logo-card__preview--light { background: var(--rls-light-grey); }
+    .ba-logo-card__preview--dark  { background: var(--rls-black); color: rgba(255,255,255,0.3); }
+    .ba-logo-card__preview--red   { background: var(--rls-red);   color: rgba(255,255,255,0.5); }
+    .ba-logo-card__preview img { max-width: 70%; max-height: 70%; object-fit: contain; }
+    .ba-logo-card__body { padding: 0.9rem 1rem; border-top: 1px solid var(--rls-light-grey); display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+    .ba-logo-card__name { font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.82rem; }
+    .ba-logo-card__formats { font-family: 'Roboto', sans-serif; font-size: 0.7rem; font-weight: 300; color: var(--rls-taupe); }
+    .ba-logo-card__dl {
+      display: inline-flex; align-items: center; gap: 0.3rem; flex-shrink: 0;
+      background: var(--rls-black); color: var(--rls-white);
+      font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.65rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.45rem 0.8rem; text-decoration: none; transition: background 0.2s;
+    }
+    .ba-logo-card__dl:hover { background: var(--rls-red); }
+    .ba-logo-card__dl--disabled { background: var(--rls-stone); cursor: not-allowed; pointer-events: none; }
+
+    /* ── Colour swatches ────────────────────────── */
+    .ba-colours { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+    .ba-swatch { border: 1px solid var(--rls-stone); overflow: hidden; }
+    .ba-swatch__block { height: 80px; }
+    .ba-swatch__body { padding: 0.75rem 1rem; }
+    .ba-swatch__name { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.82rem; margin-bottom: 0.25rem; }
+    .ba-swatch__hex {
+      font-family: 'Roboto', monospace; font-size: 0.78rem; color: #555;
+      cursor: pointer; display: flex; align-items: center; gap: 0.3rem;
+      background: none; border: none; padding: 0; transition: color 0.2s;
+    }
+    .ba-swatch__hex:hover { color: var(--rls-red); }
+    .ba-swatch__values { font-family: 'Roboto', sans-serif; font-size: 0.68rem; color: var(--rls-taupe); margin-top: 0.3rem; line-height: 1.6; }
+    .ba-copied { font-size: 0.65rem; color: var(--rls-red); margin-left: 0.3rem; opacity: 0; transition: opacity 0.2s; }
+    .ba-copied.show { opacity: 1; }
+
+    /* ── Typography specimens ───────────────────── */
+    .ba-fonts { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+    .ba-font-card { border: 1px solid var(--rls-stone); padding: 1.5rem; }
+    .ba-font-card__specimen { font-size: 2.5rem; line-height: 1.1; margin-bottom: 0.75rem; }
+    .ba-font-card__name { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.25rem; }
+    .ba-font-card__use { font-family: 'Roboto', sans-serif; font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); margin-bottom: 0.75rem; }
+    .ba-font-card__weights { font-size: 0.82rem; line-height: 2; }
+    .ba-font-card__link { display: inline-flex; align-items: center; gap: 0.3rem; margin-top: 0.75rem; font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rls-red); text-decoration: none; }
+    .ba-font-card__link:hover { opacity: 0.75; }
+
+    /* ── Rules / guidelines ─────────────────────── */
+    .ba-rules { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+    .ba-rule-card { border: 1px solid var(--rls-stone); padding: 1.25rem 1.5rem; display: flex; gap: 1rem; }
+    .ba-rule-card__icon { flex-shrink: 0; width: 36px; height: 36px; background: var(--rls-light-grey); display: flex; align-items: center; justify-content: center; color: var(--rls-red); }
+    .ba-rule-card__title { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem; }
+    .ba-rule-card__desc { font-family: 'Roboto', sans-serif; font-size: 0.8rem; font-weight: 300; color: #444; line-height: 1.6; }
+
+    /* ── Guidelines CTA ─────────────────────────── */
+    .ba-cta { background: var(--rls-black); color: var(--rls-white); padding: 2rem 2.5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; margin-top: 3.5rem; }
+    .ba-cta__title { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.3rem; }
+    .ba-cta__desc { font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 0.88rem; color: var(--rls-stone); }
+    .ba-cta__btn { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--rls-red); color: var(--rls-white); font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.75rem 1.5rem; text-decoration: none; white-space: nowrap; transition: background 0.2s; flex-shrink: 0; }
+    .ba-cta__btn:hover { background: #c20024; }
+
+    /* ── Footer ──────────────────────────────────── */
+    .ba-footer-note { text-align: center; padding: 0 2rem 3rem; font-family: 'Roboto', sans-serif; font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); }
+    .ba-footer-note a { color: var(--rls-taupe); text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .ba-logo-grid, .ba-colours, .ba-fonts, .ba-rules { grid-template-columns: 1fr; }
+      .ba-cta { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="ba-hero">
+      <a class="ba-hero__back" href="https://info.royallepagesolutions.com/pages/agent-hub/">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Agent Hub
+      </a>
+      <p class="ba-hero__eyebrow">Royal LePage Solutions®</p>
+      <h1 class="ba-hero__title">Brand <span class="ba-accent">Assets</span></h1>
+      <div class="ba-hero__rule"><span></span><span></span></div>
+      <p class="ba-hero__sub">Approved logos, brand colours, fonts, and guidelines for use in your marketing materials.</p>
+    </section>
+
+    <div class="ba-main">
+
+      <!-- ── Logos ──────────────────────────────── -->
+      <section class="ba-section">
+        <div class="ba-section__header">
+          <h2 class="ba-section__title">RLS Logos</h2>
+        </div>
+        <div class="ba-logo-grid">
+
+          <div class="ba-logo-card">
+            <div class="ba-logo-card__preview ba-logo-card__preview--light">Logo coming soon</div>
+            <div class="ba-logo-card__body">
+              <div>
+                <p class="ba-logo-card__name">RLS — Primary (Colour)</p>
+                <p class="ba-logo-card__formats">PNG · SVG</p>
+              </div>
+              <a class="ba-logo-card__dl ba-logo-card__dl--disabled" href="#">
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Soon
+              </a>
+            </div>
+          </div>
+
+          <div class="ba-logo-card">
+            <div class="ba-logo-card__preview ba-logo-card__preview--dark">Logo coming soon</div>
+            <div class="ba-logo-card__body">
+              <div>
+                <p class="ba-logo-card__name">RLS — White (Reversed)</p>
+                <p class="ba-logo-card__formats">PNG · SVG</p>
+              </div>
+              <a class="ba-logo-card__dl ba-logo-card__dl--disabled" href="#">
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Soon
+              </a>
+            </div>
+          </div>
+
+          <div class="ba-logo-card">
+            <div class="ba-logo-card__preview ba-logo-card__preview--light">Logo coming soon</div>
+            <div class="ba-logo-card__body">
+              <div>
+                <p class="ba-logo-card__name">RLS — Black</p>
+                <p class="ba-logo-card__formats">PNG · SVG</p>
+              </div>
+              <a class="ba-logo-card__dl ba-logo-card__dl--disabled" href="#">
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Soon
+              </a>
+            </div>
+          </div>
+
+          <div class="ba-logo-card">
+            <div class="ba-logo-card__preview ba-logo-card__preview--red">Logo coming soon</div>
+            <div class="ba-logo-card__body">
+              <div>
+                <p class="ba-logo-card__name">RLS — Transparent</p>
+                <p class="ba-logo-card__formats">PNG · SVG</p>
+              </div>
+              <a class="ba-logo-card__dl ba-logo-card__dl--disabled" href="#">
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Soon
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── RLP Logos ──────────────────────────── -->
+      <section class="ba-section">
+        <div class="ba-section__header">
+          <h2 class="ba-section__title">Royal LePage® Master Logos</h2>
+        </div>
+        <div class="ba-logo-grid">
+
+          <div class="ba-logo-card">
+            <div class="ba-logo-card__preview ba-logo-card__preview--light">Logo coming soon</div>
+            <div class="ba-logo-card__body">
+              <div>
+                <p class="ba-logo-card__name">RLP Master — Primary</p>
+                <p class="ba-logo-card__formats">PNG · SVG</p>
+              </div>
+              <a class="ba-logo-card__dl ba-logo-card__dl--disabled" href="#">
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Soon
+              </a>
+            </div>
+          </div>
+
+          <div class="ba-logo-card">
+            <div class="ba-logo-card__preview ba-logo-card__preview--dark">Logo coming soon</div>
+            <div class="ba-logo-card__body">
+              <div>
+                <p class="ba-logo-card__name">RLP Master — White</p>
+                <p class="ba-logo-card__formats">PNG · SVG</p>
+              </div>
+              <a class="ba-logo-card__dl ba-logo-card__dl--disabled" href="#">
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Soon
+              </a>
+            </div>
+          </div>
+
+          <div class="ba-logo-card">
+            <div class="ba-logo-card__preview ba-logo-card__preview--light">Logo coming soon</div>
+            <div class="ba-logo-card__body">
+              <div>
+                <p class="ba-logo-card__name">RLP Master — Black</p>
+                <p class="ba-logo-card__formats">PNG · SVG</p>
+              </div>
+              <a class="ba-logo-card__dl ba-logo-card__dl--disabled" href="#">
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Soon
+              </a>
+            </div>
+          </div>
+
+          <div class="ba-logo-card">
+            <div class="ba-logo-card__preview ba-logo-card__preview--dark">Logo coming soon</div>
+            <div class="ba-logo-card__body">
+              <div>
+                <p class="ba-logo-card__name">Shelter Foundation</p>
+                <p class="ba-logo-card__formats">PNG · SVG</p>
+              </div>
+              <a class="ba-logo-card__dl ba-logo-card__dl--disabled" href="#">
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Soon
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Brand Colours ──────────────────────── -->
+      <section class="ba-section">
+        <div class="ba-section__header">
+          <h2 class="ba-section__title">Brand Colours</h2>
+        </div>
+
+        <p style="font-family:'Roboto',sans-serif;font-size:0.85rem;font-weight:300;color:#555;margin-bottom:1.25rem;line-height:1.65;">
+          The Royal LePage primary palette is black, red, and white. Secondary colours complement the primary palette and should always be used with ample white space.
+          <strong style="font-weight:500;color:var(--rls-black);">Never use blue, yellow, or gold</strong> in connection with Royal LePage trademarks.
+          Click any hex code to copy it.
+        </p>
+
+        <p style="font-family:'Raleway',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--rls-taupe);margin-bottom:0.75rem;">Primary Palette</p>
+        <div class="ba-colours" style="margin-bottom:1.5rem;">
+          <div class="ba-swatch">
+            <div class="ba-swatch__block" style="background:#EA002A;"></div>
+            <div class="ba-swatch__body">
+              <p class="ba-swatch__name">Red</p>
+              <button class="ba-swatch__hex" onclick="copyHex(this,'#EA002A')">#EA002A <span class="ba-copied">Copied!</span></button>
+              <p class="ba-swatch__values">PMS 185 C<br>C:1 M:100 Y:92 K:0<br>R:234 G:0 B:42</p>
+            </div>
+          </div>
+          <div class="ba-swatch">
+            <div class="ba-swatch__block" style="background:#000000;border:1px solid #eee;"></div>
+            <div class="ba-swatch__body">
+              <p class="ba-swatch__name">Black</p>
+              <button class="ba-swatch__hex" onclick="copyHex(this,'#000000')">#000000 <span class="ba-copied">Copied!</span></button>
+              <p class="ba-swatch__values">C:0 M:0 Y:0 K:100<br>R:0 G:0 B:0</p>
+            </div>
+          </div>
+          <div class="ba-swatch">
+            <div class="ba-swatch__block" style="background:#FFFFFF;border:1px solid #eee;"></div>
+            <div class="ba-swatch__body">
+              <p class="ba-swatch__name">White</p>
+              <button class="ba-swatch__hex" onclick="copyHex(this,'#FFFFFF')">#FFFFFF <span class="ba-copied">Copied!</span></button>
+              <p class="ba-swatch__values">C:0 M:0 Y:0 K:0<br>R:255 G:255 B:255</p>
+            </div>
+          </div>
+        </div>
+
+        <p style="font-family:'Raleway',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--rls-taupe);margin-bottom:0.75rem;">Secondary Palette</p>
+        <div class="ba-colours">
+          <div class="ba-swatch">
+            <div class="ba-swatch__block" style="background:#C4C18E;"></div>
+            <div class="ba-swatch__body">
+              <p class="ba-swatch__name">Taupe</p>
+              <button class="ba-swatch__hex" onclick="copyHex(this,'#C4C18E')">#C4C18E <span class="ba-copied">Copied!</span></button>
+              <p class="ba-swatch__values">PMS 5855 C<br>R:196 G:193 B:142</p>
+            </div>
+          </div>
+          <div class="ba-swatch">
+            <div class="ba-swatch__block" style="background:#D7D3C7;"></div>
+            <div class="ba-swatch__body">
+              <p class="ba-swatch__name">Stone</p>
+              <button class="ba-swatch__hex" onclick="copyHex(this,'#D7D3C7')">#D7D3C7 <span class="ba-copied">Copied!</span></button>
+              <p class="ba-swatch__values">PMS 7534 C<br>R:215 G:211 B:199</p>
+            </div>
+          </div>
+          <div class="ba-swatch">
+            <div class="ba-swatch__block" style="background:#E7E7E7;"></div>
+            <div class="ba-swatch__body">
+              <p class="ba-swatch__name">Light Grey</p>
+              <button class="ba-swatch__hex" onclick="copyHex(this,'#E7E7E7')">#E7E7E7 <span class="ba-copied">Copied!</span></button>
+              <p class="ba-swatch__values">PMS 6 C<br>R:231 G:231 B:231</p>
+            </div>
+          </div>
+          <div class="ba-swatch">
+            <div class="ba-swatch__block" style="background:#A59D95;"></div>
+            <div class="ba-swatch__body">
+              <p class="ba-swatch__name">Warm Grey</p>
+              <button class="ba-swatch__hex" onclick="copyHex(this,'#A59D95')">#A59D95 <span class="ba-copied">Copied!</span></button>
+              <p class="ba-swatch__values">R:165 G:157 B:149</p>
+            </div>
+          </div>
+          <div class="ba-swatch">
+            <div class="ba-swatch__block" style="background:#4D4D4D;"></div>
+            <div class="ba-swatch__body">
+              <p class="ba-swatch__name">Dark Grey</p>
+              <button class="ba-swatch__hex" onclick="copyHex(this,'#4D4D4D')">#4D4D4D <span class="ba-copied">Copied!</span></button>
+              <p class="ba-swatch__values">R:77 G:77 B:77</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Typography ─────────────────────────── -->
+      <section class="ba-section">
+        <div class="ba-section__header">
+          <h2 class="ba-section__title">Typography</h2>
+        </div>
+        <div class="ba-fonts">
+
+          <div class="ba-font-card">
+            <div class="ba-font-card__specimen" style="font-family:'Raleway',sans-serif;font-weight:700;">Raleway</div>
+            <p class="ba-font-card__name">Raleway</p>
+            <p class="ba-font-card__use">Display / Headings — Digital</p>
+            <div class="ba-font-card__weights" style="font-family:'Raleway',sans-serif;">
+              <div style="font-weight:200;">Thin 200</div>
+              <div style="font-weight:300;">Light 300</div>
+              <div style="font-weight:400;">Regular 400</div>
+              <div style="font-weight:500;">Medium 500</div>
+              <div style="font-weight:600;">SemiBold 600</div>
+              <div style="font-weight:700;">Bold 700</div>
+            </div>
+            <a class="ba-font-card__link" href="https://fonts.google.com/specimen/Raleway" target="_blank" rel="noopener">
+              Get on Google Fonts
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+
+          <div class="ba-font-card">
+            <div class="ba-font-card__specimen" style="font-family:'Roboto',sans-serif;font-weight:400;">Roboto</div>
+            <p class="ba-font-card__name">Roboto</p>
+            <p class="ba-font-card__use">Body / Copy — Digital</p>
+            <div class="ba-font-card__weights" style="font-family:'Roboto',sans-serif;">
+              <div style="font-weight:100;">Thin 100</div>
+              <div style="font-weight:300;">Light 300</div>
+              <div style="font-weight:400;">Regular 400</div>
+              <div style="font-weight:500;">Medium 500</div>
+              <div style="font-weight:700;">Bold 700</div>
+              <div style="font-weight:900;">Black 900</div>
+            </div>
+            <a class="ba-font-card__link" href="https://fonts.google.com/specimen/Roboto" target="_blank" rel="noopener">
+              Get on Google Fonts
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+
+          <div class="ba-font-card">
+            <div class="ba-font-card__specimen" style="font-family:'Arial',sans-serif;font-weight:400;">Arial</div>
+            <p class="ba-font-card__name">Arial</p>
+            <p class="ba-font-card__use">Alternate — Digital & Print fallback</p>
+            <div class="ba-font-card__weights" style="font-family:'Arial',sans-serif;">
+              <div style="font-weight:400;">Regular 400</div>
+              <div style="font-weight:700;">Bold 700</div>
+            </div>
+            <p style="font-family:'Roboto',sans-serif;font-size:0.75rem;font-weight:300;color:var(--rls-taupe);margin-top:0.75rem;">System font — no download required</p>
+          </div>
+
+          <div class="ba-font-card">
+            <div class="ba-font-card__specimen" style="font-family:'Arial',sans-serif;font-weight:400;font-size:1.8rem;letter-spacing:-0.02em;">Helvetica Neue LT Pro</div>
+            <p class="ba-font-card__name">Helvetica Neue LT Pro</p>
+            <p class="ba-font-card__use">Primary — Print only</p>
+            <div style="font-family:'Arial',sans-serif;" class="ba-font-card__weights">
+              <div style="font-weight:300;">45 Light</div>
+              <div style="font-weight:400;">55 Roman</div>
+              <div style="font-weight:500;">65 Medium</div>
+              <div style="font-weight:700;">75 Bold</div>
+              <div style="font-weight:900;">85 Heavy</div>
+            </div>
+            <a class="ba-font-card__link" href="https://www.linotype.com" target="_blank" rel="noopener">
+              Purchase at Linotype
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Brand Rules ─────────────────────────── -->
+      <section class="ba-section">
+        <div class="ba-section__header">
+          <h2 class="ba-section__title">Key Brand Rules</h2>
+        </div>
+        <div class="ba-rules">
+
+          <div class="ba-rule-card">
+            <div class="ba-rule-card__icon">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#EA002A" stroke-width="1.5"/><path d="M10 6v4l3 3" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <p class="ba-rule-card__title">Always Use "Royal LePage" Together</p>
+              <p class="ba-rule-card__desc">The word "Royal" must never appear alone. It must always be used in conjunction with "LePage".</p>
+            </div>
+          </div>
+
+          <div class="ba-rule-card">
+            <div class="ba-rule-card__icon">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="#EA002A" stroke-width="1.5"/><path d="M7 10h6M10 7v6" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <p class="ba-rule-card__title">Trademark Symbols Required</p>
+              <p class="ba-rule-card__desc">Use ® or ™ in the most prominent position (headline, cover). In presentations, place on every page or slide.</p>
+            </div>
+          </div>
+
+          <div class="ba-rule-card">
+            <div class="ba-rule-card__icon">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M10 4l6 6-6 6" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <p class="ba-rule-card__title">No Blue, Yellow, or Gold</p>
+              <p class="ba-rule-card__desc">These colours must never be used in connection with Royal LePage trademarks under any circumstances.</p>
+            </div>
+          </div>
+
+          <div class="ba-rule-card">
+            <div class="ba-rule-card__icon">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="14" height="10" rx="1" stroke="#EA002A" stroke-width="1.5"/><path d="M7 5V4a3 3 0 016 0v1" stroke="#EA002A" stroke-width="1.5"/></svg>
+            </div>
+            <div>
+              <p class="ba-rule-card__title">Minimum Logo Sizes</p>
+              <p class="ba-rule-card__desc">Master brand logo: 0.75" minimum. Brokerage logo: 1.5" minimum. Never scale below these thresholds.</p>
+            </div>
+          </div>
+
+          <div class="ba-rule-card">
+            <div class="ba-rule-card__icon">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 3v14M3 10h14" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <p class="ba-rule-card__title">Staging Area (Clear Space)</p>
+              <p class="ba-rule-card__desc">Maintain clear space equal to the height of the uppercase letters in "ROYAL LePAGE" on all sides of the logo.</p>
+            </div>
+          </div>
+
+          <div class="ba-rule-card">
+            <div class="ba-rule-card__icon">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <p class="ba-rule-card__title">Do Not Alter the Logo</p>
+              <p class="ba-rule-card__desc">Never place the logo in a box, add drop shadows, change colours, scale disproportionately, or remove the trademark symbol.</p>
+            </div>
+          </div>
+
+          <div class="ba-rule-card">
+            <div class="ba-rule-card__icon">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 3a7 7 0 100 14A7 7 0 0010 3z" stroke="#EA002A" stroke-width="1.5"/><path d="M10 8v4M10 13v.5" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <p class="ba-rule-card__title">Include Disclaimer Text</p>
+              <p class="ba-rule-card__desc">All materials must include: "Royal LePage® Solutions is independently owned and operated." with a reference to rlp.ca/notices.</p>
+            </div>
+          </div>
+
+          <div class="ba-rule-card">
+            <div class="ba-rule-card__icon">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 17l4-4 3 3 7-10" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <p class="ba-rule-card__title">Broker/Manager Approval Required</p>
+              <p class="ba-rule-card__desc">All marketing and advertising materials must meet your broker's/manager's approval before publishing. Provincial guidelines take precedence.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Brand Guidelines CTA ───────────────── -->
+      <div class="ba-cta">
+        <div>
+          <p class="ba-cta__title">Royal LePage® 2024 Brand Guidelines</p>
+          <p class="ba-cta__desc">The complete brand book covering logos, colours, fonts, lawn signs, trademark rules, and more.</p>
+        </div>
+        <a class="ba-cta__btn" href="https://rlpnetwork.com/marketing-home" target="_blank" rel="noopener">
+          Access on rlpNetwork
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H7M12 2v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+    </div><!-- /ba-main -->
+
+    <p class="ba-footer-note">
+      Royal LePage® Solutions is independently owned and operated. Not intended to solicit buyers or sellers currently under contract with a brokerage.
+      View important notices at <a href="https://rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.
+    </p>
+
+  </main>
+
+  <script>
+    function copyHex(btn, hex) {
+      navigator.clipboard.writeText(hex).then(() => {
+        const tag = btn.querySelector('.ba-copied');
+        tag.classList.add('show');
+        setTimeout(() => tag.classList.remove('show'), 1800);
+      });
+    }
+  </script>
+
+</body>
+</html>
