@@ -1,5 +1,11 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
+   v1016 - FOUC guard: adds `rls-ready` class to <html>
+           after header is injected, revealing the page.
+           Works in tandem with `html { visibility: hidden }`
+           in the Custom Header Code field. A 2.5s safety
+           timeout in the header code ensures the page is
+           never permanently hidden if JS fails.
    v1015 - 1) Hamburger replaced with "≡ MENU" text button
                for improved usability (agent feedback).
            2) Agent Hub link added to red contact strip —
@@ -21,9 +27,9 @@
            (GitHub URL until the info.royallepagesolutions.com
            CNAME propagates).
    ========================================================= */
-console.log('RLS HEADER JS LOADED v1015');
+console.log('RLS HEADER JS LOADED v1016');
 (function () {
-  const VERSION = '1015';
+  const VERSION = '1016';
   const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
   const BOLDTRAIL_BASE = 'https://www.royallepagesolutions.com';
   const SITE_BASE = (location.hostname === 'info.royallepagesolutions.com')
@@ -165,6 +171,8 @@ console.log('RLS HEADER JS LOADED v1015');
     bindHeaderBehavior(header, menu, overlay);
     requestAnimationFrame(() => {
       document.body.classList.add('rls-header-ready');
+      // FOUC guard: reveal the page now that the header is in place
+      document.documentElement.classList.add('rls-ready');
     });
     console.log('[RLS Header] Injected + bound OK - v' + VERSION);
   }
