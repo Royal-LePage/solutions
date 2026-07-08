@@ -1,11 +1,12 @@
 /* =========================================================
    Royal LePage Solutions - Custom Header
-   v1016 - Two changes to match header.js v1015:
-           1) Menu button restyled to show the icon PLUS the
-              word "MENU" (auto width, horizontal padding).
-              Responsive sizes updated to match.
-           2) Added a subtle "Agent Hub" link style in the red
-              contact strip — muted, small, underlined on hover.
+   v1016 - 1) Hamburger replaced with "≡ MENU" text button.
+               Old icon-only styles removed; new label styles
+               added. Auto-collapses to icon-only "≡" below
+               600px to stay compact on mobile.
+           2) Agent Hub link styled in red contact strip —
+               semi-transparent outlined pill, intentionally
+               understated for agents-only discoverability.
    v1015 - Mobile header overlap fix: at <=600px, logo
            shifts to left-aligned and the Deposit Instructions
            button is hidden (still accessible via hamburger
@@ -29,6 +30,7 @@
   --rls-header-h-mobile: 96px;
   --rls-sans: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
 }
+
 /* ─────────────────────────────────────────────────────────
    0) Reset / page baseline
    ───────────────────────────────────────────────────────── */
@@ -39,6 +41,7 @@ html, body {
 body.rls-menu-open {
   overflow: hidden !important;
 }
+
 /* ─────────────────────────────────────────────────────────
    1) Hide BoldTrail's native header ONLY after ours injects
    ───────────────────────────────────────────────────────── */
@@ -64,6 +67,7 @@ body.has-rls-header .kv-sticky-spacer {
   padding: 0 !important;
   margin: 0 !important;
 }
+
 /* ─────────────────────────────────────────────────────────
    2) Reserve header space (when not in hero mode)
    ───────────────────────────────────────────────────────── */
@@ -80,9 +84,9 @@ body.rls-header-ready:not(.rls-has-hero) {
     padding-top: var(--rls-header-h-mobile) !important;
   }
 }
+
 /* ─────────────────────────────────────────────────────────
-   2b) Map/search results pages — push the full-bleed
-       map+results layout below the fixed header.
+   2b) Map/search results pages
    ───────────────────────────────────────────────────────── */
 body.rls-header-ready:not(.rls-has-hero) #listings-map {
   padding-top: 60px !important;
@@ -92,6 +96,7 @@ body.rls-header-ready:not(.rls-has-hero) #listings-map {
     padding-top: 40px !important;
   }
 }
+
 /* ─────────────────────────────────────────────────────────
    3) Header container
    ───────────────────────────────────────────────────────── */
@@ -111,7 +116,6 @@ body.rls-header-ready:not(.rls-has-hero) #listings-map {
 #rls-header * {
   pointer-events: auto !important;
 }
-/* Transparent mode when over a hero, before scroll */
 body.rls-has-hero #rls-header.is-transparent {
   background: transparent;
   box-shadow: none;
@@ -120,6 +124,7 @@ body.rls-has-hero #rls-header.is-transparent {
   background: var(--rls-black);
   box-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
 }
+
 /* ─────────────────────────────────────────────────────────
    4) Header inner layout
    ───────────────────────────────────────────────────────── */
@@ -133,6 +138,7 @@ body.rls-has-hero #rls-header.is-transparent {
   justify-content: flex-end;
   position: relative;
 }
+
 /* ─────────────────────────────────────────────────────────
    5) Logo - absolutely centered
    ───────────────────────────────────────────────────────── */
@@ -155,15 +161,17 @@ body.rls-has-hero #rls-header.is-transparent {
   width: auto;
   display: block;
 }
+
 /* ─────────────────────────────────────────────────────────
-   6) Header right (deposit button + phone + hamburger)
+   6) Header right (deposit button + phone + menu button)
    ───────────────────────────────────────────────────────── */
 #rls-header .rls-header-right {
   display: flex;
   align-items: center;
   gap: 1.25rem;
 }
-/* Deposit Instructions button — white outlined */
+
+/* Deposit Instructions button */
 #rls-header .rls-deposit-btn {
   display: inline-flex;
   align-items: center;
@@ -188,6 +196,7 @@ body.rls-has-hero #rls-header.is-transparent {
   border-color: var(--rls-red);
   color: var(--rls-white);
 }
+
 #rls-header .rls-phone {
   text-decoration: none;
   color: var(--rls-white);
@@ -201,18 +210,20 @@ body.rls-has-hero #rls-header.is-transparent {
 #rls-header .rls-phone:hover {
   color: var(--rls-red);
 }
-/* Menu button — two-line icon + "MENU" label */
+
+/* ─────────────────────────────────────────────────────────
+   ≡ MENU button — replaces icon-only hamburger
+   ───────────────────────────────────────────────────────── */
 #rls-header .rls-hamburger {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 2px;
   height: 48px;
-  display: flex;
+  padding: 0 1.1rem;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.65rem;
   cursor: pointer;
-  padding: 0 1.15rem;
   transition: background-color 0.3s ease, border-color 0.3s ease;
   flex-shrink: 0;
 }
@@ -224,32 +235,17 @@ body.rls-has-hero #rls-header.is-transparent {
   outline: 2px solid var(--rls-red);
   outline-offset: 2px;
 }
-#rls-header .rls-hamburger-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  width: 22px;
-  flex-shrink: 0;
-}
-#rls-header .rls-hamburger-lines span {
-  display: block;
-  height: 1.5px;
-  background: var(--rls-white);
-  border-radius: 1px;
-  transition: width 0.35s ease;
-}
-#rls-header .rls-hamburger-lines span:nth-child(1) { width: 100%; }
-#rls-header .rls-hamburger-lines span:nth-child(2) { width: 65%; align-self: flex-end; }
-/* "MENU" text label */
 #rls-header .rls-hamburger-label {
   font-family: var(--rls-sans);
   font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--rls-white);
   line-height: 1;
+  white-space: nowrap;
 }
+
 /* ─────────────────────────────────────────────────────────
    7) Slide-out menu overlay
    ───────────────────────────────────────────────────────── */
@@ -268,6 +264,7 @@ body.rls-has-hero #rls-header.is-transparent {
   opacity: 1;
   visibility: visible;
 }
+
 /* ─────────────────────────────────────────────────────────
    8) Slide-out menu (from right)
    ───────────────────────────────────────────────────────── */
@@ -289,7 +286,6 @@ body.rls-has-hero #rls-header.is-transparent {
 #rls-slide-menu.is-open {
   transform: translateX(0);
 }
-/* Subtle red accent at top edge */
 #rls-slide-menu::before {
   content: '';
   position: absolute;
@@ -299,6 +295,7 @@ body.rls-has-hero #rls-header.is-transparent {
   height: 3px;
   background: var(--rls-red);
 }
+
 /* Close button */
 #rls-slide-menu .rls-menu-close {
   position: absolute;
@@ -326,6 +323,7 @@ body.rls-has-hero #rls-header.is-transparent {
   width: 18px;
   height: 18px;
 }
+
 /* ─────────────────────────────────────────────────────────
    9) Menu content layout
    ───────────────────────────────────────────────────────── */
@@ -398,17 +396,7 @@ body.rls-has-hero #rls-header.is-transparent {
 #rls-slide-menu .rls-menu-col button:hover::before {
   width: 0.85rem;
 }
-/* Submenu indicator arrow */
-#rls-slide-menu .rls-submenu-arrow {
-  font-size: 1.1rem;
-  font-weight: 300;
-  opacity: 0.6;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-}
-#rls-slide-menu .rls-menu-col button:hover .rls-submenu-arrow {
-  opacity: 1;
-  transform: translateX(3px);
-}
+
 /* ─────────────────────────────────────────────────────────
    10) Contact strip at bottom of slide-out
    ───────────────────────────────────────────────────────── */
@@ -449,29 +437,46 @@ body.rls-has-hero #rls-header.is-transparent {
   margin-top: 4px;
   opacity: 0.9;
 }
-/* Agent Hub — deliberately low-key link for agents only */
-#rls-slide-menu .rls-menu-contact .rls-agent-hub {
-  display: inline-block;
-  margin-top: 1.4rem;
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
+
+/* Agent Hub row — sits below the address, visually separated */
+#rls-slide-menu .rls-contact-hub-row {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+/* Agent Hub link — outlined pill, intentionally understated */
+#rls-slide-menu .rls-agent-hub-link {
+  display: inline-flex !important;
+  align-items: center;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.2em !important;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-  padding-bottom: 2px;
-  line-height: 1;
-  transition: color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 2px;
+  padding: 0.4rem 0.9rem !important;
+  line-height: 1 !important;
+  opacity: 0.8;
+  transition: opacity 0.25s ease, background-color 0.25s ease !important;
 }
-#rls-slide-menu .rls-menu-contact .rls-agent-hub:hover {
-  color: var(--rls-white);
-  border-color: rgba(255, 255, 255, 0.8);
-  opacity: 1;
+#rls-slide-menu .rls-agent-hub-link:hover {
+  opacity: 1 !important;
+  background: rgba(255, 255, 255, 0.15) !important;
 }
+
 /* ─────────────────────────────────────────────────────────
-   11) Mobile submenu panel (slides in over main menu)
+   11) Submenu panel
    ───────────────────────────────────────────────────────── */
+#rls-slide-menu .rls-submenu-arrow {
+  font-size: 1.1rem;
+  font-weight: 300;
+  opacity: 0.6;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+#rls-slide-menu .rls-menu-col button:hover .rls-submenu-arrow {
+  opacity: 1;
+  transform: translateX(3px);
+}
 #rls-slide-menu .rls-submenu-panel {
   position: absolute;
   top: 0;
@@ -563,6 +568,7 @@ body.rls-has-hero #rls-header.is-transparent {
 #rls-slide-menu .rls-submenu-panel a:hover::before {
   width: 0.85rem;
 }
+
 /* ─────────────────────────────────────────────────────────
    12) Responsive
    ───────────────────────────────────────────────────────── */
@@ -602,12 +608,10 @@ body.rls-has-hero #rls-header.is-transparent {
     letter-spacing: 0.12em;
   }
 }
+
 /* ─────────────────────────────────────────────────────────
    13) Mobile (<=600px) — fix logo/deposit-button overlap.
-   The Deposit Instructions button is hidden on phones — it
-   remains accessible through the hamburger menu (column 1).
-   Logo shifts from dead-center to left-aligned so it sits
-   comfortably next to the menu button.
+   Menu button collapses to icon-only "≡" to save space.
    ───────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
   #rls-header .rls-header-inner {
@@ -616,22 +620,29 @@ body.rls-has-hero #rls-header.is-transparent {
     justify-content: flex-end;
   }
   #rls-header .rls-logo {
-    /* Override the dead-center positioning from the base styles */
     left: 1rem;
     transform: translate(0, -50%);
   }
   #rls-header .rls-logo img { height: 56px; }
   #rls-header .rls-header-right { gap: 0.5rem; }
+  /* Shrink to icon-only on mobile */
   #rls-header .rls-hamburger {
+    width: 42px;
     height: 42px;
-    padding: 0 0.75rem;
-    gap: 0.45rem;
+    padding: 0;
   }
-  #rls-header .rls-hamburger-lines { width: 18px; }
   #rls-header .rls-hamburger-label {
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
+    font-size: 1rem;
+    letter-spacing: 0;
   }
-  /* Hide deposit button on mobile — accessible via hamburger menu */
+  /* Replace label text with just the ≡ symbol on mobile */
+  #rls-header .rls-hamburger-label::before {
+    content: '≡';
+    font-size: 1.4rem;
+  }
+  #rls-header .rls-hamburger-label {
+    font-size: 0;  /* hide "MENU" text, keep ≡ via ::before */
+  }
+  /* Hide deposit button on mobile */
   #rls-header .rls-deposit-btn { display: none; }
 }
