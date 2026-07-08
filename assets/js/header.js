@@ -1,15 +1,11 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
-   v1015 - Two changes:
-           1) Menu button now reads "MENU" next to the icon
-              (a realtor found the bare two-line icon
-              confusing). Icon kept for familiarity.
-           2) Added a subtle "Agent Hub" link in the red
-              contact strip of the slide-out menu — low-key
-              on purpose, since it's for agents only. Routes
-              through SITE_BASE like the other info-site
-              links (info.royallepagesolutions.com once the
-              CNAME resolves, GitHub fallback otherwise).
+   v1015 - 1) Hamburger replaced with "≡ MENU" text button
+               for improved usability (agent feedback).
+           2) Agent Hub link added to red contact strip —
+               subtle outlined style, agents-only visibility
+               intended. Links to info.royallepagesolutions.com/
+               pages/agent-hub/
    v1014 - Logo now loads from raw.githubusercontent.com
            instead of the github.io Pages path. GitHub Pages
            mishandles the "%2B" (the "+") in the logo filename
@@ -28,35 +24,15 @@
 console.log('RLS HEADER JS LOADED v1015');
 (function () {
   const VERSION = '1015';
-  // Base URL where logo and other assets live.
-  // GitHub-hosted; works regardless of custom-domain DNS status.
   const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
-  /* ─────────────────────────────────────────────────────────
-     BOLDTRAIL_BASE — the primary BoldTrail site.
-     Moved from rlpsolutions.ca to royallepagesolutions.com.
-     If your canonical is the bare apex (no www), drop the
-     "www." below — BoldTrail typically redirects either way.
-     ───────────────────────────────────────────────────────── */
   const BOLDTRAIL_BASE = 'https://www.royallepagesolutions.com';
-  /* ─────────────────────────────────────────────────────────
-     SITE_BASE — base for the GitHub-hosted info-site links.
-     Self-detecting: only use the custom subdomain when the
-     page is actually served from it (i.e. once the CNAME has
-     propagated). Everywhere else — GitHub preview, BoldTrail,
-     local — fall back to the GitHub URL, which always resolves.
-     To force one or the other manually, replace the line below
-     with a hardcoded value, e.g.:
-       const SITE_BASE = 'https://royal-lepage.github.io/solutions';
-     ───────────────────────────────────────────────────────── */
   const SITE_BASE = (location.hostname === 'info.royallepagesolutions.com')
     ? 'https://info.royallepagesolutions.com'
     : 'https://royal-lepage.github.io/solutions';
   const DEPOSIT_URL = 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust';
   const DEPOSIT_INSTRUCTIONS_URL = ASSET_BASE + '/deposits/';
-  // Served from raw.githubusercontent.com — GitHub Pages 404s the "%2B"
-  // ("+") in this filename, but the raw host serves it fine (same host as
-  // the hero / Proudly-Canadian images).
   const LOGO_URL = 'https://raw.githubusercontent.com/Royal-LePage/solutions/main/assets/images/Solutions%20Logo%20Script_White%20%2B%20Red.png';
+
   /* ─── Header markup ─── */
   function buildHeaderHTML() {
     return `
@@ -68,16 +44,13 @@ console.log('RLS HEADER JS LOADED v1015');
           <a class="rls-deposit-btn" href="${DEPOSIT_URL}">Deposit Instructions</a>
           <a class="rls-phone" href="tel:4032525900">403.252.5900</a>
           <button class="rls-hamburger" id="rls-hamburger" aria-label="Open menu" aria-expanded="false" type="button">
-            <span class="rls-hamburger-lines">
-              <span></span>
-              <span></span>
-            </span>
-            <span class="rls-hamburger-label">Menu</span>
+            <span class="rls-hamburger-label">&#8801;&nbsp;MENU</span>
           </button>
         </div>
       </div>
     `;
   }
+
   /* ─── Slide-out menu markup ─── */
   function buildMenuHTML() {
     return `
@@ -150,11 +123,17 @@ console.log('RLS HEADER JS LOADED v1015');
           </svg>
           <span>Calgary, Alberta</span>
         </div>
-        <!-- Agent Hub — low-key link, agents only -->
-        <a class="rls-agent-hub" href="${SITE_BASE}/pages/agent-hub/">Agent Hub</a>
+        <div class="rls-contact-row rls-contact-hub-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          <a href="${SITE_BASE}/pages/agent-hub/" class="rls-agent-hub-link">Agent Hub</a>
+        </div>
       </div>
     `;
   }
+
   /* ─── Inject everything ─── */
   function ensureInjected() {
     document.body.classList.add('has-rls-header');
@@ -189,6 +168,7 @@ console.log('RLS HEADER JS LOADED v1015');
     });
     console.log('[RLS Header] Injected + bound OK - v' + VERSION);
   }
+
   /* ─── Behavior bindings ─── */
   function bindHeaderBehavior(header, menu, overlay) {
     if (header.dataset.rlsBound === '1') return;
@@ -245,6 +225,7 @@ console.log('RLS HEADER JS LOADED v1015');
       if (e.target.closest('a')) closeMenu();
     });
   }
+
   function run() {
     ensureInjected();
     setTimeout(ensureInjected, 500);
