@@ -1,5 +1,11 @@
 /* =========================================================
    Royal LePage Solutions - Custom Header
+   v1016 - Two changes to match header.js v1015:
+           1) Menu button restyled to show the icon PLUS the
+              word "MENU" (auto width, horizontal padding).
+              Responsive sizes updated to match.
+           2) Added a subtle "Agent Hub" link style in the red
+              contact strip — muted, small, underlined on hover.
    v1015 - Mobile header overlap fix: at <=600px, logo
            shifts to left-aligned and the Deposit Instructions
            button is hidden (still accessible via hamburger
@@ -8,7 +14,6 @@
    v1010 - Increased subpage #listings-map padding to 60px/40px
            so the red filter bar subtitle isn't clipped by header
    ========================================================= */
-
 :root {
   --rls-red:        #EA002A;
   --rls-red-dk:     #C20023;
@@ -19,14 +24,11 @@
   --rls-light-grey: #E8E6E3;
   --rls-stone:      #D8D3CB;
   --rls-taupe:      #B8AC9C;
-
   --rls-header-h:        160px;
   --rls-header-h-tablet: 130px;
   --rls-header-h-mobile: 96px;
-
   --rls-sans: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
 }
-
 /* ─────────────────────────────────────────────────────────
    0) Reset / page baseline
    ───────────────────────────────────────────────────────── */
@@ -34,11 +36,9 @@ html, body {
   margin: 0 !important;
   padding: 0 !important;
 }
-
 body.rls-menu-open {
   overflow: hidden !important;
 }
-
 /* ─────────────────────────────────────────────────────────
    1) Hide BoldTrail's native header ONLY after ours injects
    ───────────────────────────────────────────────────────── */
@@ -53,7 +53,6 @@ body.has-rls-header .page-wrapper > #header {
   visibility: hidden !important;
   height: 0 !important;
 }
-
 body.has-rls-header #fixed-header-spacer,
 body.has-rls-header .header-spacer,
 body.has-rls-header .sticky-spacer,
@@ -65,26 +64,22 @@ body.has-rls-header .kv-sticky-spacer {
   padding: 0 !important;
   margin: 0 !important;
 }
-
 /* ─────────────────────────────────────────────────────────
    2) Reserve header space (when not in hero mode)
    ───────────────────────────────────────────────────────── */
 body.rls-header-ready:not(.rls-has-hero) {
   padding-top: var(--rls-header-h) !important;
 }
-
 @media (max-width: 1024px) {
   body.rls-header-ready:not(.rls-has-hero) {
     padding-top: var(--rls-header-h-tablet) !important;
   }
 }
-
 @media (max-width: 600px) {
   body.rls-header-ready:not(.rls-has-hero) {
     padding-top: var(--rls-header-h-mobile) !important;
   }
 }
-
 /* ─────────────────────────────────────────────────────────
    2b) Map/search results pages — push the full-bleed
        map+results layout below the fixed header.
@@ -92,13 +87,11 @@ body.rls-header-ready:not(.rls-has-hero) {
 body.rls-header-ready:not(.rls-has-hero) #listings-map {
   padding-top: 60px !important;
 }
-
 @media (max-width: 768px) {
   body.rls-header-ready:not(.rls-has-hero) #listings-map {
     padding-top: 40px !important;
   }
 }
-
 /* ─────────────────────────────────────────────────────────
    3) Header container
    ───────────────────────────────────────────────────────── */
@@ -115,22 +108,18 @@ body.rls-header-ready:not(.rls-has-hero) #listings-map {
   transition: background-color 0.35s ease, box-shadow 0.35s ease;
   pointer-events: auto !important;
 }
-
 #rls-header * {
   pointer-events: auto !important;
 }
-
 /* Transparent mode when over a hero, before scroll */
 body.rls-has-hero #rls-header.is-transparent {
   background: transparent;
   box-shadow: none;
 }
-
 #rls-header.is-scrolled {
   background: var(--rls-black);
   box-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
 }
-
 /* ─────────────────────────────────────────────────────────
    4) Header inner layout
    ───────────────────────────────────────────────────────── */
@@ -144,7 +133,6 @@ body.rls-has-hero #rls-header.is-transparent {
   justify-content: flex-end;
   position: relative;
 }
-
 /* ─────────────────────────────────────────────────────────
    5) Logo - absolutely centered
    ───────────────────────────────────────────────────────── */
@@ -159,17 +147,14 @@ body.rls-has-hero #rls-header.is-transparent {
   line-height: 1;
   transition: opacity 0.25s ease;
 }
-
 #rls-header .rls-logo:hover {
   opacity: 0.85;
 }
-
 #rls-header .rls-logo img {
   height: 130px;
   width: auto;
   display: block;
 }
-
 /* ─────────────────────────────────────────────────────────
    6) Header right (deposit button + phone + hamburger)
    ───────────────────────────────────────────────────────── */
@@ -178,7 +163,6 @@ body.rls-has-hero #rls-header.is-transparent {
   align-items: center;
   gap: 1.25rem;
 }
-
 /* Deposit Instructions button — white outlined */
 #rls-header .rls-deposit-btn {
   display: inline-flex;
@@ -199,13 +183,11 @@ body.rls-has-hero #rls-header.is-transparent {
   white-space: nowrap;
   cursor: pointer;
 }
-
 #rls-header .rls-deposit-btn:hover {
   background: var(--rls-red);
   border-color: var(--rls-red);
   color: var(--rls-white);
 }
-
 #rls-header .rls-phone {
   text-decoration: none;
   color: var(--rls-white);
@@ -216,44 +198,39 @@ body.rls-has-hero #rls-header.is-transparent {
   transition: color 0.25s ease;
   white-space: nowrap;
 }
-
 #rls-header .rls-phone:hover {
   color: var(--rls-red);
 }
-
-/* Hamburger button */
+/* Menu button — two-line icon + "MENU" label */
 #rls-header .rls-hamburger {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 2px;
-  width: 48px;
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.65rem;
   cursor: pointer;
-  padding: 0;
+  padding: 0 1.15rem;
   transition: background-color 0.3s ease, border-color 0.3s ease;
   flex-shrink: 0;
 }
-
 #rls-header .rls-hamburger:hover {
   background: var(--rls-red);
   border-color: var(--rls-red);
 }
-
 #rls-header .rls-hamburger:focus {
   outline: 2px solid var(--rls-red);
   outline-offset: 2px;
 }
-
 #rls-header .rls-hamburger-lines {
   display: flex;
   flex-direction: column;
   gap: 5px;
   width: 22px;
+  flex-shrink: 0;
 }
-
 #rls-header .rls-hamburger-lines span {
   display: block;
   height: 1.5px;
@@ -261,10 +238,18 @@ body.rls-has-hero #rls-header.is-transparent {
   border-radius: 1px;
   transition: width 0.35s ease;
 }
-
 #rls-header .rls-hamburger-lines span:nth-child(1) { width: 100%; }
 #rls-header .rls-hamburger-lines span:nth-child(2) { width: 65%; align-self: flex-end; }
-
+/* "MENU" text label */
+#rls-header .rls-hamburger-label {
+  font-family: var(--rls-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rls-white);
+  line-height: 1;
+}
 /* ─────────────────────────────────────────────────────────
    7) Slide-out menu overlay
    ───────────────────────────────────────────────────────── */
@@ -279,12 +264,10 @@ body.rls-has-hero #rls-header.is-transparent {
   transition: opacity 0.35s ease, visibility 0.35s ease;
   z-index: 9998;
 }
-
 #rls-menu-overlay.is-open {
   opacity: 1;
   visibility: visible;
 }
-
 /* ─────────────────────────────────────────────────────────
    8) Slide-out menu (from right)
    ───────────────────────────────────────────────────────── */
@@ -303,11 +286,9 @@ body.rls-has-hero #rls-header.is-transparent {
   display: flex;
   flex-direction: column;
 }
-
 #rls-slide-menu.is-open {
   transform: translateX(0);
 }
-
 /* Subtle red accent at top edge */
 #rls-slide-menu::before {
   content: '';
@@ -318,7 +299,6 @@ body.rls-has-hero #rls-header.is-transparent {
   height: 3px;
   background: var(--rls-red);
 }
-
 /* Close button */
 #rls-slide-menu .rls-menu-close {
   position: absolute;
@@ -337,18 +317,15 @@ body.rls-has-hero #rls-header.is-transparent {
   transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
   z-index: 2;
 }
-
 #rls-slide-menu .rls-menu-close:hover {
   background: var(--rls-red);
   border-color: var(--rls-red);
   transform: rotate(90deg);
 }
-
 #rls-slide-menu .rls-menu-close svg {
   width: 18px;
   height: 18px;
 }
-
 /* ─────────────────────────────────────────────────────────
    9) Menu content layout
    ───────────────────────────────────────────────────────── */
@@ -356,13 +333,11 @@ body.rls-has-hero #rls-header.is-transparent {
   padding: 5rem 3.5rem 2rem;
   flex: 1;
 }
-
 #rls-slide-menu .rls-menu-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2.5rem 3rem;
 }
-
 #rls-slide-menu .rls-menu-col h3 {
   font-family: var(--rls-sans);
   color: var(--rls-white);
@@ -374,7 +349,6 @@ body.rls-has-hero #rls-header.is-transparent {
   padding-bottom: 0.75rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
-
 #rls-slide-menu .rls-menu-col ul {
   list-style: none;
   margin: 0;
@@ -383,7 +357,6 @@ body.rls-has-hero #rls-header.is-transparent {
   flex-direction: column;
   gap: 0.2rem;
 }
-
 #rls-slide-menu .rls-menu-col a,
 #rls-slide-menu .rls-menu-col button {
   font-family: var(--rls-sans);
@@ -404,7 +377,6 @@ body.rls-has-hero #rls-header.is-transparent {
   position: relative;
   transition: color 0.25s ease, padding-left 0.25s ease;
 }
-
 #rls-slide-menu .rls-menu-col a::before,
 #rls-slide-menu .rls-menu-col button::before {
   content: '';
@@ -417,18 +389,15 @@ body.rls-has-hero #rls-header.is-transparent {
   transition: width 0.25s ease;
   transform: translateY(-50%);
 }
-
 #rls-slide-menu .rls-menu-col a:hover,
 #rls-slide-menu .rls-menu-col button:hover {
   color: var(--rls-red);
   padding-left: 1.25rem;
 }
-
 #rls-slide-menu .rls-menu-col a:hover::before,
 #rls-slide-menu .rls-menu-col button:hover::before {
   width: 0.85rem;
 }
-
 /* Submenu indicator arrow */
 #rls-slide-menu .rls-submenu-arrow {
   font-size: 1.1rem;
@@ -436,12 +405,10 @@ body.rls-has-hero #rls-header.is-transparent {
   opacity: 0.6;
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
-
 #rls-slide-menu .rls-menu-col button:hover .rls-submenu-arrow {
   opacity: 1;
   transform: translateX(3px);
 }
-
 /* ─────────────────────────────────────────────────────────
    10) Contact strip at bottom of slide-out
    ───────────────────────────────────────────────────────── */
@@ -451,14 +418,12 @@ body.rls-has-hero #rls-header.is-transparent {
   padding: 2rem 3.5rem;
   font-family: var(--rls-sans);
 }
-
 #rls-slide-menu .rls-menu-contact .rls-contact-brand {
   font-size: 1.1rem;
   font-weight: 500;
   letter-spacing: 0.04em;
   margin-bottom: 1.25rem;
 }
-
 #rls-slide-menu .rls-menu-contact a,
 #rls-slide-menu .rls-menu-contact span {
   color: var(--rls-white);
@@ -468,18 +433,15 @@ body.rls-has-hero #rls-header.is-transparent {
   line-height: 1.55;
   transition: opacity 0.25s ease;
 }
-
 #rls-slide-menu .rls-menu-contact a:hover {
   opacity: 0.78;
 }
-
 #rls-slide-menu .rls-contact-row {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
   padding: 0.5rem 0;
 }
-
 #rls-slide-menu .rls-contact-row svg {
   width: 15px;
   height: 15px;
@@ -487,7 +449,26 @@ body.rls-has-hero #rls-header.is-transparent {
   margin-top: 4px;
   opacity: 0.9;
 }
-
+/* Agent Hub — deliberately low-key link for agents only */
+#rls-slide-menu .rls-menu-contact .rls-agent-hub {
+  display: inline-block;
+  margin-top: 1.4rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  padding-bottom: 2px;
+  line-height: 1;
+  transition: color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+}
+#rls-slide-menu .rls-menu-contact .rls-agent-hub:hover {
+  color: var(--rls-white);
+  border-color: rgba(255, 255, 255, 0.8);
+  opacity: 1;
+}
 /* ─────────────────────────────────────────────────────────
    11) Mobile submenu panel (slides in over main menu)
    ───────────────────────────────────────────────────────── */
@@ -505,12 +486,10 @@ body.rls-has-hero #rls-header.is-transparent {
   z-index: 3;
   display: none;
 }
-
 #rls-slide-menu .rls-submenu-panel.is-open {
   transform: translateX(0);
   display: block;
 }
-
 #rls-slide-menu .rls-submenu-back {
   background: none;
   border: none;
@@ -528,16 +507,13 @@ body.rls-has-hero #rls-header.is-transparent {
   gap: 0.5rem;
   transition: color 0.25s ease;
 }
-
 #rls-slide-menu .rls-submenu-back:hover {
   color: var(--rls-red);
 }
-
 #rls-slide-menu .rls-submenu-back::before {
   content: '←';
   font-size: 1.1rem;
 }
-
 #rls-slide-menu .rls-submenu-title {
   font-family: var(--rls-sans);
   color: var(--rls-white);
@@ -549,7 +525,6 @@ body.rls-has-hero #rls-header.is-transparent {
   padding-bottom: 0.75rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
-
 #rls-slide-menu .rls-submenu-panel ul {
   list-style: none;
   margin: 0;
@@ -558,7 +533,6 @@ body.rls-has-hero #rls-header.is-transparent {
   flex-direction: column;
   gap: 0.2rem;
 }
-
 #rls-slide-menu .rls-submenu-panel a {
   font-family: var(--rls-sans);
   color: rgba(255, 255, 255, 0.85);
@@ -571,7 +545,6 @@ body.rls-has-hero #rls-header.is-transparent {
   transition: color 0.25s ease, padding-left 0.25s ease;
   position: relative;
 }
-
 #rls-slide-menu .rls-submenu-panel a::before {
   content: '';
   position: absolute;
@@ -583,16 +556,13 @@ body.rls-has-hero #rls-header.is-transparent {
   transition: width 0.25s ease;
   transform: translateY(-50%);
 }
-
 #rls-slide-menu .rls-submenu-panel a:hover {
   color: var(--rls-red);
   padding-left: 1.25rem;
 }
-
 #rls-slide-menu .rls-submenu-panel a:hover::before {
   width: 0.85rem;
 }
-
 /* ─────────────────────────────────────────────────────────
    12) Responsive
    ───────────────────────────────────────────────────────── */
@@ -603,7 +573,6 @@ body.rls-has-hero #rls-header.is-transparent {
     padding: 0.75rem 1.1rem;
   }
 }
-
 @media (max-width: 1024px) {
   #rls-header .rls-header-inner {
     padding: 0 1.75rem;
@@ -613,7 +582,6 @@ body.rls-has-hero #rls-header.is-transparent {
   #rls-header .rls-header-right { gap: 0.85rem; }
   #rls-header .rls-phone { display: none; }
 }
-
 @media (max-width: 768px) {
   #rls-slide-menu .rls-menu-inner {
     padding: 4.5rem 2rem 1.5rem;
@@ -634,13 +602,12 @@ body.rls-has-hero #rls-header.is-transparent {
     letter-spacing: 0.12em;
   }
 }
-
 /* ─────────────────────────────────────────────────────────
    13) Mobile (<=600px) — fix logo/deposit-button overlap.
    The Deposit Instructions button is hidden on phones — it
    remains accessible through the hamburger menu (column 1).
    Logo shifts from dead-center to left-aligned so it sits
-   comfortably next to the hamburger.
+   comfortably next to the menu button.
    ───────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
   #rls-header .rls-header-inner {
@@ -655,8 +622,16 @@ body.rls-has-hero #rls-header.is-transparent {
   }
   #rls-header .rls-logo img { height: 56px; }
   #rls-header .rls-header-right { gap: 0.5rem; }
-  #rls-header .rls-hamburger { width: 42px; height: 42px; }
-
+  #rls-header .rls-hamburger {
+    height: 42px;
+    padding: 0 0.75rem;
+    gap: 0.45rem;
+  }
+  #rls-header .rls-hamburger-lines { width: 18px; }
+  #rls-header .rls-hamburger-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+  }
   /* Hide deposit button on mobile — accessible via hamburger menu */
   #rls-header .rls-deposit-btn { display: none; }
 }
