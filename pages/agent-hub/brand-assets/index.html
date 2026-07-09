@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+  (function () {
+    var PASS_KEY = 'rls_hub_auth';
+    function simpleHash(str) {
+      var hash = 5381;
+      for (var i = 0; i < str.length; i++) {
+        hash = ((hash << 5) + hash) + str.charCodeAt(i);
+        hash = hash & hash;
+      }
+      return Math.abs(hash).toString(16);
+    }
+    var CORRECT = simpleHash('Solutions');
+    if (sessionStorage.getItem(PASS_KEY) !== CORRECT) {
+      window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/';
+    }
+  })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brand Assets — Agent Hub — Royal LePage Solutions</title>
@@ -33,8 +50,36 @@
     *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
     body { font-family:'Roboto',sans-serif; background:var(--rls-white); color:var(--rls-black); }
 
+
+    /* ── Logout button ──────────────────────────── */
+    .rls-logout {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 0.4rem 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s, border-color 0.2s;
+    }
+    .rls-logout:hover {
+      color: var(--rls-white);
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.25);
+    }
+
     /* ── Hero ───────────────────────────────────── */
-    .ba-hero { background:var(--rls-black); color:var(--rls-white); padding:5rem 2rem 3.5rem; text-align:center; }
+    .ba-hero { position: relative !important; position: relative !important; background:var(--rls-black); color:var(--rls-white); padding:5rem 2rem 3.5rem; text-align:center; }
     .ba-hero__back { display:inline-flex; align-items:center; gap:0.4rem; font-family:'Roboto',sans-serif; font-size:0.75rem; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:var(--rls-taupe); text-decoration:none; margin-bottom:1.5rem; transition:color 0.2s; }
     .ba-hero__back:hover { color:var(--rls-white); }
     .ba-hero__eyebrow { font-family:'Roboto',sans-serif; font-weight:300; font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--rls-taupe); margin-bottom:0.75rem; }
@@ -139,6 +184,10 @@
 
   <!-- Hero -->
   <section class="ba-hero">
+      <button class="rls-logout" onclick="rlsLogout()">
+        <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M5 2H2v10h3M9 10l3-3-3-3M6 7h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Logout
+      </button>
     <a class="ba-hero__back" href="https://info.royallepagesolutions.com/pages/agent-hub/">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Agent Hub
@@ -914,5 +963,12 @@
     });
   }
 </script>
+
+  <script>
+  function rlsLogout() {
+    sessionStorage.removeItem('rls_hub_auth');
+    window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/';
+  }
+  </script>
 </body>
 </html>
