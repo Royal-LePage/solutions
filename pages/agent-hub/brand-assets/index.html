@@ -48,7 +48,8 @@
   <style>
     :root { --rls-red:#EA002A; --rls-black:#000000; --rls-white:#FFFFFF; --rls-taupe:#A89E92; --rls-stone:#D6D1C8; --rls-light-grey:#EFEFEF; --ba-max:1100px; }
     *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:'Roboto',sans-serif; background:var(--rls-white); color:var(--rls-black); }
+    html { overflow-x: hidden; }
+    body { font-family:'Roboto',sans-serif; background:var(--rls-white); color:var(--rls-black); overflow-x: hidden; }
 
 
     /* ── Logout button ──────────────────────────── */
@@ -158,22 +159,45 @@
       .ba-hero__sub { font-size: 0.88rem; }
       .ba-main { padding: 2rem 1.25rem 4rem; }
       .ba-section { margin-top: 2.5rem; }
-      .ba-logo-grid, .ba-fonts, .ba-rules { grid-template-columns: 1fr; }
-      .ba-colours { grid-template-columns: repeat(2, 1fr); }
-      .ba-swatch__block { height: 60px; }
-      .ba-logo-card__body { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+
+      /* Force all grids to single column — override minmax */
+      .ba-logo-grid { grid-template-columns: 1fr !important; }
+      .ba-fonts { grid-template-columns: 1fr !important; }
+      .ba-rules { grid-template-columns: 1fr !important; }
+      .ba-colours { grid-template-columns: repeat(2, 1fr) !important; }
+
+      /* Logo cards */
+      .ba-logo-card { width: 100% !important; max-width: 100% !important; }
+      .ba-logo-card__preview { aspect-ratio: 16/9; width: 100%; overflow: hidden; }
+      .ba-logo-card__preview img { width: 100%; height: 100%; object-fit: contain; }
+      .ba-logo-card__body { flex-direction: column; align-items: flex-start; gap: 0.75rem; padding: 0.9rem 1rem; }
       .ba-logo-card__dl { align-self: stretch; justify-content: center; padding: 0.6rem 1rem; font-size: 0.75rem; }
+
+      /* Swatches */
+      .ba-swatch__block { height: 60px; }
+
+      /* Font cards */
       .ba-font-card__specimen { font-size: 1.8rem; }
+
+      /* Rule cards */
       .ba-rule-card { padding: 1rem 1.1rem; gap: 0.75rem; }
       .ba-rule-card__icon { width: 30px; height: 30px; flex-shrink: 0; }
+
+      /* CTA */
       .ba-cta { flex-direction: column; padding: 1.5rem; gap: 1.25rem; }
       .ba-cta__btn { text-align: center; justify-content: center; }
+
+      /* Section headers */
       .ba-section__title { font-size: 0.9rem; }
       .ba-section__header { flex-wrap: wrap; }
+
+      /* Prevent any horizontal overflow */
+      .ba-main { overflow-x: hidden; }
+      .ba-logo-grid, .ba-colours, .ba-fonts, .ba-rules { width: 100%; }
     }
 
     @media (max-width: 400px) {
-      .ba-colours { grid-template-columns: 1fr; }
+      .ba-colours { grid-template-columns: 1fr !important; }
       .ba-hero { padding: 3.5rem 1rem 2rem; }
       .ba-main { padding: 1.5rem 1rem 3rem; }
     }
