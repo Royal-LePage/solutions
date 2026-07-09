@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brand Assets — Agent Hub — Royal LePage Solutions</title>
   <meta name="description" content="Download approved Royal LePage Solutions logos and access brand guidelines, colours, and fonts.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../assets/css/header.css?v=1015">
+  <link rel="stylesheet" href="../../../../assets/css/styles.css?v=1001">
+  <script defer src="../../../../assets/js/header.js?v=1014"></script>
+  <style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand Assets — Agent Hub — Royal LePage Solutions</title>
+  <meta name="description" content="Download approved Royal LePage Solutions logos and access brand guidelines, colours, and fonts.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -89,11 +103,35 @@
     .ba-cta__btn { display:inline-flex; align-items:center; gap:0.4rem; background:var(--rls-red); color:var(--rls-white); font-family:'Raleway',sans-serif; font-weight:600; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.75rem 1.5rem; text-decoration:none; white-space:nowrap; transition:background 0.2s; flex-shrink:0; }
     .ba-cta__btn:hover { background:#c20024; }
 
-    /* ── Footer ──────────────────────────────────── */
     .ba-footer-note { text-align:center; padding:0 2rem 3rem; font-family:'Roboto',sans-serif; font-size:0.78rem; font-weight:300; color:var(--rls-taupe); }
     .ba-footer-note a { color:var(--rls-taupe); text-decoration:underline; }
 
-    @media (max-width:600px) { .ba-logo-grid,.ba-colours,.ba-fonts,.ba-rules { grid-template-columns:1fr; } .ba-cta { flex-direction:column; } }
+    /* ── Mobile ──────────────────────────────────── */
+    @media (max-width: 768px) {
+      .ba-hero { padding: 4rem 1.25rem 2.5rem; }
+      .ba-hero__title { font-size: clamp(1.75rem, 7vw, 2.5rem) !important; }
+      .ba-hero__sub { font-size: 0.88rem; }
+      .ba-main { padding: 2rem 1.25rem 4rem; }
+      .ba-section { margin-top: 2.5rem; }
+      .ba-logo-grid, .ba-fonts, .ba-rules { grid-template-columns: 1fr; }
+      .ba-colours { grid-template-columns: repeat(2, 1fr); }
+      .ba-swatch__block { height: 60px; }
+      .ba-logo-card__body { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+      .ba-logo-card__dl { align-self: stretch; justify-content: center; padding: 0.6rem 1rem; font-size: 0.75rem; }
+      .ba-font-card__specimen { font-size: 1.8rem; }
+      .ba-rule-card { padding: 1rem 1.1rem; gap: 0.75rem; }
+      .ba-rule-card__icon { width: 30px; height: 30px; flex-shrink: 0; }
+      .ba-cta { flex-direction: column; padding: 1.5rem; gap: 1.25rem; }
+      .ba-cta__btn { text-align: center; justify-content: center; }
+      .ba-section__title { font-size: 0.9rem; }
+      .ba-section__header { flex-wrap: wrap; }
+    }
+
+    @media (max-width: 400px) {
+      .ba-colours { grid-template-columns: 1fr; }
+      .ba-hero { padding: 3.5rem 1rem 2rem; }
+      .ba-main { padding: 1.5rem 1rem 3rem; }
+    }
   </style>
 </head>
 <body>
