@@ -22,7 +22,10 @@
     /* ── Password Gate ──────────────────────────── */
     .hub-gate {
       position: fixed;
-      inset: 0;
+      top: 80px; /* sit below the injected header */
+      left: 0;
+      right: 0;
+      bottom: 0;
       background: var(--rls-black);
       display: flex;
       align-items: center;
@@ -434,9 +437,6 @@
   <!-- Password Gate -->
   <div class="hub-gate" id="hub-gate">
     <div class="hub-gate__box">
-      <div class="hub-gate__logo">
-        <svg width="48" height="8" viewBox="0 0 48 8" fill="none"><rect width="48" height="8" fill="#EA002A"/></svg>
-      </div>
       <h2 class="hub-gate__title">Agent Hub</h2>
       <div class="hub-gate__rule"><span></span><span></span></div>
       <p class="hub-gate__sub">This area is for Royal LePage Solutions agents only.<br>Please enter your access password to continue.</p>
@@ -488,6 +488,18 @@
         input.focus();
       }
     }
+
+    // Position gate below header
+    function positionGate() {
+      const header = document.querySelector('header') || document.querySelector('.rls-header');
+      if (header) {
+        gate.style.top = header.offsetHeight + 'px';
+      }
+    }
+    positionGate();
+    window.addEventListener('resize', positionGate);
+    // Re-check after header.js injects the header
+    setTimeout(positionGate, 500);
 
     // Already authenticated this session?
     if (sessionStorage.getItem(PASS_KEY) === CORRECT) {
