@@ -1,1 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tools &amp; Resources — Agent Hub — Royal LePage Solutions</title>
+  <meta name="description" content="Quick links to the platforms and tools you use every day.">
+  <script>
+  (function () {
+    var PASS_KEY = 'rls_hub_auth';
+    function simpleHash(str) {
+      var hash = 5381;
+      for (var i = 0; i < str.length; i++) {
+        hash = ((hash << 5) + hash) + str.charCodeAt(i);
+        hash = hash & hash;
+      }
+      return Math.abs(hash).toString(16);
+    }
+    var CORRECT = simpleHash('Solutions');
+    if (sessionStorage.getItem(PASS_KEY) !== CORRECT) {
+      window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/';
+    }
+  })();
+  </script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../../../assets/css/header.css?v=1015">
+  <link rel="stylesheet" href="../../../../assets/css/styles.css?v=1001">
+  <script defer src="../../../../assets/js/header.js?v=1014"></script>
+
+  <style>
+    :root {
+      --rls-red:        #EA002A;
+      --rls-black:      #000000;
+      --rls-white:      #FFFFFF;
+      --rls-taupe:      #A89E92;
+      --rls-stone:      #D6D1C8;
+      --rls-light-grey: #EFEFEF;
+      --tr-max:         1100px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Roboto', sans-serif; background: var(--rls-white); color: var(--rls-black); }
+
+    /* ── Hero ───────────────────────────────────── */
+    .tr-hero { background: var(--rls-black); color: var(--rls-white); padding: 5rem 2rem 3.5rem; text-align: center; }
+    .tr-hero__back { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'Roboto', sans-serif; font-size: 0.75rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rls-taupe); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.2s; }
+    .tr-hero__back:hover { color: var(--rls-white); }
+    .tr-hero__eyebrow { font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rls-taupe); margin-bottom: 0.75rem; }
+    .tr-hero__title { font-family: 'Raleway', sans-serif !important; font-weight: 700 !important; font-size: clamp(2rem, 4vw, 3rem) !important; color: var(--rls-white) !important; letter-spacing: -0.01em !important; line-height: 1.1 !important; margin-bottom: 0 !important; }
+    .tr-hero__title .tr-accent { color: var(--rls-red) !important; display: inline !important; }
+    .tr-hero__rule { display: flex; align-items: center; gap: 0.75rem; justify-content: center; margin: 1.25rem auto; width: fit-content; }
+    .tr-hero__rule span { width: 36px; height: 2px; background: var(--rls-red); display: block; }
+    .tr-hero__sub { font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 0.95rem; color: var(--rls-stone); max-width: 480px; margin: 0 auto; line-height: 1.65; }
+
+    /* ── Coming Soon ─────────────────────────────── */
+    .tr-main { max-width: var(--tr-max); margin: 0 auto; padding: 5rem 2rem 6rem; text-align: center; }
+
+    .tr-icon {
+      width: 72px; height: 72px;
+      background: var(--rls-light-grey);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 2rem;
+    }
+
+    .tr-coming__title {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .tr-coming__desc {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.7;
+      max-width: 440px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .tr-coming__items {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      max-width: 540px;
+      margin: 0 auto 3rem;
+    }
+
+    .tr-coming__tag {
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--rls-taupe);
+      background: var(--rls-light-grey);
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--rls-stone);
+    }
+
+    .tr-coming__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--rls-black);
+      color: var(--rls-white);
+      font-family: 'Raleway', sans-serif;
+      font-weight: 600;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.75rem;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .tr-coming__back:hover { background: var(--rls-red); }
+
+    /* ── Footer ──────────────────────────────────── */
+    .tr-footer-note { text-align: center; padding: 0 2rem 3rem; font-family: 'Roboto', sans-serif; font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); }
+    .tr-footer-note a { color: var(--rls-taupe); text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .tr-main { padding: 4rem 1.5rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+
+    <section class="tr-hero">
+      <a class="tr-hero__back" href="https://info.royallepagesolutions.com/pages/agent-hub/">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Agent Hub
+      </a>
+      <p class="tr-hero__eyebrow">Royal LePage Solutions®</p>
+      <h1 class="tr-hero__title">Tools &amp; <span class="tr-accent">Resources</span></h1>
+      <div class="tr-hero__rule"><span></span><span></span></div>
+      <p class="tr-hero__sub">Quick links to the platforms and tools you use every day.</p>
+    </section>
+
+    <div class="tr-main">
+
+      <div class="tr-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <rect x="3" y="5" width="26" height="18" rx="2" stroke="#A89E92" stroke-width="2"/>
+          <path d="M3 9h26" stroke="#A89E92" stroke-width="1.5"/>
+          <circle cx="7" cy="7" r="1" fill="#A89E92"/>
+          <circle cx="11" cy="7" r="1" fill="#A89E92"/>
+          <path d="M11 18h10M11 14h6" stroke="#A89E92" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M13 23v4M9 27h14" stroke="#A89E92" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <h2 class="tr-coming__title">Coming Soon</h2>
+      <p class="tr-coming__desc">
+        This page is under construction. It will include quick links to all the platforms and tools Royal LePage Solutions agents use every day.
+      </p>
+
+      <div class="tr-coming__items">
+        <span class="tr-coming__tag">Matrix / MLS</span>
+        <span class="tr-coming__tag">Smart Leads</span>
+        <span class="tr-coming__tag">Canva</span>
+        <span class="tr-coming__tag">RLP Connect</span>
+        <span class="tr-coming__tag">BoldTrail CRM</span>
+        <span class="tr-coming__tag">rlpNetwork</span>
+        <span class="tr-coming__tag">Payload Trust</span>
+        <span class="tr-coming__tag">And more…</span>
+      </div>
+
+      <a class="tr-coming__back" href="https://info.royallepagesolutions.com/pages/agent-hub/">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to Agent Hub
+      </a>
+
+    </div>
+
+    <p class="tr-footer-note">
+      Royal LePage® Solutions is independently owned and operated. Not intended to solicit buyers or sellers currently under contract with a brokerage.
+      View important notices at <a href="https://rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.
+    </p>
+
+  </main>
+
+</body>
+</html>
