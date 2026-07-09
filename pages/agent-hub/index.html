@@ -19,7 +19,83 @@
   <script defer src="../../assets/js/header.js?v=1014"></script>
 
   <style>
-    /* ── Variables ─────────────────────────────── */
+    /* ── Password Gate ──────────────────────────── */
+    .hub-gate {
+      position: fixed;
+      inset: 0;
+      background: var(--rls-black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 2rem;
+    }
+    .hub-gate__box {
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    .hub-gate__logo {
+      margin-bottom: 2rem;
+    }
+    .hub-gate__title {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--rls-white);
+      margin-bottom: 0.4rem;
+    }
+    .hub-gate__sub {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
+      font-size: 0.85rem;
+      color: var(--rls-taupe);
+      margin-bottom: 2rem;
+    }
+    .hub-gate__input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--rls-white);
+      font-family: 'Roboto', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 1rem;
+    }
+    .hub-gate__input::placeholder { color: rgba(255,255,255,0.25); letter-spacing: 0.04em; }
+    .hub-gate__input:focus { border-color: var(--rls-red); }
+    .hub-gate__btn {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: var(--rls-red);
+      color: var(--rls-white);
+      border: none;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .hub-gate__btn:hover { background: #c20024; }
+    .hub-gate__error {
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.8rem;
+      color: var(--rls-red);
+      margin-top: 0.75rem;
+      min-height: 1.2em;
+    }
+    .hub-gate__rule {
+      display: flex; align-items: center; gap: 0.75rem;
+      justify-content: center; margin: 0 auto 2rem; width: fit-content;
+    }
+    .hub-gate__rule span { width: 30px; height: 2px; background: var(--rls-red); display: block; }
+  </style>
     :root {
       --rls-red:        #EA002A;
       --rls-black:      #000000;
@@ -257,7 +333,7 @@
       <div class="hub-grid">
 
         <!-- Brand Assets -->
-        <a class="hub-card" href="brand-assets/">
+        <a class="hub-card" href="https://info.royallepagesolutions.com/pages/agent-hub/brand-assets/">
           <div class="hub-card__icon">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="2" y="6" width="20" height="14" rx="1" stroke="#EA002A" stroke-width="2"/>
@@ -278,7 +354,7 @@
         </a>
 
         <!-- Print & Supplies -->
-        <a class="hub-card" href="print-supplies/">
+        <a class="hub-card" href="https://info.royallepagesolutions.com/pages/agent-hub/print-supplies/">
           <div class="hub-card__icon">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="8" y="2" width="16" height="20" rx="1" stroke="#EA002A" stroke-width="2"/>
@@ -300,7 +376,7 @@
         </a>
 
         <!-- Preferred Suppliers -->
-        <a class="hub-card" href="preferred-suppliers/">
+        <a class="hub-card" href="https://info.royallepagesolutions.com/pages/agent-hub/preferred-suppliers/">
           <div class="hub-card__icon">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="16" cy="10" r="4" stroke="#EA002A" stroke-width="2"/>
@@ -321,7 +397,7 @@
         </a>
 
         <!-- Tools & Resources -->
-        <a class="hub-card" href="tools/">
+        <a class="hub-card" href="https://info.royallepagesolutions.com/pages/agent-hub/tools-resources/">
           <div class="hub-card__icon">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="3" y="5" width="26" height="18" rx="2" stroke="#EA002A" stroke-width="2"/>
@@ -353,6 +429,77 @@
     </p>
 
   </main>
+
+  <!-- Password Gate -->
+  <div class="hub-gate" id="hub-gate">
+    <div class="hub-gate__box">
+      <div class="hub-gate__logo">
+        <svg width="48" height="8" viewBox="0 0 48 8" fill="none"><rect width="48" height="8" fill="#EA002A"/></svg>
+      </div>
+      <h2 class="hub-gate__title">Agent Hub</h2>
+      <div class="hub-gate__rule"><span></span><span></span></div>
+      <p class="hub-gate__sub">This area is for Royal LePage Solutions agents only.<br>Please enter your access password to continue.</p>
+      <input
+        class="hub-gate__input"
+        type="password"
+        id="hub-gate-input"
+        placeholder="Enter password"
+        autocomplete="current-password"
+      >
+      <button class="hub-gate__btn" id="hub-gate-btn">Enter Hub</button>
+      <p class="hub-gate__error" id="hub-gate-error"></p>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    const PASS_KEY  = 'rls_hub_auth';
+    const PASS_HASH = '6f6b10a91ef0d8ba9e04b068cc6b6c19'; // MD5 of "Solutions"
+    const gate      = document.getElementById('hub-gate');
+    const input     = document.getElementById('hub-gate-input');
+    const btn       = document.getElementById('hub-gate-btn');
+    const error     = document.getElementById('hub-gate-error');
+
+    // Simple hash function (djb2) — good enough for obscurity
+    function simpleHash(str) {
+      let hash = 5381;
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) + hash) + str.charCodeAt(i);
+        hash = hash & hash;
+      }
+      return Math.abs(hash).toString(16);
+    }
+
+    const CORRECT = simpleHash('Solutions'); // stored at runtime only
+
+    function unlock() {
+      gate.style.display = 'none';
+      sessionStorage.setItem(PASS_KEY, CORRECT);
+    }
+
+    function tryPassword() {
+      const val = input.value.trim();
+      if (simpleHash(val) === CORRECT) {
+        unlock();
+      } else {
+        error.textContent = 'Incorrect password. Please try again.';
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    // Already authenticated this session?
+    if (sessionStorage.getItem(PASS_KEY) === CORRECT) {
+      gate.style.display = 'none';
+    }
+
+    btn.addEventListener('click', tryPassword);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') tryPassword(); });
+
+    // Focus input on load
+    setTimeout(() => input.focus(), 100);
+  })();
+  </script>
 
 </body>
 </html>
