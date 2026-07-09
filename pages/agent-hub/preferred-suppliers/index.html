@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preferred Suppliers — Agent Hub — Royal LePage Solutions</title>
+  <meta name="description" content="Trusted vendors and Royal LePage national preferred suppliers for Royal LePage Solutions agents.">
   <script>
   (function () {
     var PASS_KEY = 'rls_hub_auth';
@@ -18,92 +22,187 @@
     }
   })();
   </script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Preferred Suppliers — Agent Hub — Royal LePage Solutions</title>
-  <meta name="description" content="Trusted vendors and Royal LePage national preferred suppliers for Royal LePage Solutions agents.">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../../../assets/css/header.css?v=1015">
+
+  <link rel="stylesheet" href="../../../../assets/css/header.css?v=1016">
   <link rel="stylesheet" href="../../../../assets/css/styles.css?v=1001">
-  <script defer src="../../../../assets/js/header.js?v=1014"></script>
+  <script defer src="../../../../assets/js/header.js?v=1016"></script>
+
   <style>
-    :root { --rls-red:#EA002A; --rls-black:#000000; --rls-white:#FFFFFF; --rls-taupe:#A89E92; --rls-stone:#D6D1C8; --rls-light-grey:#EFEFEF; --sp-max:1100px; }
-    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:'Roboto',sans-serif; background:var(--rls-white); color:var(--rls-black); }
-    .sp-hero { position: relative !important; position: relative !important; background:var(--rls-black); color:var(--rls-white); padding:5rem 2rem 3.5rem; text-align:center; }
-    /* ── Logout button ──────────────────────────── */
+    :root {
+      --rls-red:        #EA002A;
+      --rls-black:      #000000;
+      --rls-white:      #FFFFFF;
+      --rls-taupe:      #A89E92;
+      --rls-stone:      #D6D1C8;
+      --rls-light-grey: #EFEFEF;
+      --sp-max:         1100px;
+    }
+    html { overflow-x: hidden; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Roboto', sans-serif; background: var(--rls-white); color: var(--rls-black); overflow-x: hidden; }
+
+    /* ── Hero ───────────────────────────────────── */
+    .sp-hero { position: relative !important; background: var(--rls-black); color: var(--rls-white); padding: 5rem 2rem 3.5rem; text-align: center; }
+    .sp-hero__back { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'Roboto', sans-serif; font-size: 0.75rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rls-taupe); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.2s; }
+    .sp-hero__back:hover { color: var(--rls-white); }
+    .sp-hero__eyebrow { font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rls-taupe); margin-bottom: 0.75rem; }
+    .sp-hero__title { font-family: 'Raleway', sans-serif !important; font-weight: 700 !important; font-size: clamp(2rem, 4vw, 3rem) !important; color: var(--rls-white) !important; letter-spacing: -0.01em !important; line-height: 1.1 !important; margin-bottom: 0 !important; }
+    .sp-hero__title .sp-accent { color: var(--rls-red) !important; display: inline !important; }
+    .sp-hero__rule { display: flex; align-items: center; gap: 0.75rem; justify-content: center; margin: 1.25rem auto; width: fit-content; }
+    .sp-hero__rule span { width: 36px; height: 2px; background: var(--rls-red); display: block; }
+    .sp-hero__sub { font-family: 'Roboto', sans-serif; font-weight: 300; font-size: 0.95rem; color: var(--rls-stone); max-width: 520px; margin: 0 auto; line-height: 1.65; }
+
+    /* ── Logout ──────────────────────────────────── */
     .rls-logout {
-      position: absolute;
-      top: 1.25rem;
-      right: 1.5rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: 'Roboto', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 400;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      padding: 0.4rem 0.9rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: color 0.2s, background 0.2s, border-color 0.2s;
+      position: absolute; top: 1.25rem; right: 1.5rem;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'Roboto', sans-serif; font-size: 0.72rem; font-weight: 400;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12); padding: 0.4rem 0.9rem;
+      cursor: pointer; text-decoration: none; transition: all 0.2s;
     }
-    .rls-logout:hover {
-      color: var(--rls-white);
-      background: rgba(255,255,255,0.12);
-      border-color: rgba(255,255,255,0.25);
+    .rls-logout:hover { color: var(--rls-white); background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); }
+
+    /* ── Tabs ────────────────────────────────────── */
+    .sp-tabs-wrap { background: var(--rls-black); padding: 0 2rem 1.5rem; display: flex; justify-content: center; }
+    .sp-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+    .sp-tab { font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.55rem 1.25rem; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); background: transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .sp-tab:hover { border-color: rgba(255,255,255,0.5); color: var(--rls-white); }
+    .sp-tab.is-active { background: var(--rls-red); border-color: var(--rls-red); color: var(--rls-white); }
+
+    /* ── Search ──────────────────────────────────── */
+    .sp-search-wrap { max-width: var(--sp-max); margin: 2rem auto 0; padding: 0 2rem; }
+    .sp-search { width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem; border: 1px solid var(--rls-stone); font-family: 'Roboto', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='7' cy='7' r='4.5' stroke='%23A89E92' stroke-width='1.5'/%3E%3Cpath d='M10.5 10.5l3 3' stroke='%23A89E92' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 1rem center; }
+    .sp-search:focus { border-color: var(--rls-red); }
+
+    /* ── Results count ───────────────────────────── */
+    .sp-results-count { max-width: var(--sp-max); margin: 1rem auto 0; padding: 0 2rem; font-family: 'Roboto', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--rls-taupe); }
+
+    /* ── Main ────────────────────────────────────── */
+    .sp-main { max-width: var(--sp-max); margin: 0 auto; padding: 1.5rem 2rem 5rem; }
+
+    /* ── States ──────────────────────────────────── */
+    .sp-state { text-align: center; padding: 4rem 2rem; color: var(--rls-taupe); font-size: 0.95rem; }
+    .sp-state__spinner { width: 32px; height: 32px; border: 3px solid var(--rls-stone); border-top-color: var(--rls-red); border-radius: 50%; animation: sp-spin 0.8s linear infinite; margin: 0 auto 1rem; }
+    @keyframes sp-spin { to { transform: rotate(360deg); } }
+
+    /* ── Category section ────────────────────────── */
+    .sp-category { margin-top: 2rem; }
+    .sp-category__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
+    .sp-category__title { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rls-taupe); }
+    .sp-category__count { font-family: 'Roboto', sans-serif; font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rls-taupe); background: var(--rls-light-grey); padding: 0.15rem 0.5rem; border-radius: 2px; }
+
+    /* ── Supplier rows ───────────────────────────── */
+    .sp-rows { border-top: 1px solid var(--rls-stone); }
+    .sp-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 1rem; border-bottom: 1px solid var(--rls-light-grey);
+      cursor: pointer; transition: background 0.15s;
+      gap: 1rem;
     }
-    .sp-hero__back { display:inline-flex; align-items:center; gap:0.4rem; font-family:'Roboto',sans-serif; font-size:0.75rem; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:var(--rls-taupe); text-decoration:none; margin-bottom:1.5rem; transition:color 0.2s; }
-    .sp-hero__back:hover { color:var(--rls-white); }
-    .sp-hero__eyebrow { font-family:'Roboto',sans-serif; font-weight:300; font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--rls-taupe); margin-bottom:0.75rem; }
-    .sp-hero__title { font-family:'Raleway',sans-serif!important; font-weight:700!important; font-size:clamp(2rem,4vw,3rem)!important; color:var(--rls-white)!important; letter-spacing:-0.01em!important; line-height:1.1!important; margin-bottom:0!important; }
-    .sp-hero__title .sp-accent { color:var(--rls-red)!important; display:inline!important; }
-    .sp-hero__rule { display:flex; align-items:center; gap:0.75rem; justify-content:center; margin:1.25rem auto; width:fit-content; }
-    .sp-hero__rule span { width:36px; height:2px; background:var(--rls-red); display:block; }
-    .sp-hero__sub { font-family:'Roboto',sans-serif; font-weight:300; font-size:0.95rem; color:var(--rls-stone); max-width:520px; margin:0 auto; line-height:1.65; }
-    .sp-tabs-wrap { background:var(--rls-black); padding:0 2rem 1.5rem; display:flex; justify-content:center; }
-    .sp-tabs { display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; }
-    .sp-tab { font-family:'Raleway',sans-serif; font-weight:600; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.55rem 1.25rem; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.6); background:transparent; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
-    .sp-tab:hover { border-color:rgba(255,255,255,0.5); color:var(--rls-white); }
-    .sp-tab.is-active { background:var(--rls-red); border-color:var(--rls-red); color:var(--rls-white); }
-    .sp-search-wrap { max-width:var(--sp-max); margin:2rem auto 0; padding:0 2rem; }
-    .sp-search { width:100%; padding:0.75rem 1rem; border:1px solid var(--rls-stone); font-family:'Roboto',sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.2s; }
-    .sp-search:focus { border-color:var(--rls-red); }
-    .sp-main { max-width:var(--sp-max); margin:0 auto; padding:1.5rem 2rem 5rem; }
-    .sp-state { text-align:center; padding:4rem 2rem; color:var(--rls-taupe); font-size:0.95rem; }
-    .sp-state__spinner { width:32px; height:32px; border:3px solid var(--rls-stone); border-top-color:var(--rls-red); border-radius:50%; animation:sp-spin 0.8s linear infinite; margin:0 auto 1rem; }
-    @keyframes sp-spin { to { transform:rotate(360deg); } }
-    .sp-category { margin-top:2.5rem; }
-    .sp-category__header { display:flex; align-items:center; gap:1rem; margin-bottom:1.1rem; padding-bottom:0.6rem; border-bottom:2px solid var(--rls-black); }
-    .sp-category__title { font-family:'Raleway',sans-serif; font-weight:700; font-size:1rem; letter-spacing:0.04em; text-transform:uppercase; }
-    .sp-category__count { font-family:'Roboto',sans-serif; font-size:0.68rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--rls-taupe); background:var(--rls-light-grey); padding:0.2rem 0.55rem; border-radius:2px; }
-    .sp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1rem; }
-    .sp-card { background:var(--rls-white); border:1px solid var(--rls-stone); display:flex; flex-direction:column; transition:box-shadow 0.2s,border-color 0.2s; position:relative; overflow:hidden; }
-    .sp-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--rls-red); transform:scaleX(0); transform-origin:left; transition:transform 0.25s; }
-    .sp-card:hover::before { transform:scaleX(1); }
-    .sp-card:hover { box-shadow:0 4px 20px rgba(0,0,0,0.08); border-color:var(--rls-taupe); }
-    .sp-card__body { padding:1.1rem 1.25rem 0.75rem; flex:1; }
-    .sp-card__name { font-family:'Raleway',sans-serif; font-weight:700; font-size:0.95rem; line-height:1.3; margin-bottom:0.2rem; }
-    .sp-card__contact { font-family:'Roboto',sans-serif; font-size:0.78rem; font-weight:300; color:var(--rls-taupe); margin-bottom:0.4rem; }
-    .sp-card__offer { font-family:'Roboto',sans-serif; font-size:0.8rem; font-weight:400; color:var(--rls-red); margin-top:0.4rem; line-height:1.45; }
-    .sp-card__footer { display:flex; flex-wrap:wrap; align-items:center; gap:0.5rem 1rem; padding:0.65rem 1.25rem 0.9rem; border-top:1px solid var(--rls-light-grey); margin-top:0.5rem; }
-    .sp-card__phone { font-family:'Roboto',sans-serif; font-size:0.82rem; color:#444; flex:1 1 100%; }
-    .sp-card__link { display:inline-flex; align-items:center; gap:0.3rem; font-family:'Raleway',sans-serif; font-weight:600; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--rls-red); text-decoration:none; transition:opacity 0.2s; }
-    .sp-card__link:hover { opacity:0.75; }
-    .sp-card__link--email { color:var(--rls-taupe); }
-    .sp-no-results { text-align:center; padding:3rem 2rem; color:var(--rls-taupe); font-size:0.9rem; }
-    .sp-footer-note { text-align:center; padding:0 2rem 3rem; font-family:'Roboto',sans-serif; font-size:0.78rem; font-weight:300; color:var(--rls-taupe); }
-    .sp-footer-note a { color:var(--rls-taupe); text-decoration:underline; }
-    @media (max-width:600px) { .sp-grid { grid-template-columns:1fr; } }
+    .sp-row:hover { background: var(--rls-light-grey); }
+    .sp-row__left { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
+    .sp-row__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--rls-red); flex-shrink: 0; }
+    .sp-row__name { font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sp-row__contact { font-family: 'Roboto', sans-serif; font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; max-width: 200px; }
+    .sp-row__arrow { color: var(--rls-stone); flex-shrink: 0; transition: color 0.2s, transform 0.2s; }
+    .sp-row:hover .sp-row__arrow { color: var(--rls-red); transform: translateX(3px); }
+
+    /* ── Modal ───────────────────────────────────── */
+    .sp-modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 9998;
+      background: rgba(0,0,0,0.6); align-items: center; justify-content: center;
+      padding: 1.5rem;
+    }
+    .sp-modal-overlay.is-open { display: flex; }
+
+    .sp-modal {
+      background: var(--rls-white); width: 100%; max-width: 480px;
+      max-height: 90vh; overflow-y: auto;
+      position: relative; animation: sp-modal-in 0.2s ease;
+    }
+    @keyframes sp-modal-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .sp-modal__header {
+      background: var(--rls-black); color: var(--rls-white);
+      padding: 1.5rem 1.5rem 1.25rem; position: relative;
+    }
+    .sp-modal__category {
+      font-family: 'Roboto', sans-serif; font-size: 0.68rem; font-weight: 300;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--rls-taupe);
+      margin-bottom: 0.4rem;
+    }
+    .sp-modal__name {
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.3rem;
+      line-height: 1.2; color: var(--rls-white);
+    }
+    .sp-modal__close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+      color: var(--rls-white); width: 32px; height: 32px; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .sp-modal__close:hover { background: rgba(255,255,255,0.25); }
+
+    .sp-modal__body { padding: 1.5rem; }
+
+    .sp-modal__field { margin-bottom: 1.1rem; }
+    .sp-modal__label {
+      font-family: 'Roboto', sans-serif; font-size: 0.65rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--rls-taupe);
+      margin-bottom: 0.25rem;
+    }
+    .sp-modal__value {
+      font-family: 'Roboto', sans-serif; font-size: 0.9rem; font-weight: 400;
+      color: var(--rls-black); line-height: 1.5;
+    }
+    .sp-modal__offer {
+      background: var(--rls-light-grey); border-left: 3px solid var(--rls-red);
+      padding: 0.75rem 1rem; margin-top: 1rem;
+    }
+    .sp-modal__offer-label {
+      font-family: 'Roboto', sans-serif; font-size: 0.65rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--rls-red);
+      margin-bottom: 0.3rem;
+    }
+    .sp-modal__offer-text {
+      font-family: 'Roboto', sans-serif; font-size: 0.85rem; color: #333; line-height: 1.55;
+    }
+
+    .sp-modal__actions { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.5rem; }
+    .sp-modal__btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.75rem 1rem; font-family: 'Raleway', sans-serif; font-weight: 600;
+      font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+      text-decoration: none; transition: all 0.2s; border: none; cursor: pointer;
+    }
+    .sp-modal__btn--primary { background: var(--rls-red); color: var(--rls-white); }
+    .sp-modal__btn--primary:hover { background: #c20024; }
+    .sp-modal__btn--secondary { background: var(--rls-black); color: var(--rls-white); }
+    .sp-modal__btn--secondary:hover { background: #222; }
+
+    /* ── No results ──────────────────────────────── */
+    .sp-no-results { text-align: center; padding: 3rem 2rem; color: var(--rls-taupe); font-size: 0.9rem; }
+
+    /* ── Footer ──────────────────────────────────── */
+    .sp-footer-note { text-align: center; padding: 0 2rem 3rem; font-family: 'Roboto', sans-serif; font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); }
+    .sp-footer-note a { color: var(--rls-taupe); text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .sp-row__contact { display: none; }
+      .sp-modal-overlay { padding: 0; align-items: flex-end; }
+      .sp-modal { max-width: 100%; max-height: 85vh; border-radius: 0; }
+    }
   </style>
 </head>
 <body>
+
   <main>
     <section class="sp-hero">
       <button class="rls-logout" onclick="rlsLogout()">
@@ -119,6 +218,7 @@
       <div class="sp-hero__rule"><span></span><span></span></div>
       <p class="sp-hero__sub">Trusted vendors recommended by Royal LePage Solutions, plus exclusive national supplier programs available to all Royal LePagers.</p>
     </section>
+
     <div class="sp-tabs-wrap">
       <div class="sp-tabs">
         <button class="sp-tab is-active" data-list="all">All</button>
@@ -127,130 +227,227 @@
         <button class="sp-tab" data-list="RLP National">RLP National</button>
       </div>
     </div>
+
     <div class="sp-search-wrap">
       <input class="sp-search" type="search" id="sp-search" placeholder="Search by name, category, or keyword…" autocomplete="off">
     </div>
+
+    <div class="sp-results-count" id="sp-count"></div>
+
     <div class="sp-main">
       <div id="sp-catalogue">
         <div class="sp-state"><div class="sp-state__spinner"></div>Loading suppliers…</div>
       </div>
     </div>
+
     <p class="sp-footer-note">
       Royal LePage® Solutions is independently owned and operated. Not intended to solicit buyers or sellers currently under contract with a brokerage.
       View important notices at <a href="https://rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.
     </p>
   </main>
 
+  <!-- Modal -->
+  <div class="sp-modal-overlay" id="sp-modal-overlay">
+    <div class="sp-modal" id="sp-modal" role="dialog" aria-modal="true">
+      <div class="sp-modal__header">
+        <p class="sp-modal__category" id="sp-modal-category"></p>
+        <h2 class="sp-modal__name" id="sp-modal-name"></h2>
+        <button class="sp-modal__close" id="sp-modal-close" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="sp-modal__body" id="sp-modal-body"></div>
+    </div>
+  </div>
+
   <script>
-  (function(){
+  (function () {
     const CSV_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRfsEecQOusUd7yrAombGo4m87-vWVcmP2Z94_YrOPvKE9nkOxinB-44KgM1fjamT8GxZshMrlb1aju/pub?gid=1791306164&single=true&output=csv';
     const catalogue = document.getElementById('sp-catalogue');
     const searchEl  = document.getElementById('sp-search');
+    const countEl   = document.getElementById('sp-count');
     const tabs      = document.querySelectorAll('.sp-tab');
-    let allSuppliers=[], activeList='all', searchQuery='';
+    const overlay   = document.getElementById('sp-modal-overlay');
+    const modalCat  = document.getElementById('sp-modal-category');
+    const modalName = document.getElementById('sp-modal-name');
+    const modalBody = document.getElementById('sp-modal-body');
 
-    function parseCSV(text){
-      const rows=[];
-      const lines=text.split(/\r?\n/);
-      for(let i=0;i<lines.length;i++){
-        const line=lines[i].trim(); if(!line)continue;
-        const cols=[]; let cur='',inQ=false;
-        for(let j=0;j<line.length;j++){
-          const ch=line[j];
-          if(ch==='"'){inQ=!inQ;}
-          else if(ch===','&&!inQ){cols.push(cur.trim());cur='';}
-          else{cur+=ch;}
+    let allSuppliers = [], activeList = 'all', searchQuery = '';
+
+    /* ── CSV parser ─────────────────────────────── */
+    function parseCSV(text) {
+      const rows = [], lines = text.split(/\r?\n/);
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim(); if (!line) continue;
+        const cols = []; let cur = '', inQ = false;
+        for (let j = 0; j < line.length; j++) {
+          const ch = line[j];
+          if (ch === '"') { inQ = !inQ; }
+          else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+          else { cur += ch; }
         }
         cols.push(cur.trim()); rows.push(cols);
       }
       return rows;
     }
 
-    function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function url(s) { if(!s||s==='-')return ''; return /^https?:\/\//i.test(s)?s:'https://'+s; }
 
-    function url(s){
-      if(!s||s==='-')return '';
-      return /^https?:\/\//i.test(s)?s:'https://'+s;
+    /* ── Modal ───────────────────────────────────── */
+    function openModal(s) {
+      modalCat.textContent  = s.list === 'RLP National' ? 'RLP National — ' + s.category : s.category;
+      modalName.textContent = s.company;
+
+      let body = '';
+
+      if (s.contact && s.contact !== '-') {
+        const contactLine = [s.contact !== '-' ? s.contact : '', s.title && s.title !== '-' ? s.title : ''].filter(Boolean).join(' — ');
+        body += `<div class="sp-modal__field"><p class="sp-modal__label">Contact</p><p class="sp-modal__value">${esc(contactLine)}</p></div>`;
+      }
+
+      if (s.phone && s.phone !== '-') {
+        body += `<div class="sp-modal__field"><p class="sp-modal__label">Phone</p><p class="sp-modal__value"><a href="tel:${esc(s.phone)}" style="color:var(--rls-black);text-decoration:none;">${esc(s.phone)}</a></p></div>`;
+      }
+
+      if (s.email && s.email !== '-') {
+        body += `<div class="sp-modal__field"><p class="sp-modal__label">Email</p><p class="sp-modal__value"><a href="mailto:${esc(s.email)}" style="color:var(--rls-red);text-decoration:none;">${esc(s.email)}</a></p></div>`;
+      }
+
+      if (s.website && s.website !== '-') {
+        body += `<div class="sp-modal__field"><p class="sp-modal__label">Website</p><p class="sp-modal__value"><a href="${esc(url(s.website))}" target="_blank" rel="noopener" style="color:var(--rls-red);text-decoration:none;">${esc(s.website)}</a></p></div>`;
+      }
+
+      if (s.offer && s.offer !== '-') {
+        body += `<div class="sp-modal__offer"><p class="sp-modal__offer-label">Exclusive Offer</p><p class="sp-modal__offer-text">${esc(s.offer)}</p></div>`;
+      }
+
+      // Action buttons
+      let actions = '';
+      if (s.phone && s.phone !== '-') {
+        actions += `<a class="sp-modal__btn sp-modal__btn--primary" href="tel:${esc(s.phone)}">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 3a1 1 0 011-1h2.5l1 3-1.5 1.5a9 9 0 004.5 4.5L12 9.5l3 1V13a1 1 0 01-1 1A12 12 0 013 3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Call Now
+        </a>`;
+      }
+      if (s.email && s.email !== '-') {
+        actions += `<a class="sp-modal__btn sp-modal__btn--secondary" href="mailto:${esc(s.email)}">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M2 4l6 5 6-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Send Email
+        </a>`;
+      }
+      if (s.website && s.website !== '-') {
+        actions += `<a class="sp-modal__btn sp-modal__btn--secondary" href="${esc(url(s.website))}" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 2c-2 2-2 8 0 12M8 2c2 2 2 8 0 12M2 8h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Visit Website
+        </a>`;
+      }
+
+      if (actions) body += `<div class="sp-modal__actions">${actions}</div>`;
+
+      modalBody.innerHTML = body;
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
     }
 
-    function render(){
-      const q=searchQuery.toLowerCase();
-      const filtered=allSuppliers.filter(s=>{
-        const lm=activeList==='all'||s.list===activeList;
-        if(!lm)return false;
-        if(!q)return true;
-        return(s.list+s.category+s.company+s.contact+s.offer).toLowerCase().includes(q);
+    function closeModal() {
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('sp-modal-close').addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    /* ── Render ──────────────────────────────────── */
+    function render() {
+      const q = searchQuery.toLowerCase();
+      const filtered = allSuppliers.filter(s => {
+        const lm = activeList === 'all' || s.list === activeList;
+        if (!lm) return false;
+        if (!q) return true;
+        return (s.list + s.category + s.company + s.contact + s.offer).toLowerCase().includes(q);
       });
 
-      if(!filtered.length){ catalogue.innerHTML='<div class="sp-no-results">No suppliers found. Try a different search or filter.</div>'; return; }
+      countEl.textContent = filtered.length ? `${filtered.length} supplier${filtered.length !== 1 ? 's' : ''} found` : '';
 
-      const seen=new Set(), cats=[], groups={};
-      filtered.forEach(s=>{
-        const key=s.list==='RLP National'?'RLP National — '+s.category:s.category;
-        if(!seen.has(key)){seen.add(key);cats.push(key);}
-        if(!groups[key])groups[key]=[];
+      if (!filtered.length) {
+        catalogue.innerHTML = '<div class="sp-no-results">No suppliers found. Try a different search or filter.</div>';
+        return;
+      }
+
+      const seen = new Set(), cats = [], groups = {};
+      filtered.forEach(s => {
+        const key = s.list === 'RLP National' ? 'RLP National — ' + s.category : s.category;
+        if (!seen.has(key)) { seen.add(key); cats.push(key); }
+        if (!groups[key]) groups[key] = [];
         groups[key].push(s);
       });
 
-      let html='';
-      cats.forEach(cat=>{
-        const items=groups[cat];
-        html+=`<div class="sp-category">
+      let html = '';
+      cats.forEach(cat => {
+        const items = groups[cat];
+        html += `<div class="sp-category">
           <div class="sp-category__header">
-            <h2 class="sp-category__title">${esc(cat)}</h2>
-            <span class="sp-category__count">${items.length} supplier${items.length!==1?'s':''}</span>
+            <span class="sp-category__title">${esc(cat)}</span>
+            <span class="sp-category__count">${items.length}</span>
           </div>
-          <div class="sp-grid">
-            ${items.map(s=>{
-              const wu=url(s.website);
-              const em=s.email&&s.email!=='-'?s.email.trim():'';
-              const ph=s.phone&&s.phone!=='-'?s.phone.trim():'';
-              return`<div class="sp-card">
-                <div class="sp-card__body">
-                  <p class="sp-card__name">${esc(s.company)}</p>
-                  ${(s.contact&&s.contact!=='-')||(s.title&&s.title!=='-')?`<p class="sp-card__contact">${esc([s.contact!=='-'?s.contact:'',s.title!=='-'?s.title:''].filter(Boolean).join(' — '))}</p>`:''}
-                  ${s.offer?`<p class="sp-card__offer">${esc(s.offer)}</p>`:''}
+          <div class="sp-rows">
+            ${items.map((s, i) => `
+              <div class="sp-row" data-supplier-index="${s._idx}" tabindex="0" role="button" aria-label="View ${esc(s.company)}">
+                <div class="sp-row__left">
+                  <span class="sp-row__dot"></span>
+                  <span class="sp-row__name">${esc(s.company)}</span>
                 </div>
-                <div class="sp-card__footer">
-                  ${ph?`<span class="sp-card__phone">${esc(ph)}</span>`:''}
-                  ${wu?`<a class="sp-card__link" href="${esc(wu)}" target="_blank" rel="noopener">Website <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`:''}
-                  ${em?`<a class="sp-card__link sp-card__link--email" href="mailto:${esc(em)}">Email</a>`:''}
+                <div style="display:flex;align-items:center;gap:1rem;">
+                  ${s.contact && s.contact !== '-' ? `<span class="sp-row__contact">${esc(s.contact)}</span>` : ''}
+                  <svg class="sp-row__arrow" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
-              </div>`;
-            }).join('')}
+              </div>`).join('')}
           </div>
         </div>`;
       });
 
-      catalogue.innerHTML=html;
+      catalogue.innerHTML = html;
+
+      // Attach click handlers
+      catalogue.querySelectorAll('.sp-row').forEach(row => {
+        const idx = parseInt(row.dataset.supplierIndex);
+        const handler = () => openModal(allSuppliers[idx]);
+        row.addEventListener('click', handler);
+        row.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') handler(); });
+      });
     }
 
-    tabs.forEach(t=>t.addEventListener('click',()=>{
-      tabs.forEach(x=>x.classList.remove('is-active'));
+    /* ── Tabs & Search ───────────────────────────── */
+    tabs.forEach(t => t.addEventListener('click', () => {
+      tabs.forEach(x => x.classList.remove('is-active'));
       t.classList.add('is-active');
-      activeList=t.dataset.list;
+      activeList = t.dataset.list;
       render();
     }));
 
-    searchEl.addEventListener('input',()=>{ searchQuery=searchEl.value; render(); });
+    searchEl.addEventListener('input', () => { searchQuery = searchEl.value; render(); });
 
+    /* ── Fetch ───────────────────────────────────── */
     fetch(CSV_URL)
-      .then(r=>{ if(!r.ok)throw new Error('HTTP '+r.status); return r.text(); })
-      .then(text=>{
-        const rows=parseCSV(text);
-        if(rows.length<2){ catalogue.innerHTML='<div class="sp-state">No data found.</div>'; return; }
-        const h=rows[0].map(x=>x.toLowerCase().replace(/[^a-z0-9]/g,''));
-        const idx={ list:h.indexOf('list'), cat:h.indexOf('category'), co:h.indexOf('companyname'), cn:h.indexOf('contactname'), ct:h.indexOf('contacttitle'), ph:h.indexOf('phone'), web:h.indexOf('website'), em:h.indexOf('emailaddress'), of:h.indexOf('offernotes') };
-        allSuppliers=rows.slice(1).filter(r=>r.some(c=>c)).map(r=>({
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+      .then(text => {
+        const rows = parseCSV(text);
+        if (rows.length < 2) { catalogue.innerHTML = '<div class="sp-state">No data found.</div>'; return; }
+        const h = rows[0].map(x => x.toLowerCase().replace(/[^a-z0-9]/g,''));
+        const idx = { list:h.indexOf('list'), cat:h.indexOf('category'), co:h.indexOf('companyname'), cn:h.indexOf('contactname'), ct:h.indexOf('contacttitle'), ph:h.indexOf('phone'), web:h.indexOf('website'), em:h.indexOf('emailaddress'), of:h.indexOf('offernotes') };
+        allSuppliers = rows.slice(1).filter(r => r.some(c => c)).map((r, i) => ({
+          _idx: i,
           list:(r[idx.list]||'').trim(), category:(r[idx.cat]||'').trim(),
           company:(r[idx.co]||'').trim(), contact:(r[idx.cn]||'').trim(),
           title:(r[idx.ct]||'').trim(), phone:(r[idx.ph]||'').trim(),
           website:(r[idx.web]||'').trim(), email:(r[idx.em]||'').trim(),
           offer:(r[idx.of]||'').trim(),
-        })).filter(s=>s.company);
+        })).filter(s => s.company);
         render();
       })
-      .catch(err=>{ catalogue.innerHTML=`<div class="sp-state">Unable to load. Please refresh.<br><small style="color:#999;margin-top:0.5rem;display:block;">${err.message}</small></div>`; });
+      .catch(err => { catalogue.innerHTML = `<div class="sp-state">Unable to load. Please refresh.<br><small style="color:#999;margin-top:0.5rem;display:block;">${err.message}</small></div>`; });
   })();
   </script>
 
@@ -260,5 +457,6 @@
     window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/';
   }
   </script>
+
 </body>
 </html>
