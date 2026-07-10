@@ -394,7 +394,7 @@
           </div>
           <div class="sp-rows">
             ${items.map((s, i) => `
-              <div class="sp-row" data-supplier-index="${s._idx}" tabindex="0" role="button" aria-label="View ${esc(s.company)}">
+              <div class="sp-row" data-supplier='${JSON.stringify(s).replace(/'/g,"&#39;")}' tabindex="0" role="button" aria-label="View ${esc(s.company)}">
                 <div class="sp-row__left">
                   <span class="sp-row__dot"></span>
                   <span class="sp-row__name">${esc(s.company)}</span>
@@ -412,8 +412,8 @@
 
       // Attach click handlers
       catalogue.querySelectorAll('.sp-row').forEach(row => {
-        const idx = parseInt(row.dataset.supplierIndex);
-        const handler = () => openModal(allSuppliers[idx]);
+        const s = JSON.parse(row.dataset.supplier);
+        const handler = () => openModal(s);
         row.addEventListener('click', handler);
         row.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') handler(); });
       });
@@ -436,13 +436,8 @@
         const rows = parseCSV(text);
         if (rows.length < 2) { catalogue.innerHTML = '<div class="sp-state">No data found.</div>'; return; }
         const h = rows[0].map(x => x.toLowerCase().replace(/[^a-z0-9]/g,''));
-        console.log('Raw headers:', rows[0]);
-        console.log('Normalized headers:', h);
-        // Column headers from sheet: List, Category, Company Name, Contact Name, Contact Title, Phone, Website, Email, Offer/Notes
         const idx = { list:h.indexOf('list'), cat:h.indexOf('category'), co:h.indexOf('companyname'), cn:h.indexOf('contactname'), ct:h.indexOf('contacttitle'), ph:h.indexOf('phone'), web:h.indexOf('website'), em:h.indexOf('email'), of:h.indexOf('offernotes') };
-        console.log('Column mapping:', idx); // debug
         allSuppliers = rows.slice(1).filter(r => r.some(c => c)).map((r, i) => ({
-          _idx: i,
           list:(r[idx.list]||'').trim(), category:(r[idx.cat]||'').trim(),
           company:(r[idx.co]||'').trim(), contact:(r[idx.cn]||'').trim(),
           title:(r[idx.ct]||'').trim(), phone:(r[idx.ph]||'').trim(),
