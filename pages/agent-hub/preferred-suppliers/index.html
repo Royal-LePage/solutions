@@ -436,7 +436,11 @@
         const rows = parseCSV(text);
         if (rows.length < 2) { catalogue.innerHTML = '<div class="sp-state">No data found.</div>'; return; }
         const h = rows[0].map(x => x.toLowerCase().replace(/[^a-z0-9]/g,''));
-        const idx = { list:h.indexOf('list'), cat:h.indexOf('category'), co:h.indexOf('companyname'), cn:h.indexOf('contactname'), ct:h.indexOf('contacttitle'), ph:h.indexOf('phone'), web:h.indexOf('website'), em:h.indexOf('emailaddress'), of:h.indexOf('offernotes') };
+        console.log('Raw headers:', rows[0]);
+        console.log('Normalized headers:', h);
+        // Column headers from sheet: List, Category, Company Name, Contact Name, Contact Title, Phone, Website, Email, Offer/Notes
+        const idx = { list:h.indexOf('list'), cat:h.indexOf('category'), co:h.indexOf('companyname'), cn:h.indexOf('contactname'), ct:h.indexOf('contacttitle'), ph:h.indexOf('phone'), web:h.indexOf('website'), em:h.indexOf('email'), of:h.indexOf('offernotes') };
+        console.log('Column mapping:', idx); // debug
         allSuppliers = rows.slice(1).filter(r => r.some(c => c)).map((r, i) => ({
           _idx: i,
           list:(r[idx.list]||'').trim(), category:(r[idx.cat]||'').trim(),
