@@ -64,8 +64,6 @@
     .tr-search-wrap { max-width: var(--tr-max); margin: 2rem auto 0; padding: 0 2rem; }
     .tr-search { width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem; border: 1px solid var(--rls-stone); font-family: 'Roboto', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='7' cy='7' r='4.5' stroke='%23A89E92' stroke-width='1.5'/%3E%3Cpath d='M10.5 10.5l3 3' stroke='%23A89E92' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 1rem center; }
     .tr-search:focus { border-color: var(--rls-red); }
-
-    /* ── Results count ───────────────────────────── */
     .tr-results-count { max-width: var(--tr-max); margin: 1rem auto 0; padding: 0 2rem; font-family: 'Roboto', sans-serif; font-size: 0.8rem; font-weight: 300; color: var(--rls-taupe); }
 
     /* ── Main ────────────────────────────────────── */
@@ -76,20 +74,21 @@
     .tr-state__spinner { width: 32px; height: 32px; border: 3px solid var(--rls-stone); border-top-color: var(--rls-red); border-radius: 50%; animation: tr-spin 0.8s linear infinite; margin: 0 auto 1rem; }
     @keyframes tr-spin { to { transform: rotate(360deg); } }
 
-    /* ── Category section ────────────────────────── */
+    /* ── Category ────────────────────────────────── */
     .tr-category { margin-top: 2rem; }
     .tr-category__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
     .tr-category__title { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rls-taupe); }
-    .tr-category__count { font-family: 'Roboto', sans-serif; font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rls-taupe); background: var(--rls-light-grey); padding: 0.15rem 0.5rem; border-radius: 2px; }
+    .tr-category__count { font-family: 'Roboto', sans-serif; font-size: 0.65rem; font-weight: 500; color: var(--rls-taupe); background: var(--rls-light-grey); padding: 0.15rem 0.5rem; border-radius: 2px; }
 
-    /* ── Tool rows ───────────────────────────────── */
+    /* ── Rows ────────────────────────────────────── */
     .tr-rows { border-top: 1px solid var(--rls-stone); }
     .tr-row { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1rem; border-bottom: 1px solid var(--rls-light-grey); cursor: pointer; transition: background 0.15s; gap: 1rem; }
     .tr-row:hover { background: var(--rls-light-grey); }
     .tr-row__left { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
     .tr-row__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--rls-red); flex-shrink: 0; }
     .tr-row__name { font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .tr-row__desc { font-family: 'Roboto', sans-serif; font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; max-width: 300px; }
+    .tr-row__badge { font-family: 'Roboto', sans-serif; font-size: 0.65rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--rls-red); background: rgba(234,0,42,0.08); border: 1px solid rgba(234,0,42,0.2); padding: 0.15rem 0.5rem; white-space: nowrap; flex-shrink: 0; }
+    .tr-row__desc { font-family: 'Roboto', sans-serif; font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; max-width: 280px; }
     .tr-row__arrow { color: var(--rls-stone); flex-shrink: 0; transition: color 0.2s, transform 0.2s; }
     .tr-row:hover .tr-row__arrow { color: var(--rls-red); transform: translateX(3px); }
 
@@ -98,18 +97,48 @@
     .tr-modal-overlay.is-open { display: flex; }
     .tr-modal { background: var(--rls-white); width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; position: relative; animation: tr-modal-in 0.2s ease; }
     @keyframes tr-modal-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    .tr-modal__header { background: var(--rls-black); color: var(--rls-white); padding: 1.5rem 1.5rem 1.25rem; position: relative; }
+
+    .tr-modal__header { background: var(--rls-black); color: var(--rls-white); padding: 1.5rem 3rem 1.25rem 1.5rem; position: relative; }
     .tr-modal__category { font-family: 'Roboto', sans-serif; font-size: 0.68rem; font-weight: 300; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rls-taupe); margin-bottom: 0.4rem; }
     .tr-modal__name { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.3rem; line-height: 1.2; color: var(--rls-white); }
     .tr-modal__close { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: var(--rls-white); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
     .tr-modal__close:hover { background: rgba(255,255,255,0.25); }
-    .tr-modal__body { padding: 1.5rem; }
-    .tr-modal__desc { font-family: 'Roboto', sans-serif; font-size: 0.9rem; font-weight: 300; color: #333; line-height: 1.65; margin-bottom: 1.25rem; }
-    .tr-modal__notes { background: var(--rls-light-grey); border-left: 3px solid var(--rls-red); padding: 0.75rem 1rem; margin-bottom: 1.25rem; }
-    .tr-modal__notes-label { font-family: 'Roboto', sans-serif; font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rls-red); margin-bottom: 0.3rem; }
+
+    .tr-modal__body { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+
+    .tr-modal__desc { font-family: 'Roboto', sans-serif; font-size: 0.9rem; font-weight: 300; color: #333; line-height: 1.65; }
+
+    /* Promo code */
+    .tr-modal__promo { background: var(--rls-light-grey); border-left: 3px solid var(--rls-red); padding: 0.85rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .tr-modal__promo-left { }
+    .tr-modal__promo-label { font-family: 'Roboto', sans-serif; font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rls-red); margin-bottom: 0.25rem; }
+    .tr-modal__promo-code { font-family: 'Roboto', monospace; font-size: 1.1rem; font-weight: 500; color: var(--rls-black); letter-spacing: 0.08em; }
+    .tr-modal__promo-copy { display: inline-flex; align-items: center; gap: 0.3rem; background: var(--rls-black); color: var(--rls-white); border: none; font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.5rem 0.85rem; cursor: pointer; transition: background 0.2s; white-space: nowrap; flex-shrink: 0; }
+    .tr-modal__promo-copy:hover { background: var(--rls-red); }
+    .tr-modal__promo-copied { font-size: 0.65rem; color: var(--rls-red); margin-left: 0.3rem; opacity: 0; transition: opacity 0.2s; }
+    .tr-modal__promo-copied.show { opacity: 1; }
+
+    /* Notes */
+    .tr-modal__notes { background: var(--rls-light-grey); padding: 0.75rem 1rem; }
+    .tr-modal__notes-label { font-family: 'Roboto', sans-serif; font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rls-taupe); margin-bottom: 0.3rem; }
     .tr-modal__notes-text { font-family: 'Roboto', sans-serif; font-size: 0.85rem; color: #333; line-height: 1.55; }
-    .tr-modal__btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.85rem 1rem; font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; background: var(--rls-red); color: var(--rls-white); transition: background 0.2s; margin-top: 0.5rem; }
-    .tr-modal__btn:hover { background: #c20024; }
+
+    /* Action buttons */
+    .tr-modal__actions { display: flex; flex-direction: column; gap: 0.6rem; }
+    .tr-modal__btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.85rem 1rem; font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: background 0.2s; border: none; cursor: pointer; }
+    .tr-modal__btn--primary { background: var(--rls-red); color: var(--rls-white); }
+    .tr-modal__btn--primary:hover { background: #c20024; }
+    .tr-modal__btn--dark { background: var(--rls-black); color: var(--rls-white); }
+    .tr-modal__btn--dark:hover { background: #222; }
+    .tr-modal__btn--outline { background: transparent; color: var(--rls-black); border: 1px solid var(--rls-stone); }
+    .tr-modal__btn--outline:hover { border-color: var(--rls-black); }
+
+    /* App download row */
+    .tr-modal__apps { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .tr-modal__app-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid var(--rls-stone); font-family: 'Roboto', sans-serif; font-size: 0.78rem; font-weight: 400; color: var(--rls-black); text-decoration: none; transition: border-color 0.2s, background 0.2s; flex: 1; justify-content: center; min-width: 140px; }
+    .tr-modal__app-btn:hover { border-color: var(--rls-black); background: var(--rls-light-grey); }
+    .tr-modal__app-label { font-size: 0.65rem; color: var(--rls-taupe); display: block; line-height: 1; margin-bottom: 0.1rem; }
+    .tr-modal__app-name { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.82rem; display: block; line-height: 1; }
 
     /* ── No results ──────────────────────────────── */
     .tr-no-results { text-align: center; padding: 3rem 2rem; color: var(--rls-taupe); font-size: 0.9rem; }
@@ -122,6 +151,7 @@
       .tr-row__desc { display: none; }
       .tr-modal-overlay { padding: 0; align-items: flex-end; }
       .tr-modal { max-width: 100%; max-height: 85vh; }
+      .tr-modal__apps { flex-direction: column; }
     }
   </style>
 </head>
@@ -146,7 +176,6 @@
     <div class="tr-search-wrap">
       <input class="tr-search" type="search" id="tr-search" placeholder="Search by name, category, or keyword…" autocomplete="off">
     </div>
-
     <div class="tr-results-count" id="tr-count"></div>
 
     <div class="tr-main">
@@ -163,7 +192,7 @@
 
   <!-- Modal -->
   <div class="tr-modal-overlay" id="tr-modal-overlay">
-    <div class="tr-modal" id="tr-modal" role="dialog" aria-modal="true">
+    <div class="tr-modal" role="dialog" aria-modal="true">
       <div class="tr-modal__header">
         <p class="tr-modal__category" id="tr-modal-category"></p>
         <h2 class="tr-modal__name" id="tr-modal-name"></h2>
@@ -208,6 +237,15 @@
     function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     function normalUrl(s) { if(!s||s==='-')return ''; return /^https?:\/\//i.test(s)?s:'https://'+s; }
 
+    /* ── Copy promo code ─────────────────────────── */
+    window.copyPromo = function(btn, code) {
+      navigator.clipboard.writeText(code).then(() => {
+        const tag = btn.querySelector('.tr-modal__promo-copied');
+        btn.querySelector('span:not(.tr-modal__promo-copied)').textContent = 'Copied!';
+        setTimeout(() => { btn.querySelector('span:not(.tr-modal__promo-copied)').textContent = 'Copy'; }, 2000);
+      });
+    };
+
     /* ── Modal ───────────────────────────────────── */
     function openModal(t) {
       modalCat.textContent  = t.category;
@@ -215,10 +253,24 @@
 
       let body = '';
 
-      if (t.desc) {
-        body += `<p class="tr-modal__desc">${esc(t.desc)}</p>`;
+      // Description
+      if (t.desc) body += `<p class="tr-modal__desc">${esc(t.desc)}</p>`;
+
+      // Promo code
+      if (t.promo && t.promo !== '-') {
+        body += `<div class="tr-modal__promo">
+          <div class="tr-modal__promo-left">
+            <p class="tr-modal__promo-label">Promo Code</p>
+            <p class="tr-modal__promo-code">${esc(t.promo)}</p>
+          </div>
+          <button class="tr-modal__promo-copy" onclick="navigator.clipboard.writeText('${esc(t.promo)}').then(()=>{this.textContent='Copied!';setTimeout(()=>{this.textContent='Copy'},2000)})">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M2 10V2h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Copy
+          </button>
+        </div>`;
       }
 
+      // Notes
       if (t.notes && t.notes !== '-') {
         body += `<div class="tr-modal__notes">
           <p class="tr-modal__notes-label">Notes</p>
@@ -226,11 +278,39 @@
         </div>`;
       }
 
+      // App downloads
+      const hasApps = (t.appstore && t.appstore !== '-') || (t.gplay && t.gplay !== '-');
+      if (hasApps) {
+        body += `<div class="tr-modal__apps">`;
+        if (t.appstore && t.appstore !== '-') {
+          body += `<a class="tr-modal__app-btn" href="${esc(t.appstore)}" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            <div>
+              <span class="tr-modal__app-label">Download on the</span>
+              <span class="tr-modal__app-name">App Store</span>
+            </div>
+          </a>`;
+        }
+        if (t.gplay && t.gplay !== '-') {
+          body += `<a class="tr-modal__app-btn" href="${esc(t.gplay)}" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.65.19.96.07l12.45-7.19-2.78-2.78-10.63 9.9zM.64 1.24C.24 1.64 0 2.28 0 3.09v17.82c0 .81.24 1.45.64 1.85l.1.09 9.98-9.98v-.24L.74 1.15l-.1.09zM20.12 10.3l-2.83-1.63-3.11 3.11 3.11 3.11 2.86-1.65c.82-.47.82-1.24-.03-1.94zM3.18.24L15.63 7.43l-2.78 2.78L2.22.31C2.52.19 2.88.07 3.18.24z"/></svg>
+            <div>
+              <span class="tr-modal__app-label">Get it on</span>
+              <span class="tr-modal__app-name">Google Play</span>
+            </div>
+          </a>`;
+        }
+        body += `</div>`;
+      }
+
+      // Open in browser button
       if (t.url && t.url !== '-') {
-        body += `<a class="tr-modal__btn" href="${esc(normalUrl(t.url))}" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 2c-2 2-2 8 0 12M8 2c2 2 2 8 0 12M2 8h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          Open ${esc(t.name)}
-        </a>`;
+        body += `<div class="tr-modal__actions">
+          <a class="tr-modal__btn tr-modal__btn--primary" href="${esc(normalUrl(t.url))}" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 2c-2 2-2 8 0 12M8 2c2 2 2 8 0 12M2 8h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Open ${esc(t.name)}
+          </a>
+        </div>`;
       }
 
       modalBody.innerHTML = body;
@@ -252,7 +332,7 @@
       const q = searchQuery.toLowerCase();
       const filtered = allTools.filter(t => {
         if (!q) return true;
-        return (t.category + t.name + t.desc + t.notes).toLowerCase().includes(q);
+        return (t.category + t.name + t.desc + t.notes + t.promo).toLowerCase().includes(q);
       });
 
       countEl.textContent = filtered.length ? `${filtered.length} tool${filtered.length !== 1 ? 's' : ''} found` : '';
@@ -284,9 +364,10 @@
                 <div class="tr-row__left">
                   <span class="tr-row__dot"></span>
                   <span class="tr-row__name">${esc(t.name)}</span>
+                  ${t.promo && t.promo !== '-' ? `<span class="tr-row__badge">Promo</span>` : ''}
                 </div>
                 <div style="display:flex;align-items:center;gap:1rem;">
-                  ${t.desc ? `<span class="tr-row__desc">${esc(t.desc.length > 60 ? t.desc.substring(0,60)+'…' : t.desc)}</span>` : ''}
+                  ${t.desc ? `<span class="tr-row__desc">${esc(t.desc.length > 55 ? t.desc.substring(0,55)+'…' : t.desc)}</span>` : ''}
                   <svg class="tr-row__arrow" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
               </div>`).join('')}
@@ -314,18 +395,24 @@
         if (rows.length < 2) { catalogue.innerHTML = '<div class="tr-state">No data found.</div>'; return; }
         const h = rows[0].map(x => x.toLowerCase().replace(/[^a-z0-9]/g,''));
         const idx = {
-          cat:   h.indexOf('category'),
-          name:  h.indexOf('toolname'),
-          desc:  h.indexOf('description'),
-          url:   h.indexOf('url'),
-          notes: h.indexOf('notes'),
+          cat:      h.indexOf('category'),
+          name:     h.indexOf('toolname'),
+          desc:     h.indexOf('description'),
+          url:      h.indexOf('url'),
+          promo:    h.indexOf('promocode'),
+          appstore: h.indexOf('appstoreurl'),
+          gplay:    h.indexOf('googleplayurl'),
+          notes:    h.indexOf('notes'),
         };
         allTools = rows.slice(1).filter(r => r.some(c => c)).map(r => ({
-          category: (r[idx.cat]  ||'').trim(),
-          name:     (r[idx.name] ||'').trim(),
-          desc:     (r[idx.desc] ||'').trim(),
-          url:      (r[idx.url]  ||'').trim(),
-          notes:    (r[idx.notes]||'').trim(),
+          category: (r[idx.cat]     ||'').trim(),
+          name:     (r[idx.name]    ||'').trim(),
+          desc:     (r[idx.desc]    ||'').trim(),
+          url:      (r[idx.url]     ||'').trim(),
+          promo:    (r[idx.promo]   ||'').trim(),
+          appstore: (r[idx.appstore]||'').trim(),
+          gplay:    (r[idx.gplay]   ||'').trim(),
+          notes:    (r[idx.notes]   ||'').trim(),
         })).filter(t => t.name);
         render();
       })
