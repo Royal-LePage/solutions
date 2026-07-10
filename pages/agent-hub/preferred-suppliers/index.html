@@ -224,7 +224,6 @@
         <button class="sp-tab is-active" data-list="all">All</button>
         <button class="sp-tab" data-list="Calgary">Calgary</button>
         <button class="sp-tab" data-list="Canmore/Banff">Canmore / Banff</button>
-        <button class="sp-tab" data-list="RLP National">RLP National</button>
       </div>
     </div>
 
@@ -383,6 +382,7 @@
         if (!groups[key]) groups[key] = [];
         groups[key].push(s);
       });
+      cats.sort((a, b) => a.localeCompare(b));
 
       let html = '';
       cats.forEach(cat => {
