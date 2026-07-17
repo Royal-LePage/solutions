@@ -245,9 +245,9 @@
       modalCat.textContent  = t.category;
       modalName.textContent = t.name;
 
-      // Thumbnail
+      // Logo / Thumbnail — accepts any direct image URL
       if (t.thumb && t.thumb !== '-') {
-        modalThumb.innerHTML = `<div class="tr-modal__thumb"><img src="${IMG_BASE}${esc(t.thumb)}" alt="${esc(t.name)}" onerror="this.parentElement.parentElement.style.display='none'"></div>`;
+        modalThumb.innerHTML = `<div class="tr-modal__thumb"><img src="${esc(t.thumb)}" alt="${esc(t.name)}" onerror="this.parentElement.parentElement.style.display='none'"></div>`;
         modalThumb.style.display = '';
       } else {
         modalThumb.innerHTML = '';
@@ -427,7 +427,7 @@
           appstore: h.indexOf('appstoreurl'),
           gplay:    h.indexOf('googleplayurl'),
           notes:    h.indexOf('notes'),
-          thumb:    h.indexOf('thumbnail'),
+          thumb:    h.indexOf('logourl'),
           video:    h.indexOf('trainingvideourl'),
         };
         allTools = rows.slice(1).filter(r => r.some(c => c)).map(r => ({
