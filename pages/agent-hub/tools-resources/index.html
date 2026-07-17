@@ -281,7 +281,7 @@
         </div>`;
       }
 
-      // Training video
+      // Training video / resource link — YouTube embeds inline, anything else opens in new tab
       const vid = youtubeId(t.video);
       if (vid) {
         const embedId = 'vid-' + Math.random().toString(36).slice(2);
@@ -302,6 +302,15 @@
           </button>
           <div class="tr-modal__video-embed" id="${embedId}"></div>
         </div>`;
+      } else if (t.video && t.video !== '-') {
+        const isDrive = t.video.includes('drive.google.com');
+        const driveIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 2L2 10l4.4 8H12L7.6 10 12 2H6.6zm4.8 0l4.4 8-4.4 8H18l4-8-4-8h-6.6zM9 10l3 5.2L15 10l-3-5.2L9 10z"/></svg>`;
+        const linkIcon = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3H3v10h10v-3M9 2h5v5M14 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        const label = isDrive ? 'Open in Google Drive' : 'Open Training Resource';
+        body += `<a class="tr-modal__btn tr-modal__btn--dark" href="${esc(t.video)}" target="_blank" rel="noopener">
+          ${isDrive ? driveIcon : linkIcon}
+          ${label}
+        </a>`;
       }
 
       // App downloads
@@ -388,7 +397,7 @@
                   <span class="tr-row__dot"></span>
                   <span class="tr-row__name">${esc(t.name)}</span>
                   ${t.promo && t.promo !== '-' ? `<span class="tr-row__badge">Promo</span>` : ''}
-                  ${t.video && t.video !== '-' ? `<span class="tr-row__video-badge">▶ Video</span>` : ''}
+                  ${t.video && t.video !== '-' ? `<span class="tr-row__video-badge">${t.video.includes('drive.google.com') ? '📁 Resource' : '▶ Video'}</span>` : ''}
                 </div>
                 <div style="display:flex;align-items:center;gap:1rem;">
                   ${t.desc ? `<span class="tr-row__desc">${esc(t.desc.length>55?t.desc.substring(0,55)+'…':t.desc)}</span>` : ''}
