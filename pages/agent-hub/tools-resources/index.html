@@ -234,8 +234,6 @@
           }
         }
         cols.push(cur.trim());
-        // Pad to header length so trailing empty cols aren't dropped
-        while (cols.length < rows[0].length) cols.push('');
         rows.push(cols);
       }
       return rows;
@@ -469,9 +467,10 @@
           thumb:    h.indexOf('logourl'),
           video:    h.indexOf('trainingvideourl'),
         };
+        const headerLen = rows[0].length;
         allTools = rows.slice(1).filter(r => r.some(c => c)).map((r, i) => {
-          // Pad row to at least 10 columns so missing trailing cols don't cause undefined
-          while (r.length < 10) r.push('');
+          // Pad to header length so missing trailing cols don't cause undefined
+          while (r.length < headerLen) r.push('');
           return {
             _idx:     i,
             category: (r[idx.cat]     ||'').trim(),
