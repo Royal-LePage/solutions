@@ -401,6 +401,7 @@
         groups[t.category].push(t);
       });
       cats.sort((a, b) => a.localeCompare(b));
+      cats.forEach(cat => groups[cat].sort((a, b) => a.name.localeCompare(b.name)));
 
       // Build tool map for click lookup
       filtered.forEach((t, i) => { toolMap[t._idx] = t; });
