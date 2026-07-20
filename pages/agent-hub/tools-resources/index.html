@@ -213,6 +213,7 @@
     const modalBody = document.getElementById('tr-modal-body');
 
     let allTools = [], searchQuery = '';
+    const toolMap = {};
 
     function parseCSV(text) {
       const rows = [], lines = text.split(/\r?\n/);
@@ -382,6 +383,9 @@
       });
       cats.sort((a, b) => a.localeCompare(b));
 
+      // Build tool map for click lookup
+      filtered.forEach((t, i) => { toolMap[t._idx] = t; });
+
       let html = '';
       cats.forEach(cat => {
         const items = groups[cat];
@@ -392,7 +396,7 @@
           </div>
           <div class="tr-rows">
             ${items.map(t => `
-              <div class="tr-row" data-tool='${JSON.stringify(t).replace(/'/g,"&#39;")}' tabindex="0" role="button">
+              <div class="tr-row" data-idx="${t._idx}" tabindex="0" role="button">
                 <div class="tr-row__left">
                   <span class="tr-row__dot"></span>
                   <span class="tr-row__name">${esc(t.name)}</span>
@@ -411,7 +415,7 @@
       catalogue.innerHTML = html;
 
       catalogue.querySelectorAll('.tr-row').forEach(row => {
-        const t = JSON.parse(row.dataset.tool);
+        const t = toolMap[parseInt(row.dataset.idx)];
         const handler = () => openModal(t);
         row.addEventListener('click', handler);
         row.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') handler(); });
@@ -439,7 +443,8 @@
           thumb:    h.indexOf('logourl'),
           video:    h.indexOf('trainingvideourl'),
         };
-        allTools = rows.slice(1).filter(r => r.some(c => c)).map(r => ({
+        allTools = rows.slice(1).filter(r => r.some(c => c)).map((r, i) => ({
+          _idx:     i,
           category: (r[idx.cat]     ||'').trim(),
           name:     (r[idx.name]    ||'').trim(),
           desc:     (r[idx.desc]    ||'').trim(),
