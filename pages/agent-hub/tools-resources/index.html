@@ -233,7 +233,10 @@
             cur += ch;
           }
         }
-        cols.push(cur.trim()); rows.push(cols);
+        cols.push(cur.trim());
+        // Pad to header length so trailing empty cols aren't dropped
+        while (cols.length < rows[0].length) cols.push('');
+        rows.push(cols);
       }
       return rows;
     }
@@ -466,19 +469,23 @@
           thumb:    h.indexOf('logourl'),
           video:    h.indexOf('trainingvideourl'),
         };
-        allTools = rows.slice(1).filter(r => r.some(c => c)).map((r, i) => ({
-          _idx:     i,
-          category: (r[idx.cat]     ||'').trim(),
-          name:     (r[idx.name]    ||'').trim(),
-          desc:     (r[idx.desc]    ||'').trim(),
-          url:      (r[idx.url]     ||'').trim(),
-          promo:    (r[idx.promo]   ||'').trim(),
-          appstore: (r[idx.appstore]||'').trim(),
-          gplay:    (r[idx.gplay]   ||'').trim(),
-          notes:    (r[idx.notes]   ||'').trim(),
-          thumb:    (r[idx.thumb]   ||'').trim(),
-          video:    (r[idx.video]   ||'').trim(),
-        })).filter(t => t.name);
+        allTools = rows.slice(1).filter(r => r.some(c => c)).map((r, i) => {
+          // Pad row to at least 10 columns so missing trailing cols don't cause undefined
+          while (r.length < 10) r.push('');
+          return {
+            _idx:     i,
+            category: (r[idx.cat]     ||'').trim(),
+            name:     (r[idx.name]    ||'').trim(),
+            desc:     (r[idx.desc]    ||'').trim(),
+            url:      (r[idx.url]     ||'').trim(),
+            promo:    (r[idx.promo]   ||'').trim(),
+            appstore: (r[idx.appstore]||'').trim(),
+            gplay:    (r[idx.gplay]   ||'').trim(),
+            notes:    (r[idx.notes]   ||'').trim(),
+            thumb:    (r[idx.thumb]   ||'').trim(),
+            video:    (r[idx.video]   ||'').trim(),
+          };
+        }).filter(t => t.name);
         render();
       })
       .catch(err => {
