@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ask Practically Speaking — Agent Hub — Royal LePage Solutions</title>
+  <meta name="description" content="AI-powered search of the AREA Practically Speaking complete article collection. Ask any Alberta real estate practice question.">
+  <script>
+  (function () {
+    var PASS_KEY = 'rls_hub_auth';
+    function simpleHash(str) {
+      var hash = 5381;
+      for (var i = 0; i < str.length; i++) { hash = ((hash << 5) + hash) + str.charCodeAt(i); hash = hash & hash; }
+      return Math.abs(hash).toString(16);
+    }
+    if (sessionStorage.getItem(PASS_KEY) !== simpleHash('Solutions')) {
+      window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/';
+    }
+  })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../assets/css/header.css?v=1016">
+  <link rel="stylesheet" href="../../../../assets/css/styles.css?v=1001">
+  <script defer src="../../../../assets/js/header.js?v=1016"></script>
+
+  <style>
+    :root { --rls-red:#EA002A; --rls-black:#000000; --rls-white:#FFFFFF; --rls-taupe:#A89E92; --rls-stone:#D6D1C8; --rls-light-grey:#EFEFEF; --ps-max:820px; }
+    html { overflow-x:hidden; }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Roboto',sans-serif; background:var(--rls-white); color:var(--rls-black); overflow-x:hidden; }
+
+    /* ── Hero ─────────────────────────────────── */
+    .ps-hero { position:relative!important; background:var(--rls-black); color:var(--rls-white); padding:5rem 2rem 3.5rem; text-align:center; }
+    .ps-hero__back { display:inline-flex; align-items:center; gap:0.4rem; font-family:'Roboto',sans-serif; font-size:0.75rem; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:var(--rls-taupe); text-decoration:none; margin-bottom:1.5rem; transition:color 0.2s; }
+    .ps-hero__back:hover { color:var(--rls-white); }
+    .ps-hero__eyebrow { font-family:'Roboto',sans-serif; font-weight:300; font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--rls-taupe); margin-bottom:0.75rem; }
+    .ps-hero__title { font-family:'Raleway',sans-serif!important; font-weight:700!important; font-size:clamp(2rem,4vw,3rem)!important; color:var(--rls-white)!important; letter-spacing:-0.01em!important; line-height:1.1!important; margin-bottom:0!important; }
+    .ps-hero__title .ps-accent { color:var(--rls-red)!important; display:inline!important; }
+    .ps-hero__rule { display:flex; align-items:center; gap:0.75rem; justify-content:center; margin:1.25rem auto; width:fit-content; }
+    .ps-hero__rule span { width:36px; height:2px; background:var(--rls-red); display:block; }
+    .ps-hero__sub { font-family:'Roboto',sans-serif; font-weight:300; font-size:0.95rem; color:var(--rls-stone); max-width:520px; margin:0 auto; line-height:1.65; }
+    .ps-hero__badge { display:inline-flex; align-items:center; gap:0.4rem; margin-top:1.25rem; font-family:'Roboto',sans-serif; font-size:0.7rem; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.4); border:1px solid rgba(255,255,255,0.12); padding:0.3rem 0.85rem; }
+
+    /* ── Logout ───────────────────────────────── */
+    .rls-logout { position:absolute; top:1.25rem; right:1.5rem; display:inline-flex; align-items:center; gap:0.4rem; font-family:'Roboto',sans-serif; font-size:0.72rem; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.5); background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); padding:0.4rem 0.9rem; cursor:pointer; transition:all 0.2s; }
+    .rls-logout:hover { color:var(--rls-white); background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.25); }
+
+    /* ── Ask panel ────────────────────────────── */
+    .ps-ask-panel { max-width:var(--ps-max); margin:2.5rem auto 0; padding:0 2rem; }
+    .ps-ask-label { font-family:'Roboto',sans-serif; font-size:0.7rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--rls-taupe); margin-bottom:0.6rem; }
+    .ps-ask-row { display:flex; gap:0; border:1px solid var(--rls-stone); transition:border-color 0.2s; }
+    .ps-ask-row:focus-within { border-color:var(--rls-red); }
+    .ps-ask-row textarea { flex:1; resize:none; height:72px; font-size:0.95rem; font-family:'Roboto',sans-serif; font-weight:300; line-height:1.55; padding:0.85rem 1rem; border:none; outline:none; color:var(--rls-black); background:var(--rls-white); }
+    .ps-ask-row textarea::placeholder { color:var(--rls-stone); }
+    .ps-ask-btn { background:var(--rls-red); color:var(--rls-white); border:none; padding:0 1.5rem; font-family:'Raleway',sans-serif; font-weight:700; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; transition:background 0.2s; white-space:nowrap; align-self:stretch; }
+    .ps-ask-btn:hover { background:#C20023; }
+    .ps-ask-btn:disabled { background:var(--rls-stone); cursor:not-allowed; }
+
+    /* ── Suggestion chips ─────────────────────── */
+    .ps-chips { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.75rem; }
+    .ps-chip { font-family:'Roboto',sans-serif; font-size:0.72rem; font-weight:400; padding:0.3rem 0.75rem; border:1px solid var(--rls-stone); color:var(--rls-taupe); background:var(--rls-white); cursor:pointer; transition:all 0.15s; line-height:1.5; }
+    .ps-chip:hover { border-color:var(--rls-red); color:var(--rls-red); background:rgba(234,0,42,0.04); }
+
+    /* ── Main content area ────────────────────── */
+    .ps-main { max-width:var(--ps-max); margin:0 auto; padding:2rem 2rem 5rem; }
+
+    /* ── Empty / idle state ───────────────────── */
+    .ps-idle { border-top:1px solid var(--rls-stone); margin-top:0.5rem; padding-top:2rem; }
+    .ps-idle__heading { font-family:'Raleway',sans-serif; font-weight:700; font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--rls-taupe); margin-bottom:1rem; }
+    .ps-article-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:0; border:1px solid var(--rls-stone); }
+    .ps-article-item { padding:0.75rem 1rem; border-bottom:1px solid var(--rls-light-grey); border-right:1px solid var(--rls-light-grey); font-family:'Roboto',sans-serif; font-size:0.82rem; font-weight:300; color:#444; line-height:1.4; cursor:pointer; transition:background 0.15s; }
+    .ps-article-item:hover { background:var(--rls-light-grey); color:var(--rls-black); }
+    .ps-article-item strong { font-weight:500; font-size:0.65rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--rls-red); display:block; margin-bottom:0.2rem; }
+
+    /* ── Loading state ────────────────────────── */
+    .ps-loading { text-align:center; padding:3rem 2rem; }
+    .ps-spinner { width:32px; height:32px; border:3px solid var(--rls-stone); border-top-color:var(--rls-red); border-radius:50%; animation:ps-spin 0.8s linear infinite; margin:0 auto 1rem; }
+    @keyframes ps-spin { to { transform:rotate(360deg); } }
+    .ps-loading__text { font-family:'Roboto',sans-serif; font-weight:300; font-size:0.9rem; color:var(--rls-taupe); }
+
+    /* ── Answer card ──────────────────────────── */
+    .ps-answer { border-top:1px solid var(--rls-stone); margin-top:0.5rem; padding-top:0; animation:ps-fade 0.3s ease; }
+    @keyframes ps-fade { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+    .ps-answer__q { background:var(--rls-light-grey); border-left:3px solid var(--rls-red); padding:0.85rem 1rem 0.85rem 1rem; margin-bottom:0; }
+    .ps-answer__q-label { font-family:'Roboto',sans-serif; font-size:0.65rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--rls-taupe); margin-bottom:0.3rem; }
+    .ps-answer__q-text { font-family:'Roboto',sans-serif; font-size:0.9rem; font-weight:400; color:var(--rls-black); line-height:1.5; }
+    .ps-answer__body { padding:1.5rem 0 0; }
+    .ps-answer__source-row { display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; }
+    .ps-answer__source-tag { font-family:'Roboto',sans-serif; font-size:0.65rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; color:var(--rls-red); background:rgba(234,0,42,0.07); border:1px solid rgba(234,0,42,0.18); padding:0.2rem 0.6rem; }
+    .ps-answer__source-label { font-family:'Roboto',sans-serif; font-size:0.72rem; font-weight:300; color:var(--rls-taupe); }
+    .ps-answer__text { font-family:'Roboto',sans-serif; font-size:0.95rem; font-weight:300; line-height:1.75; color:#222; white-space:pre-wrap; }
+    .ps-answer__disclaimer { margin-top:1.5rem; border-top:1px solid var(--rls-light-grey); padding-top:1rem; font-family:'Roboto',sans-serif; font-size:0.78rem; font-weight:300; color:var(--rls-taupe); line-height:1.55; }
+    .ps-answer__disclaimer strong { font-weight:500; color:#888; }
+    .ps-answer__again { margin-top:1.25rem; display:inline-flex; align-items:center; gap:0.4rem; font-family:'Raleway',sans-serif; font-weight:700; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--rls-red); background:none; border:1px solid rgba(234,0,42,0.3); padding:0.55rem 1rem; cursor:pointer; transition:all 0.2s; }
+    .ps-answer__again:hover { background:var(--rls-red); color:var(--rls-white); border-color:var(--rls-red); }
+
+    /* ── Error ────────────────────────────────── */
+    .ps-error { background:var(--rls-light-grey); border-left:3px solid var(--rls-red); padding:1rem 1.25rem; margin-top:1.5rem; font-family:'Roboto',sans-serif; font-size:0.9rem; color:#333; }
+    .ps-error strong { color:var(--rls-red); }
+
+    /* ── Footer ───────────────────────────────── */
+    .ps-footer-note { text-align:center; padding:0 2rem 3rem; font-family:'Roboto',sans-serif; font-size:0.78rem; font-weight:300; color:var(--rls-taupe); }
+    .ps-footer-note a { color:var(--rls-taupe); text-decoration:underline; }
+
+    @media (max-width:600px) {
+      .ps-ask-row textarea { height:64px; font-size:0.88rem; }
+      .ps-ask-btn { padding:0 1rem; font-size:0.68rem; }
+      .ps-article-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+    <section class="ps-hero">
+      <button class="rls-logout" onclick="rlsLogout()">
+        <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M5 2H2v10h3M9 10l3-3-3-3M6 7h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Logout
+      </button>
+      <a class="ps-hero__back" href="https://info.royallepagesolutions.com/pages/agent-hub/">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Agent Hub
+      </a>
+      <p class="ps-hero__eyebrow">Royal LePage Solutions®</p>
+      <h1 class="ps-hero__title">Ask <span class="ps-accent">Practically Speaking</span></h1>
+      <div class="ps-hero__rule"><span></span><span></span></div>
+      <p class="ps-hero__sub">AI-powered search of the AREA Practically Speaking complete article collection — 134 articles covering Alberta real estate practice, legislation, and professional conduct.</p>
+      <div class="ps-hero__badge">
+        <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 4v4M6 3.5v.01" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Source: AREA · Updated July 2026 · 134 articles
+      </div>
+    </section>
+
+    <div class="ps-ask-panel">
+      <p class="ps-ask-label">Your question</p>
+      <div class="ps-ask-row">
+        <textarea id="ps-input" placeholder="e.g. Who should hold a deposit, and for how long?" rows="3"></textarea>
+        <button class="ps-ask-btn" id="ps-btn" onclick="psAsk()">Ask</button>
+      </div>
+      <div class="ps-chips" id="ps-chips"></div>
+    </div>
+
+    <div class="ps-main">
+      <div id="ps-output"></div>
+    </div>
+
+    <p class="ps-footer-note">
+      Answers are generated from the AREA Practically Speaking article collection and are for reference only. Always confirm current requirements with your broker or RECA before acting in a transaction.
+      View important notices at <a href="https://rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.
+    </p>
+  </main>
+
+  <script>
+  (function () {
+
+    /* ── Auth logout ──────────────────────────── */
+    window.rlsLogout = function () {
+      sessionStorage.removeItem('rls_hub_auth');
+      window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/';
+    };
+
+    /* ── Suggestions ──────────────────────────── */
+    var SUGGESTIONS = [
+      'Who should hold a deposit?',
+      'What is a holdover period?',
+      'Rules around multiple offers',
+      'What is transaction brokerage?',
+      'Condo documents — what to obtain?',
+      'Unconditional offer best practices',
+      'How does CASL affect my business?',
+      'What is a material latent defect?',
+      'Rules for personal trades',
+      'When is property management licensing required?'
+    ];
+
+    var ARTICLE_SAMPLES = [
+      { num: '1', q: 'What should a REALTOR® know about the Clean Energy Improvement Program?' },
+      { num: '2', q: 'Who should hold real estate deposits?' },
+      { num: '6', q: 'What is a holdover period?' },
+      { num: '7', q: 'How are real estate contract assignments handled in Alberta?' },
+      { num: '8', q: 'What are some closing day best practices?' },
+      { num: '14', q: 'What are some common real estate misconceptions?' },
+      { num: '18', q: 'Best practices around a REALTOR® doing a personal trade' },
+      { num: '21', q: 'The seller has active cameras in the home — what do I need to know?' },
+      { num: '27', q: 'What are some tips for using AI when listing a property?' },
+      { num: '37', q: 'What should a REALTOR® consider about divorce sales?' },
+      { num: '60', q: 'When is transaction brokerage appropriate?' },
+      { num: '72', q: 'What are the best practices surrounding multiple offers?' },
+      { num: '82', q: 'What remedies are available when a party defaults on a purchase contract?' },
+      { num: '89', q: 'What to consider about Real Property Reports?' },
+      { num: '110', q: 'What is a material latent defect in real estate?' },
+    ];
+
+    var PDF_URL = 'https://raw.githubusercontent.com/Royal-LePage/solutions/main/assets/docs/Practically_Speaking_Complete_Collection_Corrected.pdf';
+
+    var chipsEl = document.getElementById('ps-chips');
+    SUGGESTIONS.forEach(function (s) {
+      var btn = document.createElement('button');
+      btn.className = 'ps-chip';
+      btn.textContent = s;
+      btn.addEventListener('click', function () {
+        document.getElementById('ps-input').value = s;
+        psAsk();
+      });
+      chipsEl.appendChild(btn);
+    });
+
+    /* ── Render idle article list ─────────────── */
+    function renderIdle() {
+      var html = '<div class="ps-idle">'
+        + '<p class="ps-idle__heading">Browse articles — click any to ask</p>'
+        + '<div class="ps-article-grid">';
+      ARTICLE_SAMPLES.forEach(function (a) {
+        html += '<div class="ps-article-item" data-q="' + esc(a.q) + '">'
+          + '<strong>Article ' + esc(a.num) + '</strong>'
+          + esc(a.q)
+          + '</div>';
+      });
+      html += '</div></div>';
+      document.getElementById('ps-output').innerHTML = html;
+      document.querySelectorAll('.ps-article-item').forEach(function (el) {
+        el.addEventListener('click', function () {
+          document.getElementById('ps-input').value = this.dataset.q;
+          psAsk();
+        });
+      });
+    }
+
+    renderIdle();
+
+    /* ── PDF cache ────────────────────────────── */
+    var pdfBase64Cache = null;
+
+    function fetchPdf() {
+      if (pdfBase64Cache) return Promise.resolve(pdfBase64Cache);
+      return fetch(PDF_URL)
+        .then(function (res) {
+          if (!res.ok) throw new Error('Could not load the reference document (HTTP ' + res.status + '). Check that the PDF has been committed to the repo.');
+          return res.arrayBuffer();
+        })
+        .then(function (buf) {
+          var bytes = new Uint8Array(buf);
+          var binary = '';
+          for (var i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+          pdfBase64Cache = btoa(binary);
+          return pdfBase64Cache;
+        });
+    }
+
+    /* ── Main ask function ────────────────────── */
+    window.psAsk = function () {
+      var question = document.getElementById('ps-input').value.trim();
+      if (!question) return;
+      var btn = document.getElementById('ps-btn');
+      var output = document.getElementById('ps-output');
+      btn.disabled = true;
+
+      output.innerHTML = '<div class="ps-loading">'
+        + '<div class="ps-spinner"></div>'
+        + '<p class="ps-loading__text">Searching 134 articles…</p>'
+        + '</div>';
+
+      fetchPdf()
+        .then(function (base64) {
+          return fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: 'claude-sonnet-4-6',
+              max_tokens: 1000,
+              system: 'You are an Alberta real estate practice assistant for Royal LePage Solutions agents. You have access to the "Practically Speaking" complete article collection from the Alberta Real Estate Association (AREA) — 134 Q&A articles covering Alberta real estate rules, best practices, legislation, and professional conduct.\n\nAnswer the agent\'s question accurately and clearly, drawing directly from the document. Where possible, reference the relevant article by name. Use plain language — no excessive hedging, no bullet-point overload. Be direct and practical.\n\nIf multiple articles are relevant, synthesize them. If the document does not directly address the question, say so and provide general guidance while recommending the agent confirm with their broker or RECA.\n\nDo NOT include a disclaimer at the end — that is handled separately by the interface.',
+              messages: [{
+                role: 'user',
+                content: [
+                  { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: base64 } },
+                  { type: 'text', text: question }
+                ]
+              }]
+            })
+          });
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.error) throw new Error(data.error.message);
+          var answerText = (data.content || []).filter(function (b) { return b.type === 'text'; }).map(function (b) { return b.text; }).join('\n');
+          output.innerHTML = '<div class="ps-answer">'
+            + '<div class="ps-answer__q">'
+            + '<p class="ps-answer__q-label">Your question</p>'
+            + '<p class="ps-answer__q-text">' + esc(question) + '</p>'
+            + '</div>'
+            + '<div class="ps-answer__body">'
+            + '<div class="ps-answer__source-row">'
+            + '<span class="ps-answer__source-tag">AREA</span>'
+            + '<span class="ps-answer__source-label">Practically Speaking — Complete Collection (July 2026) · 134 articles</span>'
+            + '</div>'
+            + '<p class="ps-answer__text">' + esc(answerText) + '</p>'
+            + '<p class="ps-answer__disclaimer"><strong>Note:</strong> Legislation, RECA rules, and brokerage policies change. Confirm current requirements with your broker or RECA before relying on any article in a live transaction.</p>'
+            + '<button class="ps-answer__again" onclick="psClear()">'
+            + '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8a6 6 0 1 0 1.5-4M2 4v4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            + ' Ask another question'
+            + '</button>'
+            + '</div>'
+            + '</div>';
+        })
+        .catch(function (err) {
+          output.innerHTML = '<div class="ps-error"><strong>Could not load an answer.</strong> ' + esc(err.message) + '</div>';
+          renderIdle();
+        })
+        .finally(function () {
+          btn.disabled = false;
+        });
+    };
+
+    window.psClear = function () {
+      document.getElementById('ps-input').value = '';
+      document.getElementById('ps-input').focus();
+      renderIdle();
+    };
+
+    /* ── Keyboard submit ──────────────────────── */
+    document.getElementById('ps-input').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); psAsk(); }
+    });
+
+    /* ── Helpers ──────────────────────────────── */
+    function esc(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+  })();
+  </script>
+
+</body>
+</html>
