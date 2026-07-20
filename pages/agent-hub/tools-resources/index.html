@@ -242,6 +242,17 @@
     }
 
     /* ── Modal ───────────────────────────────────── */
+    // Promo copy button — event delegation
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('.tr-modal__promo-copy');
+      if (!btn) return;
+      const code = btn.closest('.tr-modal__promo').querySelector('.tr-modal__promo-code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M2 10V2h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Copy'; }, 2000);
+      });
+    });
+
     function openModal(t) {
       modalCat.textContent  = t.category;
       modalName.textContent = t.name;
@@ -262,16 +273,16 @@
 
       // Promo code
       if (t.promo && t.promo !== '-') {
-        body += `<div class="tr-modal__promo">
-          <div>
-            <p class="tr-modal__promo-label">Promo Code</p>
-            <p class="tr-modal__promo-code">${esc(t.promo)}</p>
-          </div>
-          <button class="tr-modal__promo-copy" onclick="navigator.clipboard.writeText('${esc(t.promo)}').then(()=>{this.textContent='Copied!';setTimeout(()=>{this.innerHTML='<svg width=\\'12\\' height=\\'12\\' viewBox=\\'0 0 14 14\\' fill=\\'none\\'><rect x=\\'4\\' y=\\'4\\' width=\\'8\\' height=\\'8\\' rx=\\'1\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'/><path d=\\'M2 10V2h8\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\' stroke-linecap=\\'round\\'/></svg> Copy'},2000)})">
-            <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M2 10V2h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            Copy
-          </button>
-        </div>`;
+        const promoSafe = t.promo.replace(/'/g, "\\'");
+        body += '<div class="tr-modal__promo">'
+          + '<div>'
+          + '<p class="tr-modal__promo-label">Promo Code</p>'
+          + '<p class="tr-modal__promo-code">' + esc(t.promo) + '</p>'
+          + '</div>'
+          + '<button class="tr-modal__promo-copy" id="promo-btn-' + Date.now() + '">'
+          + '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M2 10V2h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>'
+          + ' Copy</button>'
+          + '</div>';
       }
 
       // Notes
