@@ -216,15 +216,22 @@
     const toolMap = {};
 
     function parseCSV(text) {
-      const rows = [], lines = text.split(/\r?\n/);
+      // Normalize line endings and fix common Google Sheets encoding issues
+      text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+      const rows = [], lines = text.split('\n');
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim(); if (!line) continue;
         const cols = []; let cur = '', inQ = false;
         for (let j = 0; j < line.length; j++) {
           const ch = line[j];
-          if (ch === '"') { inQ = !inQ; }
-          else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
-          else { cur += ch; }
+          if (ch === '"') {
+            if (inQ && line[j+1] === '"') { cur += '"'; j++; } // escaped quote
+            else { inQ = !inQ; }
+          } else if (ch === ',' && !inQ) {
+            cols.push(cur.trim()); cur = '';
+          } else {
+            cur += ch;
+          }
         }
         cols.push(cur.trim()); rows.push(cols);
       }
@@ -437,7 +444,12 @@
 
     /* ── Fetch ───────────────────────────────────── */
     fetch(CSV_URL)
-      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.arrayBuffer(); })
+      .then(buffer => {
+        const decoder = new TextDecoder('utf-8');
+        const text = decoder.decode(buffer);
+        return text;
+      })
       .then(text => {
         const rows = parseCSV(text);
         if (rows.length < 2) { catalogue.innerHTML = '<div class="tr-state">No data found.</div>'; return; }
