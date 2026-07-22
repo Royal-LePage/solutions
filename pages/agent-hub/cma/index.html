@@ -618,19 +618,23 @@ body{font-family:var(--sans);background:var(--black);color:var(--white);height:1
 
     <!-- ═══ LISTING SPECS ═══ -->
     <div class="panel" id="panel-specs">
-      <div class="ph"><div class="ph-eye">Setup</div><div class="ph-title">Listing spec sheets<br><em>& agent headshot</em></div><div class="ph-sub">Upload MLS data sheets, feature sheets, or any property documents. Key fields auto-fill where possible.</div></div>
+      <div class="ph"><div class="ph-eye">Setup</div><div class="ph-title">Listing spec sheets<br><em>& agent headshot</em></div><div class="ph-sub">Upload your MLS data sheet — AI reads it and auto-fills all property fields. Or paste the text manually below.</div></div>
       <div class="two">
         <div class="sc">
-          <div class="sct">Spec sheet uploads</div>
+          <div class="sct">Upload spec sheet <span style="font-size:9px;background:rgba(234,0,42,0.1);color:var(--red);padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:.05em;text-transform:uppercase">AI-powered</span></div>
           <div class="upload-zone" id="spec-drop" onclick="document.getElementById('spec-input').click()" ondragover="dragOver(event,'spec-drop')" ondragleave="dragLeave('spec-drop')" ondrop="dropFile(event,'spec-input')">
             <input type="file" id="spec-input" accept=".pdf,image/*" multiple onchange="handleSpecUpload(this)">
             <div class="uz-icon">📋</div>
-            <div class="uz-label">Upload listing spec sheets</div>
-            <div class="uz-sub">PDF or images — MLS printouts, feature sheets, condo docs · Multiple files OK</div>
+            <div class="uz-label">Upload MLS data sheet</div>
+            <div class="uz-sub">PDF or image — Claude reads it and fills in all fields automatically</div>
           </div>
           <div class="spec-list" id="spec-list"></div>
-          <div class="spec-extracted" id="spec-extracted">
-            ✓ Fields extracted from spec sheet — review and confirm in Seller Profile
+          <div id="spec-ai-status" style="display:none;margin-top:10px;padding:12px 14px;border-radius:6px;font-size:12px;font-weight:600;letter-spacing:.02em"></div>
+          <div class="spec-extracted" id="spec-extracted">✓ Fields extracted — review in Seller Profile</div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bl)">
+            <div class="sct" style="margin-bottom:8px">Or paste spec sheet text manually</div>
+            <div class="fg"><textarea class="fta" id="spec-paste" rows="5" placeholder="Paste MLS listing text here — address, beds, baths, sq ft, year built, list price, DOM..."></textarea></div>
+            <button class="btn btn-red" style="width:100%;justify-content:center" onclick="parseManualPaste()">Extract from pasted text</button>
           </div>
         </div>
         <div class="sc">
@@ -652,13 +656,17 @@ body{font-family:var(--sans);background:var(--black);color:var(--white);height:1
         </div>
       </div>
       <div class="sc">
-        <div class="sct">Extracted data preview</div>
-        <div class="sgrid g3" id="extracted-preview">
-          <div class="scard" style="padding:14px 16px"><div class="slb">Address detected</div><div style="font-size:13px;font-weight:600;color:var(--black)" id="ex-addr">—</div></div>
-          <div class="scard" style="padding:14px 16px"><div class="slb">Beds / baths</div><div style="font-size:13px;font-weight:600;color:var(--black)" id="ex-bb">—</div></div>
-          <div class="scard" style="padding:14px 16px"><div class="slb">Sq. ft.</div><div style="font-size:13px;font-weight:600;color:var(--black)" id="ex-sqft">—</div></div>
+        <div class="sct">Extracted data preview — confirm before using</div>
+        <div class="sgrid g3" style="margin-bottom:12px">
+          <div class="scard" style="padding:12px 14px"><div class="slb">Address</div><div style="font-size:12px;font-weight:600;color:var(--black)" id="ex-addr">—</div></div>
+          <div class="scard" style="padding:12px 14px"><div class="slb">Beds / baths</div><div style="font-size:12px;font-weight:600;color:var(--black)" id="ex-bb">—</div></div>
+          <div class="scard" style="padding:12px 14px"><div class="slb">Sq. ft. (RMS)</div><div style="font-size:12px;font-weight:600;color:var(--black)" id="ex-sqft">—</div></div>
+          <div class="scard" style="padding:12px 14px"><div class="slb">Year built</div><div style="font-size:12px;font-weight:600;color:var(--black)" id="ex-year">—</div></div>
+          <div class="scard" style="padding:12px 14px"><div class="slb">List price</div><div style="font-size:12px;font-weight:600;color:var(--black)" id="ex-price">—</div></div>
+          <div class="scard" style="padding:12px 14px"><div class="slb">Days on market</div><div style="font-size:12px;font-weight:600;color:var(--black)" id="ex-dom">—</div></div>
         </div>
-        <div style="margin-top:10px;font-size:11px;color:var(--muted)">Text extraction works best on digital PDFs and clear image scans. After uploading, review and adjust any auto-filled fields in Seller Profile.</div>
+        <button class="btn btn-red" id="apply-btn" style="display:none;width:100%;justify-content:center;margin-bottom:8px" onclick="applyExtracted()">Apply all fields to Seller Profile →</button>
+        <div style="font-size:11px;color:var(--muted)">Review the extracted values above, then click Apply to fill in the Seller Profile and Comparables panels.</div>
       </div>
     </div>
 
@@ -985,65 +993,224 @@ function syncAgentPhoto(){
   if(tl)se('whyme-tagline-disp',tl);
 }
 
-// ═══ SPEC SHEET UPLOAD ═══
+// ═══ SPEC SHEET UPLOAD — AI-POWERED ═══
+let extractedData = {};
+
 function handleSpecUpload(input){
   Array.from(input.files).forEach(file=>{
     const id='spec-'+Date.now()+'-'+Math.random().toString(36).slice(2);
     specFiles.push({id,name:file.name,file});
     renderSpecList();
-    // Try text extraction
-    if(file.type==='application/pdf'){extractPDFText(file);}
-    else{extractImageText(file);}
+    extractWithClaude(file);
   });
   document.getElementById('spec-badge').style.display='inline';
   document.getElementById('spec-badge').textContent='✓';
-  toast(input.files.length+' spec sheet'+(input.files.length>1?'s':'')+' uploaded','success');
+  toast(input.files.length+' spec sheet'+(input.files.length>1?'s':'')+' uploaded — reading with AI...','success');
 }
 
-function extractPDFText(file){
-  // Simple text scan using FileReader for embedded text PDFs
-  const reader=new FileReader();
-  reader.onload=e=>{
-    try{
-      const bytes=new Uint8Array(e.target.result);
-      const text=extractTextFromPDFBytes(bytes);
-      parseExtractedText(text);
-    }catch(err){}
-  };
-  reader.readAsArrayBuffer(file);
-}
+async function extractWithClaude(file){
+  const statusEl = document.getElementById('spec-ai-status');
+  statusEl.style.display='block';
+  statusEl.style.background='rgba(201,168,76,0.1)';
+  statusEl.style.border='1px solid rgba(201,168,76,0.3)';
+  statusEl.style.color='#7a5800';
+  statusEl.innerHTML='⏳ Reading spec sheet with AI — this takes a few seconds...';
 
-function extractTextFromPDFBytes(bytes){
-  let text='';
   try{
-    const str=String.fromCharCode.apply(null,bytes);
-    // Extract text between BT and ET markers (PDF text streams)
-    const matches=str.match(/\(([^)]{2,})\)/g)||[];
-    text=matches.map(m=>m.slice(1,-1)).join(' ');
-  }catch(e){}
-  return text;
+    // Convert file to base64
+    const b64 = await fileToBase64(file);
+    const mediaType = file.type || 'application/pdf';
+    const isImage = mediaType.startsWith('image/');
+
+    const messageContent = isImage
+      ? [{type:'image',source:{type:'base64',media_type:mediaType,data:b64.split(',')[1]}},
+         {type:'text',text:EXTRACT_PROMPT}]
+      : [{type:'document',source:{type:'base64',media_type:'application/pdf',data:b64.split(',')[1]}},
+         {type:'text',text:EXTRACT_PROMPT}];
+
+    const resp = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        messages:[{role:'user',content:messageContent}]
+      })
+    });
+
+    if(!resp.ok) throw new Error('API error '+resp.status);
+    const data = await resp.json();
+    const raw = data.content.find(b=>b.type==='text')?.text||'{}';
+    // Strip any markdown code fences
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(clean);
+    showExtracted(parsed);
+
+  }catch(err){
+    statusEl.style.background='rgba(234,0,42,0.06)';
+    statusEl.style.border='1px solid rgba(234,0,42,0.2)';
+    statusEl.style.color='#8a0015';
+    statusEl.innerHTML='⚠ AI extraction failed — paste the listing text below to extract manually.';
+    console.error('Claude extraction error:',err);
+  }
 }
 
-function extractImageText(file){
-  // For images we can't OCR in browser without a library, so just note it
+const EXTRACT_PROMPT = `You are reading an MLS listing data sheet or property spec sheet. Extract ONLY these fields and return them as a JSON object with no other text, no markdown, no explanation — just raw JSON:
+{
+  "address": "full street address including city and province",
+  "community": "subdivision/community name only",
+  "beds": number,
+  "baths_full": number,
+  "baths_half": number,
+  "sqft": number (RMS above-grade sq ft — use Total AG if available),
+  "year_built": number,
+  "list_price": number,
+  "dom": number (days on market),
+  "lot_size_sf": number,
+  "garage_stalls": number,
+  "status": "Active" or "Sold" or "Expired",
+  "property_type": "Detached" or "Semi-Detached" or "Attached" or "Condo",
+  "description": "the public remarks text verbatim"
+}
+For any field not found, use null. Return ONLY the JSON object.`;
+
+function parseManualPaste(){
+  const text = document.getElementById('spec-paste').value;
+  if(!text.trim()){toast('Paste some listing text first','error');return;}
+  parseTextFallback(text);
 }
 
-function parseExtractedText(text){
-  if(!text||text.length<10)return;
-  let found=false;
+function parseTextFallback(text){
+  const d = {};
+  // Address — Calgary MLS patterns
+  const addr = text.match(/(\d+\s+[A-Za-z][^
+,]+(?:Ave|Blvd|Cir|Circle|Close|Cove|Cr|Cres|Dr|Gate|Gr|Lane|Mews|Park|Pl|Rd|Rise|Row|St|Ter|Way|NE|NW|SE|SW)[^
+,]*(?:Calgary|AB)?[^
+]*)/i);
+  if(addr) d.address = addr[1].replace(/\s+/g,' ').trim();
+  // Community/Subdivision
+  const comm = text.match(/(?:Subdivision|Community|Subdivision:)\s*([A-Za-z][A-Za-z\s]+?)(?:
+|$|,)/i);
+  if(comm) d.community = comm[1].trim();
   // Beds
-  const beds=text.match(/(\d+)\s*(?:bed|bdrm|bedroom)/i);
-  if(beds){document.getElementById('p-beds').value=beds[1];se('ex-bb',beds[1]+' bd');found=true;}
-  // Baths
-  const baths=text.match(/(\d+(?:\.\d)?)\s*(?:bath|bth)/i);
-  if(baths&&document.getElementById('p-baths')){document.getElementById('p-baths').value=baths[1];const cur=document.getElementById('ex-bb').textContent;se('ex-bb',cur+(cur!=='—'?' / ':'')+baths[1]+' ba');}
-  // SqFt
-  const sqft=text.match(/(\d[\d,]+)\s*(?:sq\.?\s*ft|sqft|square feet)/i);
-  if(sqft){const s=parseInt(sqft[1].replace(/,/g,''));document.getElementById('p-sqft').value=s;se('ex-sqft',s.toLocaleString()+' sq.ft.');found=true;recalcAll();}
-  // Address pattern
-  const addr=text.match(/\d+\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+(?:Ave|Blvd|Cir|Close|Cove|Cr|Cres|Dr|Gate|Gr|Lane|Mews|Park|Pl|Rd|Rise|Row|St|Ter|Way)\b/i);
-  if(addr){document.getElementById('s-addr').value=addr[0];se('ex-addr',addr[0]);syncTop();found=true;}
-  if(found){document.getElementById('spec-extracted').style.display='block';toast('Fields extracted from spec sheet','success');}
+  const beds = text.match(/(?:Ttl Beds|Total Beds?|Bedrooms?)[\s:]+(\d+)/i) || text.match(/(\d+)\s*(?:bed|bdrm)/i);
+  if(beds) d.beds = parseInt(beds[1]);
+  // Full/half baths
+  const fbaths = text.match(/F\/H\s*Bth[\s:]+(\d+)\/(\d+)/i);
+  if(fbaths){d.baths_full=parseInt(fbaths[1]);d.baths_half=parseInt(fbaths[2]);}
+  else{ const b=text.match(/(\d+(?:\.\d)?)\s*(?:bath|bth)/i); if(b) d.baths_full=parseFloat(b[1]); }
+  // Sqft — RMS Total AG
+  const sqft = text.match(/Total\s+AG[\s:]+[\d.]+\s+Mtr2\s+([\d,]+)\s+SqFt/i)
+    || text.match(/RMS\s+SQFT[\s:,]+([\d,]+)/i)
+    || text.match(/([\d,]+)\s*(?:sq\.?\s*ft|SqFt)/i);
+  if(sqft) d.sqft = parseInt(sqft[1].replace(/,/g,''));
+  // Year built
+  const yr = text.match(/Year\s*Built[\s:]+(\d{4})/i);
+  if(yr) d.year_built = parseInt(yr[1]);
+  // List price
+  const lp = text.match(/LP[\s:]+\$?([\d,]+)/i) || text.match(/\$\s*([\d,]+(?:\.\d+)?)\s*(?:000)?/);
+  if(lp) d.list_price = parseInt(lp[1].replace(/[,$]/g,''));
+  // DOM
+  const dom = text.match(/DOM[\s:]+(\d+)/i);
+  if(dom) d.dom = parseInt(dom[1]);
+  // Status
+  const status = text.match(/^(Active|Expired|Sold)/im);
+  if(status) d.status = status[1];
+  // Lot size
+  const lot = text.match(/Lot\s*Size[\s:,]+([\d,]+)\s*SF/i);
+  if(lot) d.lot_size_sf = parseInt(lot[1].replace(/,/g,''));
+  // Garage
+  const gar = text.match(/Parking[^\n]*Total[\s:]+(\d+)/i) || text.match(/Garage[^\n]*Total[\s:]+(\d+)/i);
+  if(gar) d.garage_stalls = parseInt(gar[1]);
+
+  showExtracted(d);
+}
+
+function showExtracted(d){
+  extractedData = d;
+  const statusEl = document.getElementById('spec-ai-status');
+
+  if(!d || Object.keys(d).filter(k=>d[k]!=null).length === 0){
+    statusEl.style.display='block';
+    statusEl.style.background='rgba(234,0,42,0.06)';
+    statusEl.style.border='1px solid rgba(234,0,42,0.2)';
+    statusEl.style.color='#8a0015';
+    statusEl.innerHTML='⚠ Could not extract fields. Try pasting the listing text in the manual field below.';
+    return;
+  }
+
+  statusEl.style.display='block';
+  statusEl.style.background='rgba(26,102,53,0.08)';
+  statusEl.style.border='1px solid rgba(26,102,53,0.25)';
+  statusEl.style.color='#1a6635';
+  const count = Object.keys(d).filter(k=>d[k]!=null&&k!=='description').length;
+  statusEl.innerHTML='✓ AI extracted '+count+' fields — review below and click Apply';
+
+  // Update preview cards
+  se('ex-addr', d.address || '—');
+  const bb = [d.beds?d.beds+'bd':null, d.baths_full?d.baths_full+(d.baths_half?'.'+d.baths_half:'')+'ba':null].filter(Boolean).join(' / ') || '—';
+  se('ex-bb', bb);
+  se('ex-sqft', d.sqft ? d.sqft.toLocaleString()+' sq.ft.' : '—');
+  se('ex-year', d.year_built || '—');
+  se('ex-price', d.list_price ? '$'+d.list_price.toLocaleString() : '—');
+  se('ex-dom', d.dom ? d.dom+'d' : '—');
+
+  // Show apply button
+  const applyBtn = document.getElementById('apply-btn');
+  if(applyBtn) applyBtn.style.display='flex';
+  document.getElementById('spec-extracted').style.display='none';
+
+  // If description found, pre-fill features
+  if(d.description && document.getElementById('p-features')){
+    document.getElementById('p-features').value = d.description.slice(0,400);
+  }
+}
+
+function applyExtracted(){
+  const d = extractedData;
+  if(!d || Object.keys(d).length===0){toast('Nothing to apply — extract first','error');return;}
+
+  if(d.address){ document.getElementById('s-addr').value = d.address; syncTop(); }
+  if(d.community){
+    const sel = document.getElementById('s-community');
+    const opts = Array.from(sel.options).map(o=>o.value.toLowerCase());
+    const match = opts.findIndex(o=>d.community.toLowerCase().includes(o)||o.includes(d.community.toLowerCase()));
+    if(match>=0) sel.selectedIndex=match;
+    syncTop();
+  }
+  if(d.beds) document.getElementById('p-beds').value = d.beds;
+  if(d.baths_full) document.getElementById('p-baths').value = d.baths_full + (d.baths_half?'.'+d.baths_half:'.0');
+  if(d.sqft){ document.getElementById('p-sqft').value = d.sqft; recalcAll(); }
+  if(d.year_built) document.getElementById('p-year').value = d.year_built;
+  if(d.garage_stalls) document.getElementById('p-garage').value = d.garage_stalls;
+  if(d.lot_size_sf) document.getElementById('p-lot').value = d.lot_size_sf;
+
+  // Optionally pre-fill pricing range from list price
+  if(d.list_price){
+    const lp = d.list_price;
+    document.getElementById('p-rec').value = lp;
+    document.getElementById('p-low').value = Math.round(lp * 0.96 / 1000)*1000;
+    document.getElementById('p-high').value = Math.round(lp * 1.04 / 1000)*1000;
+    document.getElementById('n-price').value = lp;
+    document.getElementById('n-slider').value = lp;
+    recalcPricing(); recalcNet();
+  }
+
+  document.getElementById('spec-extracted').style.display='block';
+  document.getElementById('spec-extracted').textContent='✓ All fields applied — review in Seller Profile';
+  document.getElementById('apply-btn').style.display='none';
+
+  // Navigate to seller panel so they can review
+  setTimeout(()=>{ show('seller'); toast('Fields applied — review in Seller Profile','success'); },400);
+}
+
+async function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const r=new FileReader();
+    r.onload=e=>resolve(e.target.result);
+    r.onerror=reject;
+    r.readAsDataURL(file);
+  });
 }
 
 function renderSpecList(){
