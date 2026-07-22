@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>CMA Listing Presentation — Duiker Properties</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --red:#EA002A; --red-dk:#B8001F; --black:#0D1117; --dark:#1A1F2E;
+  --mid:#3A3F50; --muted:#7A7F94; --warm:#F0EDE8; --light:#F7F6F4;
+  --white:#FFFFFF; --gold:#C9A84C; --gold-dk:#A88A32;
+  --border:rgba(255,255,255,0.09); --bl:rgba(0,0,0,0.08);
+  --sans:'Raleway',sans-serif; --serif:'Cormorant Garamond',Georgia,serif;
+  --success:#1a6635; --success-bg:#e6f4ec;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;height:100%}
+body{font-family:var(--sans);background:var(--black);color:var(--white);height:100%;overflow:hidden}
+
+/* SHELL */
+.shell{display:grid;grid-template-columns:224px 1fr;grid-template-rows:60px 1fr;height:100vh}
+
+/* TOPBAR */
+.topbar{grid-column:1/-1;background:var(--dark);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;z-index:100}
+.topbar-logo{height:26px;object-fit:contain}
+.topbar-logo-fallback{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--red);display:none}
+.tdiv{width:1px;height:26px;background:var(--border);flex-shrink:0}
+.tclient{flex:1;min-width:0}
+.tclient-name{font-size:13px;font-weight:700;color:var(--white);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tclient-addr{font-size:10px;color:var(--muted);margin-top:1px;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tactions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.btn{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:8px 16px;border-radius:4px;cursor:pointer;border:none;transition:all .18s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn-ghost{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.18)}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.45)}
+.btn-red{background:var(--red);color:var(--white)}
+.btn-red:hover{background:var(--red-dk)}
+.btn-gold{background:var(--gold);color:var(--black)}
+.btn-gold:hover{background:var(--gold-dk)}
+
+/* SIDEBAR */
+.sidebar{background:#0f1320;border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-inner{padding:16px 0;flex:1}
+.slabel{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:0 18px 6px;margin-top:14px;display:block}
+.slabel:first-child{margin-top:0}
+.nitem{display:flex;align-items:center;gap:9px;padding:9px 18px;cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);border-left:3px solid transparent;transition:all .14s;user-select:none}
+.nitem:hover{color:var(--white);background:rgba(255,255,255,0.04)}
+.nitem.active{color:var(--white);border-left-color:var(--red);background:rgba(234,0,42,0.07)}
+.nitem svg{width:15px;height:15px;flex-shrink:0;opacity:.65}
+.nitem.active svg{opacity:1}
+.nbadge{margin-left:auto;font-size:9px;font-weight:800;background:var(--red);color:#fff;padding:1px 6px;border-radius:8px}
+.sidebar-session{padding:12px 14px;margin:0 10px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px}
+.session-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.session-name{font-size:11px;color:var(--white);font-weight:500;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.session-btns{display:flex;gap:6px}
+.sbtn{font-family:var(--sans);font-size:10px;font-weight:600;padding:5px 10px;border-radius:3px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .15s;letter-spacing:.04em}
+.sbtn:hover{color:var(--white);border-color:rgba(255,255,255,0.3)}
+.sbtn.red{background:var(--red);border-color:var(--red);color:#fff}
+
+/* MAIN */
+.main{overflow-y:auto;background:var(--light);color:var(--black);position:relative}
+.panel{display:none;padding:28px 32px;min-height:calc(100vh - 60px)}
+.panel.active{display:block;animation:fadeUp .22s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* PANEL HEADER */
+.ph{margin-bottom:24px}
+.ph-eye{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:5px}
+.ph-title{font-family:var(--serif);font-size:30px;font-weight:400;color:var(--black);line-height:1.1}
+.ph-title em{font-style:italic;color:var(--mid)}
+.ph-sub{font-size:12px;color:var(--muted);margin-top:5px}
+
+/* CARDS */
+.sgrid{display:grid;gap:12px;margin-bottom:18px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.scard{background:var(--white);border:1px solid var(--bl);border-radius:8px;padding:18px 20px;position:relative;overflow:hidden}
+.scard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red)}
+.scard.gold::before{background:var(--gold)}
+.scard.dark{background:var(--dark);color:var(--white);border-color:transparent}
+.scard.dark::before{background:var(--gold)}
+.slb{font-size:9px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.scard.dark .slb{color:rgba(255,255,255,0.4)}
+.sval{font-family:var(--serif);font-size:32px;font-weight:600;color:var(--black);line-height:1}
+.scard.dark .sval{color:var(--white)}
+.sval.red{color:var(--red)}
+.sval.gold{color:var(--gold)}
+.sval input{font-family:var(--serif);font-size:32px;font-weight:600;border:none;background:transparent;outline:none;padding:0;color:inherit;width:120px}
+.sctx{font-size:11px;color:var(--muted);margin-top:5px}
+.scard.dark .sctx{color:rgba(255,255,255,0.35)}
+
+/* SECTION CARD */
+.sc{background:var(--white);border:1px solid var(--bl);border-radius:8px;padding:22px 24px;margin-bottom:16px}
+.sct{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+
+/* FORM */
+.fg{margin-bottom:12px}
+.fl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;display:block}
+.fi,.fsel,.fta{font-family:var(--sans);font-size:13px;width:100%;padding:9px 11px;border:1px solid var(--bl);border-radius:4px;background:var(--light);color:var(--black);outline:none;transition:border-color .14s}
+.fi:focus,.fsel:focus,.fta:focus{border-color:var(--red)}
+.fta{resize:vertical;min-height:70px}
+.fi.err{border-color:var(--red)}
+
+/* UPLOAD ZONES */
+.upload-zone{border:2px dashed var(--bl);border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--light)}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--red);background:rgba(234,0,42,0.03)}
+.upload-zone input[type=file]{display:none}
+.upload-zone .uz-icon{font-size:28px;margin-bottom:8px;opacity:.4}
+.upload-zone .uz-label{font-size:12px;font-weight:600;color:var(--mid);letter-spacing:.03em}
+.upload-zone .uz-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.upload-preview{position:relative;border-radius:6px;overflow:hidden;background:var(--bl)}
+.upload-preview img{width:100%;display:block;border-radius:6px;max-height:180px;object-fit:cover}
+.upload-preview .up-remove{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:3px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.04em}
+.spec-list{margin-top:10px}
+.spec-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--light);border:1px solid var(--bl);border-radius:5px;margin-bottom:6px;font-size:12px;color:var(--mid)}
+.spec-item svg{width:14px;height:14px;color:var(--red);flex-shrink:0}
+.spec-item .spec-name{flex:1;font-weight:600;color:var(--black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spec-item .spec-remove{background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;padding:0 2px}
+.spec-item .spec-remove:hover{color:var(--red)}
+.spec-extracted{background:var(--success-bg);border:1px solid rgba(26,102,53,0.2);border-radius:5px;padding:8px 12px;font-size:11px;color:var(--success);margin-top:6px;display:none}
+
+/* COMPS TABLE */
+.ctbl{width:100%;border-collapse:collapse}
+.ctbl th{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:7px 10px;border-bottom:2px solid var(--bl);text-align:left;white-space:nowrap}
+.ctbl td{font-size:12px;padding:11px 10px;border-bottom:1px solid #f0ede8;color:var(--dark);vertical-align:middle}
+.ctbl tr:last-child td{border-bottom:none}
+.ctbl tr:hover td{background:var(--light)}
+.cbadge{font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.b-sold{background:#e6f4ec;color:#1a6635}
+.b-active{background:#e6f0fb;color:#1a3f8c}
+.b-expired{background:#f0ede8;color:var(--mid)}
+.b-comp{background:#fff3cd;color:#7a4f00}
+.cprice{font-weight:700;color:var(--black)}
+.adj-val{font-size:11px;color:var(--muted)}
+.adj-val.pos{color:var(--success)}
+.adj-val.neg{color:#cc2200}
+.icbtn{background:none;border:1px solid var(--bl);border-radius:3px;padding:4px 7px;cursor:pointer;font-size:11px;color:var(--muted);transition:all .13s}
+.icbtn:hover{border-color:var(--red);color:var(--red)}
+.icbtn.del:hover{border-color:#cc0000;color:#cc0000}
+.addbtn{background:none;border:2px dashed var(--bl);border-radius:5px;width:100%;padding:12px;cursor:pointer;font-family:var(--sans);font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.04em;margin-top:8px;transition:all .18s;text-transform:uppercase}
+.addbtn:hover{border-color:var(--red);color:var(--red)}
+
+/* NET SHEET */
+.nrow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--bl);font-size:13px}
+.nrow:last-child{border-bottom:none}
+.nlabel{color:var(--mid)}
+.namt{font-weight:700;color:var(--black)}
+.namt.ded{color:#cc2200}
+.ntotal{background:var(--dark);margin:14px -24px -22px;padding:18px 24px;border-radius:0 0 8px 8px;display:flex;justify-content:space-between;align-items:center}
+.ntlabel{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.4)}
+.ntsub{font-size:10px;color:rgba(255,255,255,0.25);margin-top:2px}
+.ntval{font-family:var(--serif);font-size:34px;font-weight:600;color:var(--gold)}
+.slider-wrap{margin-top:16px;padding-top:16px;border-top:1px solid var(--bl)}
+.slider-label-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}
+.price-slider{width:100%;accent-color:var(--red)}
+
+/* PRICING VIZ */
+.pviz{background:var(--dark);border-radius:8px;padding:24px 28px;margin-bottom:16px}
+.pviz-title{font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:18px}
+.pbar{position:relative;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;margin:28px 0 10px}
+.pbar-fill{position:absolute;height:100%;border-radius:4px;background:var(--red);top:0;transition:all .3s}
+.pmarker{position:absolute;top:-20px;transform:translateX(-50%);color:var(--gold);font-size:13px;transition:left .3s}
+.pbarlab{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.35);margin-top:6px}
+.prec{text-align:center;margin-top:14px}
+.prec-big{font-family:var(--serif);font-size:40px;font-weight:600;color:var(--white)}
+.prec-lbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-top:3px}
+
+/* CHART CONTAINERS */
+.chart-wrap{background:var(--white);border:1px solid var(--bl);border-radius:8px;padding:20px 22px;margin-bottom:16px}
+.chart-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:14px}
+.chart-canvas-wrap{position:relative;height:200px}
+
+/* MARKETING */
+.mitem{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--bl);align-items:flex-start}
+.mitem:last-child{border-bottom:none}
+.mnum{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--red);line-height:1;min-width:28px}
+.mtitle{font-size:13px;font-weight:700;color:var(--black);margin-bottom:2px}
+.mdesc{font-size:12px;color:var(--muted);line-height:1.5}
+.mtag{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--light);color:var(--mid);border:1px solid var(--bl);padding:2px 8px;border-radius:3px;margin-top:5px;display:inline-block}
+
+/* CREDENTIALS */
+.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.cred-card{background:var(--white);border:1px solid var(--bl);border-radius:8px;padding:18px;text-align:center}
+.cred-big{font-family:var(--serif);font-size:36px;font-weight:600;color:var(--red);line-height:1}
+.cred-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+.review{background:var(--dark);border-radius:8px;padding:20px 24px;margin-bottom:10px}
+.rstars{color:var(--gold);font-size:15px;letter-spacing:2px;margin-bottom:8px}
+.rquote{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--white);line-height:1.5}
+.rattr{font-size:11px;color:rgba(255,255,255,0.35);margin-top:8px;letter-spacing:.04em;text-transform:uppercase}
+
+/* CHECKLIST */
+.chk-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--bl)}
+.chk-item:last-child{border-bottom:none}
+.chk-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--red);margin-top:1px;flex-shrink:0;cursor:pointer}
+.chk-label{font-size:13px;color:var(--black);line-height:1.4;cursor:pointer}
+.chk-label span{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.chk-item input:checked + .chk-label{text-decoration:line-through;color:var(--muted)}
+
+/* OFFER STRATEGY */
+.os-card{background:var(--dark);border-radius:8px;padding:20px 22px;margin-bottom:10px}
+.os-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.os-tag{font-size:9px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:2px 8px;border-radius:3px}
+.os-tag.pro{background:rgba(201,168,76,0.2);color:var(--gold)}
+.os-tag.alert{background:rgba(234,0,42,0.2);color:#ff6680}
+.os-body{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.6}
+
+/* NEXT STEPS */
+.step{display:flex;gap:18px;margin-bottom:22px;align-items:flex-start}
+.step-dot{width:38px;height:38px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:18px;font-weight:600;color:var(--white);flex-shrink:0}
+.step-title{font-size:14px;font-weight:700;color:var(--black);margin-bottom:2px}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.step-badge{font-size:10px;font-weight:700;letter-spacing:.05em;background:var(--light);color:var(--mid);border:1px solid var(--bl);padding:2px 9px;border-radius:3px;margin-top:5px;display:inline-block;text-transform:uppercase}
+.cta-block{background:var(--dark);border-radius:8px;padding:28px;text-align:center}
+.cta-hl{font-family:var(--serif);font-size:28px;color:var(--white);margin-bottom:6px}
+.cta-sub{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:18px}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:400;align-items:center;justify-content:center}
+.overlay.on{display:flex}
+.modal{background:var(--white);border-radius:10px;padding:26px 30px;width:580px;max-width:92vw;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:16px;font-weight:700;color:var(--black);margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
+.modal-x{background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted)}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mfooter{margin-top:18px;display:flex;gap:8px;justify-content:flex-end}
+.adj-section{border-top:1px solid var(--bl);margin-top:14px;padding-top:14px}
+.adj-title{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.adj-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-bottom:8px}
+.adj-lbl{font-size:12px;color:var(--mid)}
+
+/* SESSION MODAL */
+.sess-list{margin:12px 0;max-height:260px;overflow-y:auto}
+.sess-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--bl);border-radius:6px;margin-bottom:6px;cursor:pointer;transition:all .14s}
+.sess-item:hover{border-color:var(--red);background:rgba(234,0,42,0.03)}
+.sess-item-name{font-size:13px;font-weight:600;color:var(--black);flex:1}
+.sess-item-date{font-size:11px;color:var(--muted)}
+.sess-item-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:2px}
+.sess-item-del:hover{color:var(--red)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--dark);color:var(--white);border:1px solid var(--border);border-radius:6px;padding:12px 18px;font-size:12px;font-weight:600;letter-spacing:.03em;z-index:1000;transform:translateY(60px);opacity:0;transition:all .3s;display:flex;align-items:center;gap:8px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success .t-dot{background:var(--success)}
+.toast.error .t-dot{background:var(--red)}
+.t-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+/* PRESENT MODE */
+#poverlay{display:none;position:fixed;inset:0;background:var(--black);z-index:1000;flex-direction:column}
+#poverlay.on{display:flex}
+.pslides{flex:1;position:relative;overflow:hidden}
+.pslide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:50px 70px;text-align:center;opacity:0;transform:translateX(30px);transition:opacity .4s,transform .4s;pointer-events:none}
+.pslide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+.pslide.prev{opacity:0;transform:translateX(-30px)}
+.p-eye{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+.p-hl{font-family:var(--serif);font-size:52px;font-weight:400;color:var(--white);line-height:1.1;margin-bottom:14px}
+.p-hl em{font-style:italic;color:rgba(255,255,255,0.45)}
+.p-sub{font-size:14px;color:rgba(255,255,255,0.45);max-width:500px;line-height:1.6}
+.p-stats{display:flex;gap:36px;justify-content:center;margin-top:36px}
+.p-stat-val{font-family:var(--serif);font-size:50px;font-weight:600;color:var(--white);line-height:1}
+.p-stat-lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-top:5px}
+.p-cover-photo{position:absolute;inset:0;object-fit:cover;width:100%;height:100%;opacity:.22}
+.p-cover-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center}
+.p-agent-wrap{display:flex;align-items:center;gap:28px;margin-top:28px}
+.p-agent-photo{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--gold)}
+.p-agent-photo-placeholder{width:90px;height:90px;border-radius:50%;background:var(--dark);border:3px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:28px;font-weight:600;color:var(--gold)}
+.p-agent-info{text-align:left}
+.p-agent-name{font-size:16px;font-weight:700;color:var(--white)}
+.p-agent-title{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px}
+.p-chart-wrap{width:100%;max-width:680px;background:rgba(255,255,255,0.05);border-radius:10px;padding:20px 24px;margin-top:20px}
+.p-chart-canvas{height:200px;width:100%}
+.pnav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-top:1px solid var(--border);background:var(--dark);flex-shrink:0}
+.pnav-logo{height:20px;object-fit:contain}
+.pdots{display:flex;gap:6px}
+.pdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.18);cursor:pointer;transition:all .2s}
+.pdot.active{background:var(--red);width:18px;border-radius:3px}
+.pbtns{display:flex;gap:8px}
+.pbtn{background:none;border:1px solid rgba(255,255,255,0.15);color:var(--white);font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 18px;border-radius:4px;cursor:pointer;transition:all .14s}
+.pbtn:hover{border-color:rgba(255,255,255,0.4)}
+.pbtn.red{background:var(--red);border-color:var(--red)}
+
+/* DISCLAIMER */
+.disc{background:var(--warm);border:1px solid rgba(201,168,76,0.25);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px}
+
+/* MOBILE NAV */
+.mobile-nav{display:none;background:var(--dark);border-top:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.mobile-nav-inner{display:flex;gap:0;min-width:max-content}
+.mnitem{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 14px;cursor:pointer;font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all .14s}
+.mnitem.active{color:var(--white);border-bottom-color:var(--red)}
+.mnitem svg{width:16px;height:16px}
+
+@media(max-width:860px){
+  .shell{grid-template-columns:1fr;grid-template-rows:60px 1fr 48px}
+  .sidebar{display:none}
+  .mobile-nav{display:block;grid-row:3}
+  body{overflow:hidden}
+  .main{height:calc(100vh - 108px);overflow-y:auto}
+  .panel{padding:16px}
+  .g3{grid-template-columns:repeat(2,1fr)}
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .two,.three{grid-template-columns:1fr}
+  .tactions .btn-ghost{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="t-dot"></div><span id="toast-msg">Saved</span></div>
+
+<!-- PRESENT MODE -->
+<div id="poverlay">
+  <div class="pslides" id="pslides">
+
+    <!-- S0: COVER -->
+    <div class="pslide active" id="ps0">
+      <img id="p-prop-photo" class="p-cover-photo" src="" style="display:none" alt="">
+      <div class="p-cover-content">
+        <div class="p-eye">Listing Presentation · Comparative Market Analysis</div>
+        <div class="p-hl" id="p-addr-hl">142 Mahogany Cove SE</div>
+        <div class="p-sub" id="p-seller-hl">Prepared for the Smith Residence · Mahogany</div>
+        <div class="p-agent-wrap">
+          <div id="p-agent-photo-wrap"></div>
+          <div class="p-agent-info">
+            <div class="p-agent-name">Kyle Duiker · Broker Delegate</div>
+            <div class="p-agent-title">Royal LePage Solutions · Duiker Properties · SE Calgary</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S1: MARKET -->
+    <div class="pslide" id="ps1">
+      <div class="p-eye">Market Overview · SE Calgary</div>
+      <div class="p-hl">The market is<br><em>moving in your favour.</em></div>
+      <div class="p-stats">
+        <div class="p-stat"><div class="p-stat-val" id="p-absorption">68%</div><div class="p-stat-lbl">Absorption rate</div></div>
+        <div class="p-stat"><div class="p-stat-val" id="p-dom">17</div><div class="p-stat-lbl">Avg. days on market</div></div>
+        <div class="p-stat"><div class="p-stat-val" id="p-lsr">98.4%</div><div class="p-stat-lbl">List-to-sale ratio</div></div>
+      </div>
+    </div>
+
+    <!-- S2: PRICE TREND CHART -->
+    <div class="pslide" id="ps2">
+      <div class="p-eye">Market Trend</div>
+      <div class="p-hl">Prices have been<br><em>trending upward.</em></div>
+      <div class="p-chart-wrap">
+        <canvas id="p-trend-chart" class="p-chart-canvas"></canvas>
+      </div>
+    </div>
+
+    <!-- S3: COMPS -->
+    <div class="pslide" id="ps3">
+      <div class="p-eye">Comparable Sales</div>
+      <div class="p-hl">The evidence<br><em>speaks for itself.</em></div>
+      <div id="p-comp-tbl" style="width:100%;max-width:700px;margin-top:24px;text-align:left;"></div>
+    </div>
+
+    <!-- S4: PSF CHART -->
+    <div class="pslide" id="ps4">
+      <div class="p-eye">Pricing Analysis</div>
+      <div class="p-hl">Your home stands<br><em>out on value.</em></div>
+      <div class="p-chart-wrap">
+        <canvas id="p-psf-chart" class="p-chart-canvas"></canvas>
+      </div>
+    </div>
+
+    <!-- S5: PRICING -->
+    <div class="pslide" id="ps5">
+      <div class="p-eye">Pricing Strategy</div>
+      <div class="p-hl">Your home is worth</div>
+      <div style="font-family:var(--serif);font-size:76px;font-weight:600;color:var(--gold);line-height:1;margin:14px 0" id="p-price">$699,900</div>
+      <div class="p-sub">Based on <span id="p-comp-cnt">4</span> comparable properties — positioned to generate competing offers</div>
+    </div>
+
+    <!-- S6: DOM CHART -->
+    <div class="pslide" id="ps6">
+      <div class="p-eye">Days on Market Analysis</div>
+      <div class="p-hl">Overpriced homes<br><em>sit and stagnate.</em></div>
+      <div class="p-chart-wrap">
+        <canvas id="p-dom-chart" class="p-chart-canvas"></canvas>
+      </div>
+      <div class="p-sub" style="margin-top:14px">The data is clear — right-priced homes sell fast. Overpriced homes attract no one.</div>
+    </div>
+
+    <!-- S7: NET SHEET -->
+    <div class="pslide" id="ps7">
+      <div class="p-eye">Seller Net Sheet</div>
+      <div class="p-hl">What you walk away with</div>
+      <div style="font-family:var(--serif);font-size:62px;font-weight:600;color:var(--gold);margin:20px 0" id="p-net">$388,603</div>
+      <div class="p-sub">Estimated net proceeds after commission, legal fees, and mortgage balance</div>
+    </div>
+
+    <!-- S8: WHY KYLE -->
+    <div class="pslide" id="ps8">
+      <div class="p-eye">Why Duiker Properties</div>
+      <div class="p-hl">Results you can<br><em>verify.</em></div>
+      <div class="p-stats">
+        <div class="p-stat"><div class="p-stat-val">180+</div><div class="p-stat-lbl">Homes sold</div></div>
+        <div class="p-stat"><div class="p-stat-val">101.2%</div><div class="p-stat-lbl">Avg. list-to-sale</div></div>
+        <div class="p-stat"><div class="p-stat-val">2010</div><div class="p-stat-lbl">Licensed since</div></div>
+      </div>
+    </div>
+
+    <!-- S9: CLOSE -->
+    <div class="pslide" id="ps9">
+      <div class="p-eye">Next Steps</div>
+      <div class="p-hl">Let's get your<br><em>home sold.</em></div>
+      <div class="p-sub" style="margin-top:16px">Sign today. Photos within 48 hours.<br>Live on MLS within the week.</div>
+    </div>
+
+  </div>
+  <div class="pnav">
+    <img class="pnav-logo" src="https://raw.githubusercontent.com/Kyleduiker/duikerproperties-homepage/main/RLP-Solutions-Logo-White.png" alt="RLP Solutions" onerror="this.style.display='none'">
+    <div class="pdots" id="pdots"></div>
+    <div class="pbtns">
+      <button class="pbtn" onclick="prevSlide()">← Prev</button>
+      <button class="pbtn" onclick="nextSlide()">Next →</button>
+      <button class="pbtn red" onclick="closePresent()">Exit</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMP MODAL -->
+<div class="overlay" id="comp-modal">
+  <div class="modal">
+    <div class="modal-title"><span id="modal-title-txt">Add comparable</span><button class="modal-x" onclick="closeModal('comp-modal')">✕</button></div>
+    <div class="modal-grid">
+      <div class="fg" style="grid-column:1/-1"><label class="fl">Address</label><input class="fi" id="m-addr" placeholder="123 Mahogany Blvd SE"></div>
+      <div class="fg"><label class="fl">Status</label>
+        <select class="fsel" id="m-status">
+          <option value="sold">Sold</option><option value="active">Active</option>
+          <option value="expired">Expired</option><option value="competing">Competing (active)</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Sale / List price ($)</label><input class="fi" id="m-price" type="number" placeholder="699900"></div>
+      <div class="fg"><label class="fl">Bedrooms</label><input class="fi" id="m-beds" type="number" placeholder="4"></div>
+      <div class="fg"><label class="fl">Bathrooms</label><input class="fi" id="m-baths" type="number" placeholder="3"></div>
+      <div class="fg"><label class="fl">Sq. ft.</label><input class="fi" id="m-sqft" type="number" placeholder="1850"></div>
+      <div class="fg"><label class="fl">Days on market</label><input class="fi" id="m-dom" type="number" placeholder="14"></div>
+      <div class="fg"><label class="fl">Year built</label><input class="fi" id="m-year" type="number" placeholder="2015"></div>
+    </div>
+    <div class="adj-section">
+      <div class="adj-title">Comparable adjustments (+ adds value / − subtracts)</div>
+      <div class="adj-row"><span class="adj-lbl">Garage (subject has)</span><input class="fi" id="adj-garage" type="number" placeholder="0" style="width:100px;text-align:right"></div>
+      <div class="adj-row"><span class="adj-lbl">Finished basement</span><input class="fi" id="adj-basement" type="number" placeholder="0" style="width:100px;text-align:right"></div>
+      <div class="adj-row"><span class="adj-lbl">Lake / water access</span><input class="fi" id="adj-lake" type="number" placeholder="0" style="width:100px;text-align:right"></div>
+      <div class="adj-row"><span class="adj-lbl">Kitchen / upgrades</span><input class="fi" id="adj-upgrades" type="number" placeholder="0" style="width:100px;text-align:right"></div>
+      <div class="adj-row"><span class="adj-lbl">Lot size difference</span><input class="fi" id="adj-lot" type="number" placeholder="0" style="width:100px;text-align:right"></div>
+    </div>
+    <div class="fg" style="margin-top:12px"><label class="fl">Notes</label><textarea class="fta" id="m-notes" rows="2" placeholder="Any relevant notes..."></textarea></div>
+    <div class="mfooter">
+      <button class="btn btn-ghost" style="color:var(--mid);border-color:var(--bl)" onclick="closeModal('comp-modal')">Cancel</button>
+      <button class="btn btn-red" onclick="saveComp()">Save comparable</button>
+    </div>
+  </div>
+</div>
+
+<!-- SESSION MODAL -->
+<div class="overlay" id="sess-modal">
+  <div class="modal">
+    <div class="modal-title"><span>Sessions</span><button class="modal-x" onclick="closeModal('sess-modal')">✕</button></div>
+    <div class="fg"><label class="fl">New session name</label>
+      <div style="display:flex;gap:8px"><input class="fi" id="new-sess-name" placeholder="Smith Residence — Mahogany" style="flex:1">
+      <button class="btn btn-red" onclick="newSession()">Create</button></div>
+    </div>
+    <div class="sess-list" id="sess-list"></div>
+    <div class="mfooter"><button class="btn btn-ghost" style="color:var(--mid);border-color:var(--bl)" onclick="closeModal('sess-modal')">Close</button></div>
+  </div>
+</div>
+
+<!-- MAIN SHELL -->
+<div class="shell">
+  <header class="topbar">
+    <img class="topbar-logo" src="https://raw.githubusercontent.com/Kyleduiker/duikerproperties-homepage/main/RLP-Solutions-Logo-White.png" alt="Royal LePage Solutions" onerror="this.style.display='none';document.querySelector('.topbar-logo-fallback').style.display='block'">
+    <span class="topbar-logo-fallback">RLP SOLUTIONS</span>
+    <div class="tdiv"></div>
+    <div class="tclient">
+      <div class="tclient-name" id="tc-name">Smith Residence</div>
+      <div class="tclient-addr" id="tc-addr">142 Mahogany Cove SE · Listing Presentation</div>
+    </div>
+    <div class="tactions">
+      <button class="btn btn-ghost" onclick="openModal('sess-modal');renderSessions()">Sessions</button>
+      <button class="btn btn-ghost" onclick="openPresent()">⬛ Present</button>
+      <button class="btn btn-gold" onclick="saveSession()">↑ Save</button>
+      <button class="btn btn-red" onclick="exportPDF()">↓ PDF</button>
+    </div>
+  </header>
+
+  <nav class="sidebar">
+    <div class="sidebar-inner">
+      <span class="slabel">Setup</span>
+      <div class="nitem active" onclick="show('seller')" id="n-seller">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Seller profile
+      </div>
+      <div class="nitem" onclick="show('specs')" id="n-specs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Listing specs
+        <span class="nbadge" id="spec-badge" style="display:none">✓</span>
+      </div>
+
+      <span class="slabel">Presentation</span>
+      <div class="nitem" onclick="show('market')" id="n-market">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Market overview
+      </div>
+      <div class="nitem" onclick="show('comps')" id="n-comps">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Comparables <span class="nbadge" id="comp-badge">4</span>
+      </div>
+      <div class="nitem" onclick="show('pricing')" id="n-pricing">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Pricing strategy
+      </div>
+      <div class="nitem" onclick="show('netsheet')" id="n-netsheet">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Net sheet
+      </div>
+      <div class="nitem" onclick="show('marketing')" id="n-marketing">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        Marketing plan
+      </div>
+      <div class="nitem" onclick="show('whyme')" id="n-whyme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Why Duiker Properties
+      </div>
+
+      <span class="slabel">Strategy</span>
+      <div class="nitem" onclick="show('checklist')" id="n-checklist">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Staging checklist
+      </div>
+      <div class="nitem" onclick="show('offers')" id="n-offers">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Offer strategy
+      </div>
+      <div class="nitem" onclick="show('nextsteps')" id="n-nextsteps">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Next steps
+      </div>
+    </div>
+    <div style="padding:0 10px 10px">
+      <div class="sidebar-session">
+        <div class="session-label">Current session</div>
+        <div class="session-name" id="sess-display">Smith Residence</div>
+        <div class="session-btns">
+          <button class="sbtn" onclick="saveSession()">Save</button>
+          <button class="sbtn" onclick="openModal('sess-modal');renderSessions()">Switch</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main">
+    <!-- ═══ SELLER PROFILE ═══ -->
+    <div class="panel active" id="panel-seller">
+      <div class="ph"><div class="ph-eye">Setup</div><div class="ph-title">Seller profile<br><em>& property details</em></div><div class="ph-sub">Fill this in first — everything else flows from it.</div></div>
+      <div class="two">
+        <div class="sc">
+          <div class="sct">Client information</div>
+          <div class="fg"><label class="fl">Seller name(s)</label><input class="fi" id="s-name" value="John &amp; Sarah Smith" oninput="syncTop()"></div>
+          <div class="fg"><label class="fl">Property address</label><input class="fi" id="s-addr" value="142 Mahogany Cove SE" oninput="syncTop()"></div>
+          <div class="fg"><label class="fl">Community</label>
+            <select class="fsel" id="s-community" onchange="syncTop()">
+              <option>Mahogany</option><option>Auburn Bay</option><option>Seton</option>
+              <option>Cranston</option><option>Chestermere</option><option>Legacy</option><option>Other</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl">Appointment date</label><input class="fi" id="s-date" type="date"></div>
+          <div class="fg"><label class="fl">Seller email (for PDF delivery)</label><input class="fi" id="s-email" type="email" placeholder="client@email.com"></div>
+        </div>
+        <div class="sc">
+          <div class="sct">Property details</div>
+          <div class="two" style="margin-bottom:0">
+            <div class="fg"><label class="fl">Bedrooms</label><input class="fi" id="p-beds" type="number" value="4"></div>
+            <div class="fg"><label class="fl">Bathrooms</label><input class="fi" id="p-baths" type="number" value="3"></div>
+            <div class="fg"><label class="fl">Sq. ft.</label><input class="fi" id="p-sqft" type="number" value="1920" oninput="recalcAll()"></div>
+            <div class="fg"><label class="fl">Year built</label><input class="fi" id="p-year" type="number" value="2016"></div>
+            <div class="fg"><label class="fl">Garage stalls</label><input class="fi" id="p-garage" type="number" value="2"></div>
+            <div class="fg"><label class="fl">Lot size (sq.ft.)</label><input class="fi" id="p-lot" type="number" value="4800"></div>
+          </div>
+          <div class="fg" style="margin-top:4px"><label class="fl">Key features</label><textarea class="fta" id="p-features" rows="3">Lake access, double garage, finished basement, upgraded kitchen with quartz countertops</textarea></div>
+        </div>
+      </div>
+      <div class="sc">
+        <div class="sct">Property photo</div>
+        <div id="prop-photo-zone">
+          <div class="upload-zone" id="prop-photo-drop" onclick="document.getElementById('prop-photo-input').click()" ondragover="dragOver(event,'prop-photo-drop')" ondragleave="dragLeave('prop-photo-drop')" ondrop="dropFile(event,'prop-photo-input')">
+            <input type="file" id="prop-photo-input" accept="image/*" onchange="handlePhotoUpload(this,'prop-photo','p-prop-photo')">
+            <div class="uz-icon">🏠</div>
+            <div class="uz-label">Upload property photo</div>
+            <div class="uz-sub">Drag and drop or click — JPG, PNG, WEBP · Shows on cover slide and PDF</div>
+          </div>
+        </div>
+        <div id="prop-photo-preview" style="display:none;margin-top:10px"></div>
+      </div>
+      <div class="sc">
+        <div class="sct">Seller motivation</div>
+        <div class="three" style="margin-bottom:0">
+          <div class="fg"><label class="fl">Primary motivation</label>
+            <select class="fsel" id="s-motivation"><option>Upsizing</option><option>Downsizing</option><option>Relocation</option><option>Investment / cash out</option><option>Divorce / estate</option><option>Job transfer</option></select>
+          </div>
+          <div class="fg"><label class="fl">Target timeline</label>
+            <select class="fsel" id="s-timeline"><option>ASAP (within 30 days)</option><option>1–2 months</option><option>3–6 months</option><option>6+ months</option></select>
+          </div>
+          <div class="fg"><label class="fl">Biggest concern</label>
+            <select class="fsel" id="s-concern"><option>Getting maximum price</option><option>Selling quickly</option><option>Minimal disruption</option><option>Coordinating purchase</option><option>First time selling</option></select>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Notes / special circumstances</label><textarea class="fta" id="s-notes" placeholder="Anything relevant to this appointment..."></textarea></div>
+      </div>
+    </div>
+
+    <!-- ═══ LISTING SPECS ═══ -->
+    <div class="panel" id="panel-specs">
+      <div class="ph"><div class="ph-eye">Setup</div><div class="ph-title">Listing spec sheets<br><em>& agent headshot</em></div><div class="ph-sub">Upload MLS data sheets, feature sheets, or any property documents. Key fields auto-fill where possible.</div></div>
+      <div class="two">
+        <div class="sc">
+          <div class="sct">Spec sheet uploads</div>
+          <div class="upload-zone" id="spec-drop" onclick="document.getElementById('spec-input').click()" ondragover="dragOver(event,'spec-drop')" ondragleave="dragLeave('spec-drop')" ondrop="dropFile(event,'spec-input')">
+            <input type="file" id="spec-input" accept=".pdf,image/*" multiple onchange="handleSpecUpload(this)">
+            <div class="uz-icon">📋</div>
+            <div class="uz-label">Upload listing spec sheets</div>
+            <div class="uz-sub">PDF or images — MLS printouts, feature sheets, condo docs · Multiple files OK</div>
+          </div>
+          <div class="spec-list" id="spec-list"></div>
+          <div class="spec-extracted" id="spec-extracted">
+            ✓ Fields extracted from spec sheet — review and confirm in Seller Profile
+          </div>
+        </div>
+        <div class="sc">
+          <div class="sct">Agent headshot</div>
+          <div id="agent-photo-zone">
+            <div class="upload-zone" id="agent-photo-drop" onclick="document.getElementById('agent-photo-input').click()" ondragover="dragOver(event,'agent-photo-drop')" ondragleave="dragLeave('agent-photo-drop')" ondrop="dropFile(event,'agent-photo-input')">
+              <input type="file" id="agent-photo-input" accept="image/*" onchange="handlePhotoUpload(this,'agent-photo','p-agent-photo-src')">
+              <div class="uz-icon">👤</div>
+              <div class="uz-label">Upload your headshot</div>
+              <div class="uz-sub">Shows on Why Kyle slide and PDF cover · JPG or PNG</div>
+            </div>
+          </div>
+          <div id="agent-photo-preview" style="display:none;margin-top:10px"></div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bl)">
+            <div class="sct" style="margin-bottom:10px">Agent bio (for PDF)</div>
+            <div class="fg"><label class="fl">Tag line</label><input class="fi" id="agent-tagline" value="SE Calgary lake community specialist"></div>
+            <div class="fg"><label class="fl">Bio (2–3 sentences)</label><textarea class="fta" id="agent-bio" rows="3">Licensed since 2010 with Broker Delegate designation earned in 2021. Specialising exclusively in Mahogany, Auburn Bay, Seton, Cranston, Chestermere, and Legacy — the lake communities of Southeast Calgary.</textarea></div>
+          </div>
+        </div>
+      </div>
+      <div class="sc">
+        <div class="sct">Extracted data preview</div>
+        <div class="sgrid g3" id="extracted-preview">
+          <div class="scard" style="padding:14px 16px"><div class="slb">Address detected</div><div style="font-size:13px;font-weight:600;color:var(--black)" id="ex-addr">—</div></div>
+          <div class="scard" style="padding:14px 16px"><div class="slb">Beds / baths</div><div style="font-size:13px;font-weight:600;color:var(--black)" id="ex-bb">—</div></div>
+          <div class="scard" style="padding:14px 16px"><div class="slb">Sq. ft.</div><div style="font-size:13px;font-weight:600;color:var(--black)" id="ex-sqft">—</div></div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted)">Text extraction works best on digital PDFs and clear image scans. After uploading, review and adjust any auto-filled fields in Seller Profile.</div>
+      </div>
+    </div>
+
+    <!-- ═══ MARKET OVERVIEW ═══ -->
+    <div class="panel" id="panel-market">
+      <div class="ph"><div class="ph-eye">Section 01</div><div class="ph-title">Market overview<br><em>SE Calgary lake communities</em></div><div class="ph-sub">Update these before each appointment — they feed directly into present mode.</div></div>
+      <div class="sgrid g3">
+        <div class="scard"><div class="slb">Absorption rate</div><div class="sval red"><input id="m-absorption" type="number" value="68" oninput="syncPresentMkt()">%</div><div class="sctx">Mahogany · last 30 days</div></div>
+        <div class="scard"><div class="slb">Avg. days on market</div><div class="sval"><input id="m-dom" type="number" value="17" oninput="syncPresentMkt()"></div><div class="sctx">Sold listings · SE Calgary</div></div>
+        <div class="scard"><div class="slb">List-to-sale ratio</div><div class="sval"><input id="m-lsr" type="number" value="98.4" step="0.1" oninput="syncPresentMkt()">%</div><div class="sctx">Last 60 days · lake communities</div></div>
+      </div>
+      <div class="sgrid g3">
+        <div class="scard"><div class="slb">Active listings</div><div class="sval"><input id="m-active" type="number" value="23"></div><div class="sctx">Comparable homes · SE Calgary</div></div>
+        <div class="scard"><div class="slb">Sold last 30 days</div><div class="sval"><input id="m-sold30" type="number" value="31"></div><div class="sctx">Comparable homes · SE Calgary</div></div>
+        <div class="scard"><div class="slb">Median sold price</div><div class="sval" style="font-size:24px">$<input id="m-median" type="number" value="697500" style="width:140px;font-size:24px"></div><div class="sctx">SE Calgary · last 30 days</div></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">6-month price trend — SE Calgary lake communities</div>
+        <div class="chart-canvas-wrap"><canvas id="trend-chart"></canvas></div>
+      </div>
+      <div class="sc" style="margin-top:0">
+        <div class="sct">Price trend data (monthly avg sold prices — most recent 6 months)</div>
+        <div class="sgrid g3" style="margin-bottom:0">
+          <div class="fg"><label class="fl">Month 1 label</label><input class="fi" id="t-l1" value="Feb"></div>
+          <div class="fg"><label class="fl">Month 2 label</label><input class="fi" id="t-l2" value="Mar"></div>
+          <div class="fg"><label class="fl">Month 3 label</label><input class="fi" id="t-l3" value="Apr"></div>
+          <div class="fg"><label class="fl">Month 4 label</label><input class="fi" id="t-l4" value="May"></div>
+          <div class="fg"><label class="fl">Month 5 label</label><input class="fi" id="t-l5" value="Jun"></div>
+          <div class="fg"><label class="fl">Month 6 label</label><input class="fi" id="t-l6" value="Jul"></div>
+          <div class="fg"><label class="fl">Month 1 avg ($)</label><input class="fi" id="t-v1" type="number" value="658000" oninput="buildTrendChart()"></div>
+          <div class="fg"><label class="fl">Month 2 avg ($)</label><input class="fi" id="t-v2" type="number" value="664000" oninput="buildTrendChart()"></div>
+          <div class="fg"><label class="fl">Month 3 avg ($)</label><input class="fi" id="t-v3" type="number" value="672000" oninput="buildTrendChart()"></div>
+          <div class="fg"><label class="fl">Month 4 avg ($)</label><input class="fi" id="t-v4" type="number" value="681000" oninput="buildTrendChart()"></div>
+          <div class="fg"><label class="fl">Month 5 avg ($)</label><input class="fi" id="t-v5" type="number" value="689000" oninput="buildTrendChart()"></div>
+          <div class="fg"><label class="fl">Month 6 avg ($)</label><input class="fi" id="t-v6" type="number" value="697500" oninput="buildTrendChart()"></div>
+        </div>
+      </div>
+      <div class="sc"><div class="sct">Market narrative</div><textarea class="fta" id="m-narrative" rows="4">The SE Calgary lake community market remains firmly in seller's territory. With an absorption rate above 65% and homes averaging just 17 days on market, well-priced properties are moving quickly — often with multiple offers in the first week.</textarea></div>
+    </div>
+
+    <!-- ═══ COMPARABLES ═══ -->
+    <div class="panel" id="panel-comps">
+      <div class="ph"><div class="ph-eye">Section 02</div><div class="ph-title">Comparable sales<br><em>The evidence.</em></div></div>
+      <div class="sc">
+        <div class="sct">Comparable properties <button class="btn btn-red" style="padding:5px 12px;font-size:10px" onclick="openCompModal()">+ Add comparable</button></div>
+        <div style="overflow-x:auto"><table class="ctbl"><thead><tr><th>Status</th><th>Address</th><th>Price</th><th>Adj. price</th><th>Beds</th><th>Baths</th><th>Sq.ft.</th><th>$/sq.ft.</th><th>DOM</th><th></th></tr></thead><tbody id="comp-tbody"></tbody></table></div>
+        <button class="addbtn" onclick="openCompModal()">+ Add comparable property</button>
+      </div>
+      <div class="sgrid g3">
+        <div class="scard dark"><div class="slb">Avg. adjusted sold price</div><div class="sval gold" id="cavg-price">$700,750</div><div class="sctx">Sold comps only</div></div>
+        <div class="scard dark"><div class="slb">Avg. price / sq. ft.</div><div class="sval gold" id="cavg-psf">$379</div><div class="sctx">All comparables</div></div>
+        <div class="scard dark"><div class="slb">Avg. days on market</div><div class="sval gold" id="cavg-dom">26</div><div class="sctx">All comparables</div></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Price per sq. ft. — subject vs. comparables</div>
+        <div class="chart-canvas-wrap"><canvas id="psf-chart"></canvas></div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Days on market — why pricing matters</div>
+        <div class="chart-canvas-wrap"><canvas id="dom-chart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- ═══ PRICING ═══ -->
+    <div class="panel" id="panel-pricing">
+      <div class="ph"><div class="ph-eye">Section 03</div><div class="ph-title">Pricing strategy<br><em>The recommendation.</em></div></div>
+      <div class="pviz">
+        <div class="pviz-title">Recommended pricing range — based on comparables</div>
+        <div class="pbar" id="pbar"><div class="pbar-fill" id="pbar-fill"></div><div class="pmarker" id="pmarker">▼</div></div>
+        <div class="pbarlab"><span id="plow-lbl">$670,000</span><span id="phigh-lbl">$730,000</span></div>
+        <div class="prec"><div class="prec-big" id="prec-disp">$699,900</div><div class="prec-lbl">Recommended list price</div></div>
+      </div>
+      <div class="two">
+        <div class="sc">
+          <div class="sct">Adjust range</div>
+          <div class="fg"><label class="fl">Low end ($)</label><input class="fi" id="p-low" type="number" value="670000" oninput="recalcPricing()"></div>
+          <div class="fg"><label class="fl">Recommended list price ($)</label><input class="fi" id="p-rec" type="number" value="699900" oninput="recalcPricing();syncNetPrice()"></div>
+          <div class="fg"><label class="fl">High end ($)</label><input class="fi" id="p-high" type="number" value="730000" oninput="recalcPricing()"></div>
+          <div class="sgrid g2" style="margin-top:12px;margin-bottom:0">
+            <div class="scard" style="padding:12px 14px"><div class="slb">Subject $/sq.ft.</div><div class="sval" style="font-size:22px" id="sub-psf">$364</div></div>
+            <div class="scard" style="padding:12px 14px"><div class="slb">Comp avg $/sq.ft.</div><div class="sval" style="font-size:22px" id="cmp-psf-d">$379</div></div>
+          </div>
+        </div>
+        <div class="sc">
+          <div class="sct">Pricing rationale</div>
+          <textarea class="fta" id="p-rationale" rows="6">Sold comps within 500m average $700,750 — placing this home at $699,900 positions it to attract immediate serious interest while leaving room to negotiate. The expired listing at $749,000 shows the ceiling where market resistance begins.</textarea>
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bl)">
+            <div class="sct" style="margin-bottom:10px">Competition notes</div>
+            <textarea class="fta" id="p-competition" rows="3" placeholder="Notes on competing active listings and how this property compares..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ NET SHEET ═══ -->
+    <div class="panel" id="panel-netsheet">
+      <div class="ph"><div class="ph-eye">Section 04</div><div class="ph-title">Seller net sheet<br><em>What you walk away with.</em></div><div class="ph-sub">All figures update live. Use the slider to show how price affects net proceeds.</div></div>
+      <div class="two">
+        <div class="sc">
+          <div class="sct">Inputs</div>
+          <div class="fg"><label class="fl">List / sale price ($)</label><input class="fi" id="n-price" type="number" value="699900" oninput="recalcNet()"></div>
+          <div class="slider-wrap">
+            <div class="slider-label-row"><span>Price range: $<span id="n-slider-low">620,000</span></span><span>$<span id="n-slider-high">780,000</span></span></div>
+            <input type="range" class="price-slider" id="n-slider" min="620000" max="780000" step="1000" value="699900" oninput="sliderToPrice(this.value)">
+          </div>
+          <div class="fg" style="margin-top:12px"><label class="fl">Total commission (%)</label><input class="fi" id="n-comm" type="number" value="3.5" step="0.1" oninput="recalcNet()"></div>
+          <div class="fg"><label class="fl">GST on commission (%)</label><input class="fi" id="n-gst" type="number" value="5" step="0.1" oninput="recalcNet()"></div>
+          <div class="fg"><label class="fl">Legal fees ($)</label><input class="fi" id="n-legal" type="number" value="1800" oninput="recalcNet()"></div>
+          <div class="fg"><label class="fl">Mortgage balance ($)</label><input class="fi" id="n-mortgage" type="number" value="285000" oninput="recalcNet()"></div>
+          <div class="fg"><label class="fl">Mortgage penalty (est.) ($)</label><input class="fi" id="n-penalty" type="number" value="0" oninput="recalcNet()"></div>
+          <div class="fg"><label class="fl">Property tax adjustment ($)</label><input class="fi" id="n-tax-adj" type="number" value="0" oninput="recalcNet()"><div style="font-size:10px;color:var(--muted);margin-top:3px">Enter positive if seller has prepaid, negative if owing at close</div></div>
+          <div class="fg"><label class="fl">Other costs ($)</label><input class="fi" id="n-other" type="number" value="0" oninput="recalcNet()"></div>
+        </div>
+        <div class="sc" style="position:relative;overflow:hidden">
+          <div class="sct">Estimated proceeds</div>
+          <div class="nrow"><span class="nlabel">Sale price</span><span class="namt" id="ns-price">$699,900</span></div>
+          <div class="nrow"><span class="nlabel">Commission (<span id="ns-comm-pct">3.5</span>%)</span><span class="namt ded" id="ns-comm">−$24,497</span></div>
+          <div class="nrow"><span class="nlabel">GST on commission</span><span class="namt ded" id="ns-gst">−$1,225</span></div>
+          <div class="nrow"><span class="nlabel">Legal fees</span><span class="namt ded" id="ns-legal">−$1,800</span></div>
+          <div class="nrow"><span class="nlabel">Mortgage payout</span><span class="namt ded" id="ns-mortgage">−$285,000</span></div>
+          <div class="nrow" id="ns-penalty-row"><span class="nlabel">Mortgage penalty</span><span class="namt ded" id="ns-penalty">−$0</span></div>
+          <div class="nrow" id="ns-tax-row"><span class="nlabel">Property tax adj.</span><span class="namt" id="ns-tax">+$0</span></div>
+          <div class="nrow"><span class="nlabel">Other costs</span><span class="namt ded" id="ns-other">−$0</span></div>
+          <div class="ntotal">
+            <div><div class="ntlabel">Estimated net proceeds</div><div class="ntsub">Before taxes · estimate only</div></div>
+            <div class="ntval" id="ns-net">$387,378</div>
+          </div>
+        </div>
+      </div>
+      <div class="disc">This net sheet is an estimate only and is not a guarantee of proceeds. Mortgage penalties, property taxes, GST/HST, condo fees, and other closing costs may vary. Consult your lawyer and mortgage broker for exact figures. Royal LePage Solutions and Duiker Properties are not responsible for variations from this estimate.</div>
+    </div>
+
+    <!-- ═══ MARKETING ═══ -->
+    <div class="panel" id="panel-marketing">
+      <div class="ph"><div class="ph-eye">Section 05</div><div class="ph-title">Marketing plan<br><em>How we sell your home.</em></div></div>
+      <div class="sc">
+        <div class="mitem"><div class="mnum">1</div><div><div class="mtitle">Professional photography & virtual tour</div><div class="mdesc">Twilight exterior shots, full interior suite, and a Matterport 3D walkthrough. Buyers decide online before they ever book a showing — your home will stop the scroll.</div><span class="mtag">Day 1 post-sign</span></div></div>
+        <div class="mitem"><div class="mnum">2</div><div><div class="mtitle">MLS launch with coordinated timing</div><div class="mdesc">Listed Thursday. Showings start Friday. Offers reviewed Tuesday. This sequence consistently generates competing offers and maximises final sale price in the SE Calgary lake community market.</div><span class="mtag">Day 3–5</span></div></div>
+        <div class="mitem"><div class="mnum">3</div><div><div class="mtitle">Targeted digital advertising</div><div class="mdesc">Facebook and Instagram campaigns geo-targeted to Mahogany, Auburn Bay, and surrounding lake community buyer pools. Retargeting ads follow interested buyers across platforms for up to 30 days.</div><span class="mtag">Week 1</span></div></div>
+        <div class="mitem"><div class="mnum">4</div><div><div class="mtitle">Sphere database broadcast</div><div class="mdesc">Direct outreach to <strong>554 qualified contacts</strong> in the Duiker Properties sphere — past clients, active buyers, and referral partners — many of whom are actively looking in this community right now.</div><span class="mtag">Day of launch</span></div></div>
+        <div class="mitem"><div class="mnum">5</div><div><div class="mtitle">Curated open house</div><div class="mdesc">Staged, pre-promoted, and executed with purpose. Not just a sign in the yard — a strategic event with targeted invites sent to buyers already showing digital interest in the neighbourhood.</div><span class="mtag">Weekend 1</span></div></div>
+        <div class="mitem" style="border-bottom:none"><div class="mnum">6</div><div><div class="mtitle">Royal LePage Solutions network</div><div class="mdesc">RLP Solutions spans South Calgary, North Calgary, Okotoks, and Canmore / Banff — giving your home direct exposure to agents with active buyers across all four Alberta markets.</div><span class="mtag">Ongoing</span></div></div>
+      </div>
+      <div class="sc">
+        <div class="sct">Photography brief</div>
+        <div class="two" style="margin-bottom:0">
+          <div class="fg"><label class="fl">Photographer name</label><input class="fi" id="ph-name" placeholder="Jane Doe Photography"></div>
+          <div class="fg"><label class="fl">Booked date</label><input class="fi" id="ph-date" type="date"></div>
+          <div class="fg" style="grid-column:1/-1"><label class="fl">Shot list / special requests</label><textarea class="fta" id="ph-notes" rows="2" placeholder="Backyard from deck, lake view from master bedroom window..."></textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ WHY ME ═══ -->
+    <div class="panel" id="panel-whyme">
+      <div class="ph"><div class="ph-eye">Section 06</div><div class="ph-title">Why Duiker Properties<br><em>Results you can verify.</em></div></div>
+      <div class="sc">
+        <div class="sct">Agent headshot</div>
+        <div style="display:flex;align-items:center;gap:20px">
+          <div id="whyme-photo-display" style="width:80px;height:80px;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:24px;color:var(--gold);flex-shrink:0">KD</div>
+          <div>
+            <div style="font-size:15px;font-weight:700;color:var(--black)">Kyle Duiker · Broker Delegate</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px">Royal LePage Solutions · Duiker Properties</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px" id="whyme-tagline-disp">SE Calgary lake community specialist</div>
+            <div style="margin-top:8px;font-size:11px;color:var(--muted)">Upload your headshot in the Listing Specs panel</div>
+          </div>
+        </div>
+      </div>
+      <div class="cred-grid">
+        <div class="cred-card"><div class="cred-big">180+</div><div class="cred-lbl">Homes sold · SE Calgary</div></div>
+        <div class="cred-card"><div class="cred-big">101.2%</div><div class="cred-lbl">Avg. list-to-sale ratio</div></div>
+        <div class="cred-card"><div class="cred-big">2010</div><div class="cred-lbl">Licensed since</div></div>
+        <div class="cred-card"><div class="cred-big">2021</div><div class="cred-lbl">Broker designation</div></div>
+      </div>
+      <div class="review"><div class="rstars">★★★★★</div><div class="rquote">"Kyle had our home sold in 8 days — well above asking. He knew exactly how to price it and the offer strategy was perfect. I wouldn't use anyone else."</div><div class="rattr">— Auburn Bay, 2024</div></div>
+      <div class="review"><div class="rstars">★★★★★</div><div class="rquote">"Kyle's data-driven approach and his knowledge of Mahogany specifically gave us complete confidence. Sold in 12 days at 102% of asking."</div><div class="rattr">— Mahogany, 2024</div></div>
+      <div class="review"><div class="rstars">★★★★★</div><div class="rquote">"First time selling and I had no idea what to expect. Kyle walked us through every step and we got $18,000 over asking price."</div><div class="rattr">— Legacy, 2023</div></div>
+    </div>
+
+    <!-- ═══ STAGING CHECKLIST ═══ -->
+    <div class="panel" id="panel-checklist">
+      <div class="ph"><div class="ph-eye">Strategy</div><div class="ph-title">Pre-listing staging checklist<br><em>Prep that pays.</em></div><div class="ph-sub">Walk through this with your seller before photos are booked. Small actions deliver outsized returns.</div></div>
+      <div class="sc">
+        <div class="sct">Exterior <button class="btn btn-ghost" style="color:var(--mid);border-color:var(--bl);padding:4px 10px;font-size:10px" onclick="window.print()">Print checklist</button></div>
+        <div id="chk-ext"></div>
+      </div>
+      <div class="sc"><div class="sct">Interior — main level</div><div id="chk-main"></div></div>
+      <div class="sc"><div class="sct">Kitchen</div><div id="chk-kitchen"></div></div>
+      <div class="sc"><div class="sct">Bedrooms & bathrooms</div><div id="chk-beds"></div></div>
+      <div class="sc"><div class="sct">Basement & garage</div><div id="chk-lower"></div></div>
+    </div>
+
+    <!-- ═══ OFFER STRATEGY ═══ -->
+    <div class="panel" id="panel-offers">
+      <div class="ph"><div class="ph-eye">Strategy</div><div class="ph-title">Offer strategy<br><em>How we maximize your outcome.</em></div></div>
+      <div class="os-card"><div class="os-title">Coordinated launch & offer holdback <span class="os-tag pro">Pro strategy</span></div><div class="os-body">List Thursday. Showings Friday through Monday. All offers presented Tuesday evening. This creates controlled urgency — buyers know others are looking, which drives competing offers and erodes conditions. We've used this model consistently across Mahogany and Auburn Bay with strong results.</div></div>
+      <div class="os-card"><div class="os-title">Multiple offer presentation <span class="os-tag pro">If we get there</span></div><div class="os-body">When multiple offers arrive, you have choices — accept the best, counter one, or issue a call for highest and best. I present every offer in full, explain the terms and risks, and advise on strategy. You always make the final call. The goal is not just the highest price but the cleanest deal with the fewest conditions.</div></div>
+      <div class="os-card"><div class="os-title">Bully offers <span class="os-tag alert">Know this in advance</span></div><div class="os-body">A bully offer arrives before the offer date with conditions designed to pressure you into accepting immediately. Alberta law requires me to present all offers. My advice in most cases: counter with a price that makes the disruption worth it, or ignore it and stick to the plan. We discuss this before the listing goes live so you're never caught off guard.</div></div>
+      <div class="os-card"><div class="os-title">Subject-free vs. subject-to offers</div><div class="os-body">A subject-free offer is cleaner and preferred, but don't dismiss a financed offer with a strong pre-approval and short conditions period. I'll vet every buyer's financing position before advising you on which offer to choose. A collapsed deal costs far more than a slightly lower clean offer.</div></div>
+      <div class="os-card"><div class="os-title">Price reductions — if needed</div><div class="os-body">If we don't receive an offer in the first 10 days, we revisit the data together. I'll show you updated showing feedback, DOM trends for competing listings, and any new sold comps. A targeted price reduction — not a panic cut — is a strategic tool, not a failure. We plan for this possibility before signing so you're mentally prepared.</div></div>
+      <div class="sc" style="margin-top:16px"><div class="sct">Seller-specific notes</div><textarea class="fta" id="offer-notes" rows="4" placeholder="Notes on how this seller's situation affects offer strategy..."></textarea></div>
+    </div>
+
+    <!-- ═══ NEXT STEPS ═══ -->
+    <div class="panel" id="panel-nextsteps">
+      <div class="ph"><div class="ph-eye">Section 07</div><div class="ph-title">Next steps<br><em>Let's get to work.</em></div></div>
+      <div class="sc" style="margin-bottom:18px">
+        <div class="step"><div class="step-dot">1</div><div><div class="step-title">Sign the listing agreement today</div><div class="step-desc">Lock in your list price, commission, and marketing start date. This activates everything.</div><span class="step-badge">Today</span></div></div>
+        <div class="step"><div class="step-dot">2</div><div><div class="step-title">Professional photography booked</div><div class="step-desc">You'll receive a prep checklist within 24 hours. Small touches make a measurable difference online.</div><span class="step-badge">Within 48 hrs</span></div></div>
+        <div class="step"><div class="step-dot">3</div><div><div class="step-title">MLS listing goes live</div><div class="step-desc">Photos uploaded, listing copy finalised, digital campaigns activated. Maximum impact from day one.</div><span class="step-badge">Day 3–5</span></div></div>
+        <div class="step" style="margin-bottom:0"><div class="step-dot">4</div><div><div class="step-title">Offers reviewed and negotiated</div><div class="step-desc">With the coordinated launch, this typically happens within 7–10 days. I present every offer in detail.</div><span class="step-badge">Week 1–2</span></div></div>
+      </div>
+      <div class="cta-block">
+        <div class="cta-hl">Ready to list?</div>
+        <div class="cta-sub">Kyle Duiker · Broker Delegate · Royal LePage Solutions · Duiker Properties</div>
+        <button class="btn btn-red" style="padding:14px 36px;font-size:12px" onclick="exportPDF()">↓ Download CMA package</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav">
+    <div class="mobile-nav-inner">
+      <div class="mnitem active" onclick="show('seller')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Profile</div>
+      <div class="mnitem" onclick="show('specs')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Specs</div>
+      <div class="mnitem" onclick="show('market')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Market</div>
+      <div class="mnitem" onclick="show('comps')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Comps</div>
+      <div class="mnitem" onclick="show('pricing')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Pricing</div>
+      <div class="mnitem" onclick="show('netsheet')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg>Net</div>
+      <div class="mnitem" onclick="show('marketing')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>Mktg</div>
+      <div class="mnitem" onclick="show('checklist')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/></svg>Checklist</div>
+      <div class="mnitem" onclick="show('nextsteps')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/></svg>Close</div>
+    </div>
+  </div>
+</div>
+
+<!-- PDF RENDER TARGET (hidden) -->
+<div id="pdf-target" style="display:none;position:absolute;left:-9999px;top:0"></div>
+<script>
+// ═══ STATE ═══
+let comps=[], specFiles=[], propPhotoB64='', agentPhotoB64='', editingId=null, nextId=10;
+let currentSlide=0, totalSlides=10;
+let charts={trend:null,psf:null,dom:null,ptrendP:null,psfP:null,pdomP:null};
+const RLP_RED='#EA002A', RLP_GOLD='#C9A84C', RLP_DARK='#1A1F2E', RLP_MID='#3A3F50', RLP_MUTED='#7A7F94';
+
+// Initial comps
+comps=[
+  {id:1,status:'sold',address:'138 Mahogany Cove SE',price:689000,adjTotal:0,beds:4,baths:3,sqft:1880,dom:14,year:2015,notes:''},
+  {id:2,status:'sold',address:'55 Auburn Bay Blvd SE',price:712500,adjTotal:0,beds:4,baths:3,sqft:1940,dom:9,year:2016,notes:''},
+  {id:3,status:'active',address:'201 Cranston Ave SE',price:724900,adjTotal:5000,beds:5,baths:4,sqft:2100,dom:22,year:2018,notes:'Extra bedroom adjustment'},
+  {id:4,status:'expired',address:'88 Legacy Circle SE',price:749000,adjTotal:-15000,beds:4,baths:3,sqft:1990,dom:61,year:2014,notes:'Overpriced — no lake access'}
+];
+
+// ═══ NAV ═══
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nitem,.mnitem').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  document.querySelectorAll('#n-'+id+',.mnitem').forEach(n=>{
+    if(n.id==='n-'+id||n.textContent.trim().toLowerCase().startsWith(id.slice(0,4))) n.classList.add('active');
+  });
+  document.getElementById('n-'+id)&&document.getElementById('n-'+id).classList.add('active');
+  if(id==='comps'){renderComps();buildPsfChart();buildDomChart();}
+  if(id==='market'){buildTrendChart();}
+  if(id==='pricing'){recalcPricing();}
+  if(id==='netsheet'){recalcNet();}
+  if(id==='whyme'){syncAgentPhoto();}
+  if(id==='checklist'){renderChecklist();}
+}
+
+// ═══ TOP BAR SYNC ═══
+function syncTop(){
+  const n=v('s-name'),a=v('s-addr'),c=v('s-community');
+  se('tc-name',n||'Seller');
+  se('tc-addr',(a||'Property address')+' · Listing Presentation');
+  se('sess-display',n||'New session');
+  document.getElementById('p-addr-hl').textContent=a||'Property Address';
+  document.getElementById('p-seller-hl').textContent='Prepared for '+(n||'the Sellers')+' · '+(c||'SE Calgary');
+}
+
+// ═══ HELPERS ═══
+function v(id){return(document.getElementById(id)||{}).value||'';}
+function se(id,txt){const el=document.getElementById(id);if(el)el.textContent=txt;}
+function fmt(n){return n.toLocaleString('en-CA',{style:'currency',currency:'CAD',maximumFractionDigits:0});}
+function fmtN(n){return '$'+Math.round(n).toLocaleString();}
+
+// ═══ PHOTO UPLOADS ═══
+function dragOver(e,id){e.preventDefault();document.getElementById(id).classList.add('drag');}
+function dragLeave(id){document.getElementById(id).classList.remove('drag');}
+function dropFile(e,inputId){e.preventDefault();const inp=document.getElementById(inputId);const dt=new DataTransfer();Array.from(e.dataTransfer.files).forEach(f=>dt.items.add(f));inp.files=dt.files;inp.dispatchEvent(new Event('change'));}
+
+function handlePhotoUpload(input,storeKey,presentId){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const b64=e.target.result;
+    if(storeKey==='prop-photo'){propPhotoB64=b64;showPhotoPreview('prop-photo-preview',b64,()=>{propPhotoB64='';document.getElementById('prop-photo-preview').style.display='none';document.getElementById('prop-photo-drop').style.display='flex';});}
+    else{agentPhotoB64=b64;showPhotoPreview('agent-photo-preview',b64,()=>{agentPhotoB64='';document.getElementById('agent-photo-preview').style.display='none';document.getElementById('agent-photo-drop').style.display='flex';});syncAgentPhoto();}
+    // Update present mode
+    const pimg=document.getElementById('p-prop-photo');
+    if(pimg&&storeKey==='prop-photo'){pimg.src=b64;pimg.style.display='block';}
+    document.getElementById(storeKey==='prop-photo'?'prop-photo-drop':'agent-photo-drop').style.display='none';
+    toast('Photo uploaded','success');
+  };
+  reader.readAsDataURL(file);
+}
+
+function showPhotoPreview(wrapId,src,onRemove){
+  const wrap=document.getElementById(wrapId);
+  wrap.innerHTML=`<div class="upload-preview"><img src="${src}" alt="Preview"><button class="up-remove" onclick="(${onRemove.toString()})()">Remove</button></div>`;
+  wrap.style.display='block';
+}
+
+function syncAgentPhoto(){
+  const wrap=document.getElementById('whyme-photo-display');
+  if(agentPhotoB64){wrap.innerHTML=`<img src="${agentPhotoB64}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--gold)">`;}
+  const ap=document.getElementById('p-agent-photo-wrap');
+  if(ap){
+    if(agentPhotoB64){ap.innerHTML=`<img class="p-agent-photo" src="${agentPhotoB64}" alt="Kyle Duiker">`;}
+    else{ap.innerHTML=`<div class="p-agent-photo-placeholder">KD</div>`;}
+  }
+  const tl=v('agent-tagline');
+  if(tl)se('whyme-tagline-disp',tl);
+}
+
+// ═══ SPEC SHEET UPLOAD ═══
+function handleSpecUpload(input){
+  Array.from(input.files).forEach(file=>{
+    const id='spec-'+Date.now()+'-'+Math.random().toString(36).slice(2);
+    specFiles.push({id,name:file.name,file});
+    renderSpecList();
+    // Try text extraction
+    if(file.type==='application/pdf'){extractPDFText(file);}
+    else{extractImageText(file);}
+  });
+  document.getElementById('spec-badge').style.display='inline';
+  document.getElementById('spec-badge').textContent='✓';
+  toast(input.files.length+' spec sheet'+(input.files.length>1?'s':'')+' uploaded','success');
+}
+
+function extractPDFText(file){
+  // Simple text scan using FileReader for embedded text PDFs
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const bytes=new Uint8Array(e.target.result);
+      const text=extractTextFromPDFBytes(bytes);
+      parseExtractedText(text);
+    }catch(err){}
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function extractTextFromPDFBytes(bytes){
+  let text='';
+  try{
+    const str=String.fromCharCode.apply(null,bytes);
+    // Extract text between BT and ET markers (PDF text streams)
+    const matches=str.match(/\(([^)]{2,})\)/g)||[];
+    text=matches.map(m=>m.slice(1,-1)).join(' ');
+  }catch(e){}
+  return text;
+}
+
+function extractImageText(file){
+  // For images we can't OCR in browser without a library, so just note it
+}
+
+function parseExtractedText(text){
+  if(!text||text.length<10)return;
+  let found=false;
+  // Beds
+  const beds=text.match(/(\d+)\s*(?:bed|bdrm|bedroom)/i);
+  if(beds){document.getElementById('p-beds').value=beds[1];se('ex-bb',beds[1]+' bd');found=true;}
+  // Baths
+  const baths=text.match(/(\d+(?:\.\d)?)\s*(?:bath|bth)/i);
+  if(baths&&document.getElementById('p-baths')){document.getElementById('p-baths').value=baths[1];const cur=document.getElementById('ex-bb').textContent;se('ex-bb',cur+(cur!=='—'?' / ':'')+baths[1]+' ba');}
+  // SqFt
+  const sqft=text.match(/(\d[\d,]+)\s*(?:sq\.?\s*ft|sqft|square feet)/i);
+  if(sqft){const s=parseInt(sqft[1].replace(/,/g,''));document.getElementById('p-sqft').value=s;se('ex-sqft',s.toLocaleString()+' sq.ft.');found=true;recalcAll();}
+  // Address pattern
+  const addr=text.match(/\d+\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+(?:Ave|Blvd|Cir|Close|Cove|Cr|Cres|Dr|Gate|Gr|Lane|Mews|Park|Pl|Rd|Rise|Row|St|Ter|Way)\b/i);
+  if(addr){document.getElementById('s-addr').value=addr[0];se('ex-addr',addr[0]);syncTop();found=true;}
+  if(found){document.getElementById('spec-extracted').style.display='block';toast('Fields extracted from spec sheet','success');}
+}
+
+function renderSpecList(){
+  const list=document.getElementById('spec-list');
+  list.innerHTML=specFiles.map(s=>`
+    <div class="spec-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span class="spec-name">${s.name}</span>
+      <button class="spec-remove" onclick="removeSpec('${s.id}')">✕</button>
+    </div>`).join('');
+}
+function removeSpec(id){specFiles=specFiles.filter(s=>s.id!==id);renderSpecList();if(!specFiles.length){document.getElementById('spec-badge').style.display='none';}}
+
+// ═══ COMPS ═══
+function openCompModal(id){
+  editingId=id||null;
+  const c=id?comps.find(x=>x.id===id):null;
+  se('modal-title-txt',c?'Edit comparable':'Add comparable');
+  const fields=['addr','status','price','beds','baths','sqft','dom','year','notes'];
+  const vals=c?[c.address,c.status,c.price,c.beds,c.baths,c.sqft,c.dom,c.year||'',c.notes||'']:['','sold','','','','','','',''];
+  fields.forEach((f,i)=>{ const el=document.getElementById('m-'+f); if(el)el.value=vals[i]; });
+  // adj fields
+  ['garage','basement','lake','upgrades','lot'].forEach(k=>{
+    const el=document.getElementById('adj-'+k);
+    if(el)el.value=c&&c['adj_'+k]?c['adj_'+k]:'';
+  });
+  openModal('comp-modal');
+}
+function saveComp(){
+  const addr=v('m-addr');
+  if(!addr){document.getElementById('m-addr').classList.add('err');return;}
+  document.getElementById('m-addr').classList.remove('err');
+  const adjs=['garage','basement','lake','upgrades','lot'].reduce((a,k)=>{
+    a['adj_'+k]=parseFloat(document.getElementById('adj-'+k).value)||0;return a;},{});
+  const adjTotal=Object.values(adjs).reduce((s,v)=>s+v,0);
+  const d={id:editingId||nextId++,address:addr,status:v('m-status'),price:parseFloat(v('m-price'))||0,beds:parseInt(v('m-beds'))||0,baths:parseFloat(v('m-baths'))||0,sqft:parseInt(v('m-sqft'))||0,dom:parseInt(v('m-dom'))||0,year:parseInt(v('m-year'))||0,notes:v('m-notes'),adjTotal,...adjs};
+  if(editingId){comps=comps.map(c=>c.id===editingId?d:c);}else{comps.push(d);}
+  closeModal('comp-modal');renderComps();buildPsfChart();buildDomChart();recalcAll();
+  toast((editingId?'Comparable updated':'Comparable added'),'success');
+}
+function deleteComp(id){if(!confirm('Remove this comparable?'))return;comps=comps.filter(c=>c.id!==id);renderComps();buildPsfChart();buildDomChart();recalcAll();}
+
+function renderComps(){
+  const tbody=document.getElementById('comp-tbody');
+  if(!tbody)return;
+  tbody.innerHTML=comps.map(c=>{
+    const adjPrice=c.price+c.adjTotal;
+    const psf=c.sqft>0?Math.round(adjPrice/c.sqft):0;
+    const bc=c.status==='sold'?'b-sold':c.status==='active'?'b-active':c.status==='expired'?'b-expired':'b-comp';
+    const bl=c.status.charAt(0).toUpperCase()+c.status.slice(1);
+    const adjStr=c.adjTotal===0?'—':(c.adjTotal>0?'<span class="adj-val pos">+'+fmtN(c.adjTotal)+'</span>':'<span class="adj-val neg">'+fmtN(c.adjTotal)+'</span>');
+    return `<tr><td><span class="cbadge ${bc}">${bl}</span></td><td>${c.address}</td><td class="cprice">${fmtN(c.price)}</td><td>${c.adjTotal!==0?fmtN(adjPrice)+'<br>'+adjStr:'—'}</td><td>${c.beds}</td><td>${c.baths}</td><td>${c.sqft.toLocaleString()}</td><td>$${psf}</td><td>${c.dom}d</td><td style="white-space:nowrap"><button class="icbtn" onclick="openCompModal(${c.id})">✎</button> <button class="icbtn del" onclick="deleteComp(${c.id})">✕</button></td></tr>`;
+  }).join('');
+  document.getElementById('comp-badge').textContent=comps.length;
+  recalcAll();
+}
+
+function recalcAll(){
+  const sold=comps.filter(c=>c.status==='sold');
+  const avgSold=sold.length?Math.round(sold.reduce((s,c)=>s+c.price+c.adjTotal,0)/sold.length):0;
+  const withSqft=comps.filter(c=>c.sqft>0);
+  const avgPsf=withSqft.length?Math.round(withSqft.reduce((s,c)=>s+(c.price+c.adjTotal)/c.sqft,0)/withSqft.length):0;
+  const avgDom=comps.length?Math.round(comps.reduce((s,c)=>s+c.dom,0)/comps.length):0;
+  se('cavg-price',avgSold>0?fmtN(avgSold):'—');
+  se('cavg-psf',avgPsf>0?'$'+avgPsf:'—');
+  se('cavg-dom',avgDom||'—');
+  if(document.getElementById('cmp-psf-d'))se('cmp-psf-d',avgPsf>0?'$'+avgPsf:'—');
+  const recP=parseFloat(v('p-rec'))||0;
+  const sqft=parseFloat(v('p-sqft'))||0;
+  const subPsf=sqft>0&&recP>0?Math.round(recP/sqft):0;
+  if(document.getElementById('sub-psf'))se('sub-psf',subPsf?'$'+subPsf:'—');
+  updatePresentComps();
+}
+
+// ═══ PRICING ═══
+function recalcPricing(){
+  const low=parseFloat(v('p-low'))||0,high=parseFloat(v('p-high'))||1,rec=parseFloat(v('p-rec'))||0;
+  se('plow-lbl',fmtN(low));se('phigh-lbl',fmtN(high));se('prec-disp',fmtN(rec));
+  const pct=high>low?Math.max(2,Math.min(98,((rec-low)/(high-low))*100)):50;
+  const fill=document.getElementById('pbar-fill'),marker=document.getElementById('pmarker');
+  if(fill)fill.style.width=pct+'%';
+  if(marker)marker.style.left=pct+'%';
+  document.getElementById('p-price').textContent=fmtN(rec);
+  document.getElementById('p-comp-cnt').textContent=comps.length;
+  // Sync net sheet price
+  const nPrice=document.getElementById('n-price');
+  if(nPrice&&nPrice.value!=rec)nPrice.value=rec;
+  const slider=document.getElementById('n-slider');
+  if(slider)slider.value=rec;
+  recalcAll();
+  recalcNet();
+}
+
+function syncNetPrice(){
+  const rec=parseFloat(v('p-rec'))||0;
+  document.getElementById('n-price').value=rec;
+  document.getElementById('n-slider').value=rec;
+  recalcNet();
+}
+
+// ═══ NET SHEET ═══
+function sliderToPrice(val){
+  document.getElementById('n-price').value=val;
+  se('n-slider-low',Math.round(val*0.88/1000)*1000|0);
+  recalcNet();
+}
+function recalcNet(){
+  const price=parseFloat(v('n-price'))||0;
+  const comm=parseFloat(v('n-comm'))||0;
+  const gst=parseFloat(v('n-gst'))||0;
+  const legal=parseFloat(v('n-legal'))||0;
+  const mortgage=parseFloat(v('n-mortgage'))||0;
+  const penalty=parseFloat(v('n-penalty'))||0;
+  const taxAdj=parseFloat(v('n-tax-adj'))||0;
+  const other=parseFloat(v('n-other'))||0;
+  const commAmt=Math.round(price*comm/100);
+  const gstAmt=Math.round(commAmt*gst/100);
+  const net=price-commAmt-gstAmt-legal-mortgage-penalty+taxAdj-other;
+  se('ns-price',fmtN(price));
+  se('ns-comm-pct',comm);
+  se('ns-comm','−'+fmtN(commAmt));
+  se('ns-gst','−'+fmtN(gstAmt));
+  se('ns-legal','−'+fmtN(legal));
+  se('ns-mortgage','−'+fmtN(mortgage));
+  se('ns-penalty','−'+fmtN(penalty));
+  se('ns-tax',taxAdj>=0?'+'+fmtN(taxAdj):'−'+fmtN(Math.abs(taxAdj)));
+  se('ns-other','−'+fmtN(other));
+  se('ns-net',fmtN(Math.max(0,net)));
+  se('p-net',fmtN(Math.max(0,net)));
+}
+
+// ═══ CHARTS ═══
+const CHART_FONT={family:"'Raleway',sans-serif",size:11};
+const gridColor='rgba(0,0,0,0.06)';
+const darkGridColor='rgba(255,255,255,0.08)';
+
+function buildTrendChart(){
+  const labels=[v('t-l1'),v('t-l2'),v('t-l3'),v('t-l4'),v('t-l5'),v('t-l6')];
+  const data=['t-v1','t-v2','t-v3','t-v4','t-v5','t-v6'].map(id=>parseFloat(v(id))||0);
+  const ctx=document.getElementById('trend-chart');if(!ctx)return;
+  if(charts.trend)charts.trend.destroy();
+  charts.trend=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Avg sold price',data,borderColor:RLP_RED,backgroundColor:'rgba(234,0,42,0.08)',tension:0.35,pointBackgroundColor:RLP_RED,pointRadius:4,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:d=>fmtN(d.raw)}}},scales:{y:{ticks:{font:CHART_FONT,callback:v=>'$'+Math.round(v/1000)+'k'},grid:{color:gridColor}},x:{ticks:{font:CHART_FONT},grid:{color:gridColor}}}}});
+  buildPresentTrendChart();
+}
+
+function buildPsfChart(){
+  const subSqft=parseFloat(v('p-sqft'))||1920;
+  const recP=parseFloat(v('p-rec'))||699900;
+  const subPsf=Math.round(recP/subSqft);
+  const labels=['Subject property',...comps.map(c=>c.address.split(' ').slice(0,2).join(' '))];
+  const data=[subPsf,...comps.map(c=>c.sqft>0?Math.round((c.price+c.adjTotal)/c.sqft):0)];
+  const colors=[RLP_RED,...comps.map(c=>c.status==='sold'?RLP_MID:c.status==='active'?'#1a3f8c':RLP_MUTED)];
+  const ctx=document.getElementById('psf-chart');if(!ctx)return;
+  if(charts.psf)charts.psf.destroy();
+  charts.psf=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:d=>'$'+d.raw+'/sq.ft.'}}},scales:{y:{ticks:{font:CHART_FONT,callback:v=>'$'+v},grid:{color:gridColor}},x:{ticks:{font:CHART_FONT}}}}});
+  buildPresentPsfChart();
+}
+
+function buildDomChart(){
+  if(!comps.length)return;
+  const sorted=[...comps].filter(c=>c.status==='sold'||c.status==='expired').sort((a,b)=>a.price-b.price);
+  const labels=sorted.map(c=>c.address.split(' ').slice(0,2).join(' '));
+  const data=sorted.map(c=>c.dom);
+  const colors=sorted.map(c=>c.status==='sold'?RLP_RED:RLP_MUTED);
+  const ctx=document.getElementById('dom-chart');if(!ctx)return;
+  if(charts.dom)charts.dom.destroy();
+  charts.dom=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Days on market',data,backgroundColor:colors,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:d=>d.raw+' days'}}},scales:{y:{ticks:{font:CHART_FONT,callback:v=>v+'d'},grid:{color:gridColor}},x:{ticks:{font:CHART_FONT}}}}});
+  buildPresentDomChart();
+}
+
+// PRESENT MODE CHARTS (dark versions)
+function buildPresentTrendChart(){
+  const labels=[v('t-l1'),v('t-l2'),v('t-l3'),v('t-l4'),v('t-l5'),v('t-l6')];
+  const data=['t-v1','t-v2','t-v3','t-v4','t-v5','t-v6'].map(id=>parseFloat(v(id))||0);
+  const ctx=document.getElementById('p-trend-chart');if(!ctx)return;
+  if(charts.ptrendP)charts.ptrendP.destroy();
+  charts.ptrendP=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,borderColor:RLP_GOLD,backgroundColor:'rgba(201,168,76,0.12)',tension:0.35,pointBackgroundColor:RLP_GOLD,pointRadius:5,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:d=>fmtN(d.raw)}}},scales:{y:{ticks:{font:CHART_FONT,color:'rgba(255,255,255,0.4)',callback:v=>'$'+Math.round(v/1000)+'k'},grid:{color:darkGridColor}},x:{ticks:{font:CHART_FONT,color:'rgba(255,255,255,0.4)'},grid:{color:darkGridColor}}}}});
+}
+function buildPresentPsfChart(){
+  const subSqft=parseFloat(v('p-sqft'))||1920;
+  const recP=parseFloat(v('p-rec'))||699900;
+  const subPsf=Math.round(recP/subSqft);
+  const labels=['Subject',...comps.map(c=>c.address.split(' ').slice(0,2).join(' '))];
+  const data=[subPsf,...comps.map(c=>c.sqft>0?Math.round((c.price+c.adjTotal)/c.sqft):0)];
+  const colors=[RLP_GOLD,...comps.map(()=>'rgba(255,255,255,0.3)')];
+  const ctx=document.getElementById('p-psf-chart');if(!ctx)return;
+  if(charts.psfP)charts.psfP.destroy();
+  charts.psfP=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:d=>'$'+d.raw+'/sq.ft.'}}},scales:{y:{ticks:{font:CHART_FONT,color:'rgba(255,255,255,0.4)',callback:v=>'$'+v},grid:{color:darkGridColor}},x:{ticks:{font:CHART_FONT,color:'rgba(255,255,255,0.4)'},grid:{color:darkGridColor}}}}});
+}
+function buildPresentDomChart(){
+  const sorted=[...comps].filter(c=>c.status==='sold'||c.status==='expired').sort((a,b)=>a.price-b.price);
+  if(!sorted.length)return;
+  const labels=sorted.map(c=>c.address.split(' ').slice(0,2).join(' '));
+  const data=sorted.map(c=>c.dom);
+  const colors=sorted.map(c=>c.status==='sold'?RLP_GOLD:'rgba(255,255,255,0.25)');
+  const ctx=document.getElementById('p-dom-chart');if(!ctx)return;
+  if(charts.pdomP)charts.pdomP.destroy();
+  charts.pdomP=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:d=>d.raw+' days'}}},scales:{y:{ticks:{font:CHART_FONT,color:'rgba(255,255,255,0.4)',callback:v=>v+'d'},grid:{color:darkGridColor}},x:{ticks:{font:CHART_FONT,color:'rgba(255,255,255,0.4)'},grid:{color:darkGridColor}}}}});
+}
+
+// ═══ PRESENT MODE ═══
+function syncPresentMkt(){
+  se('p-absorption',(v('m-absorption')||68)+'%');
+  se('p-dom',v('m-dom')||17);
+  se('p-lsr',(v('m-lsr')||98.4)+'%');
+}
+function updatePresentComps(){
+  const tbl=document.getElementById('p-comp-tbl');if(!tbl)return;
+  const rows=comps.map(c=>{
+    const col=c.status==='sold'?'#6ee7a0':c.status==='active'?'#7ec8f5':'#aaa';
+    return `<div style="display:flex;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:13px"><span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:${col};min-width:55px">${c.status}</span><span style="flex:1;color:rgba(255,255,255,0.8)">${c.address}</span><span style="font-weight:700;color:#fff;min-width:80px;text-align:right">${fmtN(c.price)}</span><span style="color:rgba(255,255,255,0.4);min-width:35px;text-align:right">${c.dom}d</span></div>`;
+  }).join('');
+  tbl.innerHTML=rows;
+  se('p-price',fmtN(parseFloat(v('p-rec'))||699900));
+  se('p-comp-cnt',comps.length);
+}
+
+function openPresent(){
+  syncPresentMkt();updatePresentComps();syncAgentPhoto();
+  if(propPhotoB64){const img=document.getElementById('p-prop-photo');img.src=propPhotoB64;img.style.display='block';}
+  buildPresentTrendChart();buildPresentPsfChart();buildPresentDomChart();
+  currentSlide=0;renderPdots();showSlide(0);
+  document.getElementById('poverlay').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function closePresent(){document.getElementById('poverlay').classList.remove('on');document.body.style.overflow='';}
+function showSlide(n){
+  const slides=document.querySelectorAll('.pslide');
+  slides.forEach((s,i)=>{s.classList.remove('active','prev');if(i===n)s.classList.add('active');else if(i<n)s.classList.add('prev');});
+  document.querySelectorAll('.pdot').forEach((d,i)=>d.classList.toggle('active',i===n));
+  currentSlide=n;
+}
+function nextSlide(){const s=document.querySelectorAll('.pslide');if(currentSlide<s.length-1)showSlide(currentSlide+1);}
+function prevSlide(){if(currentSlide>0)showSlide(currentSlide-1);}
+function renderPdots(){
+  const n=document.querySelectorAll('.pslide').length;
+  const dots=document.getElementById('pdots');
+  dots.innerHTML=Array.from({length:n},(_,i)=>`<div class="pdot${i===0?' active':''}" onclick="showSlide(${i})"></div>`).join('');
+}
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('poverlay').classList.contains('on'))return;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')nextSlide();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')prevSlide();
+  if(e.key==='Escape')closePresent();
+});
+
+// ═══ CHECKLIST ═══
+const CHECKLIST={
+  'chk-ext':[
+    ['Mow lawn, edge walkways, and remove weeds','Fresh mulch in beds adds $1k–$3k in perceived value'],
+    ['Power wash driveway, walkways, and siding','First impression is formed in 7 seconds'],
+    ['Paint or clean the front door','A new front door has a 100%+ ROI on resale'],
+    ['Clean eavestroughs and downspouts','Buyers notice and inspectors will flag it'],
+    ['Remove seasonal decor, toys, and equipment','Clutter in the yard reads as "deferred maintenance"'],
+    ['Trim trees and shrubs away from structure','Important for inspector and insurance optics'],
+  ],
+  'chk-main':[
+    ['Depersonalize — remove family photos and personal collections','Buyers need to picture themselves in the space'],
+    ['Declutter every surface — counters, shelves, tables','Rule of thumb: remove 30–40% of items per room'],
+    ['Deep clean floors, baseboards, and light fixtures','Smell and cleanliness are the top buyer turn-offs'],
+    ['Touch up paint in high-traffic areas','Fresh neutral paint is the single best dollar spent'],
+    ['Ensure all light bulbs match in warmth and brightness','Mismatched bulbs make photos look cheap'],
+    ['Replace dated switch plates and outlet covers','$2 each, significant visual upgrade'],
+  ],
+  'chk-kitchen':[
+    ['Clear counters completely — only 2–3 items maximum','Counter space = perceived kitchen size'],
+    ['Clean inside appliances, especially oven and fridge','Inspectors open everything; buyers too'],
+    ['Replace dated hardware on cabinets if budget allows','$200–$400 can modernize a whole kitchen'],
+    ['Ensure under-sink is clean and no signs of leaks','One of the first places buyers and inspectors check'],
+    ['Organize pantry and visible storage neatly','Buyers will open every door'],
+  ],
+  'chk-beds':[
+    ['Replace worn or dated bedding with neutral, hotel-style linens','Creates the "luxury hotel" feel in photos'],
+    ['Clear nightstands and dressers of personal items','Less is dramatically more in bedrooms'],
+    ['Ensure all closets are 60–70% full maximum','Overfull closets signal insufficient storage'],
+    ['Re-caulk tubs and showers if any discolouration','This is one of the top buyer objections in Calgary homes'],
+    ['Ensure all grout is clean — use grout pen if needed','Clean grout transforms a bathroom visually'],
+    ['Remove personal items from bathroom counters','Leave only 1–2 decorative items maximum'],
+  ],
+  'chk-lower':[
+    ['Declutter and organize the garage — at least one bay clear','Garage storage directly impacts perceived home size'],
+    ['Ensure basement is dry — no odors or moisture','Moisture in any form is a deal-killer'],
+    ['Stage any finished basement space with purpose','Show buyers how to use every sq.ft.'],
+    ['Label or remove any utility items that may concern buyers','Hot water tank age, furnace filters, electrical panel labeling'],
+  ]
+};
+function renderChecklist(){
+  Object.keys(CHECKLIST).forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.innerHTML=CHECKLIST[id].map((item,i)=>`
+      <div class="chk-item">
+        <input type="checkbox" id="${id}-${i}" onchange="this.nextElementSibling.classList.toggle('done',this.checked)">
+        <label class="chk-label" for="${id}-${i}">${item[0]}<span>${item[1]}</span></label>
+      </div>`).join('');
+  });
+}
+
+// ═══ MODALS ═══
+function openModal(id){document.getElementById(id).classList.add('on');}
+function closeModal(id){document.getElementById(id).classList.remove('on');}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');}));
+
+// ═══ SESSIONS (localStorage) ═══
+function getSessionKey(){return'cma-session-';}
+function getAllSessions(){try{return JSON.parse(localStorage.getItem('cma-sessions')||'{}');}catch{return{};}}
+function saveSession(){
+  const name=v('s-name')||'Session';
+  const data={
+    name,ts:Date.now(),
+    seller:{name:v('s-name'),addr:v('s-addr'),community:v('s-community'),date:v('s-date'),email:v('s-email'),motivation:v('s-motivation'),timeline:v('s-timeline'),concern:v('s-concern'),notes:v('s-notes')},
+    prop:{beds:v('p-beds'),baths:v('p-baths'),sqft:v('p-sqft'),year:v('p-year'),garage:v('p-garage'),lot:v('p-lot'),features:v('p-features')},
+    market:{absorption:v('m-absorption'),dom:v('m-dom'),lsr:v('m-lsr'),active:v('m-active'),sold30:v('m-sold30'),median:v('m-median'),narrative:v('m-narrative')},
+    trend:{l1:v('t-l1'),l2:v('t-l2'),l3:v('t-l3'),l4:v('t-l4'),l5:v('t-l5'),l6:v('t-l6'),v1:v('t-v1'),v2:v('t-v2'),v3:v('t-v3'),v4:v('t-v4'),v5:v('t-v5'),v6:v('t-v6')},
+    pricing:{low:v('p-low'),rec:v('p-rec'),high:v('p-high'),rationale:v('p-rationale'),competition:v('p-competition')},
+    net:{price:v('n-price'),comm:v('n-comm'),gst:v('n-gst'),legal:v('n-legal'),mortgage:v('n-mortgage'),penalty:v('n-penalty'),taxAdj:v('n-tax-adj'),other:v('n-other')},
+    agent:{tagline:v('agent-tagline'),bio:v('agent-bio')},
+    offerNotes:v('offer-notes'),
+    comps,propPhotoB64,agentPhotoB64
+  };
+  const sessions=getAllSessions();
+  const key=name.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  sessions[key]=data;
+  localStorage.setItem('cma-sessions',JSON.stringify(sessions));
+  se('sess-display',name);
+  toast('Session saved — "'+name+'"','success');
+}
+function loadSession(key){
+  const sessions=getAllSessions();
+  const d=sessions[key];if(!d)return;
+  function sv(id,val){const el=document.getElementById(id);if(el&&val!==undefined)el.value=val;}
+  // Seller
+  const s=d.seller||{};
+  sv('s-name',s.name);sv('s-addr',s.addr);sv('s-community',s.community);sv('s-date',s.date);sv('s-email',s.email);sv('s-motivation',s.motivation);sv('s-timeline',s.timeline);sv('s-concern',s.concern);sv('s-notes',s.notes);
+  // Prop
+  const p=d.prop||{};
+  sv('p-beds',p.beds);sv('p-baths',p.baths);sv('p-sqft',p.sqft);sv('p-year',p.year);sv('p-garage',p.garage);sv('p-lot',p.lot);sv('p-features',p.features);
+  // Market
+  const m=d.market||{};
+  sv('m-absorption',m.absorption);sv('m-dom',m.dom);sv('m-lsr',m.lsr);sv('m-active',m.active);sv('m-sold30',m.sold30);sv('m-median',m.median);sv('m-narrative',m.narrative);
+  // Trend
+  const t=d.trend||{};
+  ['l1','l2','l3','l4','l5','l6','v1','v2','v3','v4','v5','v6'].forEach(k=>sv('t-'+k,t[k]));
+  // Pricing
+  const pr=d.pricing||{};sv('p-low',pr.low);sv('p-rec',pr.rec);sv('p-high',pr.high);sv('p-rationale',pr.rationale);sv('p-competition',pr.competition);
+  // Net
+  const n=d.net||{};sv('n-price',n.price);sv('n-comm',n.comm);sv('n-gst',n.gst);sv('n-legal',n.legal);sv('n-mortgage',n.mortgage);sv('n-penalty',n.penalty);sv('n-tax-adj',n.taxAdj);sv('n-other',n.other);
+  // Agent
+  const a=d.agent||{};sv('agent-tagline',a.tagline);sv('agent-bio',a.bio);
+  sv('offer-notes',d.offerNotes);
+  comps=d.comps||[];
+  propPhotoB64=d.propPhotoB64||'';
+  agentPhotoB64=d.agentPhotoB64||'';
+  // Restore photos
+  if(propPhotoB64){const img=document.getElementById('p-prop-photo');if(img){img.src=propPhotoB64;img.style.display='block';}showPhotoPreview('prop-photo-preview',propPhotoB64,()=>{propPhotoB64='';document.getElementById('prop-photo-preview').style.display='none';document.getElementById('prop-photo-drop').style.display='flex';});document.getElementById('prop-photo-drop').style.display='none';}
+  if(agentPhotoB64){showPhotoPreview('agent-photo-preview',agentPhotoB64,()=>{agentPhotoB64='';document.getElementById('agent-photo-preview').style.display='none';document.getElementById('agent-photo-drop').style.display='flex';});document.getElementById('agent-photo-drop').style.display='none';}
+  syncTop();syncAgentPhoto();renderComps();recalcPricing();recalcNet();buildTrendChart();
+  closeModal('sess-modal');
+  se('sess-display',d.name||'Session');
+  toast('Session loaded — "'+d.name+'"','success');
+}
+function newSession(){
+  const name=v('new-sess-name');
+  if(!name){document.getElementById('new-sess-name').classList.add('err');return;}
+  document.getElementById('new-sess-name').classList.remove('err');
+  // Reset to defaults
+  comps=[];propPhotoB64='';agentPhotoB64='';
+  document.getElementById('s-name').value=name;
+  syncTop();renderComps();closeModal('sess-modal');
+  toast('New session: "'+name+'"','success');
+}
+function deleteSession(key,e){
+  e.stopPropagation();if(!confirm('Delete this session?'))return;
+  const sessions=getAllSessions();delete sessions[key];
+  localStorage.setItem('cma-sessions',JSON.stringify(sessions));
+  renderSessions();toast('Session deleted','success');
+}
+function renderSessions(){
+  const sessions=getAllSessions();
+  const keys=Object.keys(sessions).sort((a,b)=>sessions[b].ts-sessions[a].ts);
+  const list=document.getElementById('sess-list');
+  if(!keys.length){list.innerHTML='<div style="font-size:12px;color:var(--muted);padding:10px 0">No saved sessions yet.</div>';return;}
+  list.innerHTML=keys.map(k=>{
+    const s=sessions[k];
+    const dt=new Date(s.ts).toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'});
+    return `<div class="sess-item" onclick="loadSession('${k}')">
+      <div style="width:32px;height:32px;border-radius:50%;background:rgba(234,0,42,0.1);color:var(--red);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">${(s.name||'?').charAt(0).toUpperCase()}</div>
+      <div style="flex:1;min-width:0"><div class="sess-item-name">${s.name}</div><div class="sess-item-date">${dt}</div></div>
+      <button class="sess-item-del" onclick="deleteSession('${k}',event)">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ═══ TOAST ═══
+function toast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.className='toast '+type;
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ═══ PDF EXPORT ═══
+function exportPDF(){
+  toast('Generating PDF...','success');
+  const sellerName=v('s-name'),addr=v('s-addr'),community=v('s-community');
+  const recPrice=parseFloat(v('p-rec'))||0;
+  const netVal=document.getElementById('ns-net').textContent;
+  const comm=v('n-comm'),commAmt=document.getElementById('ns-comm').textContent;
+  const legal=document.getElementById('ns-legal').textContent;
+  const mortgage=document.getElementById('ns-mortgage').textContent;
+  const penalty=document.getElementById('ns-penalty').textContent;
+  const gstAmt=document.getElementById('ns-gst').textContent;
+  const rationale=v('p-rationale');
+  const narrative=v('m-narrative');
+  const propPhoto=propPhotoB64?`<img src="${propPhotoB64}" style="width:100%;height:220px;object-fit:cover;display:block" alt="Property">`:'<div style="width:100%;height:120px;background:#1A1F2E;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.2);font-size:12px;letter-spacing:.1em;text-transform:uppercase">Property photo</div>';
+  const agentPhotoHtml=agentPhotoB64?`<img src="${agentPhotoB64}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid #C9A84C;margin-right:16px" alt="Kyle Duiker">`:'<div style="width:60px;height:60px;border-radius:50%;background:#3A3F50;border:3px solid #C9A84C;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#C9A84C;margin-right:16px">KD</div>';
+  const compRows=comps.map(c=>{
+    const adjPrice=c.price+c.adjTotal;
+    const psf=c.sqft>0?Math.round(adjPrice/c.sqft):0;
+    const bc=c.status==='sold'?{bg:'#e6f4ec',col:'#1a6635'}:c.status==='active'?{bg:'#e6f0fb',col:'#1a3f8c'}:{bg:'#f0ede8',col:'#7A7F94'};
+    return `<tr><td style="padding:9px 10px"><span style="background:${bc.bg};color:${bc.col};font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:3px">${c.status}</span></td><td style="padding:9px 10px;font-size:12px">${c.address}</td><td style="padding:9px 10px;font-size:12px;font-weight:700">${fmtN(c.price)}</td><td style="padding:9px 10px;font-size:12px">${c.beds}bd/${c.baths}ba</td><td style="padding:9px 10px;font-size:12px">${c.sqft.toLocaleString()} sq.ft.</td><td style="padding:9px 10px;font-size:12px">$${psf}/sf</td><td style="padding:9px 10px;font-size:12px">${c.dom}d</td><td style="padding:9px 10px;font-size:11px;color:#7A7F94">${c.notes||'—'}</td></tr>`;
+  }).join('');
+  const agentBio=v('agent-bio');
+  const mktItems=[['Professional photography & virtual tour','Twilight shots, full interior suite, Matterport 3D walkthrough. Your home stops the scroll.','Day 1'],['MLS launch — coordinated timing','Listed Thursday. Showings Friday. Offers Tuesday. Consistent multiple-offer results.','Day 3–5'],['Targeted digital advertising','Facebook & Instagram geo-targeted to SE Calgary lake community buyer pools.','Week 1'],['Sphere database broadcast','Direct outreach to 554 qualified Duiker Properties contacts — buyers ready to move.','Day of launch'],['Curated open house','Pre-promoted, staged, strategic — not just a sign in the yard.','Weekend 1'],['Royal LePage Solutions network reach','South Calgary · North Calgary · Okotoks · Canmore / Banff — four active markets.','Ongoing']].map((m,i)=>`<div style="display:flex;gap:14px;padding:11px 0;border-bottom:1px solid #f0ede8"><div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:600;color:#EA002A;line-height:1;min-width:24px">${i+1}</div><div><div style="font-size:13px;font-weight:700;color:#0D1117;margin-bottom:2px">${m[0]}</div><div style="font-size:11px;color:#7A7F94;line-height:1.4">${m[1]}</div><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:#F7F6F4;color:#3A3F50;border:1px solid #e0ddd8;padding:2px 7px;border-radius:3px;margin-top:4px;display:inline-block">${m[2]}</div></div></div>`).join('');
+
+  const html=`<div style="font-family:Raleway,Arial,sans-serif;color:#1A1F2E;background:#fff">
+  <!-- COVER -->
+  <div style="background:#0D1117;padding:0 0 40px">
+    ${propPhoto}
+    <div style="padding:32px 44px 0">
+      <div style="color:#EA002A;font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px">Comparative Market Analysis · Listing Presentation</div>
+      <div style="font-size:34px;font-weight:300;color:#fff;line-height:1.1;margin-bottom:6px">${addr}</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.4);margin-bottom:28px">${community} · Prepared for ${sellerName}</div>
+      <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:22px;display:flex;justify-content:space-between;align-items:flex-end">
+        <div style="display:flex;align-items:center">${agentPhotoHtml}<div><div style="font-size:14px;font-weight:700;color:#fff">Kyle Duiker · Broker Delegate</div><div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px">Royal LePage Solutions · Duiker Properties</div><div style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:1px">${agentBio?v('agent-tagline'):'SE Calgary lake community specialist'}</div></div></div>
+        <div style="text-align:right"><div style="font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Recommended list price</div><div style="font-size:30px;font-weight:800;color:#C9A84C">${fmtN(recPrice)}</div></div>
+      </div>
+    </div>
+  </div>
+  <!-- MARKET -->
+  <div style="padding:36px 44px 0">
+    <div style="font-size:8px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#EA002A;margin-bottom:5px">01 · Market Overview</div>
+    <div style="font-size:20px;font-weight:300;margin-bottom:4px;border-bottom:2px solid #0D1117;padding-bottom:10px">SE Calgary lake communities — current conditions</div>
+    <div style="font-size:12px;color:#7A7F94;margin-bottom:20px;line-height:1.5">${narrative}</div>
+    <div style="display:flex;gap:14px;margin-bottom:32px">
+      ${[['Absorption rate',(v('m-absorption')||68)+'%','#EA002A'],['Avg. days on market',v('m-dom')||17,'#0D1117'],['List-to-sale ratio',(v('m-lsr')||98.4)+'%','#0D1117']].map(([lbl,val,col])=>`<div style="flex:1;background:#F7F6F4;padding:16px 18px;border-radius:6px;border-top:3px solid #EA002A"><div style="font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7A7F94;margin-bottom:5px">${lbl}</div><div style="font-size:26px;font-weight:700;color:${col}">${val}</div><div style="font-size:10px;color:#7A7F94;margin-top:3px">${community} · last 30 days</div></div>`).join('')}
+    </div>
+    <!-- COMPS -->
+    <div style="font-size:8px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#EA002A;margin-bottom:5px">02 · Comparable Sales</div>
+    <div style="font-size:20px;font-weight:300;margin-bottom:18px;border-bottom:2px solid #0D1117;padding-bottom:10px">The evidence</div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:32px;font-family:Raleway,Arial,sans-serif">
+      <thead><tr style="border-bottom:2px solid #0D1117">${['Status','Address','Price','Beds/Baths','Sq.ft.','$/sq.ft.','DOM','Notes'].map(h=>`<th style="font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7A7F94;padding:7px 10px;text-align:left">${h}</th>`).join('')}</tr></thead>
+      <tbody>${compRows}</tbody>
+    </table>
+    <!-- PRICING -->
+    <div style="font-size:8px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#EA002A;margin-bottom:5px">03 · Pricing Strategy</div>
+    <div style="font-size:20px;font-weight:300;margin-bottom:14px;border-bottom:2px solid #0D1117;padding-bottom:10px">The recommendation</div>
+    <div style="background:#0D1117;border-radius:8px;padding:26px 32px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:6px">Recommended list price</div><div style="font-size:44px;font-weight:800;color:#C9A84C;line-height:1">${fmtN(recPrice)}</div><div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:6px">Based on ${comps.length} comparable properties in ${community}</div></div>
+      <div style="text-align:right"><div style="font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:4px">Range</div><div style="font-size:14px;color:rgba(255,255,255,0.7)">${fmtN(parseFloat(v('p-low'))||0)} — ${fmtN(parseFloat(v('p-high'))||0)}</div></div>
+    </div>
+    <div style="background:#F7F6F4;border-radius:6px;padding:14px 18px;margin-bottom:32px;font-size:12px;color:#3A3F50;line-height:1.5">${rationale}</div>
+    <!-- NET SHEET -->
+    <div style="font-size:8px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#EA002A;margin-bottom:5px">04 · Seller Net Sheet</div>
+    <div style="font-size:20px;font-weight:300;margin-bottom:18px;border-bottom:2px solid #0D1117;padding-bottom:10px">What you walk away with</div>
+    <div style="margin-bottom:32px">
+      ${[['Sale price',fmtN(recPrice),false],[`Commission (${comm}%)`,commAmt,true],['GST on commission',gstAmt,true],['Legal fees',legal,true],['Mortgage balance',mortgage,true],['Mortgage penalty',penalty,true]].map(([l,v2,d])=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0ede8;font-size:13px"><span style="color:#3A3F50">${l}</span><span style="font-weight:700;color:${d?'#cc2200':'#0D1117'}">${v2}</span></div>`).join('')}
+      <div style="display:flex;justify-content:space-between;padding:18px 18px;background:#0D1117;border-radius:0 0 8px 8px;align-items:center">
+        <div><div style="font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.4)">Estimated net proceeds</div><div style="font-size:9px;color:rgba(255,255,255,0.25);margin-top:2px">Before taxes · estimate only</div></div>
+        <div style="font-size:30px;font-weight:800;color:#C9A84C">${netVal}</div>
+      </div>
+    </div>
+    <!-- MARKETING -->
+    <div style="font-size:8px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#EA002A;margin-bottom:5px">05 · Marketing Plan</div>
+    <div style="font-size:20px;font-weight:300;margin-bottom:18px;border-bottom:2px solid #0D1117;padding-bottom:10px">How we sell your home</div>
+    <div style="margin-bottom:32px">${mktItems}</div>
+    <!-- WHY KYLE -->
+    <div style="font-size:8px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#EA002A;margin-bottom:5px">06 · Why Duiker Properties</div>
+    <div style="font-size:20px;font-weight:300;margin-bottom:18px;border-bottom:2px solid #0D1117;padding-bottom:10px">Results you can verify</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:24px">
+      ${[['180+','Homes sold · SE Calgary'],['101.2%','Avg. list-to-sale'],['2010','Licensed since'],['2021','Broker designation']].map(([n,l])=>`<div style="background:#F7F6F4;border-radius:6px;padding:14px;text-align:center"><div style="font-size:28px;font-weight:700;color:#EA002A">${n}</div><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#7A7F94;margin-top:4px">${l}</div></div>`).join('')}
+    </div>
+    <!-- FOOTER -->
+    <div style="border-top:1px solid #e0ddd8;padding:18px 0;display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-size:12px;font-weight:700;color:#0D1117">Kyle Duiker · Broker Delegate</div><div style="font-size:10px;color:#7A7F94;margin-top:2px">Royal LePage Solutions · Duiker Properties · SE Calgary</div></div>
+      <div style="font-size:9px;color:#7A7F94;text-align:right;max-width:280px;line-height:1.5">This CMA is an estimate only. Not intended to replace a formal appraisal. All figures subject to change. Consult your lawyer and mortgage broker before making financial decisions.</div>
+    </div>
+  </div>
+</div>`;
+
+  const el=document.getElementById('pdf-target');
+  el.innerHTML=html;el.style.display='block';
+  const safeName=(addr||'property').replace(/[^a-z0-9]/gi,'_').toLowerCase();
+  setTimeout(()=>{
+    html2pdf().set({margin:0,filename:`CMA_${safeName}_DuikerProperties.pdf`,image:{type:'jpeg',quality:0.96},html2canvas:{scale:2,useCORS:true,logging:false},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['avoid-all','css']}}).from(el).save().then(()=>{el.style.display='none';toast('PDF exported successfully','success');});
+  },200);
+}
+
+// ═══ INIT ═══
+document.getElementById('s-date').value=new Date().toISOString().split('T')[0];
+renderComps();recalcPricing();recalcNet();syncTop();renderChecklist();syncPresentMkt();
+setTimeout(()=>{buildTrendChart();buildPsfChart();buildDomChart();},100);
+</script>
+</body>
+</html>
