@@ -105,6 +105,12 @@
   .qty.donate input{width:84px;height:40px;border:0;font-family:inherit;font-size:16px;font-weight:700;padding:0 8px;color:var(--rls-black)}
   .qty.donate input:focus{outline:none}
 
+  .attend{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .attend label{display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px solid #C9C5BF;border-radius:4px;cursor:pointer;font-weight:400}
+  .attend label:has(input:checked){border-color:var(--rls-red);box-shadow:inset 0 0 0 1px var(--rls-red);background:#FFF5F6}
+  .attend input{margin-top:4px;accent-color:var(--rls-red)}
+  .attend b{display:block;font-weight:700;font-size:15px}
+  .attend small{display:block;font-size:13px;color:var(--rls-dark-grey);margin-top:2px}
   .pay{display:grid;gap:12px}
   .pay label{display:flex;gap:14px;align-items:flex-start;padding:16px;border:1px solid #C9C5BF;border-radius:4px;cursor:pointer;font-weight:400}
   .pay label:has(input:checked){border-color:var(--rls-red);box-shadow:inset 0 0 0 1px var(--rls-red)}
@@ -144,6 +150,7 @@
     .ticket{grid-template-columns:1fr auto;grid-template-areas:"name price" "qty qty"}
     .ticket .qty{grid-area:qty;justify-self:start}
     .two{grid-template-columns:1fr}
+    .attend{grid-template-columns:1fr}
   }
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
@@ -210,34 +217,25 @@
           <fieldset>
             <legend>Who's coming</legend>
             <p class="hint">Dinner is on the brokerage for you and one guest. Just let us know you're coming.</p>
+            <div class="field">
+              <label>Will you be attending?</label>
+              <div class="attend" id="attend">
+                <label><input type="radio" name="guests" value="1"><span><b>Yes, just me</b><small>One seat at dinner</small></span></label>
+                <label><input type="radio" name="guests" value="2"><span><b>Yes, with a guest</b><small>Two seats at dinner</small></span></label>
+                <label><input type="radio" name="guests" value="0"><span><b>Can't make it</b><small>But I'd like to support the Shelter Foundation</small></span></label>
+              </div>
+            </div>
             <div class="two">
               <div class="field"><label for="name">Your name</label><input type="text" id="name" name="name" required autocomplete="name"></div>
               <div class="field"><label for="email">Email</label><input type="email" id="email" name="email" required autocomplete="email"></div>
             </div>
-            <div class="two">
-              <div class="field"><label for="office">Office</label>
-                <select id="office" name="office" required>
-                  <option value="">Select office</option>
-                  <option>South Calgary</option>
-                  <option>North Calgary</option>
-                  <option>Okotoks</option>
-                  <option>Canmore / Banff</option>
-                  <option>Head Office / Staff</option>
-                </select></div>
-              <div class="field"><label for="guests">Attending</label>
-                <select id="guests" name="guests">
-                  <option value="1">Just me</option>
-                  <option value="2">Me + 1 guest</option>
-                  <option value="0">Can't make it, but I'll still buy tickets</option>
-                </select></div>
-            </div>
-            <div class="field"><label for="guestName">Guest name (if bringing one)</label><input type="text" id="guestName" name="guestName"></div>
-            <div class="field"><label for="dietary">Dietary needs or allergies</label><textarea id="dietary" name="dietary" placeholder="Vegetarian, gluten-free, nut allergy…"></textarea></div>
+            <div class="field" id="guestField" hidden><label for="guestName">Guest name</label><input type="text" id="guestName" name="guestName"></div>
+            <div class="field" id="dietField"><label for="dietary">Dietary needs or allergies</label><textarea id="dietary" name="dietary" placeholder="Vegetarian, gluten-free, nut allergy…"></textarea></div>
           </fieldset>
 
           <fieldset>
             <legend>Tickets</legend>
-            <p class="hint">Dinner is covered. Cork pulls, raffle tickets, and 50/50 are optional and proceeds support the Royal LePage Shelter Foundation. Super and Mega packs are presale only — after the RSVP deadline, tickets are sold individually at the party.</p>
+            <p class="hint" id="ticketHint">Dinner is covered. Cork pulls, raffle tickets, and 50/50 are optional and proceeds support the Royal LePage Shelter Foundation. Super and Mega packs are presale only — after the RSVP deadline, tickets are sold individually at the party.</p>
             <div id="tickets"></div>
           </fieldset>
 
@@ -323,7 +321,7 @@ const presaleOpen = () => new Date() < new Date(CONFIG.presaleEnds);
 function render(){
   if(!presaleOpen()) CONFIG.tickets = CONFIG.tickets.filter(t => !t.presaleOnly);
   $("#tickets").innerHTML = CONFIG.tickets.map(t => `
-    <div class="ticket">
+    <div class="ticket ticket-item">
       <div><b>${t.name}${t.presaleOnly ? ` <span class="badge">Presale only</span>` : ""}</b><p>${t.desc}</p></div>
       <div class="qty">
         <button type="button" data-id="${t.id}" data-d="-1" aria-label="Fewer ${t.name}">−</button>
@@ -339,6 +337,7 @@ function render(){
     </div>` : "");
   CONFIG.tickets.forEach(t => qty[t.id] = 0);
   const d = $("#donation"); if(d) d.addEventListener("input", updateSummary);
+  $("#attend").addEventListener("change", applyAttendance);
   $("#tickets").addEventListener("click", e => {
     const b = e.target.closest("button[data-id]"); if(!b) return;
     const t = CONFIG.tickets.find(x => x.id === b.dataset.id);
@@ -348,6 +347,19 @@ function render(){
   });
 }
 
+function attending(){ const r = document.querySelector('input[name="guests"]:checked'); return r ? r.value : null; }
+function applyAttendance(){
+  const a = attending(), coming = a === "1" || a === "2";
+  $("#guestField").hidden = a !== "2";
+  $("#dietField").hidden = !coming;
+  document.querySelectorAll(".ticket-item").forEach(el => { el.hidden = a === "0"; });
+  if(a === "0"){ CONFIG.tickets.forEach(t => { qty[t.id] = 0; $("#q-"+t.id).value = 0; }); }
+  $("#ticketHint").textContent = a === "0"
+    ? "Sorry you can't join us. Tickets are for attendees only, but a donation to the Royal LePage Shelter Foundation is very welcome."
+    : "Dinner is covered. Cork pulls, raffle tickets, and 50/50 are optional and proceeds support the Royal LePage Shelter Foundation. Super and Mega packs are presale only — after the RSVP deadline, tickets are sold individually at the party.";
+  $("#submitBtn").textContent = a === "0" ? "Submit" : "Submit RSVP";
+  updateSummary();
+}
 const donation = () => { const d = $("#donation"); return d ? Math.max(0, Math.floor(Number(d.value) || 0)) : 0; };
 function total(){ return CONFIG.tickets.reduce((s,t) => s + qty[t.id]*t.price, 0) + donation(); }
 
@@ -363,13 +375,14 @@ $("#orderForm").addEventListener("submit", async e => {
   e.preventDefault();
   const f = e.target, err = $("#err");
   err.classList.remove("show");
-  if(!f.name.value.trim() || !f.email.value.trim() || !f.office.value){
-    err.textContent = "Add your name, email, and office before submitting."; err.classList.add("show"); return;
+  if(!attending()){ err.textContent = "Let us know whether you're attending first."; err.classList.add("show"); $("#attend").scrollIntoView({behavior:"smooth", block:"center"}); return; }
+  if(!f.name.value.trim() || !f.email.value.trim()){
+    err.textContent = "Add your name and email before submitting."; err.classList.add("show"); return;
   }
   const payload = {
     submitted: new Date().toISOString(),
-    name: f.name.value.trim(), email: f.email.value.trim(), office: f.office.value,
-    attending: f.guests.value, guestName: f.guestName.value.trim(), dietary: f.dietary.value.trim(),
+    name: f.name.value.trim(), email: f.email.value.trim(),
+    attending: attending(), guestName: f.guestName.value.trim(), dietary: f.dietary.value.trim(),
     payment: f.payment.value, total: total(), donation: donation(),
     ...Object.fromEntries(CONFIG.tickets.map(t => [t.id, qty[t.id]]))
   };
