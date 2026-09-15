@@ -336,7 +336,7 @@
    ============================================================ */
 const CONFIG = {
   // Google Apps Script web app URL (see holiday-party-orders.gs)
-  endpoint: "https://script.google.com/macros/s/AKfycbxYDxJIPDttR8LKZT2l5q9W14SGiDHF4JOtw-TIU4Ws5mGMep_kfXhZ8m0X-gaLRRYOWg/exec",
+  endpoint: "https://script.google.com/macros/s/AKfycbwjEm6Cttmlc2WKmGODaX-0YY6jXbXbKDkbKMVloSvTKFTPJbkACle6QbTwGDTCdSg26g/exec",
   etransferEmail: "accounting@royallepagesolutions.com",
   etransferMemo: "Holiday Party – your name",
   // Presale cutoff. Packs marked presaleOnly disappear after this moment; individual tickets stay available.
@@ -421,10 +421,14 @@ function paintStock(){
   }
 }
 function flashStock(k){ document.querySelectorAll(`.stock[data-stock="${k}"]`).forEach(el => { el.textContent = `Only ${remaining(k) - inCart(k)} more ${k}${remaining(k) - inCart(k) === 1 ? "" : "s"} available`; setTimeout(paintStock, 2000); }); }
-async function loadStock(){
+function loadStock(){
   if(!CONFIG.inventory || !CONFIG.endpoint.startsWith("http")) return;
-  try{ const r = await fetch(CONFIG.endpoint + "?stock=1", {cache:"no-store"}); const j = await r.json(); Object.assign(sold, j); }catch(e){}
-  paintStock();
+  // JSONP: Apps Script serves this as a script, which sidesteps cross-site fetch restrictions.
+  window.__stock = j => { Object.assign(sold, j || {}); paintStock(); };
+  const sc = document.createElement("script");
+  sc.src = CONFIG.endpoint + "?stock=1&callback=__stock&t=" + Date.now();
+  sc.onerror = () => paintStock();
+  document.head.appendChild(sc);
 }
 function attending(){ const r = document.querySelector('input[name="guests"]:checked'); return r ? r.value : null; }
 function applyAttendance(){
