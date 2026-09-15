@@ -28,7 +28,9 @@
     min-height:92vh;display:flex;flex-direction:column;
     padding:40px 24px 56px;position:relative;overflow:hidden
   }
-  .invite .logo{width:240px;margin:0 auto}
+  .invite .logo{width:240px;margin:0 auto;position:relative;z-index:2}
+  .invite-body{position:relative;z-index:2}
+  .snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
   .invite-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;max-width:720px;margin:0 auto;padding:48px 0}
   .invite .kicker{font-weight:500;font-size:15px;letter-spacing:.04em;color:#CFCBC5;margin-bottom:22px}
   .invite h1{font-weight:800;font-size:clamp(46px,9vw,96px);line-height:.95;letter-spacing:-.02em}
@@ -78,9 +80,10 @@
   .gallery .wrap{padding:0 24px}
   .gallery .sub{color:#B8B4AE}
   .carousel{position:relative;margin-top:36px}
-  .track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:0 24px 8px;scrollbar-width:none}
+  .track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:0 24px 8px;scroll-padding-left:24px;scrollbar-width:none}
+  .track::after{content:"";flex:0 0 calc(100% - min(78vw,520px) - 24px)}
   .track::-webkit-scrollbar{display:none}
-  .slide{flex:0 0 min(78vw,520px);aspect-ratio:4/3;scroll-snap-align:center;position:relative;overflow:hidden;background:#2A2A2A}
+  .slide{flex:0 0 min(78vw,520px);aspect-ratio:4/3;scroll-snap-align:start;position:relative;overflow:hidden;background:#2A2A2A}
   .slide img{width:100%;height:100%;object-fit:cover}
   .slide figcaption{position:absolute;left:0;right:0;bottom:0;padding:28px 16px 12px;font-size:13px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.7))}
   .nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;border-radius:50%;background:var(--rls-red);color:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
@@ -179,6 +182,7 @@
 
 <!-- ======================= INVITATION ======================= -->
 <header class="invite">
+  <canvas class="snow" id="snow" aria-hidden="true"></canvas>
   <img class="logo" src="christmas-logo.png" alt="Royal LePage Solutions">
   <div class="invite-body">
     <p class="kicker">You are invited to the</p>
@@ -337,7 +341,9 @@ const CONFIG = {
   presaleEnds: "2026-11-27T23:59:59-07:00",
   // Optional hero background. Leave "" for the solid black hero.
   heroImage: "hero.jpg",
-  heroOverlay: 0.72,   // 0 = photo fully visible, 1 = black. 0.55–0.7 keeps headline readable.
+  heroOverlay: 0.72,
+  snow: true,          // falling snow over the hero. false to turn off.
+  snowDensity: 90,     // number of flakes on desktop (halved on phones)   // 0 = photo fully visible, 1 = black. 0.55–0.7 keeps headline readable.
   // Past party photos — upload to the GitHub repo and list them here (any number).
   photos: [
     { src:"photos/party-01.jpg", caption:"2025 — Our MC, fully committed" },
@@ -471,6 +477,30 @@ function showConfirm(p){
 
 render();
 
+/* ---------- Snow ---------- */
+(function(){
+  const c = $("#snow"); if(!c || !CONFIG.snow) { if(c) c.remove(); return; }
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){ c.remove(); return; }
+  const ctx = c.getContext("2d"), hero = c.parentElement;
+  let W, H, flakes = [], running = true;
+  const n = () => Math.round(CONFIG.snowDensity * (innerWidth < 700 ? .5 : 1));
+  const mk = (top) => ({ x: Math.random()*W, y: top ? -10 : Math.random()*H, r: .8 + Math.random()*2.2, s: .4 + Math.random()*.9, d: Math.random()*Math.PI*2, o: .35 + Math.random()*.5 });
+  function size(){ W = c.width = hero.clientWidth; H = c.height = hero.clientHeight; flakes = Array.from({length:n()}, () => mk(false)); }
+  function tick(){
+    if(!running) return;
+    ctx.clearRect(0,0,W,H); ctx.fillStyle = "#fff";
+    for(const f of flakes){
+      f.y += f.s; f.d += .01; f.x += Math.sin(f.d) * .4;
+      if(f.y > H + 5) Object.assign(f, mk(true));
+      ctx.globalAlpha = f.o; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI*2); ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  size(); addEventListener("resize", size);
+  new IntersectionObserver(e => { const v = e[0].isIntersecting; if(v && !running){ running = true; tick(); } else if(!v) running = false; }).observe(hero);
+  tick();
+})();
+
 /* ---------- Hero image ---------- */
 if(CONFIG.heroImage){
   const h = document.querySelector(".invite");
@@ -484,14 +514,15 @@ if(CONFIG.heroImage){
   track.innerHTML = CONFIG.photos.map((p,i) => `<figure class="slide"><img src="${p.src}" alt="${p.caption||"Holiday party photo"}" loading="lazy">${p.caption ? `<figcaption>${p.caption}</figcaption>` : ""}</figure>`).join("");
   dots.innerHTML = CONFIG.photos.map((_,i) => `<button type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("");
   const slides = [...track.children];
-  const go = i => slides[(i + slides.length) % slides.length].scrollIntoView({behavior:"smooth", block:"nearest", inline:"center"});
   let cur = 0;
+  const nearest = () => { let best = 0, bd = Infinity; slides.forEach((sl,i) => { const d = Math.abs(sl.offsetLeft - 24 - track.scrollLeft); if(d < bd){ bd = d; best = i; } }); return best; };
+  const setDots = () => [...dots.children].forEach((d,i) => d.setAttribute("aria-current", i === cur));
+  const go = i => { cur = (i + slides.length) % slides.length; track.scrollTo({left: slides[cur].offsetLeft - 24, behavior:"smooth"}); setDots(); };
   $("#prev").onclick = () => go(cur - 1);
   $("#next").onclick = () => go(cur + 1);
   dots.onclick = e => { const b = e.target.closest("button[data-i]"); if(b) go(Number(b.dataset.i)); };
-  const io = new IntersectionObserver(es => es.forEach(en => { if(en.isIntersecting){ cur = slides.indexOf(en.target);
-    [...dots.children].forEach((d,i) => d.setAttribute("aria-current", i === cur)); } }), {root:track, threshold:.6});
-  slides.forEach(s => io.observe(s));
+  let st; track.addEventListener("scroll", () => { clearTimeout(st); st = setTimeout(() => { cur = nearest(); setDots(); }, 80); }, {passive:true});
+  setDots();
 })();
 </script>
 </body>
