@@ -61,6 +61,18 @@
   .timeline b{display:block;font-weight:700;margin-top:6px}
   .timeline p{font-size:14px;color:var(--rls-dark-grey);margin-top:4px}
 
+  /* ---------- Prizes ---------- */
+  .prizes{background:#fff}
+  .prize-grid{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .prize{background:var(--rls-light-grey);padding:32px 28px;border-top:4px solid var(--rls-red);position:relative}
+  .prize .tag{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--rls-red);text-transform:uppercase}
+  .prize h3{font-weight:800;font-size:24px;line-height:1.1;margin-top:10px}
+  .prize p{margin-top:12px;font-size:15px;color:var(--rls-dark-grey)}
+  .prize .price{margin-top:18px;font-weight:700;font-size:15px}
+  .prize .price span{color:var(--rls-dark-grey);font-weight:400}
+  .prizes .deadline{margin-top:28px;font-size:15px;color:var(--rls-dark-grey)}
+  .prizes .deadline b{color:var(--rls-red)}
+
   /* ---------- Photo carousel ---------- */
   .gallery{background:var(--rls-black);color:#fff;padding:72px 0}
   .gallery .wrap{padding:0 24px}
@@ -96,6 +108,8 @@
   .ticket b{display:block;font-weight:700;font-size:16px}
   .ticket p{font-size:14px;color:var(--rls-dark-grey)}
   .badge{display:inline-block;margin-left:8px;padding:2px 8px;font-size:11px;font-weight:700;letter-spacing:.04em;color:#fff;background:var(--rls-red);border-radius:3px;vertical-align:middle}
+  .ticket.disabled{opacity:.4;pointer-events:none;position:relative}
+  .ticket.disabled b::after{content:"Attendees only";display:inline-block;margin-left:8px;padding:2px 8px;font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--rls-black);background:var(--rls-warm-grey);border-radius:3px;vertical-align:middle}
   .ticket .price{font-weight:700;font-size:16px;white-space:nowrap;min-width:64px;text-align:right}
   .qty{display:flex;align-items:center;border:1px solid #C9C5BF;border-radius:4px;overflow:hidden}
   .qty button{width:40px;height:40px;border:0;background:#fff;font-size:20px;cursor:pointer;color:var(--rls-black)}
@@ -105,12 +119,13 @@
   .qty.donate input{width:84px;height:40px;border:0;font-family:inherit;font-size:16px;font-weight:700;padding:0 8px;color:var(--rls-black)}
   .qty.donate input:focus{outline:none}
 
-  .attend{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  .attend label{display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px solid #C9C5BF;border-radius:4px;cursor:pointer;font-weight:400}
-  .attend label:has(input:checked){border-color:var(--rls-red);box-shadow:inset 0 0 0 1px var(--rls-red);background:#FFF5F6}
-  .attend input{margin-top:4px;accent-color:var(--rls-red)}
-  .attend b{display:block;font-weight:700;font-size:15px}
-  .attend small{display:block;font-size:13px;color:var(--rls-dark-grey);margin-top:2px}
+  .attend{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .attend label{display:block;text-align:center;padding:16px 12px;border:2px solid var(--rls-black);border-radius:4px;cursor:pointer;font-weight:700;font-size:15px;color:var(--rls-black);background:#fff;transition:background .15s,color .15s,border-color .15s;user-select:none}
+  .attend label:hover{background:var(--rls-light-grey)}
+  .attend label:has(input:checked){background:var(--rls-red);border-color:var(--rls-red);color:#fff}
+  .attend label:has(input:focus-visible){outline:3px solid var(--rls-red);outline-offset:2px}
+  .attend input{position:absolute;opacity:0;width:0;height:0}
+  .attend small{display:block;font-weight:400;font-size:13px;margin-top:3px;opacity:.8}
   .pay{display:grid;gap:12px}
   .pay label{display:flex;gap:14px;align-items:flex-start;padding:16px;border:1px solid #C9C5BF;border-radius:4px;cursor:pointer;font-weight:400}
   .pay label:has(input:checked){border-color:var(--rls-red);box-shadow:inset 0 0 0 1px var(--rls-red)}
@@ -129,6 +144,10 @@
   .summary .fine{font-size:12px;color:#8A8680;margin-top:14px;line-height:1.45}
 
   /* confirmation */
+  .missyou{display:none;background:var(--rls-light-grey);border-left:4px solid var(--rls-red);padding:22px 24px;margin-bottom:24px}
+  .missyou.show{display:block}
+  .missyou b{display:block;font-weight:800;font-size:20px;margin-bottom:6px}
+  .missyou p{font-size:15px;color:var(--rls-dark-grey)}
   .confirm{display:none;background:var(--rls-light-grey);border-top:4px solid var(--rls-red);padding:32px;border-radius:4px;margin-top:40px}
   .confirm.show{display:block}
   .confirm h3{font-weight:800;font-size:24px}
@@ -151,6 +170,7 @@
     .ticket .qty{grid-area:qty;justify-self:start}
     .two{grid-template-columns:1fr}
     .attend{grid-template-columns:1fr}
+    .prize-grid{grid-template-columns:1fr}
   }
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
@@ -191,6 +211,35 @@
   </div>
 </section>
 
+<!-- ======================= PRIZES ======================= -->
+<section class="prizes">
+  <div class="wrap">
+    <h2>What's up for grabs</h2>
+    <p class="sub">Every ticket supports the Royal LePage Shelter Foundation. Every draw happens live at the party.</p>
+    <div class="prize-grid">
+      <div class="prize">
+        <div class="tag">Grand prize</div>
+        <h3>WestJet flights, anywhere they fly</h3>
+        <p>A pair of return tickets to any WestJet destination. Mexico, Hawaii, London, or home for the holidays — your call.</p>
+        <div class="price">$50 <span>per ticket</span></div>
+      </div>
+      <div class="prize">
+        <div class="tag">Every cork wins</div>
+        <h3>The cork pull</h3>
+        <p>Pull a cork from the wall and take home the bottle it's tied to. Most are very drinkable. A few are very, very good.</p>
+        <div class="price">$25 <span>per cork</span></div>
+      </div>
+      <div class="prize">
+        <div class="tag">Half the pot</div>
+        <h3>50/50 draw</h3>
+        <p>Ten tickets for ten dollars. One winner splits the pot with the Shelter Foundation, and the pot grows with every pack.</p>
+        <div class="price">$10 <span>for 10 tickets</span></div>
+      </div>
+    </div>
+    <p class="deadline">Super and Mega packs bundle all three at a discount and are only available until <b>November 27</b>. After that, tickets are sold individually at the party.</p>
+  </div>
+</section>
+
 <!-- ======================= PAST PARTIES ======================= -->
 <section class="gallery">
   <div class="wrap">
@@ -220,9 +269,9 @@
             <div class="field">
               <label>Will you be attending?</label>
               <div class="attend" id="attend">
-                <label><input type="radio" name="guests" value="1"><span><b>Yes, just me</b><small>One seat at dinner</small></span></label>
-                <label><input type="radio" name="guests" value="2"><span><b>Yes, with a guest</b><small>Two seats at dinner</small></span></label>
-                <label><input type="radio" name="guests" value="0"><span><b>Can't make it</b><small>But I'd like to support the Shelter Foundation</small></span></label>
+                <label><input type="radio" name="guests" value="1">Yes, just me<small>One seat at dinner</small></label>
+                <label><input type="radio" name="guests" value="2">Yes, with a guest<small>Two seats at dinner</small></label>
+                <label><input type="radio" name="guests" value="0">Can't make it<small>Sorry to miss it</small></label>
               </div>
             </div>
             <div class="two">
@@ -234,7 +283,8 @@
           </fieldset>
 
           <fieldset>
-            <legend>Tickets</legend>
+            <legend id="ticketLegend">Tickets</legend>
+            <div class="missyou" id="missyou"><b>We're going to miss you.</b><p>Tickets are for attendees, but would you like to make a donation to the Royal LePage Shelter Foundation in your place? Any amount helps.</p></div>
             <p class="hint" id="ticketHint">Dinner is covered. Cork pulls, raffle tickets, and 50/50 are optional and proceeds support the Royal LePage Shelter Foundation. Super and Mega packs are presale only — after the RSVP deadline, tickets are sold individually at the party.</p>
             <div id="tickets"></div>
           </fieldset>
@@ -352,10 +402,13 @@ function applyAttendance(){
   const a = attending(), coming = a === "1" || a === "2";
   $("#guestField").hidden = a !== "2";
   $("#dietField").hidden = !coming;
-  document.querySelectorAll(".ticket-item").forEach(el => { el.hidden = a === "0"; });
+  document.querySelectorAll(".ticket-item").forEach(el => { el.classList.toggle("disabled", a === "0"); el.querySelectorAll("button").forEach(b => b.disabled = a === "0"); });
   if(a === "0"){ CONFIG.tickets.forEach(t => { qty[t.id] = 0; $("#q-"+t.id).value = 0; }); }
+  $("#missyou").classList.toggle("show", a === "0");
+  $("#ticketLegend").textContent = a === "0" ? "Support the Shelter Foundation" : "Tickets";
+  $("#ticketHint").hidden = a === "0";
   $("#ticketHint").textContent = a === "0"
-    ? "Sorry you can't join us. Tickets are for attendees only, but a donation to the Royal LePage Shelter Foundation is very welcome."
+    ? ""
     : "Dinner is covered. Cork pulls, raffle tickets, and 50/50 are optional and proceeds support the Royal LePage Shelter Foundation. Super and Mega packs are presale only — after the RSVP deadline, tickets are sold individually at the party.";
   $("#submitBtn").textContent = a === "0" ? "Submit" : "Submit RSVP";
   updateSummary();
