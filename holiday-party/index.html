@@ -112,6 +112,9 @@
   .ticket b{display:block;font-weight:700;font-size:16px}
   .ticket p{font-size:14px;color:var(--rls-dark-grey)}
   .badge{display:inline-block;margin-left:8px;padding:2px 8px;font-size:11px;font-weight:700;letter-spacing:.04em;color:#fff;background:var(--rls-red);border-radius:3px;vertical-align:middle}
+  .stock{display:block;margin-top:6px;font-size:12px;font-weight:700;color:var(--rls-red)}
+  .ticket.soldout{opacity:.4;pointer-events:none}
+  .ticket.soldout b::after{content:"Sold out";display:inline-block;margin-left:8px;padding:2px 8px;font-size:11px;font-weight:700;letter-spacing:.04em;color:#fff;background:var(--rls-black);border-radius:3px;vertical-align:middle}
   .ticket.disabled{opacity:.4;pointer-events:none;position:relative}
   .ticket.disabled b::after{content:"Attendees only";display:inline-block;margin-left:8px;padding:2px 8px;font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--rls-black);background:var(--rls-warm-grey);border-radius:3px;vertical-align:middle}
   .ticket .price{font-weight:700;font-size:16px;white-space:nowrap;min-width:64px;text-align:right}
@@ -359,12 +362,14 @@ const CONFIG = {
     { src:"photos/party-10.jpg", caption:"Holiday party" },
   ],
   tickets: [
-    { id:"cork",    name:"Cork pull",                       desc:"Pull a cork, win the bottle. Every cork is a winner, a few are very good ones.",              price:25, max:20 },
+    { id:"cork",    name:"Cork pull",                       desc:"Pull a cork, win the bottle. Every cork is a winner, a few are very good ones.",              price:25, max:20, uses:{cork:1} },
     { id:"westjet", name:"WestJet Anywhere raffle",         desc:"One ticket toward a pair of WestJet flights, anywhere they fly. Drawn live at the party.",     price:50, max:20 },
     { id:"fifty",   name:"50/50 tickets",                   desc:"10 tickets per pack. Half the pot goes home with one winner.",                               price:10, max:20, unitLabel:"10 tickets" },
-    { id:"super",   name:"Super pack",                      desc:"1 cork pull, 1 WestJet raffle ticket, and 20 tickets for the 50/50 draw.",                  price:80,  max:5, presaleOnly:true },
-    { id:"mega",    name:"Mega pack",                       desc:"3 WestJet raffle tickets, 2 cork pulls, and 40 tickets for the 50/50 draw.",                price:200, max:2, presaleOnly:true },
+    { id:"super",   name:"Super pack",                      desc:"1 cork pull, 1 WestJet raffle ticket, and 20 tickets for the 50/50 draw.",                  price:80,  max:5, presaleOnly:true, uses:{cork:1} },
+    { id:"mega",    name:"Mega pack",                       desc:"3 WestJet raffle tickets, 2 cork pulls, and 40 tickets for the 50/50 draw.",                price:200, max:2, presaleOnly:true, uses:{cork:2} },
   ],
+  // Limited inventory. The page asks the sheet how many are sold and caps the cart. Remove a key to make it unlimited.
+  inventory: { cork: 50 },
   // Free-form donation line (proceeds to the Royal LePage Shelter Foundation). Set to false to hide.
   donation: { name:"Donation to the Shelter Foundation", desc:"Any amount, in support of the Foundation." },
 };
@@ -379,7 +384,7 @@ function render(){
   if(!presaleOpen()) CONFIG.tickets = CONFIG.tickets.filter(t => !t.presaleOnly);
   $("#tickets").innerHTML = CONFIG.tickets.map(t => `
     <div class="ticket ticket-item">
-      <div><b>${t.name}${t.presaleOnly ? ` <span class="badge">Presale only</span>` : ""}</b><p>${t.desc}</p></div>
+      <div><b>${t.name}${t.presaleOnly ? ` <span class="badge">Presale only</span>` : ""}</b><p>${t.desc}</p>${t.uses ? `<span class="stock" data-stock="${Object.keys(t.uses)[0]}"></span>` : ""}</div>
       <div class="qty">
         <button type="button" data-id="${t.id}" data-d="-1" aria-label="Fewer ${t.name}">−</button>
         <output id="q-${t.id}">0</output>
@@ -404,6 +409,25 @@ function render(){
   });
 }
 
+/* ---------- Inventory ---------- */
+const sold = {};
+const inCart = k => CONFIG.tickets.reduce((n,t) => n + (t.uses && t.uses[k] ? qty[t.id]*t.uses[k] : 0), 0);
+const remaining = k => (CONFIG.inventory && k in CONFIG.inventory) ? Math.max(0, CONFIG.inventory[k] - (sold[k] || 0)) : Infinity;
+function paintStock(){
+  for(const k in (CONFIG.inventory || {})){
+    const left = remaining(k);
+    document.querySelectorAll(`.stock[data-stock="${k}"]`).forEach(el => {
+      el.textContent = left > 0 ? `${left} of ${CONFIG.inventory[k]} ${k}s left` : "";
+      el.closest(".ticket").classList.toggle("soldout", left === 0);
+    });
+  }
+}
+function flashStock(k){ document.querySelectorAll(`.stock[data-stock="${k}"]`).forEach(el => { el.textContent = `Only ${remaining(k) - inCart(k)} more ${k}${remaining(k) - inCart(k) === 1 ? "" : "s"} available`; setTimeout(paintStock, 2000); }); }
+async function loadStock(){
+  if(!CONFIG.inventory || !CONFIG.endpoint.startsWith("http")) return;
+  try{ const r = await fetch(CONFIG.endpoint + "?stock=1", {cache:"no-store"}); const j = await r.json(); Object.assign(sold, j); }catch(e){}
+  paintStock();
+}
 function attending(){ const r = document.querySelector('input[name="guests"]:checked'); return r ? r.value : null; }
 function applyAttendance(){
   const a = attending(), coming = a === "1" || a === "2";
@@ -477,6 +501,7 @@ function showConfirm(p){
 }
 
 render();
+paintStock(); loadStock();
 
 /* ---------- Snow ---------- */
 (function(){
