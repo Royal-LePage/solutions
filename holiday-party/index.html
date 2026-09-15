@@ -80,10 +80,11 @@
   .gallery .wrap{padding:0 24px}
   .gallery .sub{color:#B8B4AE}
   .carousel{position:relative;margin-top:36px}
-  .track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:0 24px 8px;scroll-padding-left:24px;scrollbar-width:none}
-  .track::after{content:"";flex:0 0 calc(100% - min(78vw,520px) - 24px)}
+  .track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:0 calc(50% - min(39vw,260px)) 8px;scrollbar-width:none}
+  .slide:not(.active){opacity:.55;transition:opacity .3s}
+  .slide.active{opacity:1}
   .track::-webkit-scrollbar{display:none}
-  .slide{flex:0 0 min(78vw,520px);aspect-ratio:4/3;scroll-snap-align:start;position:relative;overflow:hidden;background:#2A2A2A}
+  .slide{flex:0 0 min(78vw,520px);aspect-ratio:4/3;scroll-snap-align:center;position:relative;overflow:hidden;background:#2A2A2A}
   .slide img{width:100%;height:100%;object-fit:cover}
   .slide figcaption{position:absolute;left:0;right:0;bottom:0;padding:28px 16px 12px;font-size:13px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.7))}
   .nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;border-radius:50%;background:var(--rls-red);color:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
@@ -515,9 +516,10 @@ if(CONFIG.heroImage){
   dots.innerHTML = CONFIG.photos.map((_,i) => `<button type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("");
   const slides = [...track.children];
   let cur = 0;
-  const nearest = () => { let best = 0, bd = Infinity; slides.forEach((sl,i) => { const d = Math.abs(sl.offsetLeft - 24 - track.scrollLeft); if(d < bd){ bd = d; best = i; } }); return best; };
-  const setDots = () => [...dots.children].forEach((d,i) => d.setAttribute("aria-current", i === cur));
-  const go = i => { cur = (i + slides.length) % slides.length; track.scrollTo({left: slides[cur].offsetLeft - 24, behavior:"smooth"}); setDots(); };
+  const target = sl => sl.offsetLeft - (track.clientWidth - sl.offsetWidth) / 2;
+  const nearest = () => { let best = 0, bd = Infinity; slides.forEach((sl,i) => { const d = Math.abs(target(sl) - track.scrollLeft); if(d < bd){ bd = d; best = i; } }); return best; };
+  const setDots = () => { [...dots.children].forEach((d,i) => d.setAttribute("aria-current", i === cur)); slides.forEach((sl,i) => sl.classList.toggle("active", i === cur)); };
+  const go = i => { cur = (i + slides.length) % slides.length; track.scrollTo({left: target(slides[cur]), behavior:"smooth"}); setDots(); };
   $("#prev").onclick = () => go(cur - 1);
   $("#next").onclick = () => go(cur + 1);
   dots.onclick = e => { const b = e.target.closest("button[data-i]"); if(b) go(Number(b.dataset.i)); };
