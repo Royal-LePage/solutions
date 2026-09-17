@@ -571,6 +571,7 @@
         imprint: CONFIG.imprint ? $('f-imprint').value.trim() : '',
         notes:   $('f-notes').value.trim(),
         cover:   c.name,
+        coverImage: c.image,
         items:   c.name + ' × ' + n,
         itemsJson: JSON.stringify([{ id: c.id, name: c.name, qty: n, price: u, subtotal: n * u }]),
         unitPrice: u.toFixed(2),
