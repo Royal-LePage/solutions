@@ -529,7 +529,7 @@
 
     function renderSummary() {
       const c = cover(), n = totalQty(), t = tierFor(n), u = t ? t.price : null;
-      document.querySelectorAll('[data-tier-price]').forEach(el => el.textContent = u ? money(u) : 'From ' + money(CONFIG.tiers[CONFIG.tiers.length - 1].price));
+      document.querySelectorAll('[data-tier-price]').forEach(el => el.textContent = u ? money(u) : 'Starting from ' + money(CONFIG.tiers[0].price));
       document.querySelectorAll('[data-tier]').forEach(el => el.classList.toggle('is-active', !!t && parseInt(el.dataset.tier, 10) === t.min));
       $('dt-summary-body').innerHTML = c
         ? `<div class="dt-summary__lines">
