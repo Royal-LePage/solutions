@@ -207,14 +207,16 @@
     .dt-done__again { display: inline-block; margin-top: 1.5rem; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rls-red); text-decoration: none; border-bottom: 1px solid var(--rls-red); }
 
     /* ── Lightbox ───────────────────────────────── */
-    .dt-lightbox { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.92); align-items: center; justify-content: center; padding: 1rem; }
+    .dt-lightbox { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(255,255,255,0.97); align-items: center; justify-content: center; padding: 1rem; }
     .dt-lightbox.is-open { display: flex; }
-    .dt-lightbox img { max-width: min(90vw, 900px); max-height: 85vh; object-fit: contain; display: block; box-shadow: 0 8px 48px rgba(0,0,0,0.6); }
+    .dt-lightbox img { max-width: min(90vw, 1000px); max-height: 85vh; object-fit: contain; display: block; box-shadow: 0 8px 48px rgba(0,0,0,0.18); }
     .dt-lightbox__close {
-      position: fixed; top: 1.25rem; right: 1.25rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-      color: #fff; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      position: fixed; top: 1.25rem; right: 1.25rem; background: var(--rls-white); border: 1px solid var(--rls-stone);
+      color: var(--rls-black); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s;
     }
-    .dt-lightbox__caption { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); font-size: 0.8rem; color: rgba(255,255,255,0.7); letter-spacing: 0.08em; }
+    .dt-lightbox__close:hover { border-color: var(--rls-black); }
+    .dt-lightbox__caption { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.8rem; color: var(--rls-black); letter-spacing: 0.08em; text-transform: uppercase; }
 
     .dt-footer-note { text-align: center; padding: 0 2rem 3rem; font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); }
     .dt-footer-note a { color: var(--rls-taupe); text-decoration: underline; }
