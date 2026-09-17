@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+  (function () {
+    var PASS_KEY = 'rls_hub_auth';
+    function simpleHash(str) {
+      var hash = 5381;
+      for (var i = 0; i < str.length; i++) { hash = ((hash << 5) + hash) + str.charCodeAt(i); hash = hash & hash; }
+      return Math.abs(hash).toString(16);
+    }
+    if (sessionStorage.getItem(PASS_KEY) !== simpleHash('Solutions')) {
+      window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/';
+    }
+  })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2027 Daytimers — Agent Hub — Royal LePage Solutions</title>
+  <meta name="description" content="Order your 2027 Royal LePage Solutions daytimer. Charged to your office account.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../../../assets/css/header.css?v=1015">
+  <link rel="stylesheet" href="../../../../assets/css/styles.css?v=1001">
+  <script defer src="../../../../assets/js/header.js?v=1014"></script>
+
+  <style>
+    :root {
+      --rls-red:        #EA002A;
+      --rls-red-dk:     #c20024;
+      --rls-black:      #000000;
+      --rls-white:      #FFFFFF;
+      --rls-taupe:      #A89E92;
+      --rls-stone:      #D6D1C8;
+      --rls-light-grey: #EFEFEF;
+      --dt-max:         1100px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Roboto', sans-serif; background: var(--rls-white); color: var(--rls-black); }
+    :focus-visible { outline: 2px solid var(--rls-red); outline-offset: 2px; }
+
+    /* ── Logout ─────────────────────────────────── */
+    .rls-logout {
+      position: absolute; top: 1.25rem; right: 1.5rem;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'Roboto', sans-serif; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      padding: 0.4rem 0.9rem; cursor: pointer; transition: color 0.2s, background 0.2s, border-color 0.2s;
+    }
+    .rls-logout:hover { color: var(--rls-white); background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); }
+
+    /* ── Hero ───────────────────────────────────── */
+    .dt-hero { position: relative; background: var(--rls-black); color: var(--rls-white); padding: 5rem 2rem 3.5rem; text-align: center; }
+    .dt-hero__back {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rls-taupe);
+      text-decoration: none; margin-bottom: 1.5rem; transition: color 0.2s;
+    }
+    .dt-hero__back:hover { color: var(--rls-white); }
+    .dt-hero__eyebrow { font-weight: 300; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rls-taupe); margin-bottom: 0.75rem; }
+    .dt-hero__title {
+      font-family: 'Raleway', sans-serif !important; font-weight: 700 !important;
+      font-size: clamp(2rem, 4vw, 3rem) !important; color: var(--rls-white) !important;
+      letter-spacing: -0.01em !important; line-height: 1.1 !important; margin-bottom: 0 !important;
+    }
+    .dt-hero__title .dt-accent { color: var(--rls-red) !important; display: inline !important; }
+    .dt-hero__rule { display: flex; align-items: center; gap: 0.75rem; justify-content: center; margin: 1.25rem auto; width: fit-content; }
+    .dt-hero__rule span { width: 36px; height: 2px; background: var(--rls-red); display: block; }
+    .dt-hero__sub { font-weight: 300; font-size: 0.95rem; color: var(--rls-stone); max-width: 520px; margin: 0 auto; line-height: 1.65; }
+    .dt-hero__deadline { margin-top: 1.5rem; font-size: 0.8rem; letter-spacing: 0.06em; color: var(--rls-white); }
+    .dt-hero__deadline strong { font-weight: 500; color: var(--rls-red); }
+
+    /* ── Wrap / note ────────────────────────────── */
+    .dt-wrap { max-width: var(--dt-max); margin: 0 auto; padding: 0 2rem; }
+    .dt-note {
+      background: var(--rls-light-grey); border-left: 4px solid var(--rls-red);
+      padding: 1rem 1.5rem; margin: 2.5rem 0 0; font-size: 0.875rem; line-height: 1.6; color: #333;
+    }
+    .dt-note strong { font-weight: 600; }
+    .dt-note a { color: var(--rls-red); text-decoration: none; }
+    .dt-note a:hover { text-decoration: underline; }
+
+    /* ── Sections ───────────────────────────────── */
+    .dt-main { max-width: var(--dt-max); margin: 0 auto; padding: 1rem 2rem 5rem; }
+    .dt-section { margin-top: 3rem; }
+    .dt-section__header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--rls-black); }
+    .dt-section__title { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    .dt-section__hint { font-size: 0.8rem; font-weight: 300; color: var(--rls-taupe); }
+
+    /* ── Cover grid ─────────────────────────────── */
+    .dt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+    .dt-card { background: var(--rls-white); border: 1px solid var(--rls-stone); display: flex; flex-direction: column; transition: border-color 0.2s, box-shadow 0.2s; }
+    .dt-card.is-selected { border-color: var(--rls-black); box-shadow: 0 0 0 1px var(--rls-black); }
+    .dt-card__img { position: relative; background: var(--rls-light-grey); aspect-ratio: 4/3; overflow: hidden; cursor: zoom-in; }
+    .dt-card__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .dt-card__img .dt-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--rls-stone); }
+    .dt-card__body { padding: 1.1rem 1.25rem 0.5rem; flex: 1; }
+    .dt-card__name { font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.95rem; line-height: 1.3; margin-bottom: 0.35rem; }
+    .dt-card__desc { font-weight: 300; font-size: 0.82rem; line-height: 1.55; color: #555; }
+    .dt-card__footer { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem 1rem; border-top: 1px solid var(--rls-light-grey); margin-top: 0.75rem; }
+    .dt-card__price { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.05rem; }
+    .dt-card__unit { font-weight: 300; font-size: 0.72rem; color: var(--rls-taupe); margin-left: 0.3rem; }
+
+    /* ── Stepper ────────────────────────────────── */
+    .dt-qty { display: inline-flex; align-items: stretch; border: 1px solid var(--rls-stone); }
+    .dt-qty button {
+      width: 34px; background: var(--rls-white); border: none; cursor: pointer;
+      font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 1rem; color: var(--rls-black);
+      transition: background 0.15s;
+    }
+    .dt-qty button:hover { background: var(--rls-light-grey); }
+    .dt-qty button:disabled { color: var(--rls-stone); cursor: default; background: var(--rls-white); }
+    .dt-qty input {
+      width: 44px; text-align: center; border: none; border-left: 1px solid var(--rls-stone); border-right: 1px solid var(--rls-stone);
+      font-family: 'Roboto', sans-serif; font-size: 0.95rem; font-weight: 500; padding: 0.4rem 0;
+      -moz-appearance: textfield;
+    }
+    .dt-qty input::-webkit-outer-spin-button, .dt-qty input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    /* ── Pricing breakdown ──────────────────────── */
+    .dt-pricing { border: 1px solid var(--rls-stone); }
+    .dt-pricing__row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.8rem 1.25rem; font-size: 0.875rem; border-bottom: 1px solid var(--rls-light-grey); }
+    .dt-pricing__row:last-child { border-bottom: none; }
+    .dt-pricing__row span:last-child { font-family: 'Raleway', sans-serif; font-weight: 600; white-space: nowrap; }
+    .dt-pricing__foot { padding: 0.75rem 1.25rem; font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); background: var(--rls-light-grey); }
+
+    /* ── Order form ─────────────────────────────── */
+    .dt-order { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start; }
+    .dt-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+    .dt-field { display: flex; flex-direction: column; gap: 0.35rem; }
+    .dt-field--full { grid-column: 1 / -1; }
+    .dt-field label { font-size: 0.78rem; font-weight: 500; color: #333; }
+    .dt-field input, .dt-field select, .dt-field textarea {
+      font-family: 'Roboto', sans-serif; font-size: 0.9rem; padding: 0.65rem 0.8rem;
+      border: 1px solid var(--rls-stone); background: var(--rls-white); color: var(--rls-black); border-radius: 0;
+    }
+    .dt-field textarea { min-height: 84px; resize: vertical; }
+    .dt-field input:focus, .dt-field select:focus, .dt-field textarea:focus { outline: none; border-color: var(--rls-black); }
+    .dt-field.is-invalid input, .dt-field.is-invalid select { border-color: var(--rls-red); }
+    .dt-field__err { font-size: 0.72rem; color: var(--rls-red); display: none; }
+    .dt-field.is-invalid .dt-field__err { display: block; }
+
+    /* ── Summary ────────────────────────────────── */
+    .dt-summary { border: 1px solid var(--rls-stone); position: sticky; top: 6rem; }
+    .dt-summary__head { padding: 1rem 1.25rem; border-bottom: 2px solid var(--rls-black); font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    .dt-summary__lines { padding: 0.5rem 1.25rem; }
+    .dt-summary__line { display: flex; justify-content: space-between; gap: 1rem; padding: 0.55rem 0; font-size: 0.85rem; border-bottom: 1px solid var(--rls-light-grey); }
+    .dt-summary__line:last-child { border-bottom: none; }
+    .dt-summary__line small { display: block; font-size: 0.72rem; color: var(--rls-taupe); font-weight: 300; }
+    .dt-summary__empty { padding: 1.25rem; font-size: 0.85rem; font-weight: 300; color: var(--rls-taupe); text-align: center; }
+    .dt-summary__total { display: flex; justify-content: space-between; align-items: baseline; padding: 1rem 1.25rem; border-top: 1px solid var(--rls-stone); background: var(--rls-light-grey); }
+    .dt-summary__total span:first-child { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+    .dt-summary__total strong { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.35rem; }
+    .dt-summary__pay { padding: 0.9rem 1.25rem 0; font-size: 0.78rem; line-height: 1.55; color: #555; font-weight: 300; }
+    .dt-summary__pay strong { font-weight: 500; color: var(--rls-black); }
+    .dt-summary__foot { padding: 1rem 1.25rem 1.25rem; }
+    .dt-submit {
+      width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: var(--rls-red); color: var(--rls-white); border: none;
+      font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.9rem 1rem; cursor: pointer; transition: background 0.2s;
+    }
+    .dt-submit:hover { background: var(--rls-red-dk); }
+    .dt-submit:disabled { background: var(--rls-stone); cursor: default; }
+    .dt-status { margin-top: 0.75rem; font-size: 0.78rem; line-height: 1.5; color: var(--rls-red); display: none; }
+    .dt-status.is-visible { display: block; }
+
+    /* ── Confirmation ───────────────────────────── */
+    .dt-done { display: none; max-width: 560px; margin: 0 auto; padding: 3rem 0; text-align: center; }
+    .dt-done.is-visible { display: block; }
+    .dt-done__check { width: 56px; height: 56px; border: 2px solid var(--rls-red); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; color: var(--rls-red); }
+    .dt-done__title { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.6rem; margin-bottom: 0.75rem; }
+    .dt-done__body { font-weight: 300; font-size: 0.95rem; line-height: 1.65; color: #444; }
+    .dt-done__body strong { font-weight: 500; color: var(--rls-black); }
+    .dt-done__again { display: inline-block; margin-top: 1.5rem; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rls-red); text-decoration: none; border-bottom: 1px solid var(--rls-red); }
+
+    /* ── Lightbox ───────────────────────────────── */
+    .dt-lightbox { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.92); align-items: center; justify-content: center; padding: 1rem; }
+    .dt-lightbox.is-open { display: flex; }
+    .dt-lightbox img { max-width: min(90vw, 900px); max-height: 85vh; object-fit: contain; display: block; box-shadow: 0 8px 48px rgba(0,0,0,0.6); }
+    .dt-lightbox__close {
+      position: fixed; top: 1.25rem; right: 1.25rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+      color: #fff; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .dt-lightbox__caption { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); font-size: 0.8rem; color: rgba(255,255,255,0.7); letter-spacing: 0.08em; }
+
+    .dt-footer-note { text-align: center; padding: 0 2rem 3rem; font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); }
+    .dt-footer-note a { color: var(--rls-taupe); text-decoration: underline; }
+
+    @media (max-width: 860px) {
+      .dt-order { grid-template-columns: 1fr; }
+      .dt-summary { position: static; }
+    }
+    @media (max-width: 600px) {
+      .dt-grid { grid-template-columns: 1fr; }
+      .dt-form { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+
+  <main>
+    <section class="dt-hero">
+      <button class="rls-logout" onclick="rlsLogout()">
+        <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M5 2H2v10h3M9 10l3-3-3-3M6 7h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Logout
+      </button>
+      <a class="dt-hero__back" href="https://info.royallepagesolutions.com/pages/agent-hub/">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Agent Hub
+      </a>
+      <p class="dt-hero__eyebrow">Royal LePage Solutions®</p>
+      <h1 class="dt-hero__title">2027 <span class="dt-accent">Daytimers</span></h1>
+      <div class="dt-hero__rule"><span></span><span></span></div>
+      <p class="dt-hero__sub">Choose your cover, set your quantity, and place your order. The cost is charged to your office account.</p>
+      <p class="dt-hero__deadline" id="dt-deadline"></p>
+    </section>
+
+    <div class="dt-wrap">
+      <div class="dt-note" id="dt-note">
+        <strong>How it works:</strong> Pick one or more covers below, then complete the order form.
+        Your order is recorded and the total is added to your monthly office account statement.
+        Questions go to <a href="mailto:solutionsdesign@royallepage.ca">solutionsdesign@royallepage.ca</a>.
+      </div>
+    </div>
+
+    <div class="dt-main" id="dt-main">
+
+      <!-- Covers -->
+      <section class="dt-section">
+        <div class="dt-section__header">
+          <h2 class="dt-section__title">Choose a cover</h2>
+          <span class="dt-section__hint">Order more than one style if you like</span>
+        </div>
+        <div class="dt-grid" id="dt-covers"></div>
+      </section>
+
+      <!-- Pricing -->
+      <section class="dt-section" id="dt-pricing-section" hidden>
+        <div class="dt-section__header">
+          <h2 class="dt-section__title">Pricing</h2>
+        </div>
+        <div class="dt-pricing" id="dt-pricing"></div>
+      </section>
+
+      <!-- Order -->
+      <section class="dt-section">
+        <div class="dt-section__header">
+          <h2 class="dt-section__title">Your details</h2>
+        </div>
+        <div class="dt-order">
+          <form class="dt-form" id="dt-form" novalidate>
+            <div class="dt-field">
+              <label for="f-name">Full name</label>
+              <input id="f-name" name="name" type="text" autocomplete="name" required>
+              <span class="dt-field__err">Enter your name.</span>
+            </div>
+            <div class="dt-field">
+              <label for="f-email">Email</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required>
+              <span class="dt-field__err">Enter a valid email so we can confirm your order.</span>
+            </div>
+            <div class="dt-field">
+              <label for="f-office">Office</label>
+              <select id="f-office" name="office" required>
+                <option value="">Select your office</option>
+                <option>South Calgary</option>
+                <option>North Calgary</option>
+                <option>Okotoks</option>
+                <option>Canmore / Banff</option>
+              </select>
+              <span class="dt-field__err">Choose the office to charge.</span>
+            </div>
+            <div class="dt-field">
+              <label for="f-phone">Phone <span style="font-weight:300;color:var(--rls-taupe)">(optional)</span></label>
+              <input id="f-phone" name="phone" type="tel" autocomplete="tel">
+            </div>
+            <div class="dt-field dt-field--full" id="f-imprint-wrap" hidden>
+              <label for="f-imprint">Name for cover imprint <span style="font-weight:300;color:var(--rls-taupe)">(exactly as it should appear)</span></label>
+              <input id="f-imprint" name="imprint" type="text">
+            </div>
+            <div class="dt-field dt-field--full">
+              <label for="f-notes">Notes <span style="font-weight:300;color:var(--rls-taupe)">(optional)</span></label>
+              <textarea id="f-notes" name="notes"></textarea>
+            </div>
+          </form>
+
+          <aside class="dt-summary" aria-live="polite">
+            <div class="dt-summary__head">Order summary</div>
+            <div id="dt-summary-body"><div class="dt-summary__empty">No covers selected yet.</div></div>
+            <div class="dt-summary__total"><span>Total</span><strong id="dt-total">$0.00</strong></div>
+            <p class="dt-summary__pay">Payment: <strong>charged to your office account</strong>. It will appear on your next monthly statement.</p>
+            <div class="dt-summary__foot">
+              <button class="dt-submit" id="dt-submit" type="button" disabled>
+                Place order
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M10 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <p class="dt-status" id="dt-status"></p>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </div>
+
+    <!-- Confirmation -->
+    <div class="dt-wrap">
+      <div class="dt-done" id="dt-done">
+        <div class="dt-done__check"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h2 class="dt-done__title">Order placed</h2>
+        <p class="dt-done__body" id="dt-done-body"></p>
+        <a class="dt-done__again" href="#" id="dt-again">Place another order</a>
+      </div>
+    </div>
+
+    <p class="dt-footer-note">
+      Royal LePage® Solutions is independently owned and operated. Not intended to solicit buyers or sellers currently under contract with a brokerage.
+      View important notices at <a href="https://rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.
+    </p>
+  </main>
+
+  <div class="dt-lightbox" id="dt-lightbox" role="dialog" aria-modal="true" aria-label="Cover preview">
+    <button class="dt-lightbox__close" id="dt-lb-close" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 2l14 14M16 2L2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <img id="dt-lb-img" src="" alt="">
+    <div class="dt-lightbox__caption" id="dt-lb-caption"></div>
+  </div>
+
+  <script>
+  (function () {
+    /* ════════════════════════════════════════════
+       CONFIG — everything Kyle edits lives here
+       ════════════════════════════════════════════ */
+    const CONFIG = {
+      // Apps Script web app URL (Deploy → Manage deployments → New version). Leave '' to test without submitting.
+      scriptUrl: '',
+      // Where cover images live (relative to this page). Filenames: no spaces or special characters.
+      imgBase: '../../../../assets/images/daytimers/',
+      // Order deadline — set to '' to hide.
+      deadline: 'Order by Friday, October 30, 2026',
+      // Show a "name for cover imprint" field on the form.
+      imprint: false,
+      // Max quantity per cover.
+      maxQty: 20,
+      unit: 'each',
+      covers: [
+        { id: 'cover-1', name: 'Cover option 1', desc: 'Short description of the material, colour and finish.', price: 0, image: 'cover-1.jpg' },
+        { id: 'cover-2', name: 'Cover option 2', desc: 'Short description of the material, colour and finish.', price: 0, image: 'cover-2.jpg' },
+        { id: 'cover-3', name: 'Cover option 3', desc: 'Short description of the material, colour and finish.', price: 0, image: 'cover-3.jpg' },
+        { id: 'cover-4', name: 'Cover option 4', desc: 'Short description of the material, colour and finish.', price: 0, image: 'cover-4.jpg' },
+        { id: 'cover-5', name: 'Cover option 5', desc: 'Short description of the material, colour and finish.', price: 0, image: 'cover-5.jpg' },
+        { id: 'cover-6', name: 'Cover option 6', desc: 'Short description of the material, colour and finish.', price: 0, image: 'cover-6.jpg' },
+      ],
+      // Pricing breakdown table. Leave the array empty to hide the section.
+      // Example: { label: 'Daytimer with cover', value: '$00.00' }
+      pricing: [],
+      pricingNote: 'Prices include GST. Charged to your office account.',
+    };
+
+    /* ── State ──────────────────────────────────── */
+    const qty = {};
+    CONFIG.covers.forEach(c => qty[c.id] = 0);
+
+    const $ = id => document.getElementById(id);
+    const money = n => '$' + n.toFixed(2);
+    const esc = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+    /* ── Hero bits ──────────────────────────────── */
+    if (CONFIG.deadline) $('dt-deadline').innerHTML = '<strong>Deadline</strong> &nbsp;' + esc(CONFIG.deadline);
+    else $('dt-deadline').remove();
+    if (CONFIG.imprint) $('f-imprint-wrap').hidden = false;
+
+    /* ── Covers ─────────────────────────────────── */
+    const placeholder = `<div class="dt-placeholder"><svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+      <rect x="6" y="10" width="36" height="28" rx="2" stroke="#D6D1C8" stroke-width="2"/>
+      <circle cx="17" cy="21" r="4" stroke="#D6D1C8" stroke-width="2"/>
+      <path d="M6 34l10-8 8 6 6-8 12 10" stroke="#D6D1C8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
+
+    window.__dtPlaceholder = placeholder;
+    $('dt-covers').innerHTML = CONFIG.covers.map(c => `
+      <div class="dt-card" data-id="${esc(c.id)}">
+        <div class="dt-card__img" data-zoom="${esc(c.image)}" data-name="${esc(c.name)}">
+          ${c.image ? `<img src="${CONFIG.imgBase}${esc(c.image)}" alt="${esc(c.name)}" loading="lazy" onerror="dtImgFallback(this)">` : placeholder}
+        </div>
+        <div class="dt-card__body">
+          <p class="dt-card__name">${esc(c.name)}</p>
+          ${c.desc ? `<p class="dt-card__desc">${esc(c.desc)}</p>` : ''}
+        </div>
+        <div class="dt-card__footer">
+          <div><span class="dt-card__price">${c.price ? money(c.price) : 'Price TBA'}</span>${c.price && CONFIG.unit ? `<span class="dt-card__unit">${esc(CONFIG.unit)}</span>` : ''}</div>
+          <div class="dt-qty">
+            <button type="button" data-step="-1" aria-label="Fewer">−</button>
+            <input type="number" min="0" max="${CONFIG.maxQty}" value="0" aria-label="Quantity for ${esc(c.name)}">
+            <button type="button" data-step="1" aria-label="More">+</button>
+          </div>
+        </div>
+      </div>`).join('');
+
+    document.querySelectorAll('.dt-card').forEach(card => {
+      const id = card.dataset.id;
+      const input = card.querySelector('input');
+      const set = n => {
+        n = Math.max(0, Math.min(CONFIG.maxQty, parseInt(n, 10) || 0));
+        qty[id] = n; input.value = n;
+        card.classList.toggle('is-selected', n > 0);
+        card.querySelector('[data-step="-1"]').disabled = n === 0;
+        card.querySelector('[data-step="1"]').disabled = n >= CONFIG.maxQty;
+        renderSummary();
+      };
+      card.querySelectorAll('[data-step]').forEach(b => b.addEventListener('click', () => set(qty[id] + parseInt(b.dataset.step, 10))));
+      input.addEventListener('input', () => set(input.value));
+      input.addEventListener('blur', () => set(input.value));
+      set(0);
+      card.querySelector('.dt-card__img').addEventListener('click', e => {
+        const img = e.currentTarget.querySelector('img');
+        if (!img) return;
+        $('dt-lb-img').src = img.src; $('dt-lb-img').alt = e.currentTarget.dataset.name;
+        $('dt-lb-caption').textContent = e.currentTarget.dataset.name;
+        $('dt-lightbox').classList.add('is-open'); document.body.style.overflow = 'hidden';
+      });
+    });
+
+    const lbClose = () => { $('dt-lightbox').classList.remove('is-open'); document.body.style.overflow = ''; };
+    $('dt-lb-close').addEventListener('click', lbClose);
+    $('dt-lightbox').addEventListener('click', e => { if (e.target === $('dt-lightbox')) lbClose(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') lbClose(); });
+
+    /* ── Pricing ────────────────────────────────── */
+    if (CONFIG.pricing.length) {
+      $('dt-pricing-section').hidden = false;
+      $('dt-pricing').innerHTML = CONFIG.pricing.map(r => `<div class="dt-pricing__row"><span>${esc(r.label)}</span><span>${esc(r.value)}</span></div>`).join('')
+        + (CONFIG.pricingNote ? `<div class="dt-pricing__foot">${esc(CONFIG.pricingNote)}</div>` : '');
+    }
+
+    /* ── Summary ────────────────────────────────── */
+    function lines() { return CONFIG.covers.filter(c => qty[c.id] > 0).map(c => ({ ...c, qty: qty[c.id], subtotal: qty[c.id] * c.price })); }
+    function total() { return lines().reduce((s, l) => s + l.subtotal, 0); }
+
+    function renderSummary() {
+      const ls = lines();
+      $('dt-summary-body').innerHTML = ls.length
+        ? `<div class="dt-summary__lines">${ls.map(l => `<div class="dt-summary__line"><span>${esc(l.name)}<small>${l.qty} × ${l.price ? money(l.price) : 'TBA'}</small></span><span>${l.price ? money(l.subtotal) : '—'}</span></div>`).join('')}</div>`
+        : '<div class="dt-summary__empty">No covers selected yet.</div>';
+      $('dt-total').textContent = money(total());
+      $('dt-submit').disabled = !ls.length;
+    }
+
+    /* ── Validation ─────────────────────────────── */
+    function validate() {
+      let ok = true;
+      const check = (id, test) => { const wrap = $(id).closest('.dt-field'); const bad = !test($(id).value.trim()); wrap.classList.toggle('is-invalid', bad); if (bad) ok = false; };
+      check('f-name', v => v.length > 1);
+      check('f-email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+      check('f-office', v => !!v);
+      if (CONFIG.imprint) { /* optional — leave blank to skip imprint */ }
+      return ok;
+    }
+    ['f-name','f-email','f-office'].forEach(id => $(id).addEventListener('input', () => $(id).closest('.dt-field').classList.remove('is-invalid')));
+
+    /* ── Submit ─────────────────────────────────── */
+    $('dt-submit').addEventListener('click', async () => {
+      const status = $('dt-status');
+      status.classList.remove('is-visible');
+      if (!lines().length) return;
+      if (!validate()) { status.textContent = 'Complete the highlighted fields to place your order.'; status.classList.add('is-visible'); return; }
+
+      const ls = lines();
+      const payload = {
+        timestamp: new Date().toISOString(),
+        name:    $('f-name').value.trim(),
+        email:   $('f-email').value.trim(),
+        office:  $('f-office').value,
+        phone:   $('f-phone').value.trim(),
+        imprint: CONFIG.imprint ? $('f-imprint').value.trim() : '',
+        notes:   $('f-notes').value.trim(),
+        items:   ls.map(l => l.name + ' × ' + l.qty).join('; '),
+        itemsJson: JSON.stringify(ls.map(l => ({ id: l.id, name: l.name, qty: l.qty, price: l.price, subtotal: l.subtotal }))),
+        totalQty: ls.reduce((s, l) => s + l.qty, 0),
+        total:   total().toFixed(2),
+        payment: 'Office account',
+      };
+
+      const btn = $('dt-submit');
+      btn.disabled = true; btn.textContent = 'Placing order…';
+
+      try {
+        if (CONFIG.scriptUrl) {
+          await fetch(CONFIG.scriptUrl, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(payload) });
+        } else {
+          console.warn('CONFIG.scriptUrl is empty — order not sent:', payload);
+        }
+        $('dt-done-body').innerHTML = `Thanks, <strong>${esc(payload.name.split(' ')[0])}</strong>. Your order for <strong>${payload.totalQty} daytimer${payload.totalQty === 1 ? '' : 's'}</strong>`
+          + (total() ? ` (${money(total())})` : '') + ` has been recorded and will be charged to your ${esc(payload.office)} office account. A confirmation is on its way to ${esc(payload.email)}.`;
+        $('dt-main').style.display = 'none';
+        $('dt-note').style.display = 'none';
+        $('dt-done').classList.add('is-visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        status.textContent = 'The order could not be sent. Check your connection and try again, or email solutionsdesign@royallepage.ca.';
+        status.classList.add('is-visible');
+        btn.disabled = false; btn.innerHTML = 'Place order';
+      }
+    });
+
+    $('dt-again').addEventListener('click', e => { e.preventDefault(); window.location.reload(); });
+  })();
+
+  function dtImgFallback(img) { img.parentNode.innerHTML = window.__dtPlaceholder; }
+  function rlsLogout() {
+    sessionStorage.removeItem('rls_hub_auth');
+    window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/';
+  }
+  </script>
+</body>
+</html>
