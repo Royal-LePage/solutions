@@ -114,7 +114,7 @@
     .dt-qty button:hover { background: var(--rls-light-grey); }
     .dt-qty button:disabled { color: var(--rls-stone); cursor: default; background: var(--rls-white); }
     .dt-qty input {
-      width: 44px; text-align: center; border: none; border-left: 1px solid var(--rls-stone); border-right: 1px solid var(--rls-stone);
+      width: 64px; text-align: center; border: none; border-left: 1px solid var(--rls-stone); border-right: 1px solid var(--rls-stone);
       font-family: 'Roboto', sans-serif; font-size: 0.95rem; font-weight: 500; padding: 0.4rem 0;
       -moz-appearance: textfield;
     }
@@ -269,6 +269,14 @@
 
     <div class="dt-main" id="dt-main">
 
+      <!-- Pricing -->
+      <section class="dt-section" id="dt-pricing-section" hidden>
+        <div class="dt-section__header">
+          <h2 class="dt-section__title">Pricing</h2>
+        </div>
+        <div class="dt-pricing" id="dt-pricing"></div>
+      </section>
+
       <!-- Covers -->
       <section class="dt-section">
         <div class="dt-section__header">
@@ -279,11 +287,11 @@
         <div class="dt-qty-bar" id="dt-qty-bar">
           <div class="dt-qty-bar__text">
             <p class="dt-qty-bar__title" id="dt-qty-bar-title">Select a cover above to set your quantity</p>
-            <p class="dt-qty-bar__hint">In steps of 25</p>
+            <p class="dt-qty-bar__hint">Any quantity — pricing drops at 250, 500 and 1,000</p>
           </div>
           <div class="dt-qty">
             <button type="button" id="dt-qty-minus" aria-label="Fewer" disabled>−</button>
-            <input type="number" id="dt-qty-input" min="0" step="25" value="0" disabled>
+            <input type="number" id="dt-qty-input" min="0" step="1" value="0" disabled>
             <button type="button" id="dt-qty-plus" aria-label="More" disabled>+</button>
           </div>
         </div>
@@ -299,14 +307,6 @@
           <div id="dt-details"></div>
           <div class="dt-interior" id="dt-interior"></div>
         </div>
-      </section>
-
-      <!-- Pricing -->
-      <section class="dt-section" id="dt-pricing-section" hidden>
-        <div class="dt-section__header">
-          <h2 class="dt-section__title">Pricing</h2>
-        </div>
-        <div class="dt-pricing" id="dt-pricing"></div>
       </section>
 
       <!-- Order -->
@@ -410,9 +410,9 @@
       deadline: 'Order by Friday, October 2, 2026 · Ships November 30',
       // Show a "name for cover imprint" field on the form.
       imprint: true,
-      // Quantity rules — one cover per order, ordered in steps of 25; the price tier is set by the quantity.
-      minQty: 25,      // smallest order — one step
-      qtyStep: 25,
+      // Quantity rules — one cover per order, any quantity; the price tier is set by the quantity.
+      minQty: 1,
+      qtyStep: 1,
       maxQty: 10000,
       unit: 'each',
       taxRate: 0.05,   // GST
@@ -513,10 +513,7 @@
         quantity = 0;
       } else {
         n = parseInt(n, 10) || 0;
-        // Never below the minimum; round to the nearest step above it.
-        if (n < CONFIG.minQty) n = CONFIG.minQty;
-        else n = CONFIG.minQty + Math.round((n - CONFIG.minQty) / CONFIG.qtyStep) * CONFIG.qtyStep;
-        quantity = Math.min(CONFIG.maxQty, n);
+        quantity = Math.max(CONFIG.minQty, Math.min(CONFIG.maxQty, n));
       }
       qtyInput.value = quantity;
       qtyInput.disabled = !selected;
