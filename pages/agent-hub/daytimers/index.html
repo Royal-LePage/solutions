@@ -342,7 +342,7 @@
             </div>
             <div id="dt-summary-body"><div class="dt-summary__empty">No covers selected yet.</div></div>
             <div class="dt-summary__total"><span>Total</span><strong id="dt-total">$0.00</strong></div>
-            <p class="dt-summary__pay">Payment: <strong>charged to your office account</strong>. It will appear on your next monthly statement.</p>
+            <p class="dt-summary__pay">Total includes GST. Payment: <strong>charged to your office account</strong>. It will appear on your next monthly statement.</p>
             <div class="dt-summary__foot">
               <button class="dt-submit" id="dt-submit" type="button" disabled>
                 Place order
@@ -398,6 +398,8 @@
       qtyStep: 25,
       maxQty: 10000,
       unit: 'each',
+      taxRate: 0.05,   // GST
+      taxLabel: 'GST (5%)',
       tiers: [
         { min: 100,  max: 249,  price: 3.65 },
         { min: 250,  max: 499,  price: 2.55 },
@@ -415,7 +417,7 @@
         { id: 'design-5', name: 'Design 5 — Classic Foyer',      desc: 'Grand white foyer with spiral stair, marble and navy velvet. Silver-grey tones.',                   price: 0, image: 'design-5.jpg' },
         { id: 'design-6', name: 'Design 6 — Architectural White', desc: 'Clean, minimal white architecture with dramatic light. The most understated of the set.',          price: 0, image: 'design-6.jpg' },
       ],
-      pricingNote: 'Per daytimer, based on your total order quantity. Minimum order 100. Charged to your office account.',
+      pricingNote: 'Per daytimer, based on your order quantity, plus GST. Minimum order 100. Charged to your office account.',
       details: [
         '28-page book-style calendar, 8.5″ × 11″',
         '13 months, each across a 17″ × 11″ spread with a notes column',
@@ -525,7 +527,9 @@
     function totalQty() { return selected ? quantity : 0; }
     function unitPrice() { const t = tierFor(totalQty()); return t ? t.price : 0; }
     function cover() { return CONFIG.covers.find(c => c.id === selected) || null; }
-    function total() { return totalQty() * unitPrice(); }
+    function subtotal() { return totalQty() * unitPrice(); }
+    function tax() { return Math.round(subtotal() * CONFIG.taxRate * 100) / 100; }
+    function total() { return subtotal() + tax(); }
 
     function renderSummary() {
       const c = cover(), n = totalQty(), t = tierFor(n), u = t ? t.price : null;
@@ -535,6 +539,8 @@
         ? `<div class="dt-summary__lines">
              <div class="dt-summary__line"><span>${esc(c.name)}<small>${n ? n.toLocaleString() + ' × ' + money(u || 0) : 'Set a quantity'}</small></span><span>${n ? money(n * (u || 0)) : '—'}</span></div>
              ${t ? `<div class="dt-summary__line dt-summary__tier"><span>Price tier<small>${tierLabel(t)} daytimers</small></span><span>${money(u)} ${esc(CONFIG.unit)}</span></div>` : ''}
+             ${n ? `<div class="dt-summary__line"><span>Subtotal</span><span>${money(subtotal())}</span></div>
+             <div class="dt-summary__line"><span>${esc(CONFIG.taxLabel)}</span><span>${money(tax())}</span></div>` : ''}
            </div>`
         : `<div class="dt-summary__empty">No cover selected yet.<br><small>Choose one cover above. Minimum order ${CONFIG.minQty}.</small></div>`;
       $('dt-total').textContent = money(total());
@@ -576,6 +582,8 @@
         itemsJson: JSON.stringify([{ id: c.id, name: c.name, qty: n, price: u, subtotal: n * u }]),
         unitPrice: u.toFixed(2),
         totalQty: n,
+        subtotal: subtotal().toFixed(2),
+        gst:     tax().toFixed(2),
         total:   total().toFixed(2),
         payment: 'Office account',
       };
@@ -590,7 +598,7 @@
           console.warn('CONFIG.scriptUrl is empty — order not sent:', payload);
         }
         $('dt-done-body').innerHTML = `Thanks, <strong>${esc(payload.name.split(' ')[0])}</strong>. Your order for <strong>${payload.totalQty} daytimer${payload.totalQty === 1 ? '' : 's'}</strong>`
-          + ` (${money(total())})` + ` has been recorded and will be charged to your ${esc(payload.office)} office account. A confirmation is on its way to ${esc(payload.email)}.`;
+          + ` (${money(total())} incl. GST)` + ` has been recorded and will be charged to your ${esc(payload.office)} office account. A confirmation is on its way to ${esc(payload.email)}.`;
         $('dt-main').style.display = 'none';
         $('dt-note').style.display = 'none';
         $('dt-done').classList.add('is-visible');
