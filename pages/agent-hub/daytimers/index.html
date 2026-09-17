@@ -504,7 +504,6 @@
     }
     $('dt-qty-minus').addEventListener('click', () => setQty(quantity - CONFIG.qtyStep));
     $('dt-qty-plus').addEventListener('click', () => setQty(quantity + CONFIG.qtyStep));
-    setQty(CONFIG.minQty);
     qtyInput.addEventListener('change', () => setQty(qtyInput.value));
 
     const lbClose = () => { $('dt-lightbox').classList.remove('is-open'); document.body.style.overflow = ''; };
@@ -513,8 +512,8 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') lbClose(); });
 
     /* ── Pricing ────────────────────────────────── */
-    const tierLabel = t => t.max ? `${t.min.toLocaleString()} – ${t.max.toLocaleString()}` : `${t.min.toLocaleString()}+`;
-    const tierFor = n => CONFIG.tiers.find(t => n >= t.min && (t.max === null || n <= t.max)) || null;
+    function tierLabel(t) { return t.max ? `${t.min.toLocaleString()} – ${t.max.toLocaleString()}` : `${t.min.toLocaleString()}+`; }
+    function tierFor(n) { return CONFIG.tiers.find(t => n >= t.min && (t.max === null || n <= t.max)) || null; }
     $('dt-pricing-section').hidden = false;
     $('dt-pricing').innerHTML = CONFIG.tiers.map(t => `<div class="dt-pricing__row" data-tier="${t.min}"><span>${tierLabel(t)} daytimers</span><span>${money(t.price)} ${esc(CONFIG.unit)}</span></div>`).join('')
       + (CONFIG.pricingNote ? `<div class="dt-pricing__foot">${esc(CONFIG.pricingNote)}</div>` : '');
@@ -551,7 +550,7 @@
       $('dt-total').textContent = money(total());
       $('dt-submit').disabled = !c || n < CONFIG.minQty;
     }
-    renderSummary();
+    setQty(CONFIG.minQty);
 
     /* ── Validation ─────────────────────────────── */
     function validate() {
