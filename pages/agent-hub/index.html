@@ -526,9 +526,14 @@
 
     const CORRECT = simpleHash('Solutions'); // stored at runtime only
 
+    // Optional return path (?next=/pages/agent-hub/daytimers/) — only hub pages are allowed.
+    const nextParam = new URLSearchParams(window.location.search).get('next') || '';
+    const NEXT = /^\/pages\/agent-hub\/[a-z0-9\-\/]*$/i.test(nextParam) ? nextParam : '';
+
     function unlock() {
       gate.style.display = 'none';
       sessionStorage.setItem(PASS_KEY, CORRECT);
+      if (NEXT) window.location.replace(NEXT);
     }
 
     function tryPassword() {
@@ -557,6 +562,7 @@
     // Already authenticated this session?
     if (sessionStorage.getItem(PASS_KEY) === CORRECT) {
       gate.style.display = 'none';
+      if (NEXT) window.location.replace(NEXT);
     }
 
     btn.addEventListener('click', tryPassword);
