@@ -17,7 +17,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2027 Daytimers — Agent Hub — Royal LePage Solutions</title>
-  <meta name="description" content="Order your 2027 Royal LePage Solutions daytimer. Charged to your office account.">
+  <meta name="description" content="Order your 2027 Royal LePage Solutions daytimer.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -247,14 +247,14 @@
       <p class="dt-hero__eyebrow">Royal LePage Solutions®</p>
       <h1 class="dt-hero__title">2027 <span class="dt-accent">Daytimers</span></h1>
       <div class="dt-hero__rule"><span></span><span></span></div>
-      <p class="dt-hero__sub">Choose your cover, set your quantity, and place your order. The cost is charged to your office account.</p>
+      <p class="dt-hero__sub">Choose your cover, set your quantity, and place your order. Eliana will follow up with a proof of your cover before it goes to print.</p>
       <p class="dt-hero__deadline" id="dt-deadline"></p>
     </section>
 
     <div class="dt-wrap">
       <div class="dt-note" id="dt-note">
         <strong>How it works:</strong> Choose one cover, set your quantity (minimum 100), then complete the order form. Pricing is per daytimer and drops at 250, 500 and 1,000. Every daytimer is personalized with your headshot and contact details — if anything on file has changed, mention it in the notes.
-        Your order is recorded and the total is added to your monthly office account statement.
+        Once your order is in, Eliana will send you a proof of your personalized cover to approve before printing.
         Questions go to <a href="mailto:solutionsdesign@royallepage.ca">solutionsdesign@royallepage.ca</a>.
       </div>
     </div>
@@ -344,7 +344,7 @@
             </div>
             <div id="dt-summary-body"><div class="dt-summary__empty">No covers selected yet.</div></div>
             <div class="dt-summary__total"><span>Total</span><strong id="dt-total">$0.00</strong></div>
-            <p class="dt-summary__pay">Total includes GST. Payment: <strong>charged to your office account</strong>. It will appear on your next monthly statement.</p>
+            <p class="dt-summary__pay">Total includes GST. <strong>Eliana will email you a proof</strong> of your cover for approval before it goes to print.</p>
             <div class="dt-summary__foot">
               <button class="dt-submit" id="dt-submit" type="button" disabled>
                 Place order
@@ -403,7 +403,7 @@
       taxRate: 0.05,   // GST
       taxLabel: 'GST (5%)',
       tiers: [
-        { min: 100,  max: 249,  price: 3.65 },
+        { min: 0,    max: 249,  price: 3.65 },
         { min: 250,  max: 499,  price: 2.55 },
         { min: 500,  max: 999,  price: 2.34 },
         { min: 1000, max: 2499, price: 2.10 },
@@ -419,7 +419,7 @@
         { id: 'design-5', name: 'Design 5 — Classic Foyer',      desc: 'Grand white foyer with spiral stair, marble and navy velvet. Silver-grey tones.',                   price: 0, image: 'design-5.jpg' },
         { id: 'design-6', name: 'Design 6 — Architectural White', desc: 'Clean, minimal white architecture with dramatic light. The most understated of the set.',          price: 0, image: 'design-6.jpg' },
       ],
-      pricingNote: 'Per daytimer, based on your order quantity, plus GST. Minimum order 100. Charged to your office account.',
+      pricingNote: 'Per daytimer, based on your order quantity, plus GST. Minimum order 100.',
       details: [
         '28-page book-style calendar, 8.5″ × 11″',
         '13 months, each across a 17″ × 11″ spread with a notes column',
@@ -600,7 +600,7 @@
           console.warn('CONFIG.scriptUrl is empty — order not sent:', payload);
         }
         $('dt-done-body').innerHTML = `Thanks, <strong>${esc(payload.name.split(' ')[0])}</strong>. Your order for <strong>${payload.totalQty} daytimer${payload.totalQty === 1 ? '' : 's'}</strong>`
-          + ` (${money(total())} incl. GST)` + ` has been recorded and will be charged to your ${esc(payload.office)} office account. A confirmation is on its way to ${esc(payload.email)}.`;
+          + ` (${money(total())} incl. GST)` + ` has been received. A confirmation is on its way to ${esc(payload.email)}, and Eliana will follow up with a proof of your cover to approve before it goes to print.`;
         $('dt-main').style.display = 'none';
         $('dt-note').style.display = 'none';
         $('dt-done').classList.add('is-visible');
