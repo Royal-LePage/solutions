@@ -338,7 +338,7 @@
               <label for="dt-qty-input">Quantity</label>
               <div class="dt-qty">
                 <button type="button" id="dt-qty-minus" aria-label="Fewer">−</button>
-                <input type="number" id="dt-qty-input" min="0" step="25" value="0" placeholder="0">
+                <input type="number" id="dt-qty-input" min="100" step="25" value="100">
                 <button type="button" id="dt-qty-plus" aria-label="More">+</button>
               </div>
             </div>
@@ -474,7 +474,6 @@
         card.classList.toggle('is-selected', on);
         card.querySelector('[data-select]').setAttribute('aria-pressed', on);
       });
-      if (selected && quantity === 0) setQty(CONFIG.minQty);
       renderSummary();
     }
 
@@ -493,15 +492,19 @@
     const qtyInput = $('dt-qty-input');
     function setQty(n) {
       n = parseInt(n, 10) || 0;
-      if (n > 0 && n < CONFIG.minQty) n = n < CONFIG.minQty / 2 ? 0 : CONFIG.minQty;
-      quantity = Math.max(0, Math.min(CONFIG.maxQty, n));
+      // Never below the minimum; round to the nearest step above it.
+      if (n < CONFIG.minQty) n = CONFIG.minQty;
+      else n = CONFIG.minQty + Math.round((n - CONFIG.minQty) / CONFIG.qtyStep) * CONFIG.qtyStep;
+      quantity = Math.min(CONFIG.maxQty, n);
       qtyInput.value = quantity;
-      $('dt-qty-minus').disabled = quantity === 0;
+      qtyInput.min = CONFIG.minQty;
+      $('dt-qty-minus').disabled = quantity <= CONFIG.minQty;
       $('dt-qty-plus').disabled = quantity >= CONFIG.maxQty;
       renderSummary();
     }
-    $('dt-qty-minus').addEventListener('click', () => setQty(quantity === CONFIG.minQty ? 0 : quantity - CONFIG.qtyStep));
-    $('dt-qty-plus').addEventListener('click', () => setQty(quantity === 0 ? CONFIG.minQty : quantity + CONFIG.qtyStep));
+    $('dt-qty-minus').addEventListener('click', () => setQty(quantity - CONFIG.qtyStep));
+    $('dt-qty-plus').addEventListener('click', () => setQty(quantity + CONFIG.qtyStep));
+    setQty(CONFIG.minQty);
     qtyInput.addEventListener('change', () => setQty(qtyInput.value));
 
     const lbClose = () => { $('dt-lightbox').classList.remove('is-open'); document.body.style.overflow = ''; };
