@@ -93,8 +93,8 @@
     /* ── Cover grid ─────────────────────────────── */
     .dt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
     .dt-card { background: var(--rls-white); border: 1px solid var(--rls-stone); display: flex; flex-direction: column; transition: border-color 0.2s, box-shadow 0.2s; }
-    .dt-card.is-selected { border-color: var(--rls-black); box-shadow: 0 0 0 1px var(--rls-black); }
-    .dt-card__img { position: relative; background: var(--rls-light-grey); aspect-ratio: 4/3; overflow: hidden; cursor: zoom-in; }
+    .dt-card.is-selected { border-color: var(--rls-red); box-shadow: 0 0 0 1px var(--rls-red); }
+    .dt-card__img { position: relative; background: var(--rls-light-grey); aspect-ratio: 1656/1080; overflow: hidden; cursor: zoom-in; }
     .dt-card__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .dt-card__img .dt-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--rls-stone); }
     .dt-card__body { padding: 1.1rem 1.25rem 0.5rem; flex: 1; }
@@ -120,12 +120,41 @@
     }
     .dt-qty input::-webkit-outer-spin-button, .dt-qty input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
+    .dt-card__select {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: var(--rls-white); color: var(--rls-black); border: 1px solid var(--rls-black);
+      font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.5rem 0.9rem; cursor: pointer; transition: background 0.2s, color 0.2s; white-space: nowrap;
+    }
+    .dt-card__select:hover { background: var(--rls-light-grey); }
+    .dt-card__select-on { display: none; align-items: center; gap: 0.35rem; }
+    .dt-card.is-selected .dt-card__select { background: var(--rls-red); color: var(--rls-white); border-color: var(--rls-red); }
+    .dt-card.is-selected .dt-card__select-off { display: none; }
+    .dt-card.is-selected .dt-card__select-on { display: inline-flex; }
+    .dt-summary__qty { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.25rem; border-bottom: 1px solid var(--rls-light-grey); }
+    .dt-summary__qty label { font-size: 0.78rem; font-weight: 500; }
+
     /* ── Pricing breakdown ──────────────────────── */
     .dt-pricing { border: 1px solid var(--rls-stone); }
     .dt-pricing__row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.8rem 1.25rem; font-size: 0.875rem; border-bottom: 1px solid var(--rls-light-grey); }
     .dt-pricing__row:last-child { border-bottom: none; }
     .dt-pricing__row span:last-child { font-family: 'Raleway', sans-serif; font-weight: 600; white-space: nowrap; }
     .dt-pricing__foot { padding: 0.75rem 1.25rem; font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); background: var(--rls-light-grey); }
+
+    .dt-pricing__row.is-active { background: var(--rls-light-grey); }
+    .dt-pricing__row.is-active span:first-child::before { content: '●'; color: var(--rls-red); font-size: 0.6rem; margin-right: 0.5rem; vertical-align: middle; }
+    .dt-summary__tier { font-weight: 500; }
+    .dt-summary__empty small { font-size: 0.75rem; }
+
+    /* ── Inside pages ───────────────────────────── */
+    .dt-inside { display: grid; grid-template-columns: 1fr 1.4fr; gap: 2rem; align-items: start; }
+    .dt-details__list { list-style: none; }
+    .dt-details__list li { position: relative; padding: 0.55rem 0 0.55rem 1.25rem; font-size: 0.875rem; font-weight: 300; line-height: 1.5; color: #333; border-bottom: 1px solid var(--rls-light-grey); }
+    .dt-details__list li::before { content: ''; position: absolute; left: 0; top: 1.05rem; width: 8px; height: 2px; background: var(--rls-red); }
+    .dt-interior { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .dt-interior__img { border: 1px solid var(--rls-stone); background: var(--rls-light-grey); cursor: zoom-in; overflow: hidden; }
+    .dt-interior__img img { width: 100%; height: auto; display: block; }
+    @media (max-width: 760px) { .dt-inside { grid-template-columns: 1fr; } }
 
     /* ── Order form ─────────────────────────────── */
     .dt-order { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start; }
@@ -222,7 +251,7 @@
 
     <div class="dt-wrap">
       <div class="dt-note" id="dt-note">
-        <strong>How it works:</strong> Pick one or more covers below, then complete the order form.
+        <strong>How it works:</strong> Choose one cover, set your quantity (minimum 100), then complete the order form. Pricing is per daytimer and drops at 250, 500 and 1,000. Every daytimer is personalized with your headshot and contact details — if anything on file has changed, mention it in the notes.
         Your order is recorded and the total is added to your monthly office account statement.
         Questions go to <a href="mailto:solutionsdesign@royallepage.ca">solutionsdesign@royallepage.ca</a>.
       </div>
@@ -234,9 +263,21 @@
       <section class="dt-section">
         <div class="dt-section__header">
           <h2 class="dt-section__title">Choose a cover</h2>
-          <span class="dt-section__hint">Order more than one style if you like</span>
+          <span class="dt-section__hint">Choose one. Full wrap shown — back, spine and front.</span>
         </div>
         <div class="dt-grid" id="dt-covers"></div>
+      </section>
+
+      <!-- Inside -->
+      <section class="dt-section">
+        <div class="dt-section__header">
+          <h2 class="dt-section__title">What's inside</h2>
+          <span class="dt-section__hint">Interior pages are the same across all covers</span>
+        </div>
+        <div class="dt-inside">
+          <div id="dt-details"></div>
+          <div class="dt-interior" id="dt-interior"></div>
+        </div>
       </section>
 
       <!-- Pricing -->
@@ -280,7 +321,7 @@
               <input id="f-phone" name="phone" type="tel" autocomplete="tel">
             </div>
             <div class="dt-field dt-field--full" id="f-imprint-wrap" hidden>
-              <label for="f-imprint">Name for cover imprint <span style="font-weight:300;color:var(--rls-taupe)">(exactly as it should appear)</span></label>
+              <label for="f-imprint">Name as it should appear on the cover</label>
               <input id="f-imprint" name="imprint" type="text">
             </div>
             <div class="dt-field dt-field--full">
@@ -291,6 +332,14 @@
 
           <aside class="dt-summary" aria-live="polite">
             <div class="dt-summary__head">Order summary</div>
+            <div class="dt-summary__qty">
+              <label for="dt-qty-input">Quantity</label>
+              <div class="dt-qty">
+                <button type="button" id="dt-qty-minus" aria-label="Fewer">−</button>
+                <input type="number" id="dt-qty-input" min="0" step="25" value="0" placeholder="0">
+                <button type="button" id="dt-qty-plus" aria-label="More">+</button>
+              </div>
+            </div>
             <div id="dt-summary-body"><div class="dt-summary__empty">No covers selected yet.</div></div>
             <div class="dt-summary__total"><span>Total</span><strong id="dt-total">$0.00</strong></div>
             <p class="dt-summary__pay">Payment: <strong>charged to your office account</strong>. It will appear on your next monthly statement.</p>
@@ -339,31 +388,46 @@
       // Apps Script web app URL (Deploy → Manage deployments → New version). Leave '' to test without submitting.
       scriptUrl: 'https://script.google.com/macros/s/AKfycbyKhzSQA5gdKlwkC1Oq_3FB81r2J6lY3Ji07CJGg_o-WR3JOAw1vap0w-AECXcOpFrP/exec',
       // Where cover images live (relative to this page). Filenames: no spaces or special characters.
-      imgBase: '../../../../assets/images/daytimers/',
+      imgBase: 'images/',
       // Order deadline — set to '' to hide.
-      deadline: 'Order by Friday, October 30, 2026',
+      deadline: 'Order by Friday, October 2, 2026 · Ships November 30',
       // Show a "name for cover imprint" field on the form.
-      imprint: false,
-      // Max quantity per cover.
-      maxQty: 20,
+      imprint: true,
+      // Quantity rules — one cover per order; the price tier is set by the quantity.
+      minQty: 100,
+      qtyStep: 25,
+      maxQty: 10000,
       unit: 'each',
-      covers: [
-        { id: 'cover-1', name: 'Cover option 1', desc: 'Short description of the material, colour and finish.', price: 0, image: 'cover-1.jpg' },
-        { id: 'cover-2', name: 'Cover option 2', desc: 'Short description of the material, colour and finish.', price: 0, image: 'cover-2.jpg' },
-        { id: 'cover-3', name: 'Cover option 3', desc: 'Short description of the material, colour and finish.', price: 0, image: 'cover-3.jpg' },
-        { id: 'cover-4', name: 'Cover option 4', desc: 'Short description of the material, colour and finish.', price: 0, image: 'cover-4.jpg' },
-        { id: 'cover-5', name: 'Cover option 5', desc: 'Short description of the material, colour and finish.', price: 0, image: 'cover-5.jpg' },
-        { id: 'cover-6', name: 'Cover option 6', desc: 'Short description of the material, colour and finish.', price: 0, image: 'cover-6.jpg' },
+      tiers: [
+        { min: 100,  max: 249,  price: 3.65 },
+        { min: 250,  max: 499,  price: 2.55 },
+        { min: 500,  max: 999,  price: 2.34 },
+        { min: 1000, max: 2499, price: 2.10 },
+        { min: 2500, max: 4999, price: 1.69 },
+        { min: 5000, max: 7499, price: 1.63 },
+        { min: 7500, max: null, price: 1.47 },
       ],
-      // Pricing breakdown table. Leave the array empty to hide the section.
-      // Example: { label: 'Daytimer with cover', value: '$00.00' }
-      pricing: [],
-      pricingNote: 'Prices include GST. Charged to your office account.',
+      covers: [
+        { id: 'design-1', name: 'Design 1 — City Sunset',        desc: 'Calgary skyline at golden hour through floor-to-ceiling glass. Black spine and back panel.',           price: 0, image: 'design-1.jpg' },
+        { id: 'design-2', name: 'Design 2 — Mountain Retreat',   desc: 'Rockies, river and pine from a lodge living room. Black spine and back panel.',                     price: 0, image: 'design-2.jpg' },
+        { id: 'design-3', name: 'Design 3 — Modern Light',       desc: 'Bright, airy interior with a curved staircase and mountain view. Warm neutral palette.',            price: 0, image: 'design-3.jpg' },
+        { id: 'design-4', name: 'Design 4 — Evening Glow',       desc: 'Moody dark interior with fireplace, mountain sunset and rich burgundy accents.',                     price: 0, image: 'design-4.jpg' },
+        { id: 'design-5', name: 'Design 5 — Classic Foyer',      desc: 'Grand white foyer with spiral stair, marble and navy velvet. Silver-grey tones.',                   price: 0, image: 'design-5.jpg' },
+        { id: 'design-6', name: 'Design 6 — Architectural White', desc: 'Clean, minimal white architecture with dramatic light. The most understated of the set.',          price: 0, image: 'design-6.jpg' },
+      ],
+      pricingNote: 'Per daytimer, based on your total order quantity. Minimum order 100. Charged to your office account.',
+      details: [
+        '28-page book-style calendar, 8.5″ × 11″',
+        '13 months, each across a 17″ × 11″ spread with a notes column',
+        'Full-colour glossy card-stock cover with your photo and contact details',
+        'Interior pages feature Canadian landscapes and landmarks',
+      ],
+      interior: ['interior-1.jpg', 'interior-2.jpg'],
     };
 
     /* ── State ──────────────────────────────────── */
-    const qty = {};
-    CONFIG.covers.forEach(c => qty[c.id] = 0);
+    let selected = null;   // cover id
+    let quantity = 0;
 
     const $ = id => document.getElementById(id);
     const money = n => '$' + n.toFixed(2);
@@ -391,30 +455,27 @@
           ${c.desc ? `<p class="dt-card__desc">${esc(c.desc)}</p>` : ''}
         </div>
         <div class="dt-card__footer">
-          <div><span class="dt-card__price">${c.price ? money(c.price) : 'Price TBA'}</span>${c.price && CONFIG.unit ? `<span class="dt-card__unit">${esc(CONFIG.unit)}</span>` : ''}</div>
-          <div class="dt-qty">
-            <button type="button" data-step="-1" aria-label="Fewer">−</button>
-            <input type="number" min="0" max="${CONFIG.maxQty}" value="0" aria-label="Quantity for ${esc(c.name)}">
-            <button type="button" data-step="1" aria-label="More">+</button>
-          </div>
+          <div><span class="dt-card__price" data-tier-price>—</span><span class="dt-card__unit">${esc(CONFIG.unit)}</span></div>
+          <button type="button" class="dt-card__select" data-select aria-pressed="false">
+            <span class="dt-card__select-off">Select this cover</span>
+            <span class="dt-card__select-on"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Selected</span>
+          </button>
         </div>
       </div>`).join('');
 
+    function selectCover(id) {
+      selected = (selected === id) ? null : id;
+      document.querySelectorAll('.dt-card').forEach(card => {
+        const on = card.dataset.id === selected;
+        card.classList.toggle('is-selected', on);
+        card.querySelector('[data-select]').setAttribute('aria-pressed', on);
+      });
+      if (selected && quantity === 0) setQty(CONFIG.minQty);
+      renderSummary();
+    }
+
     document.querySelectorAll('.dt-card').forEach(card => {
-      const id = card.dataset.id;
-      const input = card.querySelector('input');
-      const set = n => {
-        n = Math.max(0, Math.min(CONFIG.maxQty, parseInt(n, 10) || 0));
-        qty[id] = n; input.value = n;
-        card.classList.toggle('is-selected', n > 0);
-        card.querySelector('[data-step="-1"]').disabled = n === 0;
-        card.querySelector('[data-step="1"]').disabled = n >= CONFIG.maxQty;
-        renderSummary();
-      };
-      card.querySelectorAll('[data-step]').forEach(b => b.addEventListener('click', () => set(qty[id] + parseInt(b.dataset.step, 10))));
-      input.addEventListener('input', () => set(input.value));
-      input.addEventListener('blur', () => set(input.value));
-      set(0);
+      card.querySelector('[data-select]').addEventListener('click', () => selectCover(card.dataset.id));
       card.querySelector('.dt-card__img').addEventListener('click', e => {
         const img = e.currentTarget.querySelector('img');
         if (!img) return;
@@ -424,30 +485,62 @@
       });
     });
 
+    /* ── Quantity ───────────────────────────────── */
+    const qtyInput = $('dt-qty-input');
+    function setQty(n) {
+      n = parseInt(n, 10) || 0;
+      if (n > 0 && n < CONFIG.minQty) n = n < CONFIG.minQty / 2 ? 0 : CONFIG.minQty;
+      quantity = Math.max(0, Math.min(CONFIG.maxQty, n));
+      qtyInput.value = quantity;
+      $('dt-qty-minus').disabled = quantity === 0;
+      $('dt-qty-plus').disabled = quantity >= CONFIG.maxQty;
+      renderSummary();
+    }
+    $('dt-qty-minus').addEventListener('click', () => setQty(quantity === CONFIG.minQty ? 0 : quantity - CONFIG.qtyStep));
+    $('dt-qty-plus').addEventListener('click', () => setQty(quantity === 0 ? CONFIG.minQty : quantity + CONFIG.qtyStep));
+    qtyInput.addEventListener('change', () => setQty(qtyInput.value));
+
     const lbClose = () => { $('dt-lightbox').classList.remove('is-open'); document.body.style.overflow = ''; };
     $('dt-lb-close').addEventListener('click', lbClose);
     $('dt-lightbox').addEventListener('click', e => { if (e.target === $('dt-lightbox')) lbClose(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') lbClose(); });
 
     /* ── Pricing ────────────────────────────────── */
-    if (CONFIG.pricing.length) {
-      $('dt-pricing-section').hidden = false;
-      $('dt-pricing').innerHTML = CONFIG.pricing.map(r => `<div class="dt-pricing__row"><span>${esc(r.label)}</span><span>${esc(r.value)}</span></div>`).join('')
-        + (CONFIG.pricingNote ? `<div class="dt-pricing__foot">${esc(CONFIG.pricingNote)}</div>` : '');
-    }
+    const tierLabel = t => t.max ? `${t.min.toLocaleString()} – ${t.max.toLocaleString()}` : `${t.min.toLocaleString()}+`;
+    const tierFor = n => CONFIG.tiers.find(t => n >= t.min && (t.max === null || n <= t.max)) || null;
+    $('dt-pricing-section').hidden = false;
+    $('dt-pricing').innerHTML = CONFIG.tiers.map(t => `<div class="dt-pricing__row" data-tier="${t.min}"><span>${tierLabel(t)} daytimers</span><span>${money(t.price)} ${esc(CONFIG.unit)}</span></div>`).join('')
+      + (CONFIG.pricingNote ? `<div class="dt-pricing__foot">${esc(CONFIG.pricingNote)}</div>` : '');
+
+    /* ── Inside pages ───────────────────────────── */
+    $('dt-details').innerHTML = `<ul class="dt-details__list">${CONFIG.details.map(d => `<li>${esc(d)}</li>`).join('')}</ul>`;
+    $('dt-interior').innerHTML = CONFIG.interior.map(f => `<div class="dt-interior__img"><img src="${CONFIG.imgBase}${esc(f)}" alt="Interior page" loading="lazy" onerror="dtImgFallback(this)"></div>`).join('');
+    document.querySelectorAll('.dt-interior__img').forEach(el => el.addEventListener('click', () => {
+      const img = el.querySelector('img'); if (!img) return;
+      $('dt-lb-img').src = img.src; $('dt-lb-img').alt = 'Interior page'; $('dt-lb-caption').textContent = 'Interior spread';
+      $('dt-lightbox').classList.add('is-open'); document.body.style.overflow = 'hidden';
+    }));
 
     /* ── Summary ────────────────────────────────── */
-    function lines() { return CONFIG.covers.filter(c => qty[c.id] > 0).map(c => ({ ...c, qty: qty[c.id], subtotal: qty[c.id] * c.price })); }
-    function total() { return lines().reduce((s, l) => s + l.subtotal, 0); }
+    function totalQty() { return selected ? quantity : 0; }
+    function unitPrice() { const t = tierFor(totalQty()); return t ? t.price : 0; }
+    function cover() { return CONFIG.covers.find(c => c.id === selected) || null; }
+    function total() { return totalQty() * unitPrice(); }
 
     function renderSummary() {
-      const ls = lines();
-      $('dt-summary-body').innerHTML = ls.length
-        ? `<div class="dt-summary__lines">${ls.map(l => `<div class="dt-summary__line"><span>${esc(l.name)}<small>${l.qty} × ${l.price ? money(l.price) : 'TBA'}</small></span><span>${l.price ? money(l.subtotal) : '—'}</span></div>`).join('')}</div>`
-        : '<div class="dt-summary__empty">No covers selected yet.</div>';
+      const c = cover(), n = totalQty(), t = tierFor(n), u = t ? t.price : null;
+      document.querySelectorAll('[data-tier-price]').forEach(el => el.textContent = u ? money(u) : 'From ' + money(CONFIG.tiers[CONFIG.tiers.length - 1].price));
+      document.querySelectorAll('[data-tier]').forEach(el => el.classList.toggle('is-active', !!t && parseInt(el.dataset.tier, 10) === t.min));
+      $('dt-summary-body').innerHTML = c
+        ? `<div class="dt-summary__lines">
+             <div class="dt-summary__line"><span>${esc(c.name)}<small>${n ? n.toLocaleString() + ' × ' + money(u || 0) : 'Set a quantity'}</small></span><span>${n ? money(n * (u || 0)) : '—'}</span></div>
+             ${t ? `<div class="dt-summary__line dt-summary__tier"><span>Price tier<small>${tierLabel(t)} daytimers</small></span><span>${money(u)} ${esc(CONFIG.unit)}</span></div>` : ''}
+           </div>`
+        : `<div class="dt-summary__empty">No cover selected yet.<br><small>Choose one cover above. Minimum order ${CONFIG.minQty}.</small></div>`;
       $('dt-total').textContent = money(total());
-      $('dt-submit').disabled = !ls.length;
+      $('dt-submit').disabled = !c || n < CONFIG.minQty;
     }
+    renderSummary();
 
     /* ── Validation ─────────────────────────────── */
     function validate() {
@@ -465,10 +558,10 @@
     $('dt-submit').addEventListener('click', async () => {
       const status = $('dt-status');
       status.classList.remove('is-visible');
-      if (!lines().length) return;
+      if (!cover() || totalQty() < CONFIG.minQty) return;
       if (!validate()) { status.textContent = 'Complete the highlighted fields to place your order.'; status.classList.add('is-visible'); return; }
 
-      const ls = lines();
+      const c = cover(), n = totalQty(), u = unitPrice();
       const payload = {
         timestamp: new Date().toISOString(),
         name:    $('f-name').value.trim(),
@@ -477,9 +570,11 @@
         phone:   $('f-phone').value.trim(),
         imprint: CONFIG.imprint ? $('f-imprint').value.trim() : '',
         notes:   $('f-notes').value.trim(),
-        items:   ls.map(l => l.name + ' × ' + l.qty).join('; '),
-        itemsJson: JSON.stringify(ls.map(l => ({ id: l.id, name: l.name, qty: l.qty, price: l.price, subtotal: l.subtotal }))),
-        totalQty: ls.reduce((s, l) => s + l.qty, 0),
+        cover:   c.name,
+        items:   c.name + ' × ' + n,
+        itemsJson: JSON.stringify([{ id: c.id, name: c.name, qty: n, price: u, subtotal: n * u }]),
+        unitPrice: u.toFixed(2),
+        totalQty: n,
         total:   total().toFixed(2),
         payment: 'Office account',
       };
@@ -494,7 +589,7 @@
           console.warn('CONFIG.scriptUrl is empty — order not sent:', payload);
         }
         $('dt-done-body').innerHTML = `Thanks, <strong>${esc(payload.name.split(' ')[0])}</strong>. Your order for <strong>${payload.totalQty} daytimer${payload.totalQty === 1 ? '' : 's'}</strong>`
-          + (total() ? ` (${money(total())})` : '') + ` has been recorded and will be charged to your ${esc(payload.office)} office account. A confirmation is on its way to ${esc(payload.email)}.`;
+          + ` (${money(total())})` + ` has been recorded and will be charged to your ${esc(payload.office)} office account. A confirmation is on its way to ${esc(payload.email)}.`;
         $('dt-main').style.display = 'none';
         $('dt-note').style.display = 'none';
         $('dt-done').classList.add('is-visible');
