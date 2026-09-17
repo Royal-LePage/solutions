@@ -10,7 +10,7 @@
       return Math.abs(hash).toString(16);
     }
     if (sessionStorage.getItem(PASS_KEY) !== simpleHash('Solutions')) {
-      window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/';
+      window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/?next=' + encodeURIComponent(window.location.pathname);
     }
   })();
   </script>
