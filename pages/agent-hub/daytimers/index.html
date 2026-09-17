@@ -132,7 +132,15 @@
     .dt-card.is-selected .dt-card__select-off { display: none; }
     .dt-card.is-selected .dt-card__select-on { display: inline-flex; }
     .dt-summary__qty { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.25rem; border-bottom: 1px solid var(--rls-light-grey); }
-    .dt-summary__qty label { font-size: 0.78rem; font-weight: 500; }
+    .dt-summary__qty span { font-size: 0.78rem; font-weight: 500; }
+    .dt-summary__qty strong { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.05rem; }
+    .dt-qty-bar { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; margin-top: 1.5rem; padding: 1.1rem 1.5rem; border: 1px solid var(--rls-stone); background: var(--rls-light-grey); transition: border-color 0.2s, background 0.2s; }
+    .dt-qty-bar.is-active { background: var(--rls-white); border-color: var(--rls-black); }
+    .dt-qty-bar__title { font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.95rem; }
+    .dt-qty-bar__hint { font-size: 0.78rem; font-weight: 300; color: var(--rls-taupe); margin-top: 0.2rem; }
+    .dt-qty-bar .dt-qty { background: var(--rls-white); }
+    .dt-qty-bar .dt-qty input:disabled { color: var(--rls-taupe); background: var(--rls-white); }
+    @media (max-width: 600px) { .dt-qty-bar { flex-direction: column; align-items: flex-start; } }
 
     /* ── Pricing breakdown ──────────────────────── */
     .dt-pricing { border: 1px solid var(--rls-stone); }
@@ -253,7 +261,7 @@
 
     <div class="dt-wrap">
       <div class="dt-note" id="dt-note">
-        <strong>How it works:</strong> Choose one cover, set your quantity (minimum 100), then complete the order form. Pricing is per daytimer and drops at 250, 500 and 1,000. Every daytimer is personalized with your headshot and contact details — if anything on file has changed, mention it in the notes.
+        <strong>How it works:</strong> Choose one cover, set your quantity, then complete the order form. Pricing is per daytimer and drops at 250, 500 and 1,000. Every daytimer is personalized with your headshot and contact details — if anything on file has changed, mention it in the notes.
         Once your order is in, Eliana will send you a proof of your personalized cover to approve before printing.
         Questions go to <a href="mailto:solutionsdesign@royallepage.ca">solutionsdesign@royallepage.ca</a>.
       </div>
@@ -268,6 +276,17 @@
           <span class="dt-section__hint">Choose one. Full wrap shown — back, spine and front.</span>
         </div>
         <div class="dt-grid" id="dt-covers"></div>
+        <div class="dt-qty-bar" id="dt-qty-bar">
+          <div class="dt-qty-bar__text">
+            <p class="dt-qty-bar__title" id="dt-qty-bar-title">Select a cover above to set your quantity</p>
+            <p class="dt-qty-bar__hint">In steps of 25</p>
+          </div>
+          <div class="dt-qty">
+            <button type="button" id="dt-qty-minus" aria-label="Fewer" disabled>−</button>
+            <input type="number" id="dt-qty-input" min="0" step="25" value="0" disabled>
+            <button type="button" id="dt-qty-plus" aria-label="More" disabled>+</button>
+          </div>
+        </div>
       </section>
 
       <!-- Inside -->
@@ -335,12 +354,8 @@
           <aside class="dt-summary" aria-live="polite">
             <div class="dt-summary__head">Order summary</div>
             <div class="dt-summary__qty">
-              <label for="dt-qty-input">Quantity</label>
-              <div class="dt-qty">
-                <button type="button" id="dt-qty-minus" aria-label="Fewer">−</button>
-                <input type="number" id="dt-qty-input" min="100" step="25" value="100">
-                <button type="button" id="dt-qty-plus" aria-label="More">+</button>
-              </div>
+              <span>Quantity</span>
+              <strong id="dt-summary-qty">0</strong>
             </div>
             <div id="dt-summary-body"><div class="dt-summary__empty">No covers selected yet.</div></div>
             <div class="dt-summary__total"><span>Total</span><strong id="dt-total">$0.00</strong></div>
@@ -395,8 +410,8 @@
       deadline: 'Order by Friday, October 2, 2026 · Ships November 30',
       // Show a "name for cover imprint" field on the form.
       imprint: true,
-      // Quantity rules — one cover per order; the price tier is set by the quantity.
-      minQty: 100,
+      // Quantity rules — one cover per order, ordered in steps of 25; the price tier is set by the quantity.
+      minQty: 25,      // smallest order — one step
       qtyStep: 25,
       maxQty: 10000,
       unit: 'each',
@@ -419,7 +434,7 @@
         { id: 'design-5', name: 'Design 5 — Classic Foyer',      desc: 'Grand white foyer with spiral stair, marble and navy velvet. Silver-grey tones.',                   price: 0, image: 'design-5.jpg' },
         { id: 'design-6', name: 'Design 6 — Architectural White', desc: 'Clean, minimal white architecture with dramatic light. The most understated of the set.',          price: 0, image: 'design-6.jpg' },
       ],
-      pricingNote: 'Per daytimer, based on your order quantity, plus GST. Minimum order 100.',
+      pricingNote: 'Per daytimer, based on your order quantity, plus GST.',
       details: [
         '28-page book-style calendar, 8.5″ × 11″',
         '13 months, each across a 17″ × 11″ spread with a notes column',
@@ -474,7 +489,10 @@
         card.classList.toggle('is-selected', on);
         card.querySelector('[data-select]').setAttribute('aria-pressed', on);
       });
-      renderSummary();
+      const c = cover();
+      $('dt-qty-bar').classList.toggle('is-active', !!c);
+      $('dt-qty-bar-title').textContent = c ? 'How many ' + c.name.replace(/^Design \d+ — /, '') + ' daytimers?' : 'Select a cover above to set your quantity';
+      setQty(c ? CONFIG.minQty : 0);
     }
 
     document.querySelectorAll('.dt-card').forEach(card => {
@@ -491,15 +509,19 @@
     /* ── Quantity ───────────────────────────────── */
     const qtyInput = $('dt-qty-input');
     function setQty(n) {
-      n = parseInt(n, 10) || 0;
-      // Never below the minimum; round to the nearest step above it.
-      if (n < CONFIG.minQty) n = CONFIG.minQty;
-      else n = CONFIG.minQty + Math.round((n - CONFIG.minQty) / CONFIG.qtyStep) * CONFIG.qtyStep;
-      quantity = Math.min(CONFIG.maxQty, n);
+      if (!selected) {
+        quantity = 0;
+      } else {
+        n = parseInt(n, 10) || 0;
+        // Never below the minimum; round to the nearest step above it.
+        if (n < CONFIG.minQty) n = CONFIG.minQty;
+        else n = CONFIG.minQty + Math.round((n - CONFIG.minQty) / CONFIG.qtyStep) * CONFIG.qtyStep;
+        quantity = Math.min(CONFIG.maxQty, n);
+      }
       qtyInput.value = quantity;
-      qtyInput.min = CONFIG.minQty;
-      $('dt-qty-minus').disabled = quantity <= CONFIG.minQty;
-      $('dt-qty-plus').disabled = quantity >= CONFIG.maxQty;
+      qtyInput.disabled = !selected;
+      $('dt-qty-minus').disabled = !selected || quantity <= CONFIG.minQty;
+      $('dt-qty-plus').disabled = !selected || quantity >= CONFIG.maxQty;
       renderSummary();
     }
     $('dt-qty-minus').addEventListener('click', () => setQty(quantity - CONFIG.qtyStep));
@@ -546,11 +568,12 @@
              ${n ? `<div class="dt-summary__line"><span>Subtotal</span><span>${money(subtotal())}</span></div>
              <div class="dt-summary__line"><span>${esc(CONFIG.taxLabel)}</span><span>${money(tax())}</span></div>` : ''}
            </div>`
-        : `<div class="dt-summary__empty">No cover selected yet.<br><small>Choose one cover above. Minimum order ${CONFIG.minQty}.</small></div>`;
+        : `<div class="dt-summary__empty">No cover selected yet.<br><small>Choose one cover above.</small></div>`;
+      $('dt-summary-qty').textContent = n.toLocaleString();
       $('dt-total').textContent = money(total());
       $('dt-submit').disabled = !c || n < CONFIG.minQty;
     }
-    setQty(CONFIG.minQty);
+    setQty(0);
 
     /* ── Validation ─────────────────────────────── */
     function validate() {
