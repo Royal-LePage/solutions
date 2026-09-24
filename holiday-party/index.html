@@ -243,7 +243,7 @@
         <div class="price">$10 <span>for 10 tickets</span></div>
       </div>
     </div>
-    <p class="deadline">Super and Mega packs bundle all three at a discount and are only available until <b>November 27</b>. After that, tickets are sold individually at the party.</p>
+    <p class="deadline">The WestJet Pack — 3 raffle tickets for $125 — is only available until <b>November 27</b>. After that, tickets are sold individually at the party.</p>
   </div>
 </section>
 
@@ -292,7 +292,7 @@
           <fieldset>
             <legend id="ticketLegend">Tickets</legend>
             <div class="missyou" id="missyou"><b>We're going to miss you.</b><p>Tickets are for attendees, but would you like to make a donation to the Royal LePage Shelter Foundation in your place? Any amount helps.</p></div>
-            <p class="hint" id="ticketHint">Dinner is covered. Cork pulls, raffle tickets, and 50/50 are optional and proceeds support the Royal LePage Shelter Foundation. Super and Mega packs are presale only — after the RSVP deadline, tickets are sold individually at the party.</p>
+            <p class="hint" id="ticketHint">Dinner is covered. Cork pulls, raffle tickets, and 50/50 are optional and proceeds support the Royal LePage Shelter Foundation. The WestJet Pack is presale only — after the RSVP deadline, tickets are sold individually at the party.</p>
             <div id="tickets"></div>
           </fieldset>
 
@@ -381,8 +381,7 @@ const CONFIG = {
     { id:"cork",    name:"Cork pull",                       desc:"Pull a cork, win the bottle. Every cork is a winner, a few are very good ones.",              price:25, max:20, uses:{cork:1} },
     { id:"westjet", name:"WestJet Anywhere raffle",         desc:"One ticket toward a pair of WestJet flights, anywhere they fly. Drawn live at the party.",     price:50, max:20 },
     { id:"fifty",   name:"50/50 tickets",                   desc:"10 tickets per pack. Half the pot goes home with one winner.",                               price:10, max:20, unitLabel:"10 tickets" },
-    { id:"super",   name:"Super pack",                      desc:"1 cork pull, 1 WestJet raffle ticket, and 20 tickets for the 50/50 draw.",                  price:80,  max:5, presaleOnly:true, uses:{cork:1} },
-    { id:"mega",    name:"Mega pack",                       desc:"3 WestJet raffle tickets, 2 cork pulls, and 40 tickets for the 50/50 draw.",                price:200, max:2, presaleOnly:true, uses:{cork:2} },
+    { id:"westjet3", name:"The WestJet Pack",               desc:"3 WestJet raffle tickets for $125. Three chances at the grand prize, $25 off.",              price:125, max:5, presaleOnly:true },
   ],
   // Limited inventory. The page asks the sheet how many are sold and caps the cart. Remove a key to make it unlimited.
   inventory: { cork: 50 },
@@ -460,7 +459,7 @@ function applyAttendance(){
   $("#ticketHint").hidden = a === "0";
   $("#ticketHint").textContent = a === "0"
     ? ""
-    : "Dinner is covered. Cork pulls, raffle tickets, and 50/50 are optional and proceeds support the Royal LePage Shelter Foundation. Super and Mega packs are presale only — after the RSVP deadline, tickets are sold individually at the party.";
+    : "Dinner is covered. Cork pulls, raffle tickets, and 50/50 are optional and proceeds support the Royal LePage Shelter Foundation. The WestJet Pack is presale only — after the RSVP deadline, tickets are sold individually at the party.";
   $("#submitBtn").textContent = a === "0" ? "Submit" : "Submit RSVP";
   updateSummary();
 }
