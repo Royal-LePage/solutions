@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Royal LePage Solutions Holiday Party 2026</title>
+<title>Royal LePage Solutions Snowfall Gala 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
@@ -190,7 +190,7 @@
   <img class="logo" src="christmas-logo.png" alt="Royal LePage Solutions">
   <div class="invite-body">
     <p class="kicker">You are invited to the</p>
-    <h1>Holiday<span>Party</span></h1>
+    <h1>Snowfall<span>Gala</span></h1>
 
     <div class="details">
       <div><b id="d-date">Friday, December 11</b><small>2026</small></div>
@@ -254,7 +254,7 @@
     <p class="sub">A few moments from previous years. Add yours this December.</p>
   </div>
   <div class="carousel">
-    <div class="track" id="track" aria-label="Photos from past holiday parties"></div>
+    <div class="track" id="track" aria-label="Photos from past galas"></div>
     <button class="nav prev" type="button" id="prev" aria-label="Previous photo">‹</button>
     <button class="nav next" type="button" id="next" aria-label="Next photo">›</button>
   </div>
@@ -338,7 +338,7 @@ const CONFIG = {
   // Google Apps Script web app URL (see holiday-party-orders.gs)
   endpoint: "https://script.google.com/macros/s/AKfycbwjEm6Cttmlc2WKmGODaX-0YY6jXbXbKDkbKMVloSvTKFTPJbkACle6QbTwGDTCdSg26g/exec",
   etransferEmail: "accounting@royallepagesolutions.com",
-  etransferMemo: "Holiday Party – your name",
+  etransferMemo: "Snowfall Gala – your name",
   // Presale cutoff. Packs marked presaleOnly disappear after this moment; individual tickets stay available.
   presaleEnds: "2026-11-27T23:59:59-07:00",
   // Optional hero background. Leave "" for the solid black hero.
@@ -357,7 +357,7 @@ const CONFIG = {
     { src:"photos/party-07.jpg", caption:"2025 — Pick a cork, take home the bottle" },
     { src:"photos/party-08.jpg", caption:"2024 — Cheers" },
     { src:"photos/party-09.jpg", caption:"2024 — By the tree" },
-    { src:"photos/party-10.jpg", caption:"2024 — Holiday party" },
+    { src:"photos/party-10.jpg", caption:"2024 — Good company" },
     { src:"photos/party-11.jpg", caption:"2025 — Suited up" },
     { src:"photos/party-12.jpg", caption:"2024 — Cocktail hour" },
     { src:"photos/party-13.jpg", caption:"2025 — Dinner" },
@@ -557,7 +557,7 @@ if(CONFIG.heroImage){
 (function(){
   const track = $("#track"), dots = $("#dots");
   if(!CONFIG.photos || !CONFIG.photos.length){ document.querySelector(".gallery").style.display = "none"; return; }
-  track.innerHTML = CONFIG.photos.map((p,i) => `<figure class="slide"><img src="${p.src}" alt="${p.caption||"Holiday party photo"}" loading="lazy">${p.caption ? `<figcaption>${p.caption}</figcaption>` : ""}</figure>`).join("");
+  track.innerHTML = CONFIG.photos.map((p,i) => `<figure class="slide"><img src="${p.src}" alt="${p.caption||"Gala photo"}" loading="lazy">${p.caption ? `<figcaption>${p.caption}</figcaption>` : ""}</figure>`).join("");
   dots.innerHTML = CONFIG.photos.map((_,i) => `<button type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("");
   const slides = [...track.children];
   let cur = 0;
