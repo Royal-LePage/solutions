@@ -80,7 +80,7 @@
   .gallery .wrap{padding:0 24px}
   .gallery .sub{color:#B8B4AE}
   .carousel{position:relative;margin-top:36px}
-  .track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:0 calc(50% - min(39vw,260px)) 8px;scrollbar-width:none}
+  .track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:0 0 8px;scrollbar-width:none}
   .slide:not(.active){opacity:.55;transition:opacity .3s}
   .slide.active{opacity:1}
   .track::-webkit-scrollbar{display:none}
@@ -547,19 +547,28 @@ if(CONFIG.heroImage){
 (function(){
   const track = $("#track"), dots = $("#dots");
   if(!CONFIG.photos || !CONFIG.photos.length){ document.querySelector(".gallery").style.display = "none"; return; }
-  track.innerHTML = CONFIG.photos.map((p,i) => `<figure class="slide"><img src="${p.src}" alt="Gala photo" loading="lazy">${p.caption ? `<figcaption>${p.caption}</figcaption>` : ""}</figure>`).join("");
+  const N = CONFIG.photos.length, C = 2;  // clone 2 slides at each end so there's always a photo beside the current one
+  const slideHTML = p => `<figure class="slide"><img src="${p.src}" alt="Gala photo" loading="lazy">${p.caption ? `<figcaption>${p.caption}</figcaption>` : ""}</figure>`;
+  const seq = [...CONFIG.photos.slice(-C), ...CONFIG.photos, ...CONFIG.photos.slice(0, C)];
+  track.innerHTML = seq.map(slideHTML).join("");
   dots.innerHTML = CONFIG.photos.map((_,i) => `<button type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("");
   const slides = [...track.children];
-  let cur = 0;
+  const real = i => ((i - C) % N + N) % N;           // slide index → photo index
+  let cur = C, busy = false;
   const target = sl => sl.offsetLeft - (track.clientWidth - sl.offsetWidth) / 2;
   const nearest = () => { let best = 0, bd = Infinity; slides.forEach((sl,i) => { const d = Math.abs(target(sl) - track.scrollLeft); if(d < bd){ bd = d; best = i; } }); return best; };
-  const setDots = () => { [...dots.children].forEach((d,i) => d.setAttribute("aria-current", i === cur)); slides.forEach((sl,i) => sl.classList.toggle("active", i === cur)); };
-  const go = i => { cur = (i + slides.length) % slides.length; track.scrollTo({left: target(slides[cur]), behavior:"smooth"}); setDots(); };
+  const paint = () => { const r = real(cur); [...dots.children].forEach((d,i) => d.setAttribute("aria-current", i === r)); slides.forEach((sl,i) => sl.classList.toggle("active", real(i) === r && i === cur)); };
+  const jump = i => { track.style.scrollBehavior = "auto"; track.scrollLeft = target(slides[i]); track.style.scrollBehavior = ""; cur = i; paint(); };
+  const go = i => { if(busy) return; busy = true; cur = i; track.scrollTo({left: target(slides[cur]), behavior:"smooth"}); paint(); };
   $("#prev").onclick = () => go(cur - 1);
   $("#next").onclick = () => go(cur + 1);
-  dots.onclick = e => { const b = e.target.closest("button[data-i]"); if(b) go(Number(b.dataset.i)); };
-  let st; track.addEventListener("scroll", () => { clearTimeout(st); st = setTimeout(() => { cur = nearest(); setDots(); }, 80); }, {passive:true});
-  setDots();
+  dots.onclick = e => { const b = e.target.closest("button[data-i]"); if(b) go(Number(b.dataset.i) + C); };
+  let st; track.addEventListener("scroll", () => { clearTimeout(st); st = setTimeout(() => {
+    cur = nearest(); busy = false;
+    if(cur < C) jump(cur + N); else if(cur >= N + C) jump(cur - N); else paint();
+  }, 90); }, {passive:true});
+  requestAnimationFrame(() => jump(C));
+  addEventListener("resize", () => jump(cur));
 })();
 </script>
 </body>
