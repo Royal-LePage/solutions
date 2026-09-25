@@ -383,10 +383,10 @@ const CONFIG = {
     { src:"photos/party-19.jpg" },
   ],
   tickets: [
-    { id:"cork",    name:"Cork pull",                       desc:"Pull a cork, win the bottle. Every cork is a winner, a few are very good ones.",              price:25, max:20, uses:{cork:1} },
-    { id:"westjet", name:"WestJet Anywhere raffle",         desc:"One ticket toward a pair of WestJet flights, anywhere they fly. Drawn live at the party.",     price:50, max:20 },
-    { id:"fifty",   name:"50/50 tickets",                   desc:"10 tickets per pack. Half the pot goes home with one winner.",                               price:10, max:20, unitLabel:"10 tickets" },
-    { id:"westjet3", name:"The WestJet Pack",               desc:"3 WestJet raffle tickets for $125. Three chances at the grand prize, $25 off.",              price:125, max:5, presaleOnly:true },
+    { id:"cork",    name:"Cork pull",                       desc:"Pull a cork, win the bottle. Every cork is a winner, a few are very good ones.",              price:25, uses:{cork:1} },
+    { id:"westjet", name:"WestJet Anywhere raffle",         desc:"One ticket toward a pair of WestJet flights, anywhere they fly. Drawn live at the party.",     price:50 },
+    { id:"fifty",   name:"50/50 tickets",                   desc:"10 tickets per pack. Half the pot goes home with one winner.",                               price:10, unitLabel:"10 tickets" },
+    { id:"westjet3", name:"The WestJet Pack",               desc:"3 WestJet raffle tickets for $125. Three chances at the grand prize, $25 off.",              price:125, presaleOnly:true },
   ],
   // Limited inventory. The page asks the sheet how many are sold and caps the cart. Remove a key to make it unlimited.
   inventory: { cork: 50 },
@@ -423,7 +423,9 @@ function render(){
   $("#tickets").addEventListener("click", e => {
     const b = e.target.closest("button[data-id]"); if(!b) return;
     const t = CONFIG.tickets.find(x => x.id === b.dataset.id);
-    qty[t.id] = Math.min(t.max, Math.max(0, qty[t.id] + Number(b.dataset.d)));
+    const next = Math.max(0, qty[t.id] + Number(b.dataset.d));
+    if(next > qty[t.id] && t.uses){ for(const k in t.uses){ if(inCart(k) + t.uses[k] > remaining(k)){ flashStock(k); return; } } }
+    qty[t.id] = next;
     $("#q-"+t.id).value = qty[t.id];
     updateSummary();
   });
