@@ -309,7 +309,7 @@
           <legend>Payment</legend>
           <div class="pay">
             <label><input type="radio" name="payment" value="etransfer" checked>
-              <span><b>E-Transfer</b><small>Send your total to the address shown after you submit. Auto-deposit is on, no security question needed.</small></span></label>
+              <span><b>E-Transfer</b><small>Jessica will be in touch to collect your e-transfer.</small></span></label>
             <label><input type="radio" name="payment" value="office">
               <span><b>Charge my office account</b><small>The total is added to your next brokerage statement. Agents only.</small></span></label>
           </div>
@@ -511,8 +511,8 @@ $("#orderForm").addEventListener("submit", async e => {
 function showConfirm(p){
   const first = p.name.split(" ")[0], et = $("#etBox");
   if(p.payment === "etransfer" && p.total > 0){
-    $("#confirmMsg").textContent = `Thanks ${first}. Send your e-transfer using the details below, and your tickets will be at the door for pickup when you arrive.`;
-    et.innerHTML = `Send <b>${fmt(p.total)}</b> to <b>${CONFIG.etransferEmail}</b><br>Memo: <b>${CONFIG.etransferMemo.replace("your name", p.name)}</b>`; et.style.display = "block";
+    $("#confirmMsg").textContent = `Thanks ${first}. Jessica will be in touch to collect your e-transfer of ${fmt(p.total)}, and your tickets will be at the door for pickup when you arrive.`;
+    et.style.display = "none";
   } else if(p.payment === "office" && p.total > 0){
     $("#confirmMsg").textContent = `Thanks ${first}. ${fmt(p.total)} will be charged to your office account, and your tickets will be at the door for pickup when you arrive.`; et.style.display = "none";
   } else {
