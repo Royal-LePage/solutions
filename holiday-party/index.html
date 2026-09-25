@@ -348,25 +348,25 @@ const CONFIG = {
   snowDensity: 90,     // number of flakes on desktop (halved on phones)   // 0 = photo fully visible, 1 = black. 0.55–0.7 keeps headline readable.
   // Past party photos — upload to the GitHub repo and list them here (any number).
   photos: [
-    { src:"photos/party-01.jpg", caption:"2024 — Good company" },
-    { src:"photos/party-02.jpg", caption:"2024 — Cheers" },
-    { src:"photos/party-03.jpg", caption:"2024 — Cocktail hour" },
-    { src:"photos/party-04.jpg", caption:"2024 — Catching up" },
-    { src:"photos/party-05.jpg", caption:"2024 — Old friends" },
-    { src:"photos/party-06.jpg", caption:"2024 — Holiday spirit" },
-    { src:"photos/party-07.jpg", caption:"2025 — Raffle table, open for business" },
-    { src:"photos/party-08.jpg", caption:"2025 — Catching up" },
-    { src:"photos/party-09.jpg", caption:"2025 — Cheers" },
-    { src:"photos/party-10.jpg", caption:"2025 — Good company" },
-    { src:"photos/party-11.jpg", caption:"2025 — Dinner" },
-    { src:"photos/party-12.jpg", caption:"2025 — Cocktail hour" },
-    { src:"photos/party-13.jpg", caption:"2025 — Our MC, fully committed" },
-    { src:"photos/party-14.jpg", caption:"2025 — The team" },
-    { src:"photos/party-15.jpg", caption:"2025 — Dinner" },
-    { src:"photos/party-16.jpg", caption:"2025 — By the tree" },
-    { src:"photos/party-17.jpg", caption:"2025 — Winner" },
-    { src:"photos/party-18.jpg", caption:"2025 — Good company" },
-    { src:"photos/party-19.jpg", caption:"2025 — Suited up" },
+    { src:"photos/party-01.jpg" },
+    { src:"photos/party-02.jpg" },
+    { src:"photos/party-03.jpg" },
+    { src:"photos/party-04.jpg" },
+    { src:"photos/party-05.jpg" },
+    { src:"photos/party-06.jpg" },
+    { src:"photos/party-07.jpg" },
+    { src:"photos/party-08.jpg" },
+    { src:"photos/party-09.jpg" },
+    { src:"photos/party-10.jpg" },
+    { src:"photos/party-11.jpg" },
+    { src:"photos/party-12.jpg" },
+    { src:"photos/party-13.jpg" },
+    { src:"photos/party-14.jpg" },
+    { src:"photos/party-15.jpg" },
+    { src:"photos/party-16.jpg" },
+    { src:"photos/party-17.jpg" },
+    { src:"photos/party-18.jpg" },
+    { src:"photos/party-19.jpg" },
   ],
   tickets: [
     { id:"cork",    name:"Cork pull",                       desc:"Pull a cork, win the bottle. Every cork is a winner, a few are very good ones.",              price:25, max:20, uses:{cork:1} },
@@ -547,7 +547,7 @@ if(CONFIG.heroImage){
 (function(){
   const track = $("#track"), dots = $("#dots");
   if(!CONFIG.photos || !CONFIG.photos.length){ document.querySelector(".gallery").style.display = "none"; return; }
-  track.innerHTML = CONFIG.photos.map((p,i) => `<figure class="slide"><img src="${p.src}" alt="${p.caption||"Gala photo"}" loading="lazy">${p.caption ? `<figcaption>${p.caption}</figcaption>` : ""}</figure>`).join("");
+  track.innerHTML = CONFIG.photos.map((p,i) => `<figure class="slide"><img src="${p.src}" alt="Gala photo" loading="lazy">${p.caption ? `<figcaption>${p.caption}</figcaption>` : ""}</figure>`).join("");
   dots.innerHTML = CONFIG.photos.map((_,i) => `<button type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("");
   const slides = [...track.children];
   let cur = 0;
