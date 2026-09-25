@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Royal LePage Solutions Snowfall Gala 2026</title>
+<title>Royal LePage Solutions Winter Gala 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
@@ -199,7 +199,7 @@
   <img class="logo" src="christmas-logo.png" alt="Royal LePage Solutions">
   <div class="invite-body">
     <p class="kicker">You are invited to the</p>
-    <h1>Snowfall<span>Gala</span></h1>
+    <h1>Winter<span>Gala</span></h1>
 
     <div class="details">
       <div><b id="d-date">Friday, December 11</b><small>2026</small></div>
@@ -352,7 +352,7 @@ const CONFIG = {
   // Google Apps Script web app URL (see holiday-party-orders.gs)
   endpoint: "https://script.google.com/macros/s/AKfycbxvHQcpR9vnrCGK2BrRntc7T_1pZTxya_6XXyNRpAQMdWyUwjv4Bnic1DwCw5yUwNS6yA/exec",
   etransferEmail: "accounting@royallepagesolutions.com",
-  etransferMemo: "Snowfall Gala – your name",
+  etransferMemo: "Winter Gala – your name",
   // Presale cutoff. Packs marked presaleOnly disappear after this moment; individual tickets stay available.
   presaleEnds: "2026-11-27T23:59:59-07:00",
   // Optional hero background. Leave "" for the solid black hero.
@@ -385,8 +385,8 @@ const CONFIG = {
   tickets: [
     { id:"cork",    name:"Cork pull",                       desc:"Pull a cork, win the bottle. Every cork is a winner, a few are very good ones.",              price:25, uses:{cork:1} },
     { id:"westjet", name:"WestJet Anywhere raffle",         desc:"One ticket toward a pair of WestJet flights, anywhere they fly. Drawn live at the party.",     price:50 },
+    { id:"westjet3", name:"The WestJet Pack",               desc:"3 WestJet raffle tickets for $125. Three chances at the grand prize — $25 savings.",              price:125, presaleOnly:true },
     { id:"fifty",   name:"50/50 tickets",                   desc:"10 tickets per pack. Half the pot goes home with one winner.",                               price:10, unitLabel:"10 tickets" },
-    { id:"westjet3", name:"The WestJet Pack",               desc:"3 WestJet raffle tickets for $125. Three chances at the grand prize, $25 off.",              price:125, presaleOnly:true },
   ],
   // Limited inventory. The page asks the sheet how many are sold and caps the cart. Remove a key to make it unlimited.
   inventory: { cork: 50 },
