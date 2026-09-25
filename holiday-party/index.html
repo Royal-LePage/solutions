@@ -309,7 +309,7 @@
           <legend>Payment</legend>
           <div class="pay">
             <label><input type="radio" name="payment" value="etransfer" checked>
-              <span><b>E-Transfer</b><small>Jessica will be in touch to collect your e-transfer.</small></span></label>
+              <span><b>E-Transfer</b><small>Details are shown after you submit. Jessica will follow up if she hasn't seen it come through.</small></span></label>
             <label><input type="radio" name="payment" value="office">
               <span><b>Charge my office account</b><small>The total is added to your next brokerage statement. Agents only.</small></span></label>
           </div>
@@ -351,7 +351,8 @@
 const CONFIG = {
   // Google Apps Script web app URL (see holiday-party-orders.gs)
   endpoint: "https://script.google.com/macros/s/AKfycbxvHQcpR9vnrCGK2BrRntc7T_1pZTxya_6XXyNRpAQMdWyUwjv4Bnic1DwCw5yUwNS6yA/exec",
-  etransferEmail: "accounting@royallepagesolutions.com",
+  etransferEmail: "rlpstransfer@royallepage.ca",
+  etransferPassword: "Midpark",
   etransferMemo: "Winter Gala – your name",
   // Presale cutoff. Packs marked presaleOnly disappear after this moment; individual tickets stay available.
   presaleEnds: "2026-11-27T23:59:59-07:00",
@@ -511,8 +512,8 @@ $("#orderForm").addEventListener("submit", async e => {
 function showConfirm(p){
   const first = p.name.split(" ")[0], et = $("#etBox");
   if(p.payment === "etransfer" && p.total > 0){
-    $("#confirmMsg").textContent = `Thanks ${first}. Jessica will be in touch to collect your e-transfer of ${fmt(p.total)}, and your tickets will be at the door for pickup when you arrive.`;
-    et.style.display = "none";
+    $("#confirmMsg").textContent = `Thanks ${first}. Please send your e-transfer using the details below. Your tickets will be at the door for pickup when you arrive, and Jessica will follow up if she hasn't seen it come through.`;
+    et.innerHTML = `Send <b>${fmt(p.total)}</b> to <b>${CONFIG.etransferEmail}</b><br>Security answer: <b>${CONFIG.etransferPassword}</b><br>Memo: <b>${CONFIG.etransferMemo.replace("your name", p.name)}</b>`; et.style.display = "block";
   } else if(p.payment === "office" && p.total > 0){
     $("#confirmMsg").textContent = `Thanks ${first}. ${fmt(p.total)} will be charged to your office account, and your tickets will be at the door for pickup when you arrive.`; et.style.display = "none";
   } else {
