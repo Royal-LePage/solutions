@@ -191,6 +191,7 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
 .bar{width:70%;background:var(--bp-black);border-radius:3px 3px 0 0;min-height:2px;transition:height .25s;position:relative}
 .bar.pk{background:var(--bp-red)}
 .bar b{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:13px;font-weight:800;color:var(--bp-black)}
+.netbox{border:1px solid var(--bp-warm-grey);background:var(--bp-light-grey);border-radius:4px;padding:9px 11px;font:800 15px var(--bp-sans);min-height:40px}
 .mnet{font-size:11.5px;font-weight:700;color:var(--bp-dark-grey);white-space:nowrap}
 .mnet.cap{color:#fff;background:var(--bp-red);border-radius:3px;padding:0 4px}
 .mo .ml{font-size:12px;font-weight:700;color:var(--bp-dark-grey)}
@@ -397,7 +398,7 @@ function DEFAULT(){
   meta:{year:nextYearDefault()},
   vision:{name:'',ten:'',five:'',one:'',northStar:'',goal1:'',goal2:'',goal3:'',mission:'',values:'',why:'',commitment:'',andId:''},
   last:{listings:'',buyers:'',avgPrice:'',gci:''},
-  goals:{method:'gci',gciGoal:200000,netGoal:120000,tax:30,split:20,avgPrice:650000,commModel:'tier',t1:3.5,t2:1.5,flat:2.5,listShare:50,listings:10,buyers:10,cap:'',dealFee:'',feeMode:'all',capDate:'',capPaid:''},
+  goals:{method:'gci',gciGoal:200000,netGoal:120000,tax:30,split:20,avgPrice:650000,commModel:'tier',t1:3.5,t2:1.5,flat:2.5,listShare:50,buyShare:50,listings:10,buyers:10,cap:'',dealFee:'',feeMode:'all',capDate:'',capPaid:''},
   season:{w:SEASON_W.slice()},
   kpi:{lApptSign:60,lSignClose:85,bConsSign:60,bSignClose:75,convPerAppt:25,convPerHour:5,weeksOff:4,daysPerWeek:5,refPerClose:3,contactsPerRef:20},
   sources:SOURCES.map(nm=>({name:nm,last:'',goal:'',how:''})),
@@ -493,9 +494,9 @@ const SECTIONS=[
   <h3>How do you want to set your goal?</h3>
   <div class="seg" id="method-seg"><button data-m="gci" type="button">GCI goal</button><button data-m="income" type="button">Take-home income</button><button data-m="units" type="button">Number of deals</button></div>
   <div class="row c4" style="margin-top:16px" id="m-set">
-   <div id="m-gci" style="display:contents">${F('GCI goal','goals.gciGoal',{type:'money',hint:'before split, cap & expenses'})}</div>
+   <div id="m-gci" style="display:contents">${F('GCI goal','goals.gciGoal',{type:'money',hint:'before split, cap & expenses'})}<div class="f"><span>Net goal <small>after split, cap, fees & expenses</small></span><div class="netbox" data-o="netGoalBox">–</div></div></div>
    <div id="m-income" style="display:contents">${F('Take-home income goal','goals.netGoal',{type:'money',hint:'after tax'})}</div>
-   ${F('Listing share of sides','goals.listShare',{type:'pct'})}
+   ${F('Sellers you want to work with','goals.listShare',{type:'pct',hint:'% of your deals'})}${F('Buyers you want to work with','goals.buyShare',{type:'pct',hint:'% of your deals'})}
    <div class="f" id="m-budget"><span>&nbsp;</span><button class="btn btn-line" id="use-budget" type="button">Use my budget</button></div></div>
   <p id="gci-note" style="margin:-4px 0 0;font-size:13px;color:var(--bp-dark-grey)"></p>
   <div class="row c4" style="margin-top:16px" id="m-units">${F('Listing sides goal','goals.listings',{type:'num'})}${F('Buyer sides goal','goals.buyers',{type:'num'})}</div>
@@ -707,6 +708,10 @@ function onField(el){
  else if(el.type==='number'&&v!==''){ v=parseFloat(v); if(!isFinite(v)) v=''; }
  setP(el.dataset.k,v);
  if(el.dataset.k==='goals.commModel') toggleVis();
+ if((el.dataset.k==='goals.listShare'||el.dataset.k==='goals.buyShare')&&v!==''){
+  const x=Math.min(Math.max(v,0),100), other=el.dataset.k==='goals.listShare'?'goals.buyShare':'goals.listShare';
+  setP(other,Math.round((100-x)*10)/10); document.querySelectorAll(`[data-k="${other}"]`).forEach(o=>{ if(o!==el) o.value=getP(other); });
+ }
  recompute(); queueSave();
 }
 document.addEventListener('input',e=>onField(e.target));
@@ -791,7 +796,27 @@ function engine(sides,gciSide,splitPct){
   }
   monthNet.push(mn);
  });
- return {months,split,fees,net,caps,monthNet,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:ci.hasDate&&ci.annM>0?ci.annM:-1};
+ return {months,monthG:months.map(u=>u*gciSide),split,fees,net,caps,monthNet,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:ci.hasDate&&ci.annM>0?ci.annM:-1};
+}
+/* Dollar-based version used when the agent types a GCI goal: the goal is spread
+   across the months exactly (no rounding to whole deals), the split is charged on
+   those dollars until the cap, and deal fees are charged per (fractional) side. */
+function engineG(gciTotal,gciSide,splitPct,sidesWhole){
+ const ci=capInfo(), w=S.season.w.map(x=>Math.max(n(x),0)), tw=w.reduce((a,b)=>a+b,0)||1;
+ const monthG=w.map(x=>gciTotal*x/tw);
+ let paid=ci.hasDate&&ci.annM===0?0:ci.paid0, capped=ci.cap>0&&paid>=ci.cap, split=0, fees=0, net=0, cumG=0; const caps=[], monthNet=[];
+ monthG.forEach((gm,m)=>{
+  if(m>0&&ci.hasDate&&m===ci.annM){ paid=0; capped=false; }
+  let sp=gm*splitPct, pre=1;
+  if(ci.cap>0){
+   if(capped){ sp=0; pre=0; }
+   else{ const room=ci.cap-paid; if(sp>0&&sp>=room-0.005){ pre=room/sp; sp=room; paid=ci.cap; capped=true; caps.push({m,side:Math.max(1,Math.ceil((cumG+gm*pre)/gciSide-1e-9))}); } else paid+=sp; }
+  }
+  const mSides=gciSide>0?gm/gciSide:0;
+  const fee=ci.fee>0?ci.fee*mSides*(ci.feeAfter?(ci.cap>0?1-pre:0):1):0;
+  split+=sp; fees+=fee; const nt=gm-sp-fee; net+=nt; monthNet.push(nt); cumG+=gm;
+ });
+ return {months:distribute(sidesWhole,S.season.w),monthG,split,fees,net,caps,monthNet,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:ci.hasDate&&ci.annM>0?ci.annM:-1};
 }
 function calc(){
  const g=S.goals, k=S.kpi;
@@ -804,11 +829,12 @@ function calc(){
  const persAnnual=sumObj(S.pers)*12;
  const rrsp=n(S.save.rrsp), post=n(S.save.postTax), debtRed=n(S.save.debt);
  const needs=persAnnual+post+debtRed;
- let L,B,sides,E;
+ let L,B,sides,E,gciTot=null,sidesExact=null;
  if(g.method==='units'){ L=Math.max(0,Math.round(n(g.listings))); B=Math.max(0,Math.round(n(g.buyers))); sides=L+B; E=engine(sides,gciSide,split); }
  else if(g.method==='gci'){
-  sides=gciSide>0?Math.max(Math.ceil(n(g.gciGoal)/gciSide-1e-9),0):0; if(sides>1000) sides=1000;
-  L=Math.round(sides*Math.min(Math.max(n(g.listShare),0),100)/100); B=sides-L; E=engine(sides,gciSide,split);
+  gciTot=Math.max(n(g.gciGoal),0); sidesExact=gciSide>0?gciTot/gciSide:0;
+  sides=Math.min(Math.ceil(sidesExact-1e-9),1000);
+  L=Math.round(sides*Math.min(Math.max(n(g.listShare),0),100)/100); B=sides-L; E=engineG(gciTot,gciSide,split,sides);
  }
  else{
   const netCommNeeded=n(g.netGoal)/(1-t)+rrsp+bizAnnual;
@@ -819,8 +845,9 @@ function calc(){
   }
   L=Math.round(sides*Math.min(Math.max(n(g.listShare),0),100)/100); B=sides-L;
  }
- const netSide=sides?E.net/sides:gciSide*(1-split)-(ci.feeAfter?0:ci.fee);
- const gci=sides*gciSide, volume=sides*price, netComm=E.net;
+ if(gciTot===null){ gciTot=sides*gciSide; sidesExact=sides; }
+ const netSide=sidesExact>0?E.net/sidesExact:gciSide*(1-split)-(ci.feeAfter?0:ci.fee);
+ const gci=gciTot, volume=sidesExact*price, netComm=E.net;
  const profit=netComm-bizAnnual;
  const taxAmt=Math.max(profit-rrsp,0)*t;
  const takeHome=profit-rrsp-taxAmt;
@@ -838,7 +865,7 @@ function calc(){
  const qs=[0,1,2,3].map(q=>months[q*3]+months[q*3+1]+months[q*3+2]);
  const reserveMonthly=(persAnnual+bizAnnual)/12;
  return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
-  splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persAnnual>0,
+  sidesExact,monthG:E.monthG,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persAnnual>0,
   lAp,bCo,lTk,conv,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves)};
 }
 
@@ -862,7 +889,7 @@ function recompute(){
  out('gciSide',money(c.gciSide)); out('netSide',money(c.netSide));
  out('splitPaid',money(c.splitPaid)); out('feesPaid',money(c.feesPaid)); out('effSplit',c.gci?pct((c.splitPaid+c.feesPaid)/c.gci):'–');
  out('capWhen',capText(c)); out('bizAnnual',money(c.bizAnnual)); out('profitNeed',money(c.profitNeed));
- out('gci',moneyK(c.gci)); out('netTop',moneyK(c.profit)); out('sides',int(c.sides)); out('lb',`${int(c.L)} / ${int(c.B)}`); out('volume',moneyK(c.volume));
+ out('gci',moneyK(c.gci)); out('netTop',moneyK(c.profit)); out('netGoalBox',money(c.profit)); out('sides',int(c.sides)); out('lb',`${int(c.L)} / ${int(c.B)}`); out('volume',moneyK(c.volume));
  if(c.hasBudget) out('surplus',moneyK(c.surplus),c.surplus<0?'neg':'pos'); else out('surplus','Add budget','');
  // season
  const mx=Math.max(...c.months,1);
@@ -899,13 +926,13 @@ function recompute(){
  const chq=c.chequeBefore>0?c.chequeBefore:c.chequeAfter;
  if(ex) ex.innerHTML=chq>0?`<div class="tip">On a typical cheque of <b>${money(chq)}</b> after split and fees${c.cap?` (${money(c.chequeAfter)} once you cap)`:''}: <b>${money(chq*ab)}</b> to business, <b>${money(chq*at)}</b> to tax, <b>${money(chq*ap)}</b> to personal & savings.${tot!==100?` <span class="flag warn">Your split adds up to ${tot}%</span>`:''}</div>`:'';
  const gn=document.getElementById('gci-note');
- if(gn) gn.innerHTML=S.goals.method==='gci'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`Your ${money(n(S.goals.gciGoal))} goal takes <b>${int(c.sides)} closed sides</b> at ${money(c.gciSide)} each (${money(c.gci)} GCI, rounded up to whole deals). After your split, cap, fees and expenses that\u2019s <b>${money(c.profit)}</b> net and about <b>${money(c.takeHome)}</b> take-home.`:'';
+ if(gn) gn.innerHTML=S.goals.method==='gci'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, fees and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after tax${n(S.save.rrsp)?' and RRSP':''}.`:'';
  // vs last year
  const vl=document.getElementById('vs-last'), ls=n(S.last.listings)+n(S.last.buyers);
  if(vl) vl.innerHTML=ls?`<div class="tip">Last year you closed <b>${int(ls)}</b> sides${n(S.last.gci)?` for <b>${money(n(S.last.gci))}</b> GCI`:''}. This plan calls for <b>${int(c.sides)}</b> — ${c.sides>=ls?`<b>${pct((c.sides-ls)/ls)}</b> more`:`<b>${pct((ls-c.sides)/ls)}</b> fewer`}.</div>`:'';
  // scorecard
  c.qs.forEach((q,i)=>{
-  const tg=q*c.gciSide; out('tq'+i,int(q)); out('tg'+i,money(tg));
+  const tg=c.monthG[i*3]+c.monthG[i*3+1]+c.monthG[i*3+2]; out('tq'+i,int(q)); out('tg'+i,money(tg));
   const au=S.score.q[i].units, ag=S.score.q[i].gci;
   out('pace'+i,(au===''&&ag==='')?'–':(ag!==''&&tg>0)?pct(n(ag)/tg):(q>0?pct(n(au)/q):'–'));
  });
@@ -1015,7 +1042,7 @@ async function loadPlan(){
  try{ const d=await docRef().get(); if(d.exists) data=d.data().plan; }
  catch(e){ console.warn('Load failed',e); gate('app'); S=DEFAULT(); renderShell(); fillAll(); toggleVis(); recompute();
   setStatus('<b style="color:#ff8a9b">Couldn’t load your plan</b> · refresh the page to try again. Changes won’t be saved until it loads.'); return; }
- S=merge(DEFAULT(),data||{}); S.meta.year=year; lastStamp=data&&data.meta?data.meta.updated:null;
+ S=merge(DEFAULT(),data||{}); S.meta.year=year; S.goals.buyShare=Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; lastStamp=data&&data.meta?data.meta.updated:null;
  if(!S.vision.name&&user.displayName) S.vision.name=user.displayName;
  $('h-year').textContent=year;
  renderShell(); fillAll(); toggleVis(); recompute(); updateName();
@@ -1066,7 +1093,7 @@ document.getElementById('import-file').addEventListener('change',e=>{
  const r=new FileReader();
  r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d||typeof d!=='object'||!d.goals) throw new Error('bad');
    if(!confirm(`Replace your ${year} plan with the imported file?`)) return;
-   S=merge(DEFAULT(),d); S.meta.year=year; renderShell(); fillAll(); toggleVis(); recompute(); ready=true; saveNow(); toast('Plan imported'); }
+   S=merge(DEFAULT(),d); S.meta.year=year; S.goals.buyShare=Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; renderShell(); fillAll(); toggleVis(); recompute(); ready=true; saveNow(); toast('Plan imported'); }
   catch(err){ toast('That file isn’t a business plan export'); } finally{ e.target.value=''; } };
  r.readAsText(f);
 });
