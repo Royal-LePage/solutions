@@ -193,6 +193,8 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
 .bar.pk{background:var(--bp-red)}
 .bar b{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:13px;font-weight:800;color:var(--bp-black)}
 .netbox{border:1px solid var(--bp-warm-grey);background:var(--bp-light-grey);border-radius:4px;padding:9px 11px;font:800 15px var(--bp-sans);min-height:40px}
+.netbox.locked{font:700 14px var(--bp-sans);color:var(--bp-dark-grey)}
+.netbox.locked:before{content:'\1F512  ';font-size:12px}
 .mnet{font-size:11.5px;font-weight:700;color:var(--bp-dark-grey);white-space:nowrap}
 .mnet.cap{color:#fff;background:var(--bp-red);border-radius:3px;padding:0 4px}
 .mo .ml{font-size:12px;font-weight:700;color:var(--bp-dark-grey)}
@@ -399,7 +401,7 @@ function DEFAULT(){
   meta:{year:nextYearDefault()},
   vision:{name:'',ten:'',five:'',one:'',northStar:'',goal1:'',goal2:'',goal3:'',mission:'',values:'',why:'',commitment:'',andId:''},
   last:{listings:'',buyers:'',avgPrice:'',gci:''},
-  goals:{method:'gci',gciGoal:200000,netGoal:120000,tax:30,split:20,avgPrice:650000,commModel:'tier',t1:3.5,t2:1.5,flat:2.5,listShare:50,buyShare:50,listings:10,buyers:10,cap:'',dealFee:'',feeMode:'all',capDate:'',capPaid:'',rlpPct:1,rlpMax:1525,don:'',otherFee:''},
+  goals:{method:'gci',gciGoal:200000,netGoal:120000,tax:30,split:20,avgPrice:650000,commModel:'tier',t1:3.5,t2:1.5,flat:2.5,listShare:50,buyShare:50,listings:10,buyers:10,cap:'',dealFee:'',feeMode:'all',capDate:'',capPaid:'',rlpPct:1,rlpMax:1525,gstHold:5,don:'',otherFee:''},
   season:{w:SEASON_W.slice()},
   kpi:{lApptSign:60,lSignClose:85,bConsSign:60,bSignClose:75,convPerAppt:25,convPerHour:5,weeksOff:4,daysPerWeek:5,refPerClose:3,contactsPerRef:20},
   sources:SOURCES.map(nm=>({name:nm,last:'',goal:'',how:''})),
@@ -505,21 +507,22 @@ const SECTIONS=[
    <label class="f"><span>Commission per side</span><select data-k="goals.commModel"><option value="tier">Tiered (first $100K / balance)</option><option value="flat">Flat % of price</option></select></label>
    <div id="c-tier" style="display:contents">${F('On the first $100K','goals.t1',{type:'pct'})}${F('On the balance','goals.t2',{type:'pct'})}</div>
    <div id="c-flat" style="display:contents">${F('Flat rate per side','goals.flat',{type:'pct'})}</div></div>
-  <h3>Your commission plan</h3>
-  <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Enter your plan with the brokerage. Not sure of your numbers? Ask the office — leave the cap blank if you don\u2019t have one.</p>
+  <h3>Your commission plan &amp; deductions</h3>
+  <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Enter your plan with the brokerage — these match the deduction summary on your deal statement. Not sure of your numbers? Ask the office. Leave the cap blank if you don\u2019t have one.</p>
   <div class="row c4">${F('Brokerage split','goals.split',{type:'pct',hint:'until you cap'})}${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}${F('Cap anniversary','goals.capDate',{type:'date',hint:'when your cap resets'})}${F('Paid toward cap by Jan 1','goals.capPaid',{type:'money',hint:'0 if unsure'})}</div>
   <div class="row c4">${F('Deal fee per side','goals.dealFee',{type:'money',hint:'blank = none'})}
    <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal</option><option value="after">Only after I cap</option></select></label>
-   ${F('Combined tax rate','goals.tax',{type:'pct',hint:'estimate'})}</div>
-  <h3>Other deductions on your cheque</h3>
-  <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">These appear on your deal statement\u2019s deduction summary. Leave blank anything that doesn\u2019t apply to you.</p>
-  <div class="row c4">${F('RLP franchise fee','goals.rlpPct',{type:'pct',hint:'% of GCI'})}${F('RLP fee annual maximum','goals.rlpMax',{type:'money',hint:'resets with your cap'})}${F('Donation per deal','goals.don',{type:'money',hint:'DON'})}</div>
-  <p style="margin:0 0 6px;color:#888;font-size:12.5px">Income tax and GST holdbacks aren\u2019t entered here — that\u2019s your own money set aside for CRA, not a cost. Tax is already taken off your take-home, and you can plan your holdbacks on the Budget &amp; Finances page.</p>
+   ${F('Donation per deal','goals.don',{type:'money',hint:'DON'})}
+   <div class="f"><span>RLP franchise fee <small>set by Royal LePage</small></span><div class="netbox locked">1% of GCI · max $1,525/yr</div></div></div>
+  <h3>Holdbacks</h3>
+  <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">The share of each commission cheque you have held back for CRA. This is your money set aside, not a cost — income tax comes off your take-home, and GST is collected on top of your commission and paid to CRA.</p>
+  <div class="row c4">${F('Income tax holdback','goals.tax',{type:'pct',hint:'% of each cheque'})}${F('GST holdback','goals.gstHold',{type:'pct',hint:'% of each cheque'})}</div>
   <div class="res">${RC('GCI per side','gciSide')}${RC('Your average net per side','netSide')}${RC('Business expenses / yr','bizAnnual')}${RC('Take-home after tax','takeHome')}</div>
+  <div class="res">${RC('Income tax held back','taxAmt')}${RC('GST collected (5%)','gstColl')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
   <div class="res c5">${RC('Split paid to brokerage','splitPaid')}${RC('RLP franchise fee','rlpPaid')}${RC('Deal fees & donations','feesPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('You cap','capWhen')}</div>
   <div class="res">${RC('GCI goal','gci','dark')}${RC('Total closed sides','sides','dark')}${RC('Listings / buyers','lb','dark')}${RC('Sales volume','volume','dark')}</div>
   <div id="vs-last"></div>
-  ${tip('<b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Net = GCI minus your split (until you cap), RLP franchise fee (up to its annual maximum), deal fees, donations and business expenses (from the Budget page, including your marketing budget). Take-home = net minus RRSP and income tax at your combined rate. Deals are spread across the year using your Seasonality page; the split is charged until your cap is reached, the cap resets on your anniversary, and deal fees are added on top (they don\u2019t count toward the cap). Figures exclude GST. This is a planning estimate, not tax advice — confirm your rate with your accountant.')}
+  ${tip('<b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Net = GCI minus your split (until you cap), RLP franchise fee (up to its annual maximum), deal fees, donations and business expenses (from the Budget page, including your marketing budget). Take-home = net minus RRSP and your income tax holdback (a % of each cheque). The GST holdback is shown separately — GST is collected on top of your commission and paid to CRA, so it doesn\u2019t reduce your income. Deals are spread across the year using your Seasonality page; the split is charged until your cap is reached, the cap resets on your anniversary, and deal fees are added on top (they don\u2019t count toward the cap). This is a planning estimate, not tax advice — confirm your holdback rates with your accountant.')}
  `},
  {id:'season',t:'Seasonality',d:'Calgary does not sell evenly across the year. Weight each month to plan when your closings will land.',html:()=>`
   <p style="margin-top:0;color:var(--bp-dark-grey)">Adjust the weight under each month. Closings and your net commission per month update from your goal on the Goals page. The month you cap is highlighted.</p>
@@ -597,11 +600,11 @@ const SECTIONS=[
   <h3>Savings & reserves (annual)</h3>
   <div class="row c4">${F('RRSP / pre-tax savings','save.rrsp',{type:'money'})}${F('TFSA / after-tax savings','save.postTax',{type:'money'})}${F('Debt reduction goal','save.debt',{type:'money'})}${F('Cash reserves today','save.reserves',{type:'money'})}</div>
   <h3>Your financial picture at goal</h3>
-  <div class="res">${RC('Net commissions (after split)','netComm')}${RC('Estimated income tax','taxAmt')}${RC('Take-home after tax & RRSP','takeHome')}${RC('Needed for budget & savings','needs')}</div>
+  <div class="res">${RC('Net commissions (after split)','netComm')}${RC('Income tax holdback','taxAmt')}${RC('Take-home after tax & RRSP','takeHome')}${RC('Needed for budget & savings','needs')}</div>
   <div class="res c3">${RC('Surplus / shortfall','surplus','dark')}${RC('Months of reserves','reserveMonths','dark')}${RC('Business expenses as % of GCI','bizPct','dark')}</div>
   <h3>How to split every commission cheque</h3>
-  <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">If you have the brokerage hold back income tax or GST from your cheques, count that holdback as part of your tax account. GST you collect isn\u2019t income — it goes to CRA on top of the split below. Suggested split from your numbers: <b data-o="sugAlloc"></b>. Enter your own below, or leave blank to use the suggestion.</p>
-  <div class="row c3">${F('To business account','alloc.biz',{type:'pct'})}${F('To tax account','alloc.tax',{type:'pct'})}${F('To personal & savings','alloc.pers',{type:'pct'})}</div>
+  <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">Your income tax and GST holdbacks from Goals &amp; Numbers come off each cheque first; this splits what\u2019s left. Suggested split from your numbers: <b data-o="sugAlloc"></b>. Enter your own below, or leave blank to use the suggestion.</p>
+  <div class="row c3">${F('To business account','alloc.biz',{type:'pct'})}${F('Extra to tax account','alloc.tax',{type:'pct',hint:'beyond your holdbacks'})}${F('To personal & savings','alloc.pers',{type:'pct'})}</div>
   <div id="alloc-ex"></div>
  `},
  {id:'swot',t:'SWOT',d:'Your vision says where you’re going. This says where you are today.',html:()=>`
@@ -781,7 +784,7 @@ function capInfo(){
  const g=S.goals, cap=n(g.cap), d=g.capDate?new Date(g.capDate+'T00:00'):null;
  const annM=(d&&!isNaN(d))?d.getMonth():0;
  return {cap, annM, hasDate:!!(d&&!isNaN(d)), fee:Math.max(n(g.dealFee),0), feeAfter:g.feeMode==='after', paid0:Math.max(n(g.capPaid),0),
-  rlpPct:Math.min(Math.max(n(g.rlpPct),0),100)/100, rlpMax:n(g.rlpMax)>0?n(g.rlpMax):Infinity, perDeal:Math.max(n(g.don),0)};
+  rlpPct:0.01, rlpMax:1525, perDeal:Math.max(n(g.don),0)};
 }
 function engine(sides,gciSide,splitPct){
  const ci=capInfo(), months=distribute(sides,S.season.w);
@@ -856,7 +859,7 @@ function calc(){
  const netSide=sidesExact>0?E.net/sidesExact:gciSide*(1-split)-(ci.feeAfter?0:ci.fee)-Math.min(gciSide*ci.rlpPct,ci.rlpMax)-ci.perDeal;
  const gci=gciTot, volume=sidesExact*price, netComm=E.net;
  const profit=netComm-bizAnnual;
- const taxAmt=Math.max(profit-rrsp,0)*t;
+ const taxAmt=Math.max(netComm,0)*t, gstHoldPct=Math.min(Math.max(n(g.gstHold),0),100)/100, gstAmt=Math.max(netComm,0)*gstHoldPct;
  const takeHome=profit-rrsp-taxAmt;
  const surplus=takeHome-needs;
  const profitNeed=g.method==='income'?n(g.netGoal)/(1-t)+rrsp:profit;
@@ -872,7 +875,7 @@ function calc(){
  const qs=[0,1,2,3].map(q=>months[q*3]+months[q*3+1]+months[q*3+2]);
  const reserveMonthly=(persAnnual+bizAnnual)/12;
  return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
-  sidesExact,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persAnnual>0,
+  sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persAnnual>0,
   lAp,bCo,lTk,conv,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves)};
 }
 
@@ -923,18 +926,19 @@ function recompute(){
  const pw=n(S.content.personal)+n(S.content.professional)+n(S.content.and); out('postsW',dec(pw)); out('postsY',int(pw*c.weeks));
  const bs=BRAND.filter(([k])=>S.brand[k]).length; out('brandScore',`${bs} of ${BRAND.length}`);
  // money
- out('persAnnual',money(c.persAnnual)); out('netComm',money(c.netComm)); out('taxAmt',money(c.taxAmt)); out('takeHome',money(c.takeHome));
+ out('persAnnual',money(c.persAnnual)); out('netComm',money(c.netComm)); out('taxAmt',money(c.taxAmt)); out('gstAmt',money(c.gstAmt)); out('gstColl',money(c.netComm*0.05)); out('afterHold',money(c.netComm*1.05-c.taxAmt-c.gstAmt)); out('takeHome',money(c.takeHome));
  out('needs',money(c.needs)); if(!c.hasBudget){ out('surplus','Add budget',''); } out('bizPct',c.gci?pct(c.bizAnnual/c.gci):'–');
  out('reserveMonths',c.reserveMonthly>0?dec(c.reserves/c.reserveMonthly)+' mo':'–');
- const sb=c.netComm>0?c.bizAnnual/c.netComm:0, st=c.netComm>0?c.taxAmt/c.netComm:0, sp=Math.max(1-sb-st,0);
- out('sugAlloc',c.netComm>0?`${pct(sb)} business · ${pct(st)} tax · ${pct(sp)} personal & savings`:'set a goal first');
+ const hf=1.05-c.t-n(S.goals.gstHold)/100, afterAll=c.netComm*hf;
+ const sb=afterAll>0?Math.min(c.bizAnnual/afterAll,1):0, st=0, sp=Math.max(1-sb-st,0);
+ out('sugAlloc',c.netComm>0?`${pct(sb)} business · ${pct(sp)} personal & savings`:'set a goal first');
  const ab=S.alloc.biz!==''?n(S.alloc.biz)/100:sb, at=S.alloc.tax!==''?n(S.alloc.tax)/100:st, ap=S.alloc.pers!==''?n(S.alloc.pers)/100:sp;
  const tot=Math.round((ab+at+ap)*100);
  const ex=document.getElementById('alloc-ex');
- const chq=c.chequeBefore>0?c.chequeBefore:c.chequeAfter;
- if(ex) ex.innerHTML=chq>0?`<div class="tip">On a typical cheque of <b>${money(chq)}</b> after split and fees${c.cap?` (${money(c.chequeAfter)} once you cap)`:''}: <b>${money(chq*ab)}</b> to business, <b>${money(chq*at)}</b> to tax, <b>${money(chq*ap)}</b> to personal & savings.${tot!==100?` <span class="flag warn">Your split adds up to ${tot}%</span>`:''}</div>`:'';
+ const chq0=c.chequeBefore>0?c.chequeBefore:c.chequeAfter, chq=chq0*hf;
+ if(ex) ex.innerHTML=chq>0?`<div class="tip">A typical cheque of <b>${money(chq0)}</b> after split and fees, plus ${money(chq0*0.05)} GST, less your holdbacks (${money(chq0*c.t)} income tax, ${money(chq0*n(S.goals.gstHold)/100)} GST) leaves <b>${money(chq)}</b>${c.cap?` (more once you cap)`:''}. Split that as: <b>${money(chq*ab)}</b> to business, <b>${money(chq*at)}</b> extra to tax, <b>${money(chq*ap)}</b> to personal & savings.${tot!==100?` <span class="flag warn">Your split adds up to ${tot}%</span>`:''}</div>`:'';
  const gn=document.getElementById('gci-note');
- if(gn) gn.innerHTML=S.goals.method==='gci'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after tax${n(S.save.rrsp)?' and RRSP':''}.${c.hasBudget?(c.surplus<0?` <span class="flag bad">${money(-c.surplus)} short of your budget</span>`:` <span class="flag ok">Covers your budget with ${money(c.surplus)} to spare</span>`):''}`:'';
+ if(gn) gn.innerHTML=S.goals.method==='gci'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${n(S.save.rrsp)?' and RRSP':''}.${c.hasBudget?(c.surplus<0?` <span class="flag bad">${money(-c.surplus)} short of your budget</span>`:` <span class="flag ok">Covers your budget with ${money(c.surplus)} to spare</span>`):''}`:'';
  // vs last year
  const vl=document.getElementById('vs-last'), ls=n(S.last.listings)+n(S.last.buyers);
  if(vl) vl.innerHTML=ls?`<div class="tip">Last year you closed <b>${int(ls)}</b> sides${n(S.last.gci)?` for <b>${money(n(S.last.gci))}</b> GCI`:''}. This plan calls for <b>${int(c.sides)}</b> — ${c.sides>=ls?`<b>${pct((c.sides-ls)/ls)}</b> more`:`<b>${pct((ls-c.sides)/ls)}</b> fewer`}.</div>`:'';
