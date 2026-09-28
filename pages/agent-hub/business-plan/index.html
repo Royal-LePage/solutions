@@ -508,8 +508,8 @@ const SECTIONS=[
    <div id="c-tier" style="display:contents">${F('On the first $100K','goals.t1',{type:'pct'})}${F('On the balance','goals.t2',{type:'pct'})}</div>
    <div id="c-flat" style="display:contents">${F('Flat rate per side','goals.flat',{type:'pct'})}</div></div>
   <h3>Your commission plan &amp; deductions</h3>
-  <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Enter your plan with the brokerage — these match the deduction summary on your deal statement. Not sure of your numbers? Ask the office. Leave the cap blank if you don\u2019t have one.</p>
-  <div class="row c4">${F('Brokerage split','goals.split',{type:'pct',hint:'until you cap'})}${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}${F('Cap anniversary','goals.capDate',{type:'date',hint:'when your cap resets'})}${F('Paid toward cap by Jan 1','goals.capPaid',{type:'money',hint:'0 if unsure'})}</div>
+  <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Enter your plan with the brokerage — these match the deduction summary on your deal statement. Deductions are calculated over one cap year, starting at $0 on your cap anniversary (January if you leave it blank). Not sure of your numbers? Ask the office. Leave the cap blank if you don\u2019t have one.</p>
+  <div class="row c4">${F('Brokerage split','goals.split',{type:'pct',hint:'until you cap'})}${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}${F('Cap anniversary','goals.capDate',{type:'date',hint:'when your cap resets'})}<div class="f"><span>Your cap year</span><div class="netbox" data-o="cyBox">–</div></div></div>
   <div class="row c4">${F('Deal fee per side','goals.dealFee',{type:'money',hint:'blank = none'})}
    <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></label>
    ${F('Donation per deal','goals.don',{type:'money',hint:'DON'})}
@@ -519,11 +519,11 @@ const SECTIONS=[
   <div class="row c4">${F('Income tax holdback','goals.tax',{type:'pct',hint:'% of each cheque'})}${F('GST holdback','goals.gstHold',{type:'pct',hint:'% of each cheque'})}</div>
   <div class="res">${RC('GCI per side','gciSide')}${RC('Your average net per side','netSide')}${RC('Business expenses / yr','bizAnnual')}${RC('Take-home after tax','takeHome')}</div>
   <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
-  <div class="res">${RC('Split paid · calendar year <span data-o="calLbl"></span>','splitPaid')}${RC('Split paid · cap year <span data-o="cyLbl"></span>','splitCY')}${RC('<span data-o="capLbl">Cap paid</span>','capPaidOut')}${RC('Deal fees','feesPaid')}</div>
-  <div class="res c3">${RC('Donations','donPaid')}${RC('RLP franchise fee','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}</div>
+  <div class="res">${RC('Split paid','splitPaid')}${RC('<span data-o="capLbl">Cap paid</span>','capPaidOut')}${RC('Deal fees','feesPaid')}${RC('Donations','donPaid')}</div>
+  <div class="res c3">${RC('RLP franchise fee','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('Deduction period','cyCard')}</div>
   <div class="res">${RC('GCI goal','gci','dark')}${RC('Total closed sides','sides','dark')}${RC('Listings / buyers','lb','dark')}${RC('Sales volume','volume','dark')}</div>
   <div id="vs-last"></div>
-  ${tip('<b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Net = GCI minus your split (until you cap), RLP franchise fee (up to its annual maximum), deal fees, donations and business expenses (from the Budget page, including your marketing budget). Take-home = net minus RRSP and your income tax holdback (a % of each cheque). The GST holdback is shown separately — GST is collected on top of your commission and paid to CRA, so it doesn\u2019t reduce your income. Deals are spread across the year using your Seasonality page; the split is charged until your cap is reached, the cap resets on your anniversary, and deal fees are charged the way you chose: on every deal, toward your cap until you cap, or only after you cap. This is a planning estimate, not tax advice — confirm your holdback rates with your accountant.')}
+  ${tip('<b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Net = GCI minus your split (until you cap), RLP franchise fee (up to its annual maximum), deal fees, donations and business expenses (from the Budget page, including your marketing budget). Take-home = net minus RRSP and your income tax holdback (a % of each cheque). The GST holdback is shown separately — GST is collected on top of your commission and paid to CRA, so it doesn\u2019t reduce your income. Deals are spread across the year using your Seasonality page; the split is charged from your cap anniversary until your cap is reached (one 12-month cap year, starting at $0), and deal fees are charged the way you chose: on every deal, toward your cap until you cap, or only after you cap. This is a planning estimate, not tax advice — confirm your holdback rates with your accountant.')}
  `},
  {id:'season',t:'Seasonality',d:'Calgary does not sell evenly across the year. Weight each month to plan when your closings will land.',html:()=>`
   <p style="margin-top:0;color:var(--bp-dark-grey)">Adjust the weight under each month. Closings and your net commission per month update from your goal on the Goals page. The month you cap is highlighted.</p>
@@ -787,13 +787,16 @@ function capInfo(){
  return {cap, annM, hasDate:!!(d&&!isNaN(d)), fee:Math.max(n(g.dealFee),0), feeAfter:g.feeMode==='after', feeCap:g.feeMode==='cap', paid0:Math.max(n(g.capPaid),0),
   rlpPct:0.01, rlpMax:1525, perDeal:Math.max(n(g.don),0)};
 }
+/* Commission engines. Everything is calculated over ONE cap year: the 12 months
+   starting on the agent's cap anniversary (January if none is set), starting from
+   $0 paid toward the cap and the RLP maximum. Months after December follow this
+   plan's monthly pattern. Results are stored by calendar month for display. */
 function engine(sides,gciSide,splitPct){
- const ci=capInfo(), months=distribute(sides,S.season.w);
- let paid=ci.hasDate&&ci.annM===0?0:ci.paid0, capped=ci.cap>0&&paid>=ci.cap, split=0, fees=0, net=0, sideNo=0, rlp=0, rlpYr=0, other=0, capTot=0; const caps=[];
- const monthNet=[];
- months.forEach((u,m)=>{
-  if(m>0&&ci.hasDate&&m===ci.annM){ paid=0; capped=false; rlpYr=0; }
-  let mn=0;
+ const ci=capInfo(), months=distribute(sides,S.season.w), start=ci.hasDate?ci.annM:0;
+ let paid=0, capped=false, split=0, fees=0, net=0, sideNo=0, rlp=0, other=0, capTot=0; const caps=[];
+ const monthNet=new Array(12).fill(0);
+ for(let j=0;j<12;j++){
+  const m=(start+j)%12, u=months[m];
   for(let i=0;i<u;i++){
    sideNo++;
    let sp=gciSide*splitPct, fee=ci.fee;
@@ -801,57 +804,36 @@ function engine(sides,gciSide,splitPct){
    if(ci.cap>0){
     if(capped){ sp=0; if(ci.feeCap) fee=0; }
     else{ const charge=sp+(ci.feeCap?fee:0), room=ci.cap-paid;
-     if(charge>0&&charge>=room-0.005){ const k=room/charge; sp*=k; if(ci.feeCap) fee*=k; paid=ci.cap; capped=true; caps.push({m,side:sideNo}); capTot+=room; }
+     if(charge>0&&charge>=room-0.005){ const k=room/charge; sp*=k; if(ci.feeCap) fee*=k; paid=ci.cap; capped=true; caps.push({m,j,side:sideNo}); capTot+=room; }
      else{ paid+=charge; capTot+=charge; } }
    }
    if(ci.feeAfter) fee=wasCapped?ci.fee:0;
-   const rf=Math.max(Math.min(gciSide*ci.rlpPct,ci.rlpMax-rlpYr),0); rlpYr+=rf;
-   split+=sp; fees+=fee; rlp+=rf; other+=ci.perDeal; const nt=gciSide-sp-fee-rf-ci.perDeal; net+=nt; mn+=nt;
+   const rf=Math.max(Math.min(gciSide*ci.rlpPct,ci.rlpMax-rlp),0);
+   split+=sp; fees+=fee; rlp+=rf; other+=ci.perDeal; const nt=gciSide-sp-fee-rf-ci.perDeal; net+=nt; monthNet[m]+=nt;
   }
-  monthNet.push(mn);
- });
- return {months,monthG:months.map(u=>u*gciSide),split,fees,rlp,other,capTot,net,caps,monthNet,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:ci.hasDate&&ci.annM>0?ci.annM:-1};
+ }
+ return {months,monthG:months.map(u=>u*gciSide),split,fees,rlp,other,capTot,net,caps,monthNet,start,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:-1};
 }
-/* Dollar-based version used when the agent types a GCI goal: the goal is spread
-   across the months exactly (no rounding to whole deals), the split is charged on
-   those dollars until the cap, and deal fees are charged per (fractional) side. */
+/* Dollar-based version used with a GCI goal: the goal is spread across the months
+   exactly (no rounding to whole deals); deal fees are charged per fractional side. */
 function engineG(gciTotal,gciSide,splitPct,sidesWhole){
- const ci=capInfo(), w=S.season.w.map(x=>Math.max(n(x),0)), tw=w.reduce((a,b)=>a+b,0)||1;
+ const ci=capInfo(), w=S.season.w.map(x=>Math.max(n(x),0)), tw=w.reduce((a,b)=>a+b,0)||1, start=ci.hasDate?ci.annM:0;
  const monthG=w.map(x=>gciTotal*x/tw);
- let paid=ci.hasDate&&ci.annM===0?0:ci.paid0, capped=ci.cap>0&&paid>=ci.cap, split=0, fees=0, net=0, cumG=0, rlp=0, rlpYr=0, other=0, capTot=0; const caps=[], monthNet=[];
- monthG.forEach((gm,m)=>{
-  if(m>0&&ci.hasDate&&m===ci.annM){ paid=0; capped=false; rlpYr=0; }
-  const mSides=gciSide>0?gm/gciSide:0;
+ let paid=0, capped=false, split=0, fees=0, net=0, cumG=0, rlp=0, other=0, capTot=0; const caps=[], monthNet=new Array(12).fill(0);
+ for(let j=0;j<12;j++){
+  const m=(start+j)%12, gm=monthG[m], mSides=gciSide>0?gm/gciSide:0;
   let sp=gm*splitPct, fee=ci.fee*mSides, pre=1;
   if(ci.cap>0){
    if(capped){ sp=0; pre=0; if(ci.feeCap) fee=0; }
    else{ const charge=sp+(ci.feeCap?fee:0), room=ci.cap-paid;
-    if(charge>0&&charge>=room-0.005){ pre=room/charge; sp*=pre; if(ci.feeCap) fee*=pre; paid=ci.cap; capped=true; caps.push({m,side:Math.max(1,Math.ceil((cumG+gm*pre)/gciSide-1e-9))}); capTot+=room; }
+    if(charge>0&&charge>=room-0.005){ pre=room/charge; sp*=pre; if(ci.feeCap) fee*=pre; paid=ci.cap; capped=true; caps.push({m,j,side:Math.max(1,Math.ceil((cumG+gm*pre)/gciSide-1e-9))}); capTot+=room; }
     else{ paid+=charge; capTot+=charge; } }
   }
   if(ci.feeAfter) fee=ci.cap>0?ci.fee*mSides*(1-pre):0;
-  const rf=Math.max(Math.min(gm*ci.rlpPct,ci.rlpMax-rlpYr),0); rlpYr+=rf; const oth=ci.perDeal*mSides;
-  split+=sp; fees+=fee; rlp+=rf; other+=oth; const nt=gm-sp-fee-rf-oth; net+=nt; monthNet.push(nt); cumG+=gm;
- });
- return {months:distribute(sidesWhole,S.season.w),monthG,split,fees,rlp,other,capTot,net,caps,monthNet,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:ci.hasDate&&ci.annM>0?ci.annM:-1};
-}
-/* One full cap year starting on the anniversary month, using this plan's monthly
-   GCI (months after December repeat the same pattern). Starts from $0 paid. */
-function capYear(monthG,gciSide,splitPct){
- const ci=capInfo(), start=ci.hasDate?ci.annM:0;
- let paid=0, capped=false, split=0, capTot=0, capM=-1;
- for(let i=0;i<12;i++){
-  const m=(start+i)%12, gm=monthG[m]||0, mSides=gciSide>0?gm/gciSide:0;
-  let sp=gm*splitPct, fee=ci.feeCap?ci.fee*mSides:0;
-  if(ci.cap>0){
-   if(capped){ sp=0; fee=0; }
-   else{ const charge=sp+fee, room=ci.cap-paid;
-    if(charge>0&&charge>=room-0.005){ const k=room/charge; sp*=k; paid=ci.cap; capped=true; capM=i; capTot+=room; }
-    else{ paid+=charge; capTot+=charge; } }
-  }
-  split+=sp;
+  const rf=Math.max(Math.min(gm*ci.rlpPct,ci.rlpMax-rlp),0), oth=ci.perDeal*mSides;
+  split+=sp; fees+=fee; rlp+=rf; other+=oth; const nt=gm-sp-fee-rf-oth; net+=nt; monthNet[m]=nt; cumG+=gm;
  }
- return {split,capTot,capM,start,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0};
+ return {months:distribute(sidesWhole,S.season.w),monthG,split,fees,rlp,other,capTot,net,caps,monthNet,start,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:-1};
 }
 function calc(){
  const g=S.goals, k=S.kpi;
@@ -900,7 +882,7 @@ function calc(){
  const qs=[0,1,2,3].map(q=>months[q*3]+months[q*3+1]+months[q*3+2]);
  const reserveMonthly=(persAnnual+bizAnnual)/12;
  return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
-  sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,CY:capYear(E.monthG,gciSide,split),splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persAnnual>0,
+  sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persAnnual>0,
   lAp,bCo,lTk,conv,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves)};
 }
 
@@ -913,6 +895,8 @@ function out(key,val,cls){
 
 let C;
 function capText(c,long){
+ const y=+S.meta.year||year, st=c.capStart||0;
+ if(c.cap&&c.caps.length){ const m=c.caps[0].m; return `${long?MONTHS_FULL[m]:MONTHS[m]} ${st>0&&m<st?y+1:y}`; }
  if(!c.cap) return 'No cap';
  if(!c.caps.length) return `Not this year · ${moneyK(c.capRemaining)} to go`;
  const parts=c.caps.map(x=>`${long?MONTHS_FULL[x.m]:MONTHS[x.m]} (side ${x.side})`);
@@ -923,12 +907,11 @@ function recompute(){
  const perW=v=>v/c.weeks, perD=v=>v/c.days;
  out('gciSide',money(c.gciSide)); out('netSide',money(c.netSide));
  out('splitPaid',money(c.splitPaid)); out('rlpPaid',money(c.rlpPaid)); out('feesPaid',money(c.feesPaid)); out('donPaid',money(c.otherPaid));
- { const cy=c.CY, y=+S.meta.year||year, ci=capInfo();
-  const cyName=ci.hasDate&&cy.start>0?`(${MONTHS[cy.start]} ${y} – ${MONTHS[(cy.start+11)%12]} ${y+1})`:`(Jan – Dec ${y})`;
-  out('calLbl',`(Jan – Dec ${y})`); out('cyLbl',cyName); out('splitCY',money(cy.split));
-  out('capPaidOut',c.cap?money(cy.capTot):'No cap');
-  const mm=cy.capM>=0?(cy.start+cy.capM)%12:-1, my=mm>=0?(ci.hasDate&&cy.start>0&&mm<cy.start?y+1:y):y;
-  out('capLbl',!c.cap?'Cap paid · cap year':cy.capM>=0?`Cap paid · cap year · you cap in ${MONTHS_FULL[mm]} ${my}`:`Cap paid · cap year · ${money(cy.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
+ { const y=+S.meta.year||year, st=c.capStart, mm=c.caps.length?c.caps[0].m:-1;
+  const cyName=st>0?`${MONTHS[st]} ${y} – ${MONTHS[(st+11)%12]} ${y+1}`:`Jan – Dec ${y}`;
+  out('cyBox',cyName); out('cyCard',cyName);
+  out('capPaidOut',c.cap?money(c.capTot):'No cap');
+  out('capLbl',!c.cap?'Cap paid':mm>=0?`Cap paid · you cap in ${MONTHS_FULL[mm]} ${st>0&&mm<st?y+1:y}`:`Cap paid · ${money(c.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
  { const td=c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid; out('effSplit',money(td)); out('effPct',c.gci?pct(td/c.gci):'–'); }
   out('bizAnnual',money(c.bizAnnual)); out('profitNeed',money(c.profitNeed));
  out('gci',moneyK(c.gci)); out('netTop',moneyK(c.profit)); out('netGoalBox',money(c.profit)); out('sides',int(c.sides)); out('lb',`${int(c.L)} / ${int(c.B)}`); out('volume',moneyK(c.volume));
