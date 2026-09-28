@@ -519,8 +519,8 @@ const SECTIONS=[
   <div class="row c4">${F('Income tax holdback','goals.tax',{type:'pct',hint:'% of each cheque'})}${F('GST holdback','goals.gstHold',{type:'pct',hint:'% of each cheque'})}</div>
   <div class="res">${RC('GCI per side','gciSide')}${RC('Your average net per side','netSide')}${RC('Business expenses / yr','bizAnnual')}${RC('Take-home after tax','takeHome')}</div>
   <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
-  <div class="res c3">${RC('Split paid to brokerage','splitPaid')}${RC('Deal fees','feesPaid')}${RC('Donations','donPaid')}</div>
-  <div class="res c3">${RC('RLP franchise fee','rlpPaid')}${RC('<span data-o="capLbl">Cap paid</span>','capPaidOut')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}</div>
+  <div class="res">${RC('Split paid · calendar year <span data-o="calLbl"></span>','splitPaid')}${RC('Split paid · cap year <span data-o="cyLbl"></span>','splitCY')}${RC('<span data-o="capLbl">Cap paid</span>','capPaidOut')}${RC('Deal fees','feesPaid')}</div>
+  <div class="res c3">${RC('Donations','donPaid')}${RC('RLP franchise fee','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}</div>
   <div class="res">${RC('GCI goal','gci','dark')}${RC('Total closed sides','sides','dark')}${RC('Listings / buyers','lb','dark')}${RC('Sales volume','volume','dark')}</div>
   <div id="vs-last"></div>
   ${tip('<b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Net = GCI minus your split (until you cap), RLP franchise fee (up to its annual maximum), deal fees, donations and business expenses (from the Budget page, including your marketing budget). Take-home = net minus RRSP and your income tax holdback (a % of each cheque). The GST holdback is shown separately — GST is collected on top of your commission and paid to CRA, so it doesn\u2019t reduce your income. Deals are spread across the year using your Seasonality page; the split is charged until your cap is reached, the cap resets on your anniversary, and deal fees are charged the way you chose: on every deal, toward your cap until you cap, or only after you cap. This is a planning estimate, not tax advice — confirm your holdback rates with your accountant.')}
@@ -835,6 +835,24 @@ function engineG(gciTotal,gciSide,splitPct,sidesWhole){
  });
  return {months:distribute(sidesWhole,S.season.w),monthG,split,fees,rlp,other,capTot,net,caps,monthNet,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:ci.hasDate&&ci.annM>0?ci.annM:-1};
 }
+/* One full cap year starting on the anniversary month, using this plan's monthly
+   GCI (months after December repeat the same pattern). Starts from $0 paid. */
+function capYear(monthG,gciSide,splitPct){
+ const ci=capInfo(), start=ci.hasDate?ci.annM:0;
+ let paid=0, capped=false, split=0, capTot=0, capM=-1;
+ for(let i=0;i<12;i++){
+  const m=(start+i)%12, gm=monthG[m]||0, mSides=gciSide>0?gm/gciSide:0;
+  let sp=gm*splitPct, fee=ci.feeCap?ci.fee*mSides:0;
+  if(ci.cap>0){
+   if(capped){ sp=0; fee=0; }
+   else{ const charge=sp+fee, room=ci.cap-paid;
+    if(charge>0&&charge>=room-0.005){ const k=room/charge; sp*=k; paid=ci.cap; capped=true; capM=i; capTot+=room; }
+    else{ paid+=charge; capTot+=charge; } }
+  }
+  split+=sp;
+ }
+ return {split,capTot,capM,start,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0};
+}
 function calc(){
  const g=S.goals, k=S.kpi;
  const price=n(g.avgPrice);
@@ -882,7 +900,7 @@ function calc(){
  const qs=[0,1,2,3].map(q=>months[q*3]+months[q*3+1]+months[q*3+2]);
  const reserveMonthly=(persAnnual+bizAnnual)/12;
  return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
-  sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persAnnual>0,
+  sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,CY:capYear(E.monthG,gciSide,split),splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persAnnual>0,
   lAp,bCo,lTk,conv,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves)};
 }
 
@@ -905,7 +923,12 @@ function recompute(){
  const perW=v=>v/c.weeks, perD=v=>v/c.days;
  out('gciSide',money(c.gciSide)); out('netSide',money(c.netSide));
  out('splitPaid',money(c.splitPaid)); out('rlpPaid',money(c.rlpPaid)); out('feesPaid',money(c.feesPaid)); out('donPaid',money(c.otherPaid));
- out('capPaidOut',c.cap?money(c.capTot):'No cap'); out('capLbl',!c.cap?'Cap paid':(c.caps.length?`Cap paid · you cap in ${c.caps.map(x=>MONTHS_FULL[x.m]).join(' & ')}`:`Cap paid · ${money(c.capRemaining)} to go to reach your ${moneyK(c.cap)} cap`)+(c.resetM>=0?` (cap resets ${MONTHS[c.resetM]})`:''));
+ { const cy=c.CY, y=+S.meta.year||year, ci=capInfo();
+  const cyName=ci.hasDate&&cy.start>0?`(${MONTHS[cy.start]} ${y} – ${MONTHS[(cy.start+11)%12]} ${y+1})`:`(Jan – Dec ${y})`;
+  out('calLbl',`(Jan – Dec ${y})`); out('cyLbl',cyName); out('splitCY',money(cy.split));
+  out('capPaidOut',c.cap?money(cy.capTot):'No cap');
+  const mm=cy.capM>=0?(cy.start+cy.capM)%12:-1, my=mm>=0?(ci.hasDate&&cy.start>0&&mm<cy.start?y+1:y):y;
+  out('capLbl',!c.cap?'Cap paid · cap year':cy.capM>=0?`Cap paid · cap year · you cap in ${MONTHS_FULL[mm]} ${my}`:`Cap paid · cap year · ${money(cy.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
  { const td=c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid; out('effSplit',money(td)); out('effPct',c.gci?pct(td/c.gci):'–'); }
   out('bizAnnual',money(c.bizAnnual)); out('profitNeed',money(c.profitNeed));
  out('gci',moneyK(c.gci)); out('netTop',moneyK(c.profit)); out('netGoalBox',money(c.profit)); out('sides',int(c.sides)); out('lb',`${int(c.L)} / ${int(c.B)}`); out('volume',moneyK(c.volume));
