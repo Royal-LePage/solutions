@@ -491,6 +491,14 @@ const SECTIONS=[
   <div class="row c2">${T('Core values','vision.values',{rows:5,hint:'Short sentences, not single words',ph:'e.g. I tell clients the truth about the market, even when it is not what they want to hear.'})}${T('My why','vision.why',{rows:5,hint:'What truly drives you, not what should'})}</div>
   <div class="row c2">${T('My commitment','vision.commitment',{rows:3,hint:'How seriously will you hold yourself to this plan?'})}${T('I’m a REALTOR® AND…','vision.andId',{rows:3,hint:'The expertise or passion that sets you apart',ph:'e.g. a lake-community local, a new-build specialist, a hockey parent'})}</div>
  `},
+ {id:'swot',t:'SWOT',d:'Your vision says where you’re going. This says where you are today.',html:()=>`
+  <div class="swot">
+   <div><div class="swot-l">Internal</div>${T('Strengths','swot.s',{rows:6,ph:'e.g. Deep knowledge of the SE lake communities'})}</div>
+   <div><div class="swot-l">Internal</div>${T('Weaknesses','swot.w',{rows:6,ph:'e.g. Inconsistent follow-up with online leads'})}</div>
+   <div><div class="swot-l">External</div>${T('Opportunities','swot.o',{rows:6,ph:'e.g. New phases opening in a nearby community'})}</div>
+   <div><div class="swot-l">External</div>${T('Threats','swot.t',{rows:6,ph:'e.g. Rising inventory lengthening days on market'})}</div>
+  </div>
+ `},
  {id:'numbers',t:'Goals & Numbers',d:'Set your GCI goal, or start from the number of deals you want. Your net and take-home are worked out for you, and the rest of the plan runs on these numbers.',html:()=>`
   <h3>Last 12 months <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— optional, skip if you don\u2019t have these handy</small></h3>
   <div class="row c4">${F('Listing sides closed','last.listings',{type:'num'})}${F('Buyer sides closed','last.buyers',{type:'num'})}${F('Average sale price','last.avgPrice',{type:'money'})}${F('Gross commission (GCI)','last.gci',{type:'money'})}</div>
@@ -524,6 +532,24 @@ const SECTIONS=[
   <div class="res">${RC('GCI goal','gci','dark')}${RC('Total closed sides','sides','dark')}${RC('Listings / buyers','lb','dark')}${RC('Sales volume','volume','dark')}</div>
   <div id="vs-last"></div>
   ${tip('<b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Net = GCI minus your split (until you cap), RLP franchise fee (up to its annual maximum), deal fees, donations and business expenses (from the Budget page, including your marketing budget). Take-home = net minus RRSP and your income tax holdback (a % of each cheque). The GST holdback is shown separately — GST is collected on top of your commission and paid to CRA, so it doesn\u2019t reduce your income. Deals are spread across the year using your Seasonality page; the split is charged from your cap anniversary until your cap is reached (one 12-month cap year, starting at $0), and deal fees are charged the way you chose: on every deal, toward your cap until you cap, or only after you cap. This is a planning estimate, not tax advice — confirm your holdback rates with your accountant.')}
+ `},
+ {id:'money',t:'Budget & Finances',d:'It is not what you gross, it is what you keep. Build your budget and decide how every commission cheque gets split.',html:()=>`
+  <div class="row c2" style="align-items:start">
+   <div><h3>Business expenses (monthly)</h3><table><tbody>${BIZ.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l})}</td></tr>`).join('')}
+    <tr><td>Marketing <small style="color:#888">(from Marketing page)</small></td><td class="num" data-o="mktgMonthly"></td></tr></tbody>
+    <tfoot><tr><td>Annual business total</td><td class="num" data-o="bizAnnual"></td></tr></tfoot></table></div>
+   <div><h3>Personal expenses (monthly)</h3><table><tbody>${PERS.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><td>Annual personal total</td><td class="num" data-o="persAnnual"></td></tr></tfoot></table></div>
+  </div>
+  <h3>Savings & reserves (annual)</h3>
+  <div class="row c4">${F('RRSP / pre-tax savings','save.rrsp',{type:'money'})}${F('TFSA / after-tax savings','save.postTax',{type:'money'})}${F('Debt reduction goal','save.debt',{type:'money'})}${F('Cash reserves today','save.reserves',{type:'money'})}</div>
+  <h3>Your financial picture at goal</h3>
+  <div class="res">${RC('Net commissions (after split)','netComm')}${RC('Income tax holdback','taxAmt')}${RC('Take-home after tax & RRSP','takeHome')}${RC('Needed for budget & savings','needs')}</div>
+  <div class="res c3">${RC('Surplus / shortfall','surplus','dark')}${RC('Months of reserves','reserveMonths','dark')}${RC('Business expenses as % of GCI','bizPct','dark')}</div>
+  <h3>How to split every commission cheque</h3>
+  <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">Your income tax and GST holdbacks from Goals &amp; Numbers come off each cheque first; this splits what\u2019s left. Suggested split from your numbers: <b data-o="sugAlloc"></b>. Enter your own below, or leave blank to use the suggestion.</p>
+  <div class="row c3">${F('To business account','alloc.biz',{type:'pct'})}${F('Extra to tax account','alloc.tax',{type:'pct',hint:'beyond your holdbacks'})}${F('To personal & savings','alloc.pers',{type:'pct'})}</div>
+  <div id="alloc-ex"></div>
  `},
  {id:'season',t:'Seasonality',d:'Calgary does not sell evenly across the year. Weight each month to plan when your closings will land.',html:()=>`
   <p style="margin-top:0;color:var(--bp-dark-grey)">Adjust the weight under each month. Closings and your net commission per month update from your goal on the Goals page. The month you cap is highlighted.</p>
@@ -589,32 +615,6 @@ const SECTIONS=[
   <h3>Operations initiatives this year</h3>
   <div class="tbl-wrap"><table><thead><tr><th>Initiative</th><th style="width:170px">Target date</th><th style="width:130px">Priority</th><th class="no-print"></th></tr></thead><tbody id="init-body"></tbody></table></div>
   <button class="btn btn-line btn-sm no-print" id="init-add" type="button" style="margin-top:10px">+ Add initiative</button>
- `},
- {id:'money',t:'Budget & Finances',d:'It is not what you gross, it is what you keep. Build your budget and decide how every commission cheque gets split.',html:()=>`
-  <div class="row c2" style="align-items:start">
-   <div><h3>Business expenses (monthly)</h3><table><tbody>${BIZ.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l})}</td></tr>`).join('')}
-    <tr><td>Marketing <small style="color:#888">(from Marketing page)</small></td><td class="num" data-o="mktgMonthly"></td></tr></tbody>
-    <tfoot><tr><td>Annual business total</td><td class="num" data-o="bizAnnual"></td></tr></tfoot></table></div>
-   <div><h3>Personal expenses (monthly)</h3><table><tbody>${PERS.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody>
-    <tfoot><tr><td>Annual personal total</td><td class="num" data-o="persAnnual"></td></tr></tfoot></table></div>
-  </div>
-  <h3>Savings & reserves (annual)</h3>
-  <div class="row c4">${F('RRSP / pre-tax savings','save.rrsp',{type:'money'})}${F('TFSA / after-tax savings','save.postTax',{type:'money'})}${F('Debt reduction goal','save.debt',{type:'money'})}${F('Cash reserves today','save.reserves',{type:'money'})}</div>
-  <h3>Your financial picture at goal</h3>
-  <div class="res">${RC('Net commissions (after split)','netComm')}${RC('Income tax holdback','taxAmt')}${RC('Take-home after tax & RRSP','takeHome')}${RC('Needed for budget & savings','needs')}</div>
-  <div class="res c3">${RC('Surplus / shortfall','surplus','dark')}${RC('Months of reserves','reserveMonths','dark')}${RC('Business expenses as % of GCI','bizPct','dark')}</div>
-  <h3>How to split every commission cheque</h3>
-  <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">Your income tax and GST holdbacks from Goals &amp; Numbers come off each cheque first; this splits what\u2019s left. Suggested split from your numbers: <b data-o="sugAlloc"></b>. Enter your own below, or leave blank to use the suggestion.</p>
-  <div class="row c3">${F('To business account','alloc.biz',{type:'pct'})}${F('Extra to tax account','alloc.tax',{type:'pct',hint:'beyond your holdbacks'})}${F('To personal & savings','alloc.pers',{type:'pct'})}</div>
-  <div id="alloc-ex"></div>
- `},
- {id:'swot',t:'SWOT',d:'Your vision says where you’re going. This says where you are today.',html:()=>`
-  <div class="swot">
-   <div><div class="swot-l">Internal</div>${T('Strengths','swot.s',{rows:6,ph:'e.g. Deep knowledge of the SE lake communities'})}</div>
-   <div><div class="swot-l">Internal</div>${T('Weaknesses','swot.w',{rows:6,ph:'e.g. Inconsistent follow-up with online leads'})}</div>
-   <div><div class="swot-l">External</div>${T('Opportunities','swot.o',{rows:6,ph:'e.g. New phases opening in a nearby community'})}</div>
-   <div><div class="swot-l">External</div>${T('Threats','swot.t',{rows:6,ph:'e.g. Rising inventory lengthening days on market'})}</div>
-  </div>
  `},
  {id:'score',t:'Scorecard',d:'Check in every quarter. Track actuals against plan and grade each part of your business.',html:()=>`
   <h3>Quarterly results</h3>
