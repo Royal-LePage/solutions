@@ -100,7 +100,7 @@ body{margin:0;background:var(--bp-light-grey);color:var(--bp-black);font-family:
 .bp-tools select{background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:4px;padding:8px 10px;font:600 13px var(--bp-sans);width:auto}
 .bp-status{font-size:12px;color:#aaa;margin-top:8px}
 .bp-status b{color:#fff;font-weight:600}
-.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:#333;margin-top:20px;border-radius:4px;overflow:hidden}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:#333;margin-top:20px;border-radius:4px;overflow:hidden}
 .kpi{background:#222;padding:14px 16px}
 .kpi .v{font-size:22px;font-weight:800;white-space:nowrap}
 .kpi .l{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#aaa;font-weight:600}
@@ -342,6 +342,7 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
     </div>
     <div class="kpis">
       <div class="kpi"><div class="v" data-o="gci">$0</div><div class="l">GCI goal</div></div>
+      <div class="kpi"><div class="v" data-o="netTop">$0</div><div class="l">Net after cap &amp; expenses</div></div>
       <div class="kpi"><div class="v" data-o="sides">0</div><div class="l">Closed sides</div></div>
       <div class="kpi"><div class="v" data-o="convDay">0</div><div class="l">Conversations / day</div></div>
       <div class="kpi"><div class="v" data-o="contactsDay">0</div><div class="l">Referral contacts / day</div></div>
@@ -853,7 +854,7 @@ function recompute(){
  out('gciSide',money(c.gciSide)); out('netSide',money(c.netSide));
  out('splitPaid',money(c.splitPaid)); out('feesPaid',money(c.feesPaid)); out('effSplit',c.gci?pct((c.splitPaid+c.feesPaid)/c.gci):'–');
  out('capWhen',capText(c)); out('bizAnnual',money(c.bizAnnual)); out('profitNeed',money(c.profitNeed));
- out('gci',moneyK(c.gci)); out('sides',int(c.sides)); out('lb',`${int(c.L)} / ${int(c.B)}`); out('volume',moneyK(c.volume));
+ out('gci',moneyK(c.gci)); out('netTop',moneyK(c.profit)); out('sides',int(c.sides)); out('lb',`${int(c.L)} / ${int(c.B)}`); out('volume',moneyK(c.volume));
  if(c.hasBudget) out('surplus',moneyK(c.surplus),c.surplus<0?'neg':'pos'); else out('surplus','Add budget','');
  // season
  const mx=Math.max(...c.months,1);
@@ -880,7 +881,7 @@ function recompute(){
  const bs=BRAND.filter(([k])=>S.brand[k]).length; out('brandScore',`${bs} of ${BRAND.length}`);
  // money
  out('persAnnual',money(c.persAnnual)); out('netComm',money(c.netComm)); out('taxAmt',money(c.taxAmt)); out('takeHome',money(c.takeHome));
- out('needs',money(c.needs)); if(!c.hasBudget){ out('surplus','Add your budget',''); } out('bizPct',c.gci?pct(c.bizAnnual/c.gci):'–');
+ out('needs',money(c.needs)); if(!c.hasBudget){ out('surplus','Add budget',''); } out('bizPct',c.gci?pct(c.bizAnnual/c.gci):'–');
  out('reserveMonths',c.reserveMonthly>0?dec(c.reserves/c.reserveMonthly)+' mo':'–');
  const sb=c.netComm>0?c.bizAnnual/c.netComm:0, st=c.netComm>0?c.taxAmt/c.netComm:0, sp=Math.max(1-sb-st,0);
  out('sugAlloc',c.netComm>0?`${pct(sb)} business · ${pct(st)} tax · ${pct(sp)} personal & savings`:'set a goal first');
@@ -925,7 +926,7 @@ function renderSummary(){
    <div class="sum-card"><h4>North star</h4><p style="font-size:16px;font-weight:700">${t(v.northStar)}</p><h4 style="margin-top:12px">This year</h4><p>${t(v.one)}</p></div>
    <div class="sum-card"><h4>Three core goals</h4>${goals.length?`<ol>${goals.map(g=>`<li>${esc(g)}</li>`).join('')}</ol>`:t('')}<h4 style="margin-top:12px">My why</h4><p>${t(v.why)}</p></div>
    <div class="sum-card"><h4>The numbers</h4><dl>
-    <dt>GCI goal</dt><dd>${money(c.gci)}</dd><dt>Closed sides</dt><dd>${int(c.sides)} (${int(c.L)} listings / ${int(c.B)} buyers)</dd>
+    <dt>GCI goal</dt><dd>${money(c.gci)}</dd><dt>Net after cap &amp; expenses</dt><dd>${money(c.profit)}</dd><dt>Closed sides</dt><dd>${int(c.sides)} (${int(c.L)} listings / ${int(c.B)} buyers)</dd>
     <dt>Sales volume</dt><dd>${money(c.volume)}</dd><dt>Average price</dt><dd>${money(c.price)}</dd>
     <dt>Take-home after tax</dt><dd>${money(c.takeHome)}</dd>${c.cap?`<dt>Cap reached</dt><dd>${capText(c,true)}</dd>`:''}${c.hasBudget?`<dt>Budget surplus</dt><dd style="color:${c.surplus<0?'var(--bp-red)':'var(--green)'}">${money(c.surplus)}</dd>`:''}</dl></div>
    <div class="sum-card"><h4>Daily & weekly activity</h4><dl>
