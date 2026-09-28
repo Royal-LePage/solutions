@@ -511,7 +511,7 @@ const SECTIONS=[
   <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Enter your plan with the brokerage — these match the deduction summary on your deal statement. Not sure of your numbers? Ask the office. Leave the cap blank if you don\u2019t have one.</p>
   <div class="row c4">${F('Brokerage split','goals.split',{type:'pct',hint:'until you cap'})}${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}${F('Cap anniversary','goals.capDate',{type:'date',hint:'when your cap resets'})}${F('Paid toward cap by Jan 1','goals.capPaid',{type:'money',hint:'0 if unsure'})}</div>
   <div class="row c4">${F('Deal fee per side','goals.dealFee',{type:'money',hint:'blank = none'})}
-   <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal</option><option value="after">Only after I cap</option></select></label>
+   <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></label>
    ${F('Donation per deal','goals.don',{type:'money',hint:'DON'})}
    <div class="f"><span>RLP franchise fee <small>set by Royal LePage</small></span><div class="netbox locked">1% of GCI · max $1,525/yr</div></div></div>
   <h3>Holdbacks</h3>
@@ -522,7 +522,7 @@ const SECTIONS=[
   <div class="res c5">${RC('Split paid to brokerage','splitPaid')}${RC('RLP franchise fee','rlpPaid')}${RC('Deal fees & donations','feesPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('You cap','capWhen')}</div>
   <div class="res">${RC('GCI goal','gci','dark')}${RC('Total closed sides','sides','dark')}${RC('Listings / buyers','lb','dark')}${RC('Sales volume','volume','dark')}</div>
   <div id="vs-last"></div>
-  ${tip('<b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Net = GCI minus your split (until you cap), RLP franchise fee (up to its annual maximum), deal fees, donations and business expenses (from the Budget page, including your marketing budget). Take-home = net minus RRSP and your income tax holdback (a % of each cheque). The GST holdback is shown separately — GST is collected on top of your commission and paid to CRA, so it doesn\u2019t reduce your income. Deals are spread across the year using your Seasonality page; the split is charged until your cap is reached, the cap resets on your anniversary, and deal fees are added on top (they don\u2019t count toward the cap). This is a planning estimate, not tax advice — confirm your holdback rates with your accountant.')}
+  ${tip('<b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Net = GCI minus your split (until you cap), RLP franchise fee (up to its annual maximum), deal fees, donations and business expenses (from the Budget page, including your marketing budget). Take-home = net minus RRSP and your income tax holdback (a % of each cheque). The GST holdback is shown separately — GST is collected on top of your commission and paid to CRA, so it doesn\u2019t reduce your income. Deals are spread across the year using your Seasonality page; the split is charged until your cap is reached, the cap resets on your anniversary, and deal fees are charged the way you chose: on every deal, toward your cap until you cap, or only after you cap. This is a planning estimate, not tax advice — confirm your holdback rates with your accountant.')}
  `},
  {id:'season',t:'Seasonality',d:'Calgary does not sell evenly across the year. Weight each month to plan when your closings will land.',html:()=>`
   <p style="margin-top:0;color:var(--bp-dark-grey)">Adjust the weight under each month. Closings and your net commission per month update from your goal on the Goals page. The month you cap is highlighted.</p>
@@ -783,7 +783,7 @@ function distribute(total,weights){
 function capInfo(){
  const g=S.goals, cap=n(g.cap), d=g.capDate?new Date(g.capDate+'T00:00'):null;
  const annM=(d&&!isNaN(d))?d.getMonth():0;
- return {cap, annM, hasDate:!!(d&&!isNaN(d)), fee:Math.max(n(g.dealFee),0), feeAfter:g.feeMode==='after', paid0:Math.max(n(g.capPaid),0),
+ return {cap, annM, hasDate:!!(d&&!isNaN(d)), fee:Math.max(n(g.dealFee),0), feeAfter:g.feeMode==='after', feeCap:g.feeMode==='cap', paid0:Math.max(n(g.capPaid),0),
   rlpPct:0.01, rlpMax:1525, perDeal:Math.max(n(g.don),0)};
 }
 function engine(sides,gciSide,splitPct){
@@ -795,11 +795,15 @@ function engine(sides,gciSide,splitPct){
   let mn=0;
   for(let i=0;i<u;i++){
    sideNo++;
-   let sp=gciSide*splitPct;
-   if(ci.cap>0){ sp=Math.max(Math.min(sp,ci.cap-paid),0); paid+=sp; }
+   let sp=gciSide*splitPct, fee=ci.fee;
    const wasCapped=capped;
-   if(ci.cap>0&&paid>=ci.cap-0.005&&!capped){ capped=true; caps.push({m,side:sideNo}); }
-   const fee=ci.fee>0&&(!ci.feeAfter||wasCapped)?ci.fee:0;
+   if(ci.cap>0){
+    if(capped){ sp=0; if(ci.feeCap) fee=0; }
+    else{ const charge=sp+(ci.feeCap?fee:0), room=ci.cap-paid;
+     if(charge>0&&charge>=room-0.005){ const k=room/charge; sp*=k; if(ci.feeCap) fee*=k; paid=ci.cap; capped=true; caps.push({m,side:sideNo}); }
+     else paid+=charge; }
+   }
+   if(ci.feeAfter) fee=wasCapped?ci.fee:0;
    const rf=Math.max(Math.min(gciSide*ci.rlpPct,ci.rlpMax-rlpYr),0); rlpYr+=rf;
    split+=sp; fees+=fee; rlp+=rf; other+=ci.perDeal; const nt=gciSide-sp-fee-rf-ci.perDeal; net+=nt; mn+=nt;
   }
@@ -816,13 +820,15 @@ function engineG(gciTotal,gciSide,splitPct,sidesWhole){
  let paid=ci.hasDate&&ci.annM===0?0:ci.paid0, capped=ci.cap>0&&paid>=ci.cap, split=0, fees=0, net=0, cumG=0, rlp=0, rlpYr=0, other=0; const caps=[], monthNet=[];
  monthG.forEach((gm,m)=>{
   if(m>0&&ci.hasDate&&m===ci.annM){ paid=0; capped=false; rlpYr=0; }
-  let sp=gm*splitPct, pre=1;
-  if(ci.cap>0){
-   if(capped){ sp=0; pre=0; }
-   else{ const room=ci.cap-paid; if(sp>0&&sp>=room-0.005){ pre=room/sp; sp=room; paid=ci.cap; capped=true; caps.push({m,side:Math.max(1,Math.ceil((cumG+gm*pre)/gciSide-1e-9))}); } else paid+=sp; }
-  }
   const mSides=gciSide>0?gm/gciSide:0;
-  const fee=ci.fee>0?ci.fee*mSides*(ci.feeAfter?(ci.cap>0?1-pre:0):1):0;
+  let sp=gm*splitPct, fee=ci.fee*mSides, pre=1;
+  if(ci.cap>0){
+   if(capped){ sp=0; pre=0; if(ci.feeCap) fee=0; }
+   else{ const charge=sp+(ci.feeCap?fee:0), room=ci.cap-paid;
+    if(charge>0&&charge>=room-0.005){ pre=room/charge; sp*=pre; if(ci.feeCap) fee*=pre; paid=ci.cap; capped=true; caps.push({m,side:Math.max(1,Math.ceil((cumG+gm*pre)/gciSide-1e-9))}); }
+    else paid+=charge; }
+  }
+  if(ci.feeAfter) fee=ci.cap>0?ci.fee*mSides*(1-pre):0;
   const rf=Math.max(Math.min(gm*ci.rlpPct,ci.rlpMax-rlpYr),0); rlpYr+=rf; const oth=ci.perDeal*mSides;
   split+=sp; fees+=fee; rlp+=rf; other+=oth; const nt=gm-sp-fee-rf-oth; net+=nt; monthNet.push(nt); cumG+=gm;
  });
@@ -863,7 +869,7 @@ function calc(){
  const takeHome=profit-rrsp-taxAmt;
  const surplus=takeHome-needs;
  const profitNeed=g.method==='income'?n(g.netGoal)/(1-t)+rrsp:profit;
- const rlpSide=Math.min(gciSide*ci.rlpPct,ci.rlpMax), chequeBefore=gciSide*(1-split)-(ci.feeAfter?0:ci.fee)-rlpSide-ci.perDeal, chequeAfter=gciSide-ci.fee-ci.perDeal;
+ const rlpSide=Math.min(gciSide*ci.rlpPct,ci.rlpMax), chequeBefore=gciSide*(1-split)-(ci.feeAfter?0:ci.fee)-rlpSide-ci.perDeal, chequeAfter=gciSide-(ci.feeCap?0:ci.fee)-ci.perDeal;
  // activity
  const lRate=(n(k.lApptSign)/100)*(n(k.lSignClose)/100), bRate=(n(k.bConsSign)/100)*(n(k.bSignClose)/100);
  const lAp=lRate>0?L/lRate:0, bCo=bRate>0?B/bRate:0, lTk=n(k.lSignClose)>0?L/(n(k.lSignClose)/100):0;
