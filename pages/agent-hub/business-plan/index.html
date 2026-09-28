@@ -488,16 +488,15 @@ const SECTIONS=[
   <div class="row c2">${T('Core values','vision.values',{rows:5,hint:'Short sentences, not single words',ph:'e.g. I tell clients the truth about the market, even when it is not what they want to hear.'})}${T('My why','vision.why',{rows:5,hint:'What truly drives you, not what should'})}</div>
   <div class="row c2">${T('My commitment','vision.commitment',{rows:3,hint:'How seriously will you hold yourself to this plan?'})}${T('I’m a REALTOR® AND…','vision.andId',{rows:3,hint:'The expertise or passion that sets you apart',ph:'e.g. a lake-community local, a new-build specialist, a hockey parent'})}</div>
  `},
- {id:'numbers',t:'Goals & Numbers',d:'Set a GCI goal, work backwards from the income you need, or start from the number of deals you want. The rest of the plan runs on these numbers.',html:()=>`
+ {id:'numbers',t:'Goals & Numbers',d:'Set your GCI goal, or start from the number of deals you want. Your net and take-home are worked out for you, and the rest of the plan runs on these numbers.',html:()=>`
   <h3>Last 12 months <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— optional, skip if you don\u2019t have these handy</small></h3>
   <div class="row c4">${F('Listing sides closed','last.listings',{type:'num'})}${F('Buyer sides closed','last.buyers',{type:'num'})}${F('Average sale price','last.avgPrice',{type:'money'})}${F('Gross commission (GCI)','last.gci',{type:'money'})}</div>
   <h3>How do you want to set your goal?</h3>
-  <div class="seg" id="method-seg"><button data-m="gci" type="button">GCI goal</button><button data-m="income" type="button">Take-home income</button><button data-m="units" type="button">Number of deals</button></div>
+  <div class="seg" id="method-seg"><button data-m="gci" type="button">GCI goal</button><button data-m="units" type="button">Number of deals</button></div>
   <div class="row c4" style="margin-top:16px" id="m-set">
    <div id="m-gci" style="display:contents">${F('GCI goal','goals.gciGoal',{type:'money',hint:'before split, cap & expenses'})}<div class="f"><span>Net goal <small>after split, cap, fees & expenses</small></span><div class="netbox" data-o="netGoalBox">–</div></div></div>
-   <div id="m-income" style="display:contents">${F('Take-home income goal','goals.netGoal',{type:'money',hint:'after tax'})}</div>
    ${F('Sellers you want to work with','goals.listShare',{type:'pct',hint:'% of your deals'})}${F('Buyers you want to work with','goals.buyShare',{type:'pct',hint:'% of your deals'})}
-   <div class="f" id="m-budget"><span>&nbsp;</span><button class="btn btn-line" id="use-budget" type="button">Use my budget</button></div></div>
+   </div>
   <p id="gci-note" style="margin:-4px 0 0;font-size:13px;color:var(--bp-dark-grey)"></p>
   <div class="row c4" style="margin-top:16px" id="m-units">${F('Listing sides goal','goals.listings',{type:'num'})}${F('Buyer sides goal','goals.buyers',{type:'num'})}</div>
   <h3>Your average deal</h3>
@@ -511,11 +510,11 @@ const SECTIONS=[
   <div class="row c4">${F('Deal fee per side','goals.dealFee',{type:'money',hint:'blank = none'})}
    <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal</option><option value="after">Only after I cap</option></select></label>
    ${F('Combined tax rate','goals.tax',{type:'pct',hint:'estimate'})}</div>
-  <div class="res">${RC('GCI per side','gciSide')}${RC('Your average net per side','netSide')}${RC('Business expenses / yr','bizAnnual')}${RC('Profit needed before tax','profitNeed')}</div>
+  <div class="res">${RC('GCI per side','gciSide')}${RC('Your average net per side','netSide')}${RC('Business expenses / yr','bizAnnual')}${RC('Take-home after tax','takeHome')}</div>
   <div class="res">${RC('Split paid to brokerage','splitPaid')}${RC('Deal fees','feesPaid')}${RC('You cap','capWhen')}${RC('Your effective split','effSplit')}</div>
   <div class="res">${RC('GCI goal','gci','dark')}${RC('Total closed sides','sides','dark')}${RC('Listings / buyers','lb','dark')}${RC('Sales volume','volume','dark')}</div>
   <div id="vs-last"></div>
-  ${tip('<b>How this is calculated:</b> with a GCI goal, the number of deals is your GCI goal ÷ GCI per side. With a take-home goal, it works backwards: take-home ÷ (1 − tax rate), plus RRSP contributions, plus business expenses (from the Budget page, including your marketing budget). Deals are spread across the year using your Seasonality page; the split is charged until your cap is reached, the cap resets on your anniversary, and deal fees are added on top (they don\u2019t count toward the cap). Figures exclude GST. This is a planning estimate, not tax advice — confirm your rate with your accountant.')}
+  ${tip('<b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Net = GCI minus your split, deal fees and business expenses (from the Budget page, including your marketing budget). Take-home = net minus RRSP and income tax at your combined rate. Deals are spread across the year using your Seasonality page; the split is charged until your cap is reached, the cap resets on your anniversary, and deal fees are added on top (they don\u2019t count toward the cap). Figures exclude GST. This is a planning estimate, not tax advice — confirm your rate with your accountant.')}
  `},
  {id:'season',t:'Seasonality',d:'Calgary does not sell evenly across the year. Weight each month to plan when your closings will land.',html:()=>`
   <p style="margin-top:0;color:var(--bp-dark-grey)">Adjust the weight under each month. Closings and your net commission per month update from your goal on the Goals page. The month you cap is highlighted.</p>
@@ -926,7 +925,7 @@ function recompute(){
  const chq=c.chequeBefore>0?c.chequeBefore:c.chequeAfter;
  if(ex) ex.innerHTML=chq>0?`<div class="tip">On a typical cheque of <b>${money(chq)}</b> after split and fees${c.cap?` (${money(c.chequeAfter)} once you cap)`:''}: <b>${money(chq*ab)}</b> to business, <b>${money(chq*at)}</b> to tax, <b>${money(chq*ap)}</b> to personal & savings.${tot!==100?` <span class="flag warn">Your split adds up to ${tot}%</span>`:''}</div>`:'';
  const gn=document.getElementById('gci-note');
- if(gn) gn.innerHTML=S.goals.method==='gci'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, fees and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after tax${n(S.save.rrsp)?' and RRSP':''}.`:'';
+ if(gn) gn.innerHTML=S.goals.method==='gci'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, fees and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after tax${n(S.save.rrsp)?' and RRSP':''}.${c.hasBudget?(c.surplus<0?` <span class="flag bad">${money(-c.surplus)} short of your budget</span>`:` <span class="flag ok">Covers your budget with ${money(c.surplus)} to spare</span>`):''}`:'';
  // vs last year
  const vl=document.getElementById('vs-last'), ls=n(S.last.listings)+n(S.last.buyers);
  if(vl) vl.innerHTML=ls?`<div class="tip">Last year you closed <b>${int(ls)}</b> sides${n(S.last.gci)?` for <b>${money(n(S.last.gci))}</b> GCI`:''}. This plan calls for <b>${int(c.sides)}</b> — ${c.sides>=ls?`<b>${pct((c.sides-ls)/ls)}</b> more`:`<b>${pct((ls-c.sides)/ls)}</b> fewer`}.</div>`:'';
@@ -1042,7 +1041,7 @@ async function loadPlan(){
  try{ const d=await docRef().get(); if(d.exists) data=d.data().plan; }
  catch(e){ console.warn('Load failed',e); gate('app'); S=DEFAULT(); renderShell(); fillAll(); toggleVis(); recompute();
   setStatus('<b style="color:#ff8a9b">Couldn’t load your plan</b> · refresh the page to try again. Changes won’t be saved until it loads.'); return; }
- S=merge(DEFAULT(),data||{}); S.meta.year=year; S.goals.buyShare=Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; lastStamp=data&&data.meta?data.meta.updated:null;
+ S=merge(DEFAULT(),data||{}); S.meta.year=year; if(S.goals.method==='income'){ const c0=calc(); S.goals.gciGoal=Math.round(c0.gci/1000)*1000; S.goals.method='gci'; } S.goals.buyShare=Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; lastStamp=data&&data.meta?data.meta.updated:null;
  if(!S.vision.name&&user.displayName) S.vision.name=user.displayName;
  $('h-year').textContent=year;
  renderShell(); fillAll(); toggleVis(); recompute(); updateName();
@@ -1093,7 +1092,7 @@ document.getElementById('import-file').addEventListener('change',e=>{
  const r=new FileReader();
  r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d||typeof d!=='object'||!d.goals) throw new Error('bad');
    if(!confirm(`Replace your ${year} plan with the imported file?`)) return;
-   S=merge(DEFAULT(),d); S.meta.year=year; S.goals.buyShare=Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; renderShell(); fillAll(); toggleVis(); recompute(); ready=true; saveNow(); toast('Plan imported'); }
+   S=merge(DEFAULT(),d); S.meta.year=year; if(S.goals.method==='income'){ const c0=calc(); S.goals.gciGoal=Math.round(c0.gci/1000)*1000; S.goals.method='gci'; } S.goals.buyShare=Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; renderShell(); fillAll(); toggleVis(); recompute(); ready=true; saveNow(); toast('Plan imported'); }
   catch(err){ toast('That file isn’t a business plan export'); } finally{ e.target.value=''; } };
  r.readAsText(f);
 });
