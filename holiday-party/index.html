@@ -57,14 +57,14 @@
 
   /* schedule */
   .schedule{background:var(--rls-light-grey)}
-  .timeline{margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2px;background:var(--rls-warm-grey)}
-  .timeline div{background:#fff;padding:24px}
+  .timeline{margin-top:40px;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--rls-warm-grey)}
+  .timeline div{background:#fff;padding:22px 18px}
   .timeline time{display:block;font-weight:800;font-size:22px;color:var(--rls-red)}
   .timeline b{display:block;font-weight:700;margin-top:6px}
-  .timeline p{font-size:14px;color:var(--rls-dark-grey);margin-top:4px}
+  .timeline p{font-size:13.5px;color:var(--rls-dark-grey);margin-top:4px}
 
   /* ---------- Parking & getting home ---------- */
-  .logistics{background:#fff;padding:56px 24px}
+  .logistics{background:#fff;padding:64px 24px;border-top:1px solid var(--rls-warm-grey)}
   .logi-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
   .logistics h3{font-weight:800;font-size:22px;margin-bottom:12px}
   .logistics p{font-size:15px;color:var(--rls-dark-grey);margin-bottom:12px}
@@ -198,6 +198,7 @@
     .attend{grid-template-columns:1fr}
     .prize-grid{grid-template-columns:1fr}
     .logi-grid{grid-template-columns:1fr;gap:32px}
+    .timeline{grid-template-columns:1fr}
   }
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
@@ -239,33 +240,11 @@
     <h2>The evening</h2>
     <p class="sub">Get all dressed up, bring a guest, and celebrate the season at our Winter Gala.</p>
     <div class="timeline">
-      <div><time>6:00</time><b>Cocktail hour</b><p>Silent auction for the Shelter Foundation opens. Photos and cork pull too.</p></div>
-      <div><time>7:00</time><b>Dinner</b><p>Plated dinner, courtesy of the brokerage. Dietary needs noted on your RSVP.</p></div>
+      <div><time>6:00</time><b>Cocktail hour</b><p>Silent auction opens. Photos and cork pull.</p></div>
+      <div><time>7:00</time><b>Dinner</b><p>Buffet dinner. Dietary needs noted on your RSVP.</p></div>
       <div><time>8:15</time><b>Holiday toast</b><p>A few words to close out the year.</p></div>
-      <div><time>9:00</time><b>Draws and winners</b><p>Silent auction bidding ends. WestJet raffle and 50/50 winners announced live.</p></div>
+      <div><time>9:00</time><b>Draws and winners</b><p>Auction closes. WestJet and 50/50 winners announced.</p></div>
       <div><time>9:15</time><b>Dancing</b><p>Until 11.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= PARKING & GETTING HOME ======================= -->
-<section class="logistics">
-  <div class="wrap">
-    <div class="logi-grid">
-      <div>
-        <h3>Parking</h3>
-        <p>The Hyatt has underground parking, and we'll have validation tickets that bring it from $24 down to $12. The garage fits vehicles up to 1.99 m (6 ft 6 in) high.</p>
-        <p>Right next door, the <a href="https://www.calgaryparking.com/find-parking/lots/convention-centre-parkade-lot-60.html" target="_blank" rel="noopener">Telus Convention Centre Parkade</a> (Lot 60) is $5 from 6 pm, with access off 1st Street SE.</p>
-      </div>
-      <div>
-        <h3>Getting home</h3>
-        <p>Please don't drink and drive. If you've had a couple, arrange a ride, call an Uber, or use one of these:</p>
-        <ul>
-          <li><a href="https://keysplease.net/" target="_blank" rel="noopener">Keys Please</a> — they drive you home in your own car</li>
-          <li>Associated Cabs — <a href="tel:+14032991111">403-299-1111</a></li>
-          <li>Checker Cabs — <a href="tel:+14032999999">403-299-9999</a></li>
-        </ul>
-      </div>
     </div>
   </div>
 </section>
@@ -361,6 +340,28 @@
 </section>
 
 </form>
+
+<!-- ======================= PARKING & GETTING HOME ======================= -->
+<section class="logistics">
+  <div class="wrap">
+    <div class="logi-grid">
+      <div>
+        <h3>Parking</h3>
+        <p>The Hyatt has underground parking, and we'll have validation tickets that bring it from $24 down to $12. The garage fits vehicles up to 1.99 m (6 ft 6 in) high.</p>
+        <p>Right next door, the <a href="https://www.calgaryparking.com/find-parking/lots/convention-centre-parkade-lot-60.html" target="_blank" rel="noopener">Telus Convention Centre Parkade</a> (Lot 60) is $5 from 6 pm, with access off 1st Street SE.</p>
+      </div>
+      <div>
+        <h3>Getting home</h3>
+        <p>Please don't drink and drive. If you've had a couple, arrange a ride, call an Uber, or use one of these:</p>
+        <ul>
+          <li><a href="https://keysplease.net/" target="_blank" rel="noopener">Keys Please</a> — they drive you home in your own car</li>
+          <li>Associated Cabs — <a href="tel:+14032991111">403-299-1111</a></li>
+          <li>Checker Cabs — <a href="tel:+14032999999">403-299-9999</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="confirm-wrap" id="confirmWrap" hidden>
   <div class="wrap">
