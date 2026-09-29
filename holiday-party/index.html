@@ -63,6 +63,16 @@
   .timeline b{display:block;font-weight:700;margin-top:6px}
   .timeline p{font-size:14px;color:var(--rls-dark-grey);margin-top:4px}
 
+  /* ---------- Parking & getting home ---------- */
+  .logistics{background:#fff;padding:56px 24px}
+  .logi-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+  .logistics h3{font-weight:800;font-size:22px;margin-bottom:12px}
+  .logistics p{font-size:15px;color:var(--rls-dark-grey);margin-bottom:12px}
+  .logistics ul{list-style:none;font-size:15px;color:var(--rls-dark-grey)}
+  .logistics li{padding:6px 0;border-top:1px solid var(--rls-warm-grey)}
+  .logistics a{color:var(--rls-red);font-weight:600;text-decoration:none}
+  .logistics a:hover{text-decoration:underline}
+
   /* ---------- Prizes ---------- */
   .prizes{background:#fff}
   .prize-grid{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
@@ -187,6 +197,7 @@
     .two{grid-template-columns:1fr}
     .attend{grid-template-columns:1fr}
     .prize-grid{grid-template-columns:1fr}
+    .logi-grid{grid-template-columns:1fr;gap:32px}
   }
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
@@ -228,11 +239,33 @@
     <h2>The evening</h2>
     <p class="sub">Get all dressed up, bring a guest, and celebrate the season at our Winter Gala.</p>
     <div class="timeline">
-      <div><time>6:00</time><b>Cocktails and photos</b><p>Photo booth opens. Cork pull table is live.</p></div>
+      <div><time>6:00</time><b>Cocktail hour</b><p>Silent auction for the Shelter Foundation opens. Photos and cork pull too.</p></div>
       <div><time>7:00</time><b>Dinner</b><p>Plated dinner, courtesy of the brokerage. Dietary needs noted on your RSVP.</p></div>
-      <div><time>8:15</time><b>Awards and toasts</b><p>A few words, a few surprises.</p></div>
-      <div><time>8:45</time><b>WestJet raffle and 50/50 draw</b><p>Must be present to win. Winners announced live.</p></div>
-      <div><time>9:30</time><b>Dancing</b><p>Bar stays open until last call.</p></div>
+      <div><time>8:15</time><b>Holiday toast</b><p>A few words to close out the year.</p></div>
+      <div><time>9:00</time><b>Draws and winners</b><p>Silent auction bidding ends. WestJet raffle and 50/50 winners announced live.</p></div>
+      <div><time>9:15</time><b>Dancing</b><p>Until 11.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PARKING & GETTING HOME ======================= -->
+<section class="logistics">
+  <div class="wrap">
+    <div class="logi-grid">
+      <div>
+        <h3>Parking</h3>
+        <p>The Hyatt has underground parking, and we'll have validation tickets that bring it from $24 down to $12. The garage fits vehicles up to 1.99 m (6 ft 6 in) high.</p>
+        <p>Right next door, the <a href="https://www.calgaryparking.com/find-parking/lots/convention-centre-parkade-lot-60.html" target="_blank" rel="noopener">Telus Convention Centre Parkade</a> (Lot 60) is $5 from 6 pm, with access off 1st Street SE.</p>
+      </div>
+      <div>
+        <h3>Getting home</h3>
+        <p>Please don't drink and drive. If you've had a couple, arrange a ride, call an Uber, or use one of these:</p>
+        <ul>
+          <li><a href="https://keysplease.net/" target="_blank" rel="noopener">Keys Please</a> — they drive you home in your own car</li>
+          <li>Associated Cabs — <a href="tel:+14032991111">403-299-1111</a></li>
+          <li>Checker Cabs — <a href="tel:+14032999999">403-299-9999</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
