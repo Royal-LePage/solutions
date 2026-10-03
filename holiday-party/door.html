@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Winter Gala — Door sales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--rls-red:#EA002A;--rls-red-dk:#B80021;--rls-black:#1A1A1A;--rls-dark-grey:#4A4A4A;--rls-warm-grey:#E9E6E2;--rls-light-grey:#F6F5F3;--rls-sans:'Raleway',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{font-family:var(--rls-sans);background:var(--rls-light-grey);color:var(--rls-black);-webkit-font-smoothing:antialiased;overscroll-behavior:none;user-select:none}
+  button{font-family:inherit;cursor:pointer}
+
+  header{background:var(--rls-black);color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+  header h1{font-size:20px;font-weight:800}
+  header h1 span{color:var(--rls-red)}
+  header .stock{font-size:14px;color:#B8B4AE}
+  header .stock b{color:#fff}
+
+  main{display:grid;grid-template-columns:1fr 380px;gap:20px;padding:20px;max-width:1200px;margin:0 auto}
+
+  .items{display:grid;gap:12px}
+  .item{background:#fff;border-radius:8px;padding:16px 20px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;border:2px solid transparent}
+  .item.has{border-color:var(--rls-red)}
+  .item.soldout{opacity:.4;pointer-events:none}
+  .item b{display:block;font-size:20px;font-weight:700}
+  .item small{display:block;font-size:14px;color:var(--rls-dark-grey);margin-top:2px}
+  .item .price{font-weight:800;font-size:22px;margin-top:4px}
+  .qty{display:flex;align-items:center;gap:0;border:2px solid var(--rls-black);border-radius:8px;overflow:hidden}
+  .qty button{width:64px;height:64px;border:0;background:#fff;font-size:32px;font-weight:600;color:var(--rls-black)}
+  .qty button:active{background:var(--rls-warm-grey)}
+  .qty output{width:64px;text-align:center;font-weight:800;font-size:28px}
+  .donate{display:flex;align-items:center;gap:8px;border:2px solid var(--rls-black);border-radius:8px;padding:0 14px;height:68px;font-weight:800;font-size:24px;background:#fff}
+  .donate input{width:110px;border:0;font:inherit;font-weight:800;font-size:26px;outline:none;color:var(--rls-black)}
+
+  .side{display:grid;gap:12px;align-content:start}
+  .card{background:#fff;border-radius:8px;padding:18px 20px}
+  .card h3{font-size:15px;font-weight:700;color:var(--rls-dark-grey);margin-bottom:10px;letter-spacing:.04em;text-transform:uppercase}
+  .field input{width:100%;font:inherit;font-size:20px;padding:14px;border:2px solid #C9C5BF;border-radius:8px;outline:none}
+  .field input:focus{border-color:var(--rls-red)}
+  .pay{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .pay label{display:block;text-align:center;padding:14px 6px;border:2px solid var(--rls-black);border-radius:8px;font-weight:700;font-size:15px;background:#fff}
+  .pay label:has(input:checked){background:var(--rls-red);border-color:var(--rls-red);color:#fff}
+  .pay input{position:absolute;opacity:0;width:0;height:0}
+
+  .summary{background:var(--rls-black);color:#fff;border-radius:8px;padding:20px}
+  .summary ul{list-style:none;font-size:16px;min-height:52px}
+  .summary li{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #333;color:#D8D4CE}
+  .summary li.empty{color:#8A8680;border:0}
+  .summary .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;font-weight:800;font-size:38px}
+  .summary .total span:first-child{font-size:18px;font-weight:600;color:#B8B4AE}
+  .btn{width:100%;margin-top:16px;background:var(--rls-red);color:#fff;border:0;border-radius:8px;font-weight:800;font-size:22px;padding:20px}
+  .btn:active{background:var(--rls-red-dk)}
+  .btn:disabled{opacity:.5}
+  .ghost{width:100%;margin-top:8px;background:transparent;color:#B8B4AE;border:2px solid #444;border-radius:8px;font-weight:600;font-size:15px;padding:12px}
+  .err{color:#FF7A8E;font-weight:600;font-size:14px;margin-top:10px;display:none}
+  .err.show{display:block}
+
+  .done{position:fixed;inset:0;background:var(--rls-black);color:#fff;display:none;align-items:center;justify-content:center;text-align:center;padding:40px;z-index:10}
+  .done.show{display:flex}
+  .done h2{font-size:48px;font-weight:800}
+  .done p{font-size:22px;color:#B8B4AE;margin-top:12px}
+  .done .big{font-size:72px;font-weight:800;color:var(--rls-red);margin:20px 0}
+  .done .etbox{margin-top:16px;padding:16px 22px;background:#2A2A2A;border-radius:8px;font-size:18px;color:#D8D4CE;line-height:1.6}
+  .done .etbox b{color:#fff}
+  .done button{margin-top:36px;background:#fff;color:var(--rls-black);border:0;border-radius:8px;font-weight:800;font-size:22px;padding:18px 48px}
+
+  @media (max-width:900px){ main{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Winter Gala <span>·</span> Door sales</h1>
+  <div class="stock" id="stockLine"></div>
+</header>
+
+<main>
+  <section class="items" id="items"></section>
+
+  <aside class="side">
+    <div class="card">
+      <h3>Buyer</h3>
+      <div class="field"><input type="text" id="name" placeholder="Name (as on their RSVP)" autocomplete="off"></div>
+    </div>
+    <div class="card">
+      <h3>Payment</h3>
+      <div class="pay">
+        <label><input type="radio" name="payment" value="cash" checked>Cash</label>
+        <label><input type="radio" name="payment" value="etransfer">E-Transfer</label>
+        <label><input type="radio" name="payment" value="office">Office acct</label>
+      </div>
+    </div>
+    <div class="summary">
+      <ul id="lines"><li class="empty">Tap + to add tickets</li></ul>
+      <div class="total"><span>Total</span><span id="total">$0</span></div>
+      <button class="btn" id="submitBtn" type="button">Record sale</button>
+      <button class="ghost" id="clearBtn" type="button">Clear</button>
+      <p class="err" id="err"></p>
+    </div>
+  </aside>
+</main>
+
+<div class="done" id="done">
+  <div>
+    <h2>Recorded</h2>
+    <p id="doneName"></p>
+    <div class="big" id="doneTotal"></div>
+    <p id="doneHow"></p>
+    <div class="etbox" id="doneEt" hidden></div>
+    <button type="button" id="nextBtn">Next sale</button>
+  </div>
+</div>
+
+<script>
+/* ---- keep these in sync with index.html ---- */
+const CONFIG = {
+  endpoint: "https://script.google.com/macros/s/AKfycbyiq0_1oSkxfBWYJVSpf3XGzl1aawfldOfA93ZeGjcUORBfc_0MGQy8J_edfoNYRNxX3A/exec",
+  etransferEmail: "rlpstransfer@royallepage.ca",
+  etransferPassword: "Midpark",
+  tickets: [
+    { id:"cork",    name:"Cork pull",            desc:"Every cork wins a bottle",      price:25,  uses:{cork:1} },
+    { id:"westjet", name:"WestJet raffle",       desc:"One ticket, drawn at 9:00",     price:50 },
+    { id:"fifty",   name:"50/50 single ticket",  desc:"",                              price:20 },
+    { id:"fifty6",  name:"50/50 six tickets",    desc:"$20 savings",                   price:100 },
+  ],
+  inventory: { cork: 50 },
+  donation: true,
+};
+
+const $ = s => document.querySelector(s);
+const fmt = n => "$" + n.toLocaleString("en-CA");
+const qty = {}; const sold = {};
+const inCart = k => CONFIG.tickets.reduce((n,t) => n + (t.uses && t.uses[k] ? qty[t.id]*t.uses[k] : 0), 0);
+const remaining = k => (CONFIG.inventory && k in CONFIG.inventory) ? Math.max(0, CONFIG.inventory[k] - (sold[k] || 0)) : Infinity;
+const donation = () => { const d = $("#donation"); return d ? Math.max(0, Math.floor(Number(d.value) || 0)) : 0; };
+const total = () => CONFIG.tickets.reduce((s,t) => s + qty[t.id]*t.price, 0) + donation();
+
+function render(){
+  $("#items").innerHTML = CONFIG.tickets.map(t => `
+    <div class="item" id="item-${t.id}">
+      <div><b>${t.name}</b>${t.desc ? `<small>${t.desc}</small>` : ""}<div class="price">${fmt(t.price)}</div></div>
+      <div class="qty"><button type="button" data-id="${t.id}" data-d="-1">−</button><output id="q-${t.id}">0</output><button type="button" data-id="${t.id}" data-d="1">+</button></div>
+    </div>`).join("") + (CONFIG.donation ? `
+    <div class="item" id="item-donation">
+      <div><b>Donation to the Shelter Foundation</b><small>Any amount</small></div>
+      <div class="donate">$<input type="number" id="donation" inputmode="numeric" placeholder="0" min="0"></div>
+    </div>` : "");
+  CONFIG.tickets.forEach(t => qty[t.id] = 0);
+  $("#items").addEventListener("click", e => {
+    const b = e.target.closest("button[data-id]"); if(!b) return;
+    const t = CONFIG.tickets.find(x => x.id === b.dataset.id);
+    const next = Math.max(0, qty[t.id] + Number(b.dataset.d));
+    if(next > qty[t.id] && t.uses){ for(const k in t.uses){ if(inCart(k) + t.uses[k] > remaining(k)){ flash(`Only ${remaining(k) - inCart(k)} corks left`); return; } } }
+    qty[t.id] = next; $("#q-"+t.id).value = next; update();
+  });
+  const d = $("#donation"); if(d) d.addEventListener("input", update);
+}
+function update(){
+  const lines = CONFIG.tickets.filter(t => qty[t.id] > 0).map(t => `<li><span>${qty[t.id]} × ${t.name}</span><span>${fmt(qty[t.id]*t.price)}</span></li>`);
+  if(donation() > 0) lines.push(`<li><span>Donation</span><span>${fmt(donation())}</span></li>`);
+  $("#lines").innerHTML = lines.length ? lines.join("") : `<li class="empty">Tap + to add tickets</li>`;
+  $("#total").textContent = fmt(total());
+  CONFIG.tickets.forEach(t => $("#item-"+t.id).classList.toggle("has", qty[t.id] > 0));
+  $("#item-donation") && $("#item-donation").classList.toggle("has", donation() > 0);
+}
+function paintStock(){
+  const left = remaining("cork");
+  $("#stockLine").innerHTML = `Corks left: <b>${left}</b> of ${CONFIG.inventory.cork}`;
+  $("#item-cork").classList.toggle("soldout", left === 0);
+}
+function loadStock(){
+  window.__stock = j => { Object.assign(sold, j || {}); paintStock(); };
+  const sc = document.createElement("script"); sc.src = CONFIG.endpoint + "?stock=1&callback=__stock&t=" + Date.now(); document.head.appendChild(sc);
+}
+function flash(msg){ const e = $("#err"); e.textContent = msg; e.classList.add("show"); setTimeout(() => e.classList.remove("show"), 2500); }
+function clearAll(){
+  CONFIG.tickets.forEach(t => { qty[t.id] = 0; $("#q-"+t.id).value = 0; });
+  const d = $("#donation"); if(d) d.value = "";
+  $("#name").value = ""; document.querySelector('input[name="payment"][value="cash"]').checked = true;
+  update();
+}
+$("#clearBtn").onclick = clearAll;
+$("#nextBtn").onclick = () => { $("#done").classList.remove("show"); clearAll(); loadStock(); };
+
+$("#submitBtn").onclick = async () => {
+  if(total() <= 0){ flash("Add at least one ticket or a donation."); return; }
+  const name = $("#name").value.trim() || "Door sale";
+  const payment = document.querySelector('input[name="payment"]:checked').value;
+  const payload = { submitted: new Date().toISOString(), name, email: "", attending: "", guestName: "", dietary: "",
+    payment, total: total(), donation: donation(), source: "door",
+    ...Object.fromEntries(CONFIG.tickets.map(t => [t.id, qty[t.id]])) };
+  const btn = $("#submitBtn"); btn.disabled = true; btn.textContent = "Saving…";
+  try{
+    await fetch(CONFIG.endpoint, { method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body: JSON.stringify(payload) });
+    // optimistic cork count so the next sale sees it immediately
+    sold.cork = (sold.cork || 0) + inCart("cork");
+    $("#doneName").textContent = name; $("#doneTotal").textContent = fmt(payload.total);
+    const how = { cash:"Paid in cash", etransfer:"Paying by e-transfer", office:"Charged to office account" }[payment];
+    $("#doneHow").textContent = how;
+    const et = $("#doneEt");
+    if(payment === "etransfer"){ et.hidden = false; et.innerHTML = `Send <b>${fmt(payload.total)}</b> to <b>${CONFIG.etransferEmail}</b><br>Security answer: <b>${CONFIG.etransferPassword}</b>`; } else et.hidden = true;
+    $("#done").classList.add("show");
+  }catch(x){ flash("Didn't save — check the Wi-Fi and try again."); }
+  btn.disabled = false; btn.textContent = "Record sale";
+};
+
+render(); update(); paintStock(); loadStock();
+</script>
+</body>
+</html>
