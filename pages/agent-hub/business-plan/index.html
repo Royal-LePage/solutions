@@ -123,6 +123,44 @@ body{margin:0;background:var(--bp-light-grey);color:var(--bp-black);font-family:
 .bp-nav .n{flex:0 0 22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-size:11px;font-weight:700}
 .bp-nav button.done .n{background:var(--bp-red);border-color:var(--bp-red);color:#fff}
 .bp-nav .t{flex:1}
+.bp-nav .ph{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--bp-red);font-weight:800;padding:12px 10px 4px}
+.bp-nav .ph:first-child{padding-top:4px}
+.ess{color:var(--bp-red);font-size:12px;line-height:1}
+.bp-nav button.on .ess{color:#fff}
+.nav-key{font-size:11.5px;color:#888;padding:10px 10px 4px;border-top:1px solid var(--bp-warm-grey);margin-top:8px}
+.ess-t{color:var(--bp-dark-grey)}
+.intro{color:var(--bp-dark-grey);font-size:14px;margin:0 0 12px;max-width:820px}
+details.deeper{border:1px dashed #C9C4BC;border-radius:6px;margin:22px 0;background:#FCFBFA}
+details.deeper>summary{cursor:pointer;padding:12px 16px;font:700 14px var(--bp-sans);list-style:none;display:flex;gap:8px;align-items:center}
+details.deeper>summary::-webkit-details-marker{display:none}
+details.deeper>summary:before{content:'+';display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--bp-black);color:#fff;font-size:14px;flex:0 0 20px}
+details.deeper[open]>summary:before{content:'\2212'}
+details.deeper>summary span{color:var(--bp-red);text-transform:uppercase;letter-spacing:.08em;font-size:11.5px}
+details.deeper>summary small{color:#999;font-weight:500;font-size:12px;margin-left:auto}
+.deeper-b{padding:0 16px 16px}
+.vb{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:end;background:var(--bp-light-grey);border-radius:6px;padding:18px;margin:6px 0 22px}
+.vb p{color:var(--bp-dark-grey);font-size:14px}
+.vwords{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:8px}
+.ps-preview{border-left:4px solid var(--bp-red);background:var(--bp-light-grey);padding:14px 16px;font-size:16px;line-height:1.55;border-radius:0 4px 4px 0}
+.ps-preview .blank{color:#aaa}
+.chan{border:1px solid var(--bp-warm-grey);border-top:3px solid var(--bp-red);border-radius:4px;padding:14px 16px 4px;margin-bottom:14px}
+.chan h4{margin:0 0 10px;font:800 15px var(--bp-sans)}
+.comp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px;margin-bottom:10px}
+.chain{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch;margin-bottom:6px}
+.chain span{background:var(--bp-light-grey);border-radius:4px;padding:8px 10px;font-size:13px;display:flex;flex-direction:column}
+.chain small{color:#777;font-size:11.5px}
+.chain i{font-style:normal;color:var(--bp-red);font-weight:800;align-self:center}
+table.pri td textarea,table.journey td textarea{min-height:52px;font-size:13px}
+.season-legend{display:flex;gap:18px;font-size:12px;color:var(--bp-dark-grey);margin:-2px 0 6px}
+.season-legend i{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-2px;margin-right:4px}
+.lg-bar{background:var(--bp-black)}.lg-in{border:1.5px solid #D6D1CA;background:#fff}
+table.cf{font-size:12px;min-width:860px}
+table.cf th,table.cf td{padding:6px 4px;white-space:nowrap}
+table.cf tbody th{text-align:left;font-weight:600;text-transform:none;letter-spacing:0;font-size:12.5px;border-bottom:1px solid var(--bp-warm-grey)}
+table.cf td.neg{color:var(--bp-red)}
+table.cf tr.flow td,table.cf tr.flow th{font-weight:800;border-top:2px solid var(--bp-black)}
+table.cf tr.bal td,table.cf tr.bal th{font-weight:800;background:var(--bp-light-grey)}
+table.cf td.tot{background:#F0EDE8;font-weight:700}
 
 .sec{display:none;background:#fff;border-radius:6px;border:1px solid var(--bp-warm-grey);padding:28px}
 .sec.on{display:block}
@@ -246,12 +284,16 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
   .bp-grid{grid-template-columns:minmax(0,1fr)}
   .bp-nav{position:static;display:flex;overflow-x:auto;gap:4px;padding:6px}
   .bp-nav button{flex:0 0 auto;width:auto;white-space:nowrap}
+  .bp-nav .ph{align-self:center;padding:0 4px 0 10px;white-space:nowrap}
+  .nav-key{display:none}
+  .vwords{grid-template-columns:repeat(3,minmax(0,1fr))}
   .kpis{grid-template-columns:repeat(3,1fr)}
   .res,.res.c5{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:640px){
   .sec{padding:18px}
-  .c2,.c3,.c4,.swot,.sum-grid,.res.c3{grid-template-columns:minmax(0,1fr)}
+  .c2,.c3,.c4,.swot,.sum-grid,.res.c3,.vb,.comp{grid-template-columns:minmax(0,1fr)}
+  .vwords{grid-template-columns:repeat(2,minmax(0,1fr))}
   .kpis{grid-template-columns:repeat(2,1fr)}
   .season{grid-template-columns:repeat(6,minmax(0,1fr))}
   .qs{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -376,15 +418,23 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
 ---------------------------------------------------------------- */
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const MONTHS_FULL=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const SOURCES=['Past clients & sphere','Referrals (clients & friends)','Agent-to-agent referrals','Online leads','Geo farm','Open houses','Sign & call-ins','Other'];
+const SOURCES=['Sphere / referrals','Past clients','Geographic farming','Open houses','Social media','Paid advertising','Networking','Professional partners','Online search / SEO','Other'];
+const COMPETITORS=[['agents','Other agents'],['discount','Discount brokerages'],['teams','Teams'],['fsbo','FSBO (for sale by owner)'],['online','Online platforms'],['family','Friends / family'],['nothing','Doing nothing']];
+const CX_STAGES=['Lead','Consultation','Search / preparation','Offer','Contract','Closing','Post-close'];
+const CANVA_URL='https://www.canva.com/s/templates?query=vision+board';
+const PHASES=[['Foundation',['vision','values']],['Positioning',['position','swot']],['Strategy',['model','sources','calendar','cx','marketing','ops','priorities']],['Business Plan',['numbers','money','season','activity']],['Execution',['score','summary']]];
+const ESSENTIAL=['vision','values','position','priorities','numbers','money'];
+const TASK_ACTIONS=['Only I do','Systemize','Delegate','Automate','Delete'];
+const VALUE_EX=[['Integrity','Tell the truth even when uncomfortable','Give clients honest opinions about pricing'],['Service','Put the client’s interests first','Respond promptly and anticipate needs'],['Excellence','Continually improve','Invest in education and review every transaction'],['Relationships','Build long-term trust','Stay connected after closing'],['','','']];
+const PRI_EX=[['25 transactions','Lead generation','Need more qualified opportunities','Referral + sphere strategy','Qualified leads'],['25 transactions','Conversion','Current conversion is too low','Improve consultation process','Lead → client %'],['15 listings','Listing pipeline','Need more seller opportunities','Geographic authority','Listing appointments'],['$250K GCI','Average transaction value','Current mix is too low','Target a higher-value market','Average sale price'],['','','','','']];
 const CAL_ROWS=[['call','Reason to call'],['text','Reason to text / email'],['popby','Pop-by idea'],['video','Video / social post'],['event','Event / client party']];
 const PILLARS=[['build','Build — goals & numbers'],['brand','Brand — reputation & presence'],['amplify','Amplify — content & marketing'],['connect','Connect — sphere & referrals'],['simplify','Simplify — systems & delegation']];
 const BIZ=[['desk','Brokerage desk / admin fees'],['board','Board & association dues'],['license','Licence & E&O insurance'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other business']];
 const PERS=[['housing','Housing (mortgage/rent, tax, insurance)'],['transport','Personal transportation'],['groceries','Groceries & household'],['utilities','Utilities & internet'],['insurance','Life, health & other insurance'],['family','Childcare & family'],['debt','Personal debt payments'],['lifestyle','Lifestyle, dining & travel'],['giving','Giving & charity'],['other','Other personal']];
 const MKTG=[['paid','Paid social & online ads'],['print','Print & mailers'],['events','Client events & appreciation'],['popby','Pop-bys & client gifts'],['email','Email, newsletter & CRM add-ons'],['signage','Signage, photos & listing marketing'],['other','Other marketing']];
 const BRAND=[['google','My first three Google results are professional and accurate'],['gbp','Google Business Profile is claimed and has reviews from the last 90 days'],['photo','The same current headshot is used on every platform'],['bio','My Royal LePage bio page and website are current'],['linkedin','LinkedIn headline and profile are up to date'],['social','Every social profile links back to my website or bio page']];
-const DEFAULT_TASKS=['Lead follow-up','Transaction management','Social media scheduling','Client onboarding','Listing prep & marketing','Database updates'];
-const SEASON_W=[5,7,9,10,11,10,9,9,8,8,7,5];
+const DEFAULT_TASKS=['CRM','Database management','Lead follow-up','Transaction management','Marketing','Client communication','Accounting','Administrative support','Technology','Automation'];
+const SEASON_W=[20,25,50,60,90,100,90,70,55,45,25,20]; /* when deals go firm (sales curve) */
 
 const IDEAS={
  call:['New-year market outlook','Spring plans check-in','Spring market is here: home value update','Tax season wrap-up: any plans this year?','Yard season check-in','Summer plans and a home value update','Stampede invite','Back-to-school check-in','Fall market update','Thanksgiving thank-you calls','Year-end review: any moves next year?','Holiday greetings and referral thank-yous'],
@@ -399,13 +449,23 @@ function nextYearDefault(){const d=new Date();return d.getMonth()>=6?d.getFullYe
 function DEFAULT(){
  return {
   meta:{year:nextYearDefault()},
-  vision:{name:'',ten:'',five:'',one:'',northStar:'',goal1:'',goal2:'',goal3:'',mission:'',values:'',why:'',commitment:'',andId:''},
+  vision:{name:'',board:'',ten:'',five:'',three:'',one:'',ninety:'',northStar:'',goal1:'',goal2:'',goal3:'',mission:'',values:'',why:'',commitment:'',andId:''},
+  values:{words:Array(15).fill(''),core:[0,1,2,3,4].map(()=>({v:'',means:'',practice:''}))},
+  pos:{ideal:'',needs:'',uvp:'',ps:{client:'',value:'',proof:'',outcome:''}},
+  model:{primary:'',structure:'',approach:'',fulltime:'',geo:'',types:'',price:'',hours:'',fit:''},
+  market:{primary:'',secondary:'',geo:'',prop:'',opp:''},
+  comp:{agents:false,discount:false,teams:false,fsbo:false,online:false,family:false,nothing:false},compWhy:'',
+  cx:{experience:'',standard:'',journey:CX_STAGES.map(()=>({need:'',provide:'',comm:'',distinct:''}))},
+  brandpos:{want:['','',''],now:['','','']},
+  sys:{consistent:'',onlyMe:'',systemize:'',delegate:''},
+  pri:{items:[0,1,2].map(()=>({goal:'',priority:'',why:'',strategy:'',measure:'',target:'',q:['','','','']})),notFocus:''},
+  obj:{primary:'',sec1:'',sec2:''},
   last:{listings:'',buyers:'',avgPrice:'',gci:''},
   goals:{method:'gci',gciGoal:200000,netGoal:120000,tax:30,split:20,avgPrice:650000,commModel:'tier',t1:3.5,t2:1.5,flat:2.5,listShare:50,buyShare:50,listings:10,buyers:10,cap:'',dealFee:'',feeMode:'all',capDate:'',capPaid:'',rlpPct:1,rlpMax:1525,gstHold:5,don:'',otherFee:''},
-  season:{w:SEASON_W.slice()},
+  season:{w:SEASON_W.slice(),lag:30,curve:''},
   kpi:{lApptSign:60,lSignClose:85,bConsSign:60,bSignClose:75,convPerAppt:25,convPerHour:5,weeksOff:4,daysPerWeek:5,refPerClose:3,contactsPerRef:20},
-  sources:SOURCES.map(nm=>({name:nm,last:'',goal:'',how:''})),
-  content:{personal:1,professional:2,and:1,andTopic:''},
+  sources:SOURCES.map(nm=>({name:nm,pri:'',last:'',goal:'',why:'',who:'',strat:'',res:'',result:''})),
+  content:{personal:1,professional:2,and:1,andTopic:'',platforms:'',themes:'',process:''},
   mktg:{paid:'',print:'',events:'',popby:'',email:'',signage:'',other:''},
   brand:{},
   cal:MONTHS.map(()=>({call:'',text:'',popby:'',video:'',event:''})),
@@ -441,6 +501,16 @@ function merge(base,src){
 }
 
 let S=DEFAULT();
+/* Bring plans saved by earlier versions into the current shape. */
+function normalize(){
+ if(!S.sources||S.sources.length!==SOURCES.length||S.sources.some((x,i)=>x.name!==SOURCES[i])) S.sources=DEFAULT().sources;
+ if(S.season.curve!=='firm'){ S.season.w=SEASON_W.slice(); S.season.curve='firm'; }
+ (S.tasks||[]).forEach(t=>{ if(t.action==='Do') t.action='Only I do'; });
+ if(!S.vision.five&&S.vision.ten) S.vision.five=S.vision.ten;
+ if(!Array.isArray(S.pri.items)||!S.pri.items.length) S.pri.items=DEFAULT().pri.items;
+ S.pri.items.forEach(x=>{ if(!Array.isArray(x.q)||x.q.length!==4) x.q=['','','','']; });
+ if(!Array.isArray(S.values.words)||S.values.words.length<15) S.values.words=(S.values.words||[]).concat(Array(15).fill('')).slice(0,15);
+}
 
 /* ---------------------------------------------------------------
    Helpers
@@ -472,26 +542,50 @@ function T(label,key,o={}){
  return `<label class="f"><span>${label}${o.hint?` <small>${o.hint}</small>`:''}</span><textarea data-k="${key}" rows="${o.rows||3}" placeholder="${esc(o.ph||'')}"></textarea></label>`;
 }
 function tip(html){return `<div class="tip">${html}</div>`;}
+function deeper(title,html){return `<details class="deeper"><summary><span>Go deeper</span> ${title} <small>optional</small></summary><div class="deeper-b">${html}</div></details>`;}
+function intro(t){return `<p class="intro">${t}</p>`;}
 function RC(label,key,cls=''){return `<div class="rc ${cls}"><div class="v" data-o="${key}">–</div><div class="l">${label}</div></div>`;}
 
 /* ---------------------------------------------------------------
    Sections
 ---------------------------------------------------------------- */
 const SECTIONS=[
- {id:'vision',t:'Vision & Why',d:'Where you are going and why it matters. Everything else in this plan should point back to this page.',html:()=>`
+ {id:'vision',t:'Vision & Goals',d:'Where are you going, and why does it matter? Everything else in this plan should point back to this page.',html:()=>`
   <div class="row c2">${F('Your name','vision.name',{hint:'appears on your printed plan'})}</div>
-  <h3>Vision</h3>
-  <div class="row">${T('10-year vision','vision.ten',{hint:'Think big: income, clients served, team, investments, lifestyle',rows:3})}</div>
-  <div class="row c2">${T('5-year vision','vision.five')}${T('This year','vision.one',{hint:'Specific milestones for the plan year'})}</div>
-  <div class="row">${F('My north star','vision.northStar',{ph:'The one outcome every decision this year builds toward',hint:'One sentence'})}</div>
-  <h3>Three core growth goals</h3>
-  <div class="row c3">${F('Goal 1','vision.goal1')}${F('Goal 2','vision.goal2')}${F('Goal 3','vision.goal3')}</div>
-  <h3>Mission, values & motivation</h3>
-  <div class="row">${T('Mission statement','vision.mission',{rows:2,hint:'Your purpose and how you deliver it, in one or two sentences'})}</div>
-  <div class="row c2">${T('Core values','vision.values',{rows:5,hint:'Short sentences, not single words',ph:'e.g. I tell clients the truth about the market, even when it is not what they want to hear.'})}${T('My why','vision.why',{rows:5,hint:'What truly drives you, not what should'})}</div>
-  <div class="row c2">${T('My commitment','vision.commitment',{rows:3,hint:'How seriously will you hold yourself to this plan?'})}${T('I’m a REALTOR® AND…','vision.andId',{rows:3,hint:'The expertise or passion that sets you apart',ph:'e.g. a lake-community local, a new-build specialist, a hockey parent'})}</div>
+  <div class="vb">
+   <div><h3 style="margin-top:0">Start by creating your vision board</h3>
+    <p>Think about every area of your life: lifestyle, family &amp; relationships, financial, career, clients, impact, personal growth, experiences and environment. Then place your vision board somewhere you’ll see it every day.</p>
+    <a class="btn btn-red" href="${CANVA_URL}" target="_blank" rel="noopener">Open Canva vision board templates ↗</a></div>
+   <div>${F('Link to my vision board','vision.board',{hint:'optional',ph:'Paste your Canva share link'})}<div id="vb-open"></div></div>
+  </div>
+  <div class="row">${T('5+ year vision','vision.five',{hint:'What do I ultimately want my real estate business, finances, lifestyle, clients and reputation to look like?',rows:4})}</div>
+  <div class="row c2">${T('3-year goals','vision.three',{hint:'What do I want my business and life to look like in 3 years?',rows:4})}${T('1-year goals','vision.one',{hint:'What must I accomplish this year to move toward my 3-year goals?',rows:4})}</div>
+  <div class="row c2">${T('90-day priorities','vision.ninety',{hint:'What specifically matters right now?',rows:4})}${T('My why','vision.why',{hint:'Why does this matter to me?',rows:4})}</div>
  `},
- {id:'swot',t:'SWOT',d:'Your vision says where you’re going. This says where you are today.',html:()=>`
+ {id:'values',t:'Values & Mission',d:'What you stand for and who you serve. These are the principles that guide how you operate.',html:()=>`
+  <h3>Core values</h3>
+  ${intro('Think about 2–3 moments in your life and career when you felt especially proud, fulfilled or energized — like you were doing exactly what you were meant to do. What values were present? It also helps to think about experiences that frustrated, disappointed or angered you, and turn those into values.')}
+  ${intro('<b>List 10–15, then narrow down to your top 3–5.</b> These should be genuine values, not aspirational words that simply sound good.')}
+  <div class="vwords">${Array.from({length:15},(_,i)=>F('','values.words.'+i,{aria:'Value '+(i+1),ph:i<4?['Integrity','Communication','Service','Relationships'][i]:''})).join('')}</div>
+  <h3>Turn your values into behaviours</h3>
+  ${intro('A value isn’t useful if it stays an abstract word. For your 3–5 core values:')}
+  <div class="tbl-wrap"><table class="vt"><thead><tr><th style="width:20%">Core value</th><th>What it means</th><th>What it looks like in practice</th></tr></thead>
+  <tbody>${VALUE_EX.map((ex,i)=>`<tr><td><input data-k="values.core.${i}.v" placeholder="${esc(ex[0])}" aria-label="Core value ${i+1}"></td><td><input data-k="values.core.${i}.means" placeholder="${esc(ex[1])}" aria-label="What it means"></td><td><input data-k="values.core.${i}.practice" placeholder="${esc(ex[2])}" aria-label="What it looks like in practice"></td></tr>`).join('')}</tbody></table></div>
+  <p class="intro">Now your values become <b>operating principles</b> rather than wall art.</p>
+  <h3>Mission statement</h3>
+  <div class="row">${T('My mission','vision.mission',{rows:3,hint:'Who I serve, what I do for them, and the purpose behind it'})}</div>
+ `},
+ {id:'position',t:'Ideal Client & UVP',d:'Who you are best positioned to serve, and why they should choose you.',html:()=>`
+  <div class="row c2">${T('My ideal client','pos.ideal',{hint:'Who am I best positioned to serve?',rows:4})}${T('Their needs','pos.needs',{hint:'What problems and desires do they have?',rows:4})}</div>
+  <div class="row">${T('My unique value proposition','pos.uvp',{hint:'What value do I create, and what makes it meaningfully different? Why should this client choose me?',rows:4})}</div>
+  ${tip('<b>“Unique” doesn’t mean nobody else does it.</b> It means the combination of <i>who you serve + the problem you solve + how you solve it + the experience or outcome you create</i> is distinctive enough to give a client a reason to choose you.')}
+  <h3>My positioning statement</h3>
+  ${intro('How do I want to be perceived? Fill in the blanks:')}
+  <div class="row c2">${F('For…','pos.ps.client',{hint:'ideal client',ph:'move-up families in the SE lake communities'})}${F('I am the real estate professional who…','pos.ps.value',{hint:'primary value / difference',ph:'knows every lake community street by street'})}</div>
+  <div class="row c2">${F('because…','pos.ps.proof',{hint:'proof / strength',ph:'I live here and have sold 100+ homes in these communities'})}${F('so they can…','pos.ps.outcome',{hint:'desired outcome',ph:'buy the right home with confidence and sell for top dollar'})}</div>
+  <div class="ps-preview" data-o="psPreview"></div>
+ `},
+ {id:'swot',t:'SWOT',d:'Your vision says where you’re going. This says where you are today, and leads into your strategic priorities.',html:()=>`
   <div class="swot">
    <div><div class="swot-l">Internal</div>${T('Strengths','swot.s',{rows:6,ph:'e.g. Deep knowledge of the SE lake communities'})}</div>
    <div><div class="swot-l">Internal</div>${T('Weaknesses','swot.w',{rows:6,ph:'e.g. Inconsistent follow-up with online leads'})}</div>
@@ -499,8 +593,100 @@ const SECTIONS=[
    <div><div class="swot-l">External</div>${T('Threats','swot.t',{rows:6,ph:'e.g. Rising inventory lengthening days on market'})}</div>
   </div>
  `},
- {id:'numbers',t:'Goals & Numbers',d:'Set your GCI goal, or start from the number of deals you want. Your net and take-home are worked out for you, and the rest of the plan runs on these numbers.',html:()=>`
-  <h3>Last 12 months <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— optional, skip if you don\u2019t have these handy</small></h3>
+ {id:'model',t:'Business Model & Market',d:'Your strategy is the bridge between your identity and positioning and your numbers. What kind of real estate business am I building?',html:()=>`
+  <h3>My business model</h3>
+  <div class="row c4">
+   <label class="f"><span>Primary business</span><select data-k="model.primary"><option value="">Choose…</option><option>Buyers</option><option>Sellers</option><option>Investors</option><option>Mixed</option></select></label>
+   <label class="f"><span>Structure</span><select data-k="model.structure"><option value="">Choose…</option><option>Individual agent</option><option>Team</option><option>Future team</option></select></label>
+   <label class="f"><span>Approach</span><select data-k="model.approach"><option value="">Choose…</option><option>Referral-based</option><option>Prospecting-based</option><option>Marketing-based</option><option>Hybrid</option></select></label>
+   <label class="f"><span>Full-time / part-time</span><select data-k="model.fulltime"><option value="">Choose…</option><option>Full-time</option><option>Part-time</option></select></label></div>
+  <div class="row c4">${F('Geographic market','model.geo',{ph:'e.g. SE Calgary'})}${F('Primary property types','model.types',{ph:'e.g. detached, lake homes'})}${F('Price range','model.price',{ph:'e.g. $500K–$900K'})}${F('Desired working hours','model.hours',{type:'num',hint:'per week'})}</div>
+  <div class="row c2"><div class="f"><span>Desired income <small>from Goals &amp; Numbers</small></span><div class="netbox" data-o="modelIncome">–</div></div><div class="f"><span>Desired transaction volume <small>from Goals &amp; Numbers</small></span><div class="netbox" data-o="modelVol">–</div></div></div>
+  <div class="row">${T('Does this business model support the life described in my vision?','model.fit',{rows:3})}</div>
+  <h3>Target market</h3>
+  ${intro('You’ve already identified your ideal client — now turn that into a market strategy.')}
+  <div class="row c2">${F('Primary client','market.primary')}${F('Secondary client','market.secondary')}</div>
+  <div class="row c2">${F('Geographic focus','market.geo')}${F('Property focus','market.prop')}</div>
+  <div class="row">${T('Market opportunity','market.opp',{hint:'What opportunity exists in this market that I am particularly well positioned to pursue?',rows:3})}</div>
+  ${deeper('Competitive landscape',`
+   <p class="intro">Who are my clients likely to consider instead of me?</p>
+   <div class="comp">${COMPETITORS.map(([k,l])=>`<label class="chk"><input type="checkbox" data-k="comp.${k}">${l}</label>`).join('')}</div>
+   ${T('Why would my ideal client choose me over those alternatives?','compWhy',{rows:3,hint:'this ties directly back to your UVP'})}`)}
+ `},
+ {id:'sources',t:'Lead Generation',d:'Strategy is the choice of how you will win; tactics are the specific actions you take. Where will my best clients come from?',html:()=>`
+  <h3>Lead source portfolio</h3>
+  ${intro('Mark <b>3–5 primary channels</b> — this keeps you from trying to do everything. Add how many deals came from each last year and your goal for this year.')}
+  <div class="tbl-wrap"><table>
+   <thead><tr><th>Source</th><th style="width:150px">Priority</th><th class="num">Last year (sides)</th><th class="num">%</th><th class="num">Goal (sides)</th><th class="num">%</th></tr></thead>
+   <tbody id="src-body"></tbody>
+   <tfoot><tr><td>Total</td><td id="src-pri"></td><td class="num" data-o="srcLast"></td><td></td><td class="num" data-o="srcGoal"></td><td></td></tr><tr><td colspan="6" id="src-flag" style="border:0;font-weight:500"></td></tr></tfoot>
+  </table></div>
+  <h3>My primary channels</h3>
+  <div id="src-cards"></div>
+ `},
+ {id:'calendar',t:'Touch Calendar',d:'Your sphere and past clients are your best source of business. Give yourself a reason to reach out every month.',html:()=>`
+  <div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"><button class="btn btn-red btn-sm" id="cal-fill" type="button">Fill empty cells with suggestions</button></div>
+  <div class="qtabs no-print" id="cal-tabs"></div>
+  <div class="tbl-wrap"><table class="cal"><thead id="cal-head"></thead><tbody id="cal-body"></tbody></table></div>
+  ${tip('<b>Minimum rhythm:</b> one business mixer a quarter and a client appreciation event at least twice a year. Put the dates in your calendar now.')}
+ `},
+ {id:'cx',t:'Client Experience',d:'This connects directly to your mission, values and UVP.',html:()=>`
+  <div class="row">${T('What experience do I want every client to have when working with me?','cx.experience',{rows:4})}</div>
+  <div class="row">${T('What standard will I hold myself to?','cx.standard',{rows:3,ph:'Communication standard: every client knows what is happening, what happens next, and what decisions they need to make.'})}</div>
+  ${intro('A standard like this becomes an <b>operating strategy</b>, not just a marketing claim.')}
+  ${deeper('Map the client journey',`
+   <p class="intro">For each stage: what does the client need, what will I provide, how will I communicate, and what will make it distinctive?</p>
+   <div class="tbl-wrap"><table class="journey"><thead><tr><th>Stage</th><th>What the client needs</th><th>What I’ll provide</th><th>How I’ll communicate</th><th>What makes it distinctive</th></tr></thead>
+   <tbody>${CX_STAGES.map((st,i)=>`<tr><td><b>${st}</b></td>${['need','provide','comm','distinct'].map(k=>`<td><textarea rows="2" data-k="cx.journey.${i}.${k}" aria-label="${st} ${k}"></textarea></td>`).join('')}</tr>`).join('')}</tbody></table></div>`)}
+ `},
+ {id:'marketing',t:'Brand & Marketing',d:'Marketing gets much easier once you’ve established who you are → who you serve → what you stand for → why you’re different.',html:()=>`
+  ${deeper('Brand position',`
+   <p class="intro">What do I want my brand to be known for, and what is it known for today?</p>
+   <div class="row c2"><div><div class="swot-l">Desired brand associations</div>${[0,1,2].map(i=>F('','brandpos.want.'+i,{aria:'Desired association '+(i+1),ph:(i+1)+'.'})).join('<div style="height:8px"></div>')}</div>
+   <div><div class="swot-l">Current brand associations</div>${[0,1,2].map(i=>F('','brandpos.now.'+i,{aria:'Current association '+(i+1),ph:(i+1)+'.'})).join('<div style="height:8px"></div>')}</div></div>`)}
+  <h3>Content strategy</h3>
+  ${tip('<b>What should my marketing accomplish?</b> <b>Educate</b> — demonstrate expertise. <b>Build trust</b> — show personality, values, stories and social proof. <b>Demonstrate results</b> — show what you actually do for clients. <b>Generate conversations</b> — create opportunities for people to engage with you.')}
+  <div class="row c3">${F('Platforms','content.platforms',{ph:'e.g. Instagram, Facebook, email newsletter'})}${F('Content themes','content.themes',{ph:'e.g. lake living, market updates, client stories'})}${F('Production process','content.process',{ph:'e.g. batch film monthly, schedule weekly'})}</div>
+  <h3>Frequency — weekly content mix</h3>
+  <div class="row c4">${F('Personal posts / week','content.personal',{type:'num',hint:'family, hobbies'})}${F('Professional posts / week','content.professional',{type:'num',hint:'listings, market, wins'})}${F('“AND” posts / week','content.and',{type:'num',hint:'your niche'})}${F('My AND topic','content.andTopic',{ph:'e.g. lake living'})}</div>
+  <p style="font-size:13.5px;color:var(--bp-dark-grey)">Total: <b data-o="postsW"></b> posts a week · <b data-o="postsY"></b> this year. Aim for at least 3 a week with a mix of all three.</p>
+  <h3>Marketing budget</h3>
+  <div class="tbl-wrap"><table><thead><tr><th>Channel</th><th style="width:180px">Annual $</th><th class="num">% of budget</th></tr></thead>
+  <tbody>${MKTG.map(([k,l])=>`<tr><td>${l}</td><td>${F('','mktg.'+k,{type:'money',aria:l})}</td><td class="num" data-o="mk_${k}"></td></tr>`).join('')}</tbody>
+  <tfoot><tr><td>Total marketing</td><td class="num" data-o="mktgTotal"></td><td class="num" data-o="mktgPctGci"></td></tr></tfoot></table></div>
+  <p style="font-size:12.5px;color:#888">The total flows into business expenses on the Budget &amp; Finances page.</p>
+  ${deeper('Brand audit — Google yourself',`${BRAND.map(([k,l])=>`<label class="chk"><input type="checkbox" data-k="brand.${k}">${l}</label>`).join('')}
+   <p style="font-size:13.5px;color:var(--bp-dark-grey)"><b data-o="brandScore"></b> complete. Repeat this audit every quarter.</p>`)}
+ `},
+ {id:'ops',t:'Systems & Leverage',d:'This is often missing from agent business plans. It matters most if your vision includes freedom, family time, or eventually building a team.',html:()=>`
+  <div class="row">${T('What needs to happen consistently for this business to work — and how will I make sure it happens?','sys.consistent',{rows:4})}</div>
+  <div class="row c3">${T('What should only I do?','sys.onlyMe',{rows:4})}${T('What can be systemized?','sys.systemize',{rows:4})}${T('What can eventually be delegated?','sys.delegate',{rows:4})}</div>
+  <h3>Tech stack</h3>
+  <div class="row c3">${F('CRM','tech.crm',{ph:'e.g. BoldTrail / rlpSPHERE'})}${F('Transaction management','tech.tm',{ph:'e.g. brokerage back office'})}${F('Forms & e-signature','tech.forms',{ph:'e.g. WEBForms, DocuSign'})}</div>
+  <div class="row c3">${F('Accounting & budget','tech.acct',{ph:'e.g. QuickBooks'})}${F('Social scheduling','tech.social',{ph:'e.g. Meta Business Suite'})}${F('Other','tech.other')}</div>
+  ${deeper('Systems review',`
+   <p class="intro">Go area by area and decide who owns it and how it gets done.</p>
+   <div class="tbl-wrap"><table><thead><tr><th>Area</th><th>Current owner</th><th style="width:160px">Decision</th><th>Tool or process</th><th class="no-print"></th></tr></thead><tbody id="task-body"></tbody></table></div>
+   <button class="btn btn-line btn-sm no-print" id="task-add" type="button" style="margin-top:10px">+ Add area</button>`)}
+  <h3>Systems initiatives this year</h3>
+  <div class="tbl-wrap"><table><thead><tr><th>Initiative</th><th style="width:170px">Target date</th><th style="width:130px">Priority</th><th class="no-print"></th></tr></thead><tbody id="init-body"></tbody></table></div>
+  <button class="btn btn-line btn-sm no-print" id="init-add" type="button" style="margin-top:10px">+ Add initiative</button>
+ `},
+ {id:'priorities',t:'Strategic Priorities',d:'Goals define the results you need. Strategic priorities are the few areas you will focus on to produce them. Tactics are what you will actually do.',html:()=>`
+  <div class="chain"><span><b>Vision</b></span><i>→</i><span><b>Business goals</b><small>What results do I want?</small></span><i>→</i><span><b>Strategic priorities</b><small>Where must I focus?</small></span><i>→</i><span><b>Strategies</b><small>How will I approach each one?</small></span><i>→</i><span><b>Tactics</b><small>What will I do?</small></span><i>→</i><span><b>Key measures</b><small>How will I know it’s working?</small></span></div>
+  <h3>My strategic priorities</h3>
+  ${intro('Based on the goals you want to achieve, what <b>3–5 areas</b> need the most focus? Your key measures carry over to the quarterly scorecard.')}
+  <div class="tbl-wrap"><table class="pri"><thead><tr><th>Goal</th><th>Strategic priority</th><th>Why is this critical?</th><th>Strategy</th><th>Key measure</th><th style="width:110px">Annual target</th><th class="no-print"></th></tr></thead><tbody id="pri-body"></tbody></table></div>
+  <button class="btn btn-line btn-sm no-print" id="pri-add" type="button" style="margin-top:10px">+ Add priority</button>
+  <h3>What will I deliberately NOT focus on this year?</h3>
+  ${intro('Strategy isn’t just deciding what you’re going to do. It’s also deciding what you’re <b>not</b> going to do.')}
+  <div class="row">${T('','pri.notFocus',{rows:3}).replace('<span></span>','')}</div>
+ `},
+ {id:'numbers',t:'Goals & Numbers',d:'Your business objectives and the numbers behind them. Set your GCI goal, or start from the number of deals you want — the rest of the plan runs on these numbers.',html:()=>`
+  <h3>Business objectives</h3>
+  <div class="row">${F('Primary business objective','obj.primary',{hint:'the single most important result I want to achieve this year'})}</div>
+  <div class="row c2">${F('Secondary objective','obj.sec1')}${F('Secondary objective','obj.sec2')}</div>
+  <h3>Last 12 months <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— optional, skip if you don’t have these handy</small></h3>
   <div class="row c4">${F('Listing sides closed','last.listings',{type:'num'})}${F('Buyer sides closed','last.buyers',{type:'num'})}${F('Average sale price','last.avgPrice',{type:'money'})}${F('Gross commission (GCI)','last.gci',{type:'money'})}</div>
   <h3>How do you want to set your goal?</h3>
   <div class="seg" id="method-seg"><button data-m="gci" type="button">GCI goal</button><button data-m="units" type="button">Number of deals</button></div>
@@ -515,8 +701,14 @@ const SECTIONS=[
    <label class="f"><span>Commission per side</span><select data-k="goals.commModel"><option value="tier">Tiered (first $100K / balance)</option><option value="flat">Flat % of price</option></select></label>
    <div id="c-tier" style="display:contents">${F('On the first $100K','goals.t1',{type:'pct'})}${F('On the balance','goals.t2',{type:'pct'})}</div>
    <div id="c-flat" style="display:contents">${F('Flat rate per side','goals.flat',{type:'pct'})}</div></div>
+  <div class="res">${RC('GCI per side','gciSide')}${RC('Your average net per side','netSide')}${RC('Business expenses / yr','bizAnnual')}${RC('Take-home after tax','takeHome')}</div>
+  <div class="res">${RC('GCI goal','gci','dark')}${RC('Total closed sides','sides','dark')}${RC('Listings / buyers','lb','dark')}${RC('Sales volume','volume','dark')}</div>
+  <div id="vs-last"></div>
+  ${tip('<b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Your net comes from the commission plan, deductions and expenses you enter on the next page, <b>Budget &amp; Finances</b>. Until you fill that in, the plan uses a 20% split with no cap.')}
+ `},
+ {id:'money',t:'Budget & Finances',d:'It is not what you gross, it is what you keep. Set your commission plan, build your budget, and decide how every cheque gets split.',html:()=>`
   <h3>Your commission plan &amp; deductions</h3>
-  <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Enter your plan with the brokerage — these match the deduction summary on your deal statement. Deductions are calculated over one cap year, starting at $0 on your cap anniversary (January if you leave it blank). Not sure of your numbers? Ask the office. Leave the cap blank if you don\u2019t have one.</p>
+  <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Enter your plan with the brokerage — these match the deduction summary on your deal statement. Deductions are calculated over one cap year, starting at $0 on your cap anniversary (January if you leave it blank). Not sure of your numbers? Ask the office. Leave the cap blank if you don’t have one.</p>
   <div class="row c4">${F('Brokerage split','goals.split',{type:'pct',hint:'until you cap'})}${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}${F('Cap anniversary','goals.capDate',{type:'date',hint:'when your cap resets'})}<div class="f"><span>Your cap year</span><div class="netbox" data-o="cyBox">–</div></div></div>
   <div class="row c4">${F('Deal fee per side','goals.dealFee',{type:'money',hint:'blank = none'})}
    <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></label>
@@ -525,18 +717,12 @@ const SECTIONS=[
   <h3>Holdbacks</h3>
   <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">The share of each commission cheque you have held back for CRA. This is your money set aside, not a cost — income tax comes off your take-home, and GST is collected on top of your commission and paid to CRA.</p>
   <div class="row c4">${F('Income tax holdback','goals.tax',{type:'pct',hint:'% of each cheque'})}${F('GST holdback','goals.gstHold',{type:'pct',hint:'% of each cheque'})}</div>
-  <div class="res">${RC('GCI per side','gciSide')}${RC('Your average net per side','netSide')}${RC('Business expenses / yr','bizAnnual')}${RC('Take-home after tax','takeHome')}</div>
-  <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
   <div class="res">${RC('Split paid','splitPaid')}${RC('<span data-o="capLbl">Cap paid</span>','capPaidOut')}${RC('Deal fees','feesPaid')}${RC('Donations','donPaid')}</div>
   <div class="res c3">${RC('RLP franchise fee','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('Deduction period','cyCard')}</div>
-  <div class="res">${RC('GCI goal','gci','dark')}${RC('Total closed sides','sides','dark')}${RC('Listings / buyers','lb','dark')}${RC('Sales volume','volume','dark')}</div>
-  <div id="vs-last"></div>
-  ${tip('<b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Net = GCI minus your split (until you cap), RLP franchise fee (up to its annual maximum), deal fees, donations and business expenses (from the Budget page, including your marketing budget). Take-home = net minus RRSP and your income tax holdback (a % of each cheque). The GST holdback is shown separately — GST is collected on top of your commission and paid to CRA, so it doesn\u2019t reduce your income. Deals are spread across the year using your Seasonality page; the split is charged from your cap anniversary until your cap is reached (one 12-month cap year, starting at $0), and deal fees are charged the way you chose: on every deal, toward your cap until you cap, or only after you cap. This is a planning estimate, not tax advice — confirm your holdback rates with your accountant.')}
- `},
- {id:'money',t:'Budget & Finances',d:'It is not what you gross, it is what you keep. Build your budget and decide how every commission cheque gets split.',html:()=>`
+  <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
   <div class="row c2" style="align-items:start">
    <div><h3>Business expenses (monthly)</h3><table><tbody>${BIZ.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l})}</td></tr>`).join('')}
-    <tr><td>Marketing <small style="color:#888">(from Marketing page)</small></td><td class="num" data-o="mktgMonthly"></td></tr></tbody>
+    <tr><td>Marketing <small style="color:#888">(from Brand &amp; Marketing)</small></td><td class="num" data-o="mktgMonthly"></td></tr></tbody>
     <tfoot><tr><td>Annual business total</td><td class="num" data-o="bizAnnual"></td></tr></tfoot></table></div>
    <div><h3>Personal expenses (monthly)</h3><table><tbody>${PERS.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Annual personal total</td><td class="num" data-o="persAnnual"></td></tr></tfoot></table></div>
@@ -544,21 +730,26 @@ const SECTIONS=[
   <h3>Savings & reserves (annual)</h3>
   <div class="row c4">${F('RRSP / pre-tax savings','save.rrsp',{type:'money'})}${F('TFSA / after-tax savings','save.postTax',{type:'money'})}${F('Debt reduction goal','save.debt',{type:'money'})}${F('Cash reserves today','save.reserves',{type:'money'})}</div>
   <h3>Your financial picture at goal</h3>
-  <div class="res">${RC('Net commissions (after split)','netComm')}${RC('Income tax holdback','taxAmt')}${RC('Take-home after tax & RRSP','takeHome')}${RC('Needed for budget & savings','needs')}</div>
+  <div class="res">${RC('Net commissions (after deductions)','netComm')}${RC('Income tax holdback','taxAmt')}${RC('Take-home after tax & RRSP','takeHome')}${RC('Needed for budget & savings','needs')}</div>
   <div class="res c3">${RC('Surplus / shortfall','surplus','dark')}${RC('Months of reserves','reserveMonths','dark')}${RC('Business expenses as % of GCI','bizPct','dark')}</div>
   <h3>How to split every commission cheque</h3>
-  <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">Your income tax and GST holdbacks from Goals &amp; Numbers come off each cheque first; this splits what\u2019s left. Suggested split from your numbers: <b data-o="sugAlloc"></b>. Enter your own below, or leave blank to use the suggestion.</p>
+  <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">Your income tax and GST holdbacks come off each cheque first; this splits what’s left. Suggested split from your numbers: <b data-o="sugAlloc"></b>. Enter your own below, or leave blank to use the suggestion.</p>
   <div class="row c3">${F('To business account','alloc.biz',{type:'pct'})}${F('Extra to tax account','alloc.tax',{type:'pct',hint:'beyond your holdbacks'})}${F('To personal & savings','alloc.pers',{type:'pct'})}</div>
   <div id="alloc-ex"></div>
  `},
- {id:'season',t:'Seasonality',d:'Calgary does not sell evenly across the year. Weight each month to plan when your closings will land.',html:()=>`
-  <p style="margin-top:0;color:var(--bp-dark-grey)">Adjust the weight under each month. Closings and your net commission per month update from your goal on the Goals page. The month you cap is highlighted.</p>
+ {id:'season',t:'Seasonality & Cash Flow',d:'Deals go firm on one curve and close — and pay you — on another. Plan for both so the slow months don’t catch you off guard.',html:()=>`
+  <div class="row c3"><label class="f"><span>Firm to possession <small>typical time to close</small></span><select data-k="season.lag"><option value="30">About 30 days</option><option value="45">About 45 days</option><option value="60">About 60 days</option><option value="90">About 90 days</option></select></label></div>
+  <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">Set <b>when your deals go firm</b> using the weights under each month (higher = busier). The bars show when those deals <b>close and pay you</b>, shifted by your firm-to-possession time. Each bar shows closings and net commission; your cap month is highlighted.</p>
   <div class="season" id="season"></div>
-  <div class="qs">${RC('Q1 (Jan–Mar)','q1')}${RC('Q2 (Apr–Jun)','q2')}${RC('Q3 (Jul–Sep)','q3')}${RC('Q4 (Oct–Dec)','q4')}</div>
+  <div class="season-legend"><span><i class="lg-bar"></i> Closings (paid)</span><span><i class="lg-in"></i> Deals going firm (weight)</span></div>
+  <div class="qs">${RC('Q1 closings','q1')}${RC('Q2 closings','q2')}${RC('Q3 closings','q3')}${RC('Q4 closings','q4')}</div>
   <div class="no-print" style="margin-top:14px"><button class="btn btn-line btn-sm" id="season-reset" type="button">Reset to a typical Calgary curve</button></div>
-  ${tip('<b>Tip:</b> closings lag conversations by roughly 60–120 days. To close in May, the prospecting happens January through March.')}
+  <h3>Cash flow projection</h3>
+  ${intro('What actually lands in your account each month, after holdbacks, against what goes out. The running balance starts from your <b>cash reserves today</b> (Budget &amp; Finances).')}
+  <div class="tbl-wrap"><table class="cf" id="cf-table"></table></div>
+  <div id="cf-note"></div>
  `},
- {id:'activity',t:'Activity Plan',d:'Turn your goal into the daily conversations and contacts that produce it. Use your own ratios if you track them.',html:()=>`
+ {id:'activity',t:'Activity Plan',d:'Your production model: GCI → transactions → leads → appointments → activities. Turn your goal into the daily conversations that produce it.',html:()=>`
   <h3>Your conversion ratios</h3>
   ${tip('<b>First year using the plan?</b> These are typical starting ratios — leave them as they are for now. Track your real numbers this year and update them next year.')}
   <div class="row c4">${F('Listing appts that sign','kpi.lApptSign',{type:'pct'})}${F('Signed listings that close','kpi.lSignClose',{type:'pct'})}${F('Buyer consults that sign','kpi.bConsSign',{type:'pct'})}${F('Signed buyers that close','kpi.bSignClose',{type:'pct'})}</div>
@@ -578,47 +769,12 @@ const SECTIONS=[
   <div class="res">${RC('Referrals needed (year)','refY')}${RC('Referrals per month','refM')}${RC('Contacts per month','conM')}${RC('Contacts per day','contactsDay','dark')}</div>
   ${tip('<b>What counts as a contact:</b> a real voice-to-voice or face-to-face conversation where you ask for a referral. Likes, emails and mailers don’t count. A simple way to stay on pace: reach out to 5 people every day across 3 channels — calls, DMs and in person.')}
  `},
- {id:'sources',t:'Lead Sources',d:'Where your business came from last year, and where it will come from this year.',html:()=>`
-  <div class="tbl-wrap"><table>
-   <thead><tr><th>Source</th><th class="num">Last year (sides)</th><th class="num">%</th><th class="num">Goal (sides)</th><th class="num">%</th><th style="min-width:240px">How I’ll strengthen it</th></tr></thead>
-   <tbody id="src-body"></tbody>
-   <tfoot><tr><td>Total</td><td class="num" data-o="srcLast"></td><td></td><td class="num" data-o="srcGoal"></td><td></td><td id="src-flag"></td></tr></tfoot>
-  </table></div>
-  ${tip('<b>Tip:</b> for most agents, past clients and referrals are the least expensive business to win. If they make up less than half of your goal, look at your touch calendar before your ad budget.')}
- `},
- {id:'marketing',t:'Marketing & Brand',d:'Your budget by channel, your content mix, and a quick audit of how you show up online.',html:()=>`
-  <h3>Annual marketing budget</h3>
-  <div class="tbl-wrap"><table><thead><tr><th>Channel</th><th style="width:180px">Annual $</th><th class="num">% of budget</th></tr></thead>
-  <tbody>${MKTG.map(([k,l])=>`<tr><td>${l}</td><td>${F('','mktg.'+k,{type:'money',aria:l})}</td><td class="num" data-o="mk_${k}"></td></tr>`).join('')}</tbody>
-  <tfoot><tr><td>Total marketing</td><td class="num" data-o="mktgTotal"></td><td class="num" data-o="mktgPctGci"></td></tr></tfoot></table></div>
-  <p style="font-size:12.5px;color:#888">The total flows into business expenses on the Goals and Budget pages.</p>
-  <h3>Weekly content mix</h3>
-  <div class="row c4">${F('Personal posts / week','content.personal',{type:'num',hint:'family, hobbies'})}${F('Professional posts / week','content.professional',{type:'num',hint:'listings, market, wins'})}${F('“AND” posts / week','content.and',{type:'num',hint:'your niche'})}${F('My AND topic','content.andTopic',{ph:'e.g. lake living'})}</div>
-  <p style="font-size:13.5px;color:var(--bp-dark-grey)">Total: <b data-o="postsW"></b> posts a week · <b data-o="postsY"></b> this year. Aim for at least 3 a week with a mix of all three.</p>
-  <h3>Brand audit — Google yourself</h3>
-  ${BRAND.map(([k,l])=>`<label class="chk"><input type="checkbox" data-k="brand.${k}">${l}</label>`).join('')}
-  <p style="font-size:13.5px;color:var(--bp-dark-grey)"><b data-o="brandScore"></b> complete. Repeat this audit every quarter.</p>
- `},
- {id:'calendar',t:'Touch Calendar',d:'A reason to reach out every month. Fill in your own, or start from Calgary-specific suggestions and edit them.',html:()=>`
-  <div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"><button class="btn btn-red btn-sm" id="cal-fill" type="button">Fill empty cells with suggestions</button></div>
-  <div class="qtabs no-print" id="cal-tabs"></div>
-  <div class="tbl-wrap"><table class="cal"><thead id="cal-head"></thead><tbody id="cal-body"></tbody></table></div>
-  ${tip('<b>Minimum rhythm:</b> one business mixer a quarter and a client appreciation event at least twice a year. Put the dates in your calendar now.')}
- `},
- {id:'ops',t:'Operations',d:'The systems behind your business. Decide what you keep doing, delegate, automate or drop.',html:()=>`
-  <h3>Tech stack</h3>
-  <div class="row c3">${F('CRM','tech.crm',{ph:'e.g. BoldTrail / rlpSPHERE'})}${F('Transaction management','tech.tm',{ph:'e.g. brokerage back office'})}${F('Forms & e-signature','tech.forms',{ph:'e.g. WEBForms, DocuSign'})}</div>
-  <div class="row c3">${F('Accounting & budget','tech.acct',{ph:'e.g. QuickBooks'})}${F('Social scheduling','tech.social',{ph:'e.g. Meta Business Suite'})}${F('Other','tech.other')}</div>
-  <h3>Do · Delegate · Automate · Delete</h3>
-  <div class="tbl-wrap"><table><thead><tr><th>Task</th><th>Current owner</th><th style="width:150px">Decision</th><th>Tool or process</th><th class="no-print"></th></tr></thead><tbody id="task-body"></tbody></table></div>
-  <button class="btn btn-line btn-sm no-print" id="task-add" type="button" style="margin-top:10px">+ Add task</button>
-  <h3>Operations initiatives this year</h3>
-  <div class="tbl-wrap"><table><thead><tr><th>Initiative</th><th style="width:170px">Target date</th><th style="width:130px">Priority</th><th class="no-print"></th></tr></thead><tbody id="init-body"></tbody></table></div>
-  <button class="btn btn-line btn-sm no-print" id="init-add" type="button" style="margin-top:10px">+ Add initiative</button>
- `},
- {id:'score',t:'Scorecard',d:'Check in every quarter. Track actuals against plan and grade each part of your business.',html:()=>`
+ {id:'score',t:'Quarterly Scorecard',d:'Annual → quarterly → monthly. Sit down once a quarter, enter your actuals, and grade each part of your business.',html:()=>`
   <h3>Quarterly results</h3>
-  <div class="tbl-wrap"><table><thead><tr><th>Quarter</th><th class="num">Target sides</th><th style="width:110px">Actual sides</th><th class="num">Target GCI</th><th style="width:160px">Actual GCI</th><th class="num">Pace</th><th>Notes</th></tr></thead><tbody id="score-body"></tbody></table></div>
+  <div class="tbl-wrap"><table><thead><tr><th>Quarter</th><th class="num">Target closings</th><th style="width:110px">Actual sides</th><th class="num">Target GCI</th><th style="width:160px">Actual GCI</th><th class="num">Pace</th><th>Notes</th></tr></thead><tbody id="score-body"></tbody></table></div>
+  <h3>Strategic priority measures</h3>
+  ${intro('Your key measures from <b>Strategic Priorities</b>. Enter the actual result for each quarter.')}
+  <div class="tbl-wrap"><table><thead><tr><th>Priority</th><th>Key measure</th><th class="num">Annual target</th><th style="width:90px">Q1</th><th style="width:90px">Q2</th><th style="width:90px">Q3</th><th style="width:90px">Q4</th><th class="num">Year to date</th></tr></thead><tbody id="pm-body"></tbody></table></div>
   <h3>Red · Yellow · Green check-in</h3>
   <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">Click a cell to cycle through red, yellow and green.</p>
   <div class="tbl-wrap"><table class="ryg"><thead><tr><th>Area</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th></tr></thead><tbody id="ryg-body"></tbody></table></div>
@@ -628,6 +784,9 @@ const SECTIONS=[
  {id:'summary',t:'One-Page Summary',d:'Your plan at a glance. Print it, pin it up, and bring it to your quarterly check-ins.',html:()=>`<div id="summary"></div>`}
 ];
 
+/* order steps by phase */
+{ const ord=PHASES.flatMap(p=>p[1]); SECTIONS.sort((x,y)=>ord.indexOf(x.id)-ord.indexOf(y.id)); }
+const PHASE_OF=Object.fromEntries(PHASES.flatMap(([ph,ids])=>ids.map(i=>[i,ph])));
 /* ---------------------------------------------------------------
    Render
 ---------------------------------------------------------------- */
@@ -635,14 +794,17 @@ const nav=document.getElementById('nav'), main=document.getElementById('sections
 let current='vision', calQ=0;
 
 function renderShell(){
- nav.innerHTML=SECTIONS.map((s,i)=>`<button type="button" data-go="${s.id}" id="nav-${s.id}"><span class="n">${i+1}</span><span class="t">${s.t}</span></button>`).join('');
+ let last='';
+ nav.innerHTML=SECTIONS.map((s,i)=>{ const ph=PHASE_OF[s.id], head=ph!==last?`<div class="ph">${ph}</div>`:''; last=ph;
+  return head+`<button type="button" data-go="${s.id}" id="nav-${s.id}"><span class="n">${i+1}</span><span class="t">${s.t}</span>${ESSENTIAL.includes(s.id)?'<span class="ess" title="Essential">★</span>':''}</button>`; }).join('')
+  +'<div class="nav-key"><span class="ess">★</span> Essential — start here</div>';
  main.innerHTML=SECTIONS.map((s,i)=>`<section class="sec" id="s-${s.id}">
-   <div class="sec-h"><div><div class="sec-num">Step ${i+1} of ${SECTIONS.length}</div><h2>${s.t}</h2><p>${s.d}</p></div></div>
+   <div class="sec-h"><div><div class="sec-num">${PHASE_OF[s.id]} · Step ${i+1} of ${SECTIONS.length}${ESSENTIAL.includes(s.id)?' · <span class="ess-t">★ Essential</span>':''}</div><h2>${s.t}</h2><p>${s.d}</p></div></div>
    ${s.html()}
    <div class="sec-foot">${i>0?`<button class="btn btn-line" data-go="${SECTIONS[i-1].id}" type="button">← ${SECTIONS[i-1].t}</button>`:'<span></span>'}
    ${i<SECTIONS.length-1?`<button class="btn btn-red" data-go="${SECTIONS[i+1].id}" type="button">${SECTIONS[i+1].t} →</button>`:'<button class="btn btn-red" id="b-print-sum2" type="button">Print one-page summary</button>'}</div>
  </section>`).join('');
- renderSources();renderTasks();renderInits();renderCal();renderScore();renderSeason();
+ renderSources();renderSrcCards();renderTasks();renderInits();renderCal();renderPri();renderScore();renderSeason();
  show(current,false);
 }
 
@@ -653,6 +815,7 @@ function show(id,scroll){
  document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id==='s-'+id));
  nav.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
  if(id==='summary') renderSummary();
+ if(id==='score') renderPM();
  if(C) recompute();
  if(scroll){ const hh=(document.getElementById('rls-header')||{offsetHeight:0}).offsetHeight; const top=document.querySelector('.bp-grid').getBoundingClientRect().top+window.scrollY-hh-16; if(window.scrollY>top) window.scrollTo({top,behavior:'smooth'}); }
 }
@@ -660,14 +823,23 @@ function show(id,scroll){
 function renderSources(){
  document.getElementById('src-body').innerHTML=S.sources.map((s,i)=>`<tr>
   <td>${esc(s.name)}</td>
-  <td style="width:110px"><input type="number" inputmode="decimal" data-k="sources.${i}.last" aria-label="${esc(s.name)} last year"></td><td class="num" data-o="srcL${i}"></td>
-  <td style="width:110px"><input type="number" inputmode="decimal" data-k="sources.${i}.goal" aria-label="${esc(s.name)} goal"></td><td class="num" data-o="srcG${i}"></td>
-  <td><input data-k="sources.${i}.how" placeholder="e.g. quarterly pop-bys to my top 50" aria-label="${esc(s.name)} strategy"></td></tr>`).join('');
+  <td><select data-k="sources.${i}.pri" aria-label="${esc(s.name)} priority"><option value="">—</option><option>Primary</option><option>Secondary</option></select></td>
+  <td style="width:110px"><input type="number" inputmode="decimal" min="0" data-k="sources.${i}.last" aria-label="${esc(s.name)} last year"></td><td class="num" data-o="srcL${i}"></td>
+  <td style="width:110px"><input type="number" inputmode="decimal" min="0" data-k="sources.${i}.goal" aria-label="${esc(s.name)} goal"></td><td class="num" data-o="srcG${i}"></td></tr>`).join('');
+}
+function renderSrcCards(){
+ const el=document.getElementById('src-cards'); if(!el) return;
+ const prim=S.sources.map((s,i)=>[s,i]).filter(([s])=>s.pri==='Primary');
+ el.innerHTML=prim.length?prim.map(([s,i])=>`<div class="chan"><h4>${esc(s.name)}</h4>
+  <div class="row c2">${T('Why this channel?','sources.'+i+'.why',{rows:2})}${T('Who does it reach?','sources.'+i+'.who',{rows:2})}</div>
+  <div class="row c3">${T('My strategy','sources.'+i+'.strat',{rows:3})}${T('Resources it will require','sources.'+i+'.res',{rows:3,hint:'time, money, people'})}${T('Result I expect','sources.'+i+'.result',{rows:3})}</div></div>`).join('')
+  :'<p class="muted">Mark a source as <b>Primary</b> in the table above to plan it here.</p>';
+ fillAll(el);
 }
 function renderTasks(){
  document.getElementById('task-body').innerHTML=S.tasks.map((t,i)=>`<tr>
-  <td><input data-k="tasks.${i}.task" aria-label="Task"></td><td><input data-k="tasks.${i}.owner" aria-label="Owner"></td>
-  <td><select data-k="tasks.${i}.action" aria-label="Decision"><option value="">Choose…</option><option>Do</option><option>Delegate</option><option>Automate</option><option>Delete</option></select></td>
+  <td><input data-k="tasks.${i}.task" aria-label="Area"></td><td><input data-k="tasks.${i}.owner" aria-label="Owner"></td>
+  <td><select data-k="tasks.${i}.action" aria-label="Decision"><option value="">Choose…</option>${TASK_ACTIONS.map(a=>`<option>${a}</option>`).join('')}</select></td>
   <td><input data-k="tasks.${i}.tool" aria-label="Tool or process"></td><td class="no-print"><button class="btn-x" data-del-task="${i}" title="Remove" type="button">×</button></td></tr>`).join('');
 }
 function renderInits(){
@@ -683,6 +855,23 @@ function renderCal(){
  document.getElementById('cal-body').innerHTML=CAL_ROWS.map(([k,l])=>`<tr><td>${l}</td>${ms.map(m=>`<td><textarea data-k="cal.${m}.${k}" rows="2" aria-label="${MONTHS_FULL[m]} ${l}"></textarea></td>`).join('')}</tr>`).join('');
  fillAll(document.getElementById('s-calendar'));
 }
+function renderPri(){
+ const el=document.getElementById('pri-body'); if(!el) return;
+ el.innerHTML=S.pri.items.map((x,i)=>{ const ex=PRI_EX[i]||PRI_EX[4];
+  return `<tr>${['goal','priority','why','strategy','measure'].map((k,j)=>`<td><textarea rows="2" data-k="pri.items.${i}.${k}" placeholder="${esc(ex[j])}" aria-label="${k}"></textarea></td>`).join('')}
+  <td><input type="number" inputmode="decimal" min="0" data-k="pri.items.${i}.target" aria-label="Annual target"></td>
+  <td class="no-print">${S.pri.items.length>1?`<button class="btn-x" data-del-pri="${i}" title="Remove" type="button">×</button>`:''}</td></tr>`; }).join('');
+ fillAll(el);
+ const ab=document.getElementById('pri-add'); if(ab) ab.style.display=S.pri.items.length>=5?'none':'';
+}
+function renderPM(){
+ const el=document.getElementById('pm-body'); if(!el) return;
+ const rows=S.pri.items.map((x,i)=>[x,i]).filter(([x])=>x.priority||x.measure);
+ el.innerHTML=rows.length?rows.map(([x,i])=>`<tr><td><b>${esc(x.priority)||'—'}</b></td><td>${esc(x.measure)||'—'}</td><td class="num">${x.target!==''?int(n(x.target)):'–'}</td>
+  ${[0,1,2,3].map(q=>`<td><input type="number" inputmode="decimal" data-k="pri.items.${i}.q.${q}" aria-label="Q${q+1} actual"></td>`).join('')}<td class="num" data-o="pmY${i}"></td></tr>`).join('')
+  :'<tr><td colspan="8" class="muted">Add your strategic priorities and key measures first.</td></tr>';
+ fillAll(el);
+}
 function renderScore(){
  document.getElementById('score-body').innerHTML=[0,1,2,3].map(q=>`<tr><td><b>Q${q+1}</b></td><td class="num" data-o="tq${q}"></td>
   <td><input type="number" inputmode="decimal" data-k="score.q.${q}.units" aria-label="Q${q+1} actual sides"></td><td class="num" data-o="tg${q}"></td>
@@ -691,7 +880,7 @@ function renderScore(){
  document.getElementById('ryg-body').innerHTML=PILLARS.map(([k,l])=>`<tr><td><b>${l}</b></td>${[0,1,2,3].map(q=>{const s=S.score.ryg[k][q]||0;return `<td><button type="button" data-ryg="${k}.${q}" data-s="${s}">${['—','Red','Yellow','Green'][s]}</button></td>`;}).join('')}</tr>`).join('');
 }
 function renderSeason(){
- document.getElementById('season').innerHTML=MONTHS.map((m,i)=>`<div class="mo"><div class="bar-box"><div class="bar" id="bar${i}"><b id="bu${i}"></b></div></div><div class="ml">${m}</div><div class="mnet" id="mn${i}"></div><input type="number" inputmode="decimal" min="0" data-k="season.w.${i}" aria-label="${MONTHS_FULL[i]} weight"></div>`).join('');
+ document.getElementById('season').innerHTML=MONTHS.map((m,i)=>`<div class="mo"><div class="bar-box"><div class="bar" id="bar${i}"><b id="bu${i}"></b></div></div><div class="ml">${m}</div><div class="mnet" id="mn${i}"></div><input type="number" inputmode="decimal" min="0" data-k="season.w.${i}" aria-label="${MONTHS_FULL[i]} deals going firm"></div>`).join('');
 }
 
 /* ---------------------------------------------------------------
@@ -716,6 +905,8 @@ function onField(el){
  else if(el.type==='number'&&v!==''){ v=parseFloat(v); if(!isFinite(v)) v=''; }
  setP(el.dataset.k,v);
  if(el.dataset.k==='goals.commModel') toggleVis();
+ if(/^sources\.\d+\.pri$/.test(el.dataset.k)) renderSrcCards();
+ if(el.dataset.k==='season.lag') setP('season.lag',+v||30);
  if((el.dataset.k==='goals.listShare'||el.dataset.k==='goals.buyShare')&&v!==''){
   const x=Math.min(Math.max(v,0),100), other=el.dataset.k==='goals.listShare'?'goals.buyShare':'goals.listShare';
   setP(other,Math.round((100-x)*10)/10); document.querySelectorAll(`[data-k="${other}"]`).forEach(o=>{ if(o!==el) o.value=getP(other); });
@@ -738,11 +929,13 @@ document.addEventListener('click',e=>{
  if(t.dataset.calq!==undefined){ calQ=+t.dataset.calq; renderCal(); return; }
  if(t.dataset.ryg){ const [k,q]=t.dataset.ryg.split('.'); const s=((S.score.ryg[k][q]||0)+1)%4; S.score.ryg[k][q]=s; t.dataset.s=s; t.textContent=['—','Red','Yellow','Green'][s]; queueSave(); return; }
  if(t.dataset.delTask!==undefined){ S.tasks.splice(+t.dataset.delTask,1); renderTasks(); fillAll(document.getElementById('task-body')); queueSave(); return; }
+ if(t.dataset.delPri!==undefined){ S.pri.items.splice(+t.dataset.delPri,1); renderPri(); recompute(); queueSave(); return; }
  if(t.dataset.delInit!==undefined){ S.inits.splice(+t.dataset.delInit,1); renderInits(); fillAll(document.getElementById('init-body')); recompute(); queueSave(); return; }
  switch(t.id){
+  case 'pri-add': if(S.pri.items.length<5){ S.pri.items.push({goal:'',priority:'',why:'',strategy:'',measure:'',target:'',q:['','','','']}); renderPri(); queueSave(); } break;
   case 'task-add': S.tasks.push({task:'',owner:'',action:'',tool:''}); renderTasks(); fillAll(document.getElementById('task-body')); queueSave(); break;
   case 'init-add': S.inits.push({what:'',date:'',priority:'Medium'}); renderInits(); fillAll(document.getElementById('init-body')); queueSave(); break;
-  case 'season-reset': S.season.w=SEASON_W.slice(); fillAll(document.getElementById('season')); recompute(); queueSave(); break;
+  case 'season-reset': S.season.w=SEASON_W.slice(); S.season.lag=30; fillAll(document.getElementById('s-season')); recompute(); queueSave(); break;
   case 'use-budget': { const c=calc(); if(c.needs<=0){ toast('Add your personal budget on the Budget & Finances page first'); break; } S.goals.netGoal=Math.round(c.needs); fillAll(); recompute(); queueSave(); toast('Take-home goal set to '+money(c.needs)); break; }
   case 'cal-fill': { let k=0; S.cal.forEach((m,i)=>CAL_ROWS.forEach(([r])=>{ if(!m[r]&&IDEAS[r][i]){ m[r]=IDEAS[r][i]; k++; } })); renderCal(); recompute(); queueSave(); toast(k?`Added ${k} suggestions — edit any of them`:'Every cell already has something in it'); break; }
   case 'b-print-sum': case 'b-print-sum2': renderSummary(); document.body.classList.add('print-summary'); window.print(); break;
@@ -757,8 +950,8 @@ document.addEventListener('click',e=>{
  }
 });
 window.addEventListener('afterprint',()=>document.body.classList.remove('print-summary'));
-window.addEventListener('beforeprint',()=>{ renderSummary(); document.querySelectorAll('textarea').forEach(t=>{t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px';}); });
-window.addEventListener('afterprint',()=>document.querySelectorAll('textarea').forEach(t=>t.style.height=''));
+window.addEventListener('beforeprint',()=>{ document.querySelectorAll('details.deeper').forEach(d=>{ d.dataset.wasOpen=d.open?'1':''; d.open=true; }); renderSummary(); document.querySelectorAll('textarea').forEach(t=>{t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px';}); });
+window.addEventListener('afterprint',()=>{ document.querySelectorAll('textarea').forEach(t=>t.style.height=''); document.querySelectorAll('details.deeper').forEach(d=>{ d.open=!!d.dataset.wasOpen; }); });
 
 function toggleVis(){
  const m=S.goals.method, show=(id,on,d)=>{ const el=document.getElementById(id); if(el) el.style.display=on?(d||''):'none'; };
@@ -781,6 +974,12 @@ function distribute(total,weights){
 /* Commission engine: walk through the plan year month by month, charging the
    split until the cap is reached, resetting the cap on the anniversary month,
    and adding deal fees per side. */
+/* Closing (payday) weights: the firm-date curve shifted by the firm-to-possession time. */
+function closeW(){
+ const w=S.season.w.map(x=>Math.max(n(x),0)), lag=Math.max(n(S.season.lag)||30,0)/30, k=Math.floor(lag), f=lag-k, out=new Array(12).fill(0);
+ w.forEach((x,i)=>{ out[(i+k)%12]+=x*(1-f); out[(i+k+1)%12]+=x*f; });
+ return out;
+}
 function capInfo(){
  const g=S.goals, cap=n(g.cap), d=g.capDate?new Date(g.capDate+'T00:00'):null;
  const annM=(d&&!isNaN(d))?d.getMonth():0;
@@ -792,7 +991,7 @@ function capInfo(){
    $0 paid toward the cap and the RLP maximum. Months after December follow this
    plan's monthly pattern. Results are stored by calendar month for display. */
 function engine(sides,gciSide,splitPct){
- const ci=capInfo(), months=distribute(sides,S.season.w), start=ci.hasDate?ci.annM:0;
+ const ci=capInfo(), months=distribute(sides,closeW()), start=ci.hasDate?ci.annM:0;
  let paid=0, capped=false, split=0, fees=0, net=0, sideNo=0, rlp=0, other=0, capTot=0; const caps=[];
  const monthNet=new Array(12).fill(0);
  for(let j=0;j<12;j++){
@@ -817,7 +1016,7 @@ function engine(sides,gciSide,splitPct){
 /* Dollar-based version used with a GCI goal: the goal is spread across the months
    exactly (no rounding to whole deals); deal fees are charged per fractional side. */
 function engineG(gciTotal,gciSide,splitPct,sidesWhole){
- const ci=capInfo(), w=S.season.w.map(x=>Math.max(n(x),0)), tw=w.reduce((a,b)=>a+b,0)||1, start=ci.hasDate?ci.annM:0;
+ const ci=capInfo(), w=closeW(), tw=w.reduce((a,b)=>a+b,0)||1, start=ci.hasDate?ci.annM:0;
  const monthG=w.map(x=>gciTotal*x/tw);
  let paid=0, capped=false, split=0, fees=0, net=0, cumG=0, rlp=0, other=0, capTot=0; const caps=[], monthNet=new Array(12).fill(0);
  for(let j=0;j<12;j++){
@@ -833,7 +1032,7 @@ function engineG(gciTotal,gciSide,splitPct,sidesWhole){
   const rf=Math.max(Math.min(gm*ci.rlpPct,ci.rlpMax-rlp),0), oth=ci.perDeal*mSides;
   split+=sp; fees+=fee; rlp+=rf; other+=oth; const nt=gm-sp-fee-rf-oth; net+=nt; monthNet[m]=nt; cumG+=gm;
  }
- return {months:distribute(sidesWhole,S.season.w),monthG,split,fees,rlp,other,capTot,net,caps,monthNet,start,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:-1};
+ return {months:distribute(sidesWhole,closeW()),monthG,split,fees,rlp,other,capTot,net,caps,monthNet,start,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:-1};
 }
 function calc(){
  const g=S.goals, k=S.kpi;
@@ -883,7 +1082,7 @@ function calc(){
  const reserveMonthly=(persAnnual+bizAnnual)/12;
  return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
   sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persAnnual>0,
-  lAp,bCo,lTk,conv,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves)};
+  lAp,bCo,lTk,conv,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed};
 }
 
 function out(key,val,cls){
@@ -953,6 +1152,34 @@ function recompute(){
  if(ex) ex.innerHTML=chq>0?`<div class="tip">A typical cheque of <b>${money(chq0)}</b> after split and fees, plus ${money(chq0*0.05)} GST, less your holdbacks (${money(chq0*c.t)} income tax, ${money(chq0*n(S.goals.gstHold)/100)} GST) leaves <b>${money(chq)}</b>${c.cap?` (more once you cap)`:''}. Split that as: <b>${money(chq*ab)}</b> to business, <b>${money(chq*at)}</b> extra to tax, <b>${money(chq*ap)}</b> to personal & savings.${tot!==100?` <span class="flag warn">Your split adds up to ${tot}%</span>`:''}</div>`:'';
  const gn=document.getElementById('gci-note');
  if(gn) gn.innerHTML=S.goals.method==='gci'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${n(S.save.rrsp)?' and RRSP':''}.${c.hasBudget?(c.surplus<0?` <span class="flag bad">${money(-c.surplus)} short of your budget</span>`:` <span class="flag ok">Covers your budget with ${money(c.surplus)} to spare</span>`):''}`:'';
+
+ // positioning statement
+ { const ps=S.pos.ps, b=(x,ph)=>x?`<b>${esc(x)}</b>`:`<span class="blank">${ph}</span>`;
+   const el=document.querySelector('[data-o="psPreview"]'); if(el) el.innerHTML=`For ${b(ps.client,'[ideal client]')}, I am the real estate professional who ${b(ps.value,'[primary value / difference]')} because ${b(ps.proof,'[proof / strength]')}, so they can ${b(ps.outcome,'[desired outcome]')}.`; }
+ // vision board link
+ { const vb=document.getElementById('vb-open'), u=(S.vision.board||'').trim(); if(vb) vb.innerHTML=/^https?:\/\//i.test(u)?`<a class="btn btn-line btn-sm" style="margin-top:8px" href="${esc(u)}" target="_blank" rel="noopener">Open my vision board ↗</a>`:''; }
+ // business model
+ out('modelIncome',c.gci?`${money(c.profit)} net · ${money(c.takeHome)} take-home`:'–'); out('modelVol',c.sides?`${int(c.sides)} sides · ${moneyK(c.volume)} volume`:'–');
+ // primary channel count
+ { const np=S.sources.filter(x=>x.pri==='Primary').length, el=document.getElementById('src-pri'); if(el) el.innerHTML=`<span class="flag ${np>=3&&np<=5?'ok':'warn'}">${np} primary</span>`; }
+ // strategic priority measures
+ S.pri.items.forEach((x,i)=>{ const filled=x.q.filter(v=>v!==''); const tot=filled.reduce((a,v)=>a+n(v),0); out('pmY'+i,filled.length?(x.target!==''&&n(x.target)>0?`${int(tot)} · ${pct(tot/n(x.target))}`:int(tot)):'–'); });
+ // cash flow
+ { const tb=document.getElementById('cf-table');
+   if(tb){ const y=+S.meta.year||year, hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers=(c.persAnnual+c.post+c.debtRed+c.rrsp)/12;
+    let bal=c.reserves, low=Infinity, lowM=0; const rows={cl:[],net:[],hold:[],biz:[],pers:[],flow:[],bal:[]};
+    for(let m=0;m<12;m++){ const nt=c.monthNet[m]||0, h=nt*hold, fl=nt-h-biz-pers; bal+=fl; if(bal<low){low=bal;lowM=m;}
+     rows.cl.push(c.gciSide>0?(c.monthG[m]||0)/c.gciSide:0); rows.net.push(nt); rows.hold.push(-h); rows.biz.push(-biz); rows.pers.push(-pers); rows.flow.push(fl); rows.bal.push(bal); }
+    const fm=v=>v===0?'–':(v<0?'−':'')+'$'+Math.round(Math.abs(v)).toLocaleString('en-CA');
+    const row=(lbl,arr,cls,fn)=>`<tr class="${cls||''}"><th>${lbl}</th>${arr.map(v=>`<td class="num${v<0&&cls?' neg':''}">${fn?fn(v):fm(v)}</td>`).join('')}<td class="num tot">${cls==='bal'?fm(arr[11]):fn?int(arr.reduce((a,b)=>a+b,0)):fm(arr.reduce((a,b)=>a+b,0))}</td></tr>`;
+    tb.innerHTML=`<thead><tr><th></th>${MONTHS.map(m=>`<th class="num">${m}</th>`).join('')}<th class="num">Year</th></tr></thead><tbody>
+     ${row('Expected closings',rows.cl,'',v=>v?dec(v):'–')}${row('Net commission',rows.net)}${row('Income tax holdback',rows.hold)}${row('Business expenses',rows.biz)}${row('Personal, savings &amp; RRSP',rows.pers)}
+     ${row('Net cash flow',rows.flow,'flow')}${row('Running balance',rows.bal,'bal')}</tbody>`;
+    const cn=document.getElementById('cf-note');
+    if(cn) cn.innerHTML=!c.hasBudget&&!c.bizAnnual?'<div class="tip">Add your expenses on <b>Budget &amp; Finances</b> to see your real cash flow.</div>'
+      :low<0?`<div class="tip"><span class="flag bad">Your balance dips to ${fm(low)} in ${MONTHS_FULL[lowM]}</span> You’d need about <b>${money(-low)}</b> more in reserves, or more closings before then, to cover the slow months.</div>`
+      :`<div class="tip"><span class="flag ok">You stay positive all year</span> Your lowest balance is <b>${fm(low)}</b> in ${MONTHS_FULL[lowM]}.</div>`;
+   } }
  // vs last year
  const vl=document.getElementById('vs-last'), ls=n(S.last.listings)+n(S.last.buyers);
  if(vl) vl.innerHTML=ls?`<div class="tip">Last year you closed <b>${int(ls)}</b> sides${n(S.last.gci)?` for <b>${money(n(S.last.gci))}</b> GCI`:''}. This plan calls for <b>${int(c.sides)}</b> — ${c.sides>=ls?`<b>${pct((c.sides-ls)/ls)}</b> more`:`<b>${pct((ls-c.sides)/ls)}</b> fewer`}.</div>`:'';
@@ -978,30 +1205,28 @@ function agentName(){ return (S.vision&&S.vision.name)||''; }
 function renderSummary(){
  const c=C||calc(), v=S.vision, el=document.getElementById('summary'); if(!el) return;
  const t=x=>x?esc(x):'<span class="muted">Not filled in yet</span>';
- const goals=[v.goal1,v.goal2,v.goal3].filter(Boolean);
- const order=['High','Medium','Low'];
- const inits=S.inits.filter(i=>i.what).sort((a,b)=>order.indexOf(a.priority)-order.indexOf(b.priority)).slice(0,5);
- const topSrc=S.sources.filter(s=>n(s.goal)).sort((a,b)=>n(b.goal)-n(a.goal)).slice(0,4);
+ const ps=S.pos.ps, psTxt=(ps.client&&ps.value)?`For ${esc(ps.client)}, I am the real estate professional who ${esc(ps.value)}${ps.proof?` because ${esc(ps.proof)}`:''}${ps.outcome?`, so they can ${esc(ps.outcome)}`:''}.`:'';
+ const vals=S.values.core.map(x=>x.v).filter(Boolean);
+ const pris=S.pri.items.filter(x=>x.priority||x.measure);
+ const prim=S.sources.filter(x=>x.pri==='Primary');
  const who=agentName();
  el.innerHTML=`
   <div class="print-only" style="border-bottom:3px solid var(--bp-red);padding-bottom:8px;margin-bottom:14px"><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#666;font-weight:700">Royal LePage Solutions</div><div style="font-size:22px;font-weight:800">${esc(who)}${who?' — ':''}${S.meta.year} Business Plan</div></div>
   <div class="sum-grid">
-   <div class="sum-card"><h4>North star</h4><p style="font-size:16px;font-weight:700">${t(v.northStar)}</p><h4 style="margin-top:12px">This year</h4><p>${t(v.one)}</p></div>
-   <div class="sum-card"><h4>Three core goals</h4>${goals.length?`<ol>${goals.map(g=>`<li>${esc(g)}</li>`).join('')}</ol>`:t('')}<h4 style="margin-top:12px">My why</h4><p>${t(v.why)}</p></div>
+   <div class="sum-card"><h4>1-year goals</h4><p>${t(v.one)}</p><h4 style="margin-top:12px">90-day priorities</h4><p>${t(v.ninety)}</p></div>
+   <div class="sum-card"><h4>Positioning</h4><p style="font-weight:600">${psTxt||t('')}</p><h4 style="margin-top:12px">Core values</h4><p>${vals.length?vals.map(esc).join(' · '):t('')}</p></div>
+   <div class="sum-card"><h4>Strategic priorities</h4>${pris.length?`<ol>${pris.map(x=>`<li><b>${esc(x.priority)}</b>${x.measure?` — ${esc(x.measure)}${x.target!==''?`: ${int(n(x.target))}`:''}`:''}</li>`).join('')}</ol>`:t('')}
+    ${S.pri.notFocus?`<h4 style="margin-top:12px">Not focusing on</h4><p>${esc(S.pri.notFocus)}</p>`:''}</div>
    <div class="sum-card"><h4>The numbers</h4><dl>
-    <dt>GCI goal</dt><dd>${money(c.gci)}</dd><dt>Net after cap &amp; expenses</dt><dd>${money(c.profit)}</dd><dt>Closed sides</dt><dd>${int(c.sides)} (${int(c.L)} listings / ${int(c.B)} buyers)</dd>
-    <dt>Sales volume</dt><dd>${money(c.volume)}</dd><dt>Average price</dt><dd>${money(c.price)}</dd>
+    <dt>GCI goal</dt><dd>${money(c.gci)}</dd><dt>Net after deductions &amp; expenses</dt><dd>${money(c.profit)}</dd><dt>Closed sides</dt><dd>${int(c.sides)} (${int(c.L)} listings / ${int(c.B)} buyers)</dd>
     <dt>Take-home after tax</dt><dd>${money(c.takeHome)}</dd>${c.cap?`<dt>Cap reached</dt><dd>${capText(c,true)}</dd>`:''}${c.hasBudget?`<dt>Budget surplus</dt><dd style="color:${c.surplus<0?'var(--bp-red)':'var(--green)'}">${money(c.surplus)}</dd>`:''}</dl></div>
-   <div class="sum-card"><h4>Daily & weekly activity</h4><dl>
-    <dt>Conversations per day</dt><dd>${dec(c.conv/c.days)}</dd><dt>Prospecting hours per week</dt><dd>${dec(c.hrs/c.weeks)}</dd>
-    <dt>Referral contacts per day</dt><dd>${dec(c.conY/c.days)}</dd><dt>Listing appointments per month</dt><dd>${dec(c.lAp/12)}</dd>
-    <dt>Buyer consultations per month</dt><dd>${dec(c.bCo/12)}</dd><dt>Posts per week</dt><dd>${dec(n(S.content.personal)+n(S.content.professional)+n(S.content.and))}</dd></dl></div>
   </div>
-  <div class="sum-card" style="margin-top:18px"><h4>Closings by month</h4><div class="sum-months">${c.months.map((u,i)=>`<div>${MONTHS[i]}<b>${u}</b></div>`).join('')}</div></div>
-  <div class="sum-grid" style="margin-top:18px">
-   <div class="sum-card"><h4>Where the business comes from</h4>${topSrc.length?`<dl>${topSrc.map(s=>`<dt>${esc(s.name)}</dt><dd>${int(n(s.goal))} sides</dd>`).join('')}</dl>`:t('')}
-    <h4 style="margin-top:12px">Marketing budget</h4><dl><dt>Annual total</dt><dd>${money(c.mktgTotal)}</dd><dt>Share of GCI</dt><dd>${c.gci?pct(c.mktgTotal/c.gci):'–'}</dd></dl></div>
-   <div class="sum-card"><h4>Priority initiatives</h4>${inits.length?`<ol>${inits.map(i=>`<li>${esc(i.what)}${i.date?` <small style="color:#888">— ${esc(i.date)}</small>`:''}</li>`).join('')}</ol>`:t('')}
+  <div class="sum-card" style="margin-top:14px"><h4>Closings by month</h4><div class="sum-months">${c.months.map((u,i)=>`<div>${MONTHS[i]}<b>${u}</b></div>`).join('')}</div></div>
+  <div class="sum-grid" style="margin-top:14px">
+   <div class="sum-card"><h4>Activity</h4><dl>
+    <dt>Conversations per day</dt><dd>${dec(c.conv/c.days)}</dd><dt>Referral contacts per day</dt><dd>${dec(c.conY/c.days)}</dd>
+    <dt>Listing appointments per month</dt><dd>${dec(c.lAp/12)}</dd><dt>Buyer consultations per month</dt><dd>${dec(c.bCo/12)}</dd></dl></div>
+   <div class="sum-card"><h4>Primary lead channels</h4>${prim.length?`<p>${prim.map(x=>esc(x.name)).join(' · ')}</p>`:t('')}
     <h4 style="margin-top:12px">Mission</h4><p>${t(v.mission)}</p></div>
   </div>`;
 }
@@ -1068,7 +1293,7 @@ async function loadPlan(){
  try{ const d=await docRef().get(); if(d.exists) data=d.data().plan; }
  catch(e){ console.warn('Load failed',e); gate('app'); S=DEFAULT(); renderShell(); fillAll(); toggleVis(); recompute();
   setStatus('<b style="color:#ff8a9b">Couldn’t load your plan</b> · refresh the page to try again. Changes won’t be saved until it loads.'); return; }
- S=merge(DEFAULT(),data||{}); S.meta.year=year; if(S.goals.method==='income'){ const c0=calc(); S.goals.gciGoal=Math.round(c0.gci/1000)*1000; S.goals.method='gci'; } S.goals.buyShare=Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; lastStamp=data&&data.meta?data.meta.updated:null;
+ S=merge(DEFAULT(),data||{}); normalize(); S.meta.year=year; if(S.goals.method==='income'){ const c0=calc(); S.goals.gciGoal=Math.round(c0.gci/1000)*1000; S.goals.method='gci'; } S.goals.buyShare=Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; lastStamp=data&&data.meta?data.meta.updated:null;
  if(!S.vision.name&&user.displayName) S.vision.name=user.displayName;
  $('h-year').textContent=year;
  renderShell(); fillAll(); toggleVis(); recompute(); updateName();
@@ -1119,7 +1344,7 @@ document.getElementById('import-file').addEventListener('change',e=>{
  const r=new FileReader();
  r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d||typeof d!=='object'||!d.goals) throw new Error('bad');
    if(!confirm(`Replace your ${year} plan with the imported file?`)) return;
-   S=merge(DEFAULT(),d); S.meta.year=year; if(S.goals.method==='income'){ const c0=calc(); S.goals.gciGoal=Math.round(c0.gci/1000)*1000; S.goals.method='gci'; } S.goals.buyShare=Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; renderShell(); fillAll(); toggleVis(); recompute(); ready=true; saveNow(); toast('Plan imported'); }
+   S=merge(DEFAULT(),d); normalize(); S.meta.year=year; if(S.goals.method==='income'){ const c0=calc(); S.goals.gciGoal=Math.round(c0.gci/1000)*1000; S.goals.method='gci'; } S.goals.buyShare=Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; renderShell(); fillAll(); toggleVis(); recompute(); ready=true; saveNow(); toast('Plan imported'); }
   catch(err){ toast('That file isn’t a business plan export'); } finally{ e.target.value=''; } };
  r.readAsText(f);
 });
