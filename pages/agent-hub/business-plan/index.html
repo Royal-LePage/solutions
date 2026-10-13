@@ -87,6 +87,15 @@ body{margin:0;background:var(--bp-light-grey);color:var(--bp-black);font-family:
 .g-btn[disabled]{opacity:.6;cursor:wait}
 .or{display:flex;align-items:center;gap:12px;margin:22px 0 14px;color:#999;font-size:12.5px;font-weight:600}
 .or:before,.or:after{content:'';flex:1;height:1px;background:var(--bp-warm-grey)}
+.pw-tabs{display:inline-flex;border:1px solid #D6D1CA;border-radius:4px;overflow:hidden;margin-bottom:14px}
+.pw-tabs button{background:#fff;border:0;padding:9px 18px;font:700 13px var(--bp-sans);cursor:pointer;color:var(--bp-dark-grey)}
+.pw-tabs button+button{border-left:1px solid #D6D1CA}
+.pw-tabs button.on{background:var(--bp-black);color:#fff}
+.pw-form{max-width:380px;margin:0 auto;text-align:left;display:flex;flex-direction:column;gap:12px}
+.pw-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.linkbtn{background:none;border:0;padding:0;color:var(--bp-dark-grey);text-decoration:underline;font:600 13px var(--bp-sans);cursor:pointer}
+.linkbtn:hover{color:var(--bp-red)}
+.vf-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .em-form{display:flex;gap:8px;max-width:440px;margin:0 auto}
 .em-form input{flex:1;min-width:0}
 .em-form .btn{white-space:nowrap}
@@ -371,13 +380,35 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
         <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.7 6c4.5-4.2 6.9-10.3 6.9-17.7z"/><path fill="#FBBC05" d="M10.6 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.1C1 16.6 0 20.2 0 24s1 7.4 2.7 10.7l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.7-6c-2.1 1.4-4.9 2.3-8.2 2.3-6.2 0-11.5-4.1-13.4-9.9l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/></svg>
         Sign in with Google
       </button>
-      <div class="or"><span>or sign in with email</span></div>
-      <form class="em-form" id="em-form" novalidate>
-        <input type="email" id="em-input" placeholder="you@example.com" autocomplete="email" aria-label="Your email address">
-        <button class="btn btn-red" id="em-btn" type="submit">Email me a sign-in link</button>
+      <div class="or"><span>or use your email</span></div>
+      <div class="pw-tabs" role="tablist"><button type="button" data-pw="in" class="on">Sign in</button><button type="button" data-pw="up">Create account</button></div>
+      <div class="ok-msg" id="pw-msg" hidden></div>
+      <form class="pw-form" id="pw-in" novalidate>
+        <label class="f"><span>Email</span><input type="email" id="in-email" autocomplete="email"></label>
+        <label class="f"><span>Password</span><input type="password" id="in-pass" autocomplete="current-password"></label>
+        <div class="pw-row"><button type="button" class="linkbtn" data-pw="reset">Forgot password?</button><button class="btn btn-red" type="submit" id="in-btn">Sign in</button></div>
       </form>
-      <div class="ok-msg" id="em-sent" hidden></div>
-      <p class="fine">Any email address works — use the same one each time so you always get the same plan. With email, we send you a one-time link — no password needed. You’ll stay signed in until you close your browser.</p>
+      <form class="pw-form" id="pw-up" novalidate hidden>
+        <label class="f"><span>Your name</span><input type="text" id="up-name" autocomplete="name"></label>
+        <label class="f"><span>Email</span><input type="email" id="up-email" autocomplete="email"></label>
+        <label class="f"><span>Password <small>at least 8 characters</small></span><input type="password" id="up-pass" autocomplete="new-password"></label>
+        <label class="f"><span>Confirm password</span><input type="password" id="up-pass2" autocomplete="new-password"></label>
+        <div class="pw-row"><span></span><button class="btn btn-red" type="submit" id="up-btn">Create account</button></div>
+      </form>
+      <form class="pw-form" id="pw-reset" novalidate hidden>
+        <p class="intro" style="margin:0">Enter your email and we’ll send you a link to set a new password.</p>
+        <label class="f"><span>Email</span><input type="email" id="rs-email" autocomplete="email"></label>
+        <div class="pw-row"><button type="button" class="linkbtn" data-pw="in">← Back to sign in</button><button class="btn btn-red" type="submit" id="rs-btn">Send reset link</button></div>
+      </form>
+      <p class="fine">Any email address works — use the same one each time so you always get the same plan. You’ll stay signed in until you close your browser.</p>
+    </div>
+    <div id="g-verify" hidden>
+      <h2>Verify your email</h2>
+      <p>We sent a verification link to <b id="vf-email"></b>. Click the link in that email, then come back here and press <b>Continue</b>. Don’t see it? Check your spam folder.</p>
+      <div class="err" id="vf-err" hidden></div>
+      <div class="ok-msg" id="vf-ok" hidden></div>
+      <div class="vf-btns"><button class="btn btn-red" id="vf-continue" type="button">I’ve verified — continue</button><button class="btn btn-line" id="vf-resend" type="button">Resend email</button></div>
+      <p class="fine"><button type="button" class="linkbtn" id="vf-out">Use a different email</button></p>
     </div>
     <div id="g-confirm" hidden>
       <h2>Finish signing in</h2>
@@ -1278,7 +1309,7 @@ function allowed(u){ return !!(u&&u.email&&u.emailVerified); }
 
 function gate(state,msg){
  $('bp-gate').hidden=state==='app'; $('bp-app').hidden=state!=='app';
- $('g-loading').hidden=state!=='loading'; $('g-signin').hidden=state!=='signin'; $('g-config').hidden=state!=='config'; $('g-confirm').hidden=state!=='confirm';
+ $('g-loading').hidden=state!=='loading'; $('g-signin').hidden=state!=='signin'; $('g-config').hidden=state!=='config'; $('g-confirm').hidden=state!=='confirm'; $('g-verify').hidden=state!=='verify';
  const e=$('g-err'); e.hidden=!msg; e.textContent=msg||'';
  $('g-btn').disabled=false;
 }
@@ -1357,7 +1388,85 @@ async function signOut(){
  try{ await auth.signOut(); }catch(e){}
 }
 
-/* ---- Email sign-in link (passwordless) ---- */
+/* ---- Email + password accounts ---- */
+const ACS=()=>({url:location.origin+location.pathname});
+function authMsg(e){
+ const c=e&&e.code||'';
+ if(c==='auth/operation-not-allowed') return 'Email sign-in isn’t turned on yet. Use Sign in with Google for now, or ask the Agent Hub administrator.';
+ if(c==='auth/email-already-in-use') return 'There’s already an account for this email. Sign in instead — or use “Forgot password?” if you don’t know the password (or if you normally use Google).';
+ if(c==='auth/weak-password') return 'Choose a stronger password — at least 8 characters.';
+ if(c==='auth/invalid-email') return 'Enter a valid email address.';
+ if(c==='auth/invalid-credential'||c==='auth/wrong-password'||c==='auth/user-not-found'||c==='auth/invalid-login-credentials') return 'The email or password is incorrect. Try again, or use “Forgot password?”.';
+ if(c==='auth/too-many-requests') return 'Too many attempts. Wait a few minutes and try again, or reset your password.';
+ if(c==='auth/network-request-failed') return 'Check your internet connection and try again.';
+ return 'Something went wrong. Please try again.';
+}
+function pwTab(t){
+ ['in','up','reset'].forEach(k=>{ $('pw-'+k).hidden=k!==t; });
+ document.querySelectorAll('.pw-tabs button').forEach(b=>b.classList.toggle('on',b.dataset.pw===t||(t==='reset'&&b.dataset.pw==='in')));
+ $('g-err').hidden=true; $('pw-msg').hidden=true;
+ if(t==='reset'&&!$('rs-email').value) $('rs-email').value=$('in-email').value;
+}
+function busy(btn,on,label){ btn.disabled=on; if(on){ btn.dataset.l=btn.textContent; btn.textContent=label||'Please wait…'; } else if(btn.dataset.l) btn.textContent=btn.dataset.l; }
+function okMsg(html){ const m=$('pw-msg'); m.innerHTML=html; m.hidden=false; }
+async function pwSignIn(){
+ const em=$('in-email').value.trim(), pw=$('in-pass').value; $('g-err').hidden=true;
+ if(!okDomain(em)) return gate('signin','Enter a valid email address.');
+ if(!pw) return gate('signin','Enter your password.');
+ const b=$('in-btn'); busy(b,true,'Signing in…');
+ try{ await auth.signInWithEmailAndPassword(em,pw); }catch(e){ console.warn(e); gate('signin',authMsg(e)); } finally{ busy(b,false); }
+}
+async function pwSignUp(){
+ const nm=$('up-name').value.trim(), em=$('up-email').value.trim(), pw=$('up-pass').value, pw2=$('up-pass2').value; $('g-err').hidden=true;
+ if(!okDomain(em)) return gate('signin','Enter a valid email address.');
+ if(pw.length<8) return gate('signin','Choose a password with at least 8 characters.');
+ if(pw!==pw2) return gate('signin','The two passwords don’t match.');
+ const b=$('up-btn'); busy(b,true,'Creating account…');
+ try{
+  pendingVerify=true;
+  const cred=await auth.createUserWithEmailAndPassword(em,pw);
+  if(nm){ try{ await cred.user.updateProfile({displayName:nm}); }catch(e){} }
+  try{ await cred.user.sendEmailVerification(ACS()); }catch(e){ console.warn(e); }
+  showVerify(cred.user);
+ }catch(e){ pendingVerify=false; console.warn(e); gate('signin',authMsg(e)); } finally{ busy(b,false); }
+}
+async function pwReset(){
+ const em=$('rs-email').value.trim(); $('g-err').hidden=true;
+ if(!okDomain(em)) return gate('signin','Enter a valid email address.');
+ const b=$('rs-btn'); busy(b,true,'Sending…');
+ try{ await auth.sendPasswordResetEmail(em,ACS()); okMsg(`If there’s an account for <b>${esc(em)}</b>, a link to set a new password is on its way. Check your spam folder if you don’t see it.`); }
+ catch(e){ console.warn(e); if(e&&e.code==='auth/user-not-found') okMsg(`If there’s an account for <b>${esc(em)}</b>, a link to set a new password is on its way.`); else gate('signin',authMsg(e)); }
+ finally{ busy(b,false); }
+}
+let pendingVerify=false;
+function showVerify(u){ user=null; $('vf-email').textContent=u.email; $('vf-err').hidden=true; $('vf-ok').hidden=true; gate('verify'); }
+async function verifyContinue(){
+ const u=auth.currentUser; if(!u) return gate('signin');
+ const b=$('vf-continue'); busy(b,true,'Checking…');
+ try{ await u.reload(); if(auth.currentUser.emailVerified){ await auth.currentUser.getIdToken(true); pendingVerify=false; await enterApp(auth.currentUser); }
+  else{ const x=$('vf-err'); x.textContent='Your email isn’t verified yet. Click the link in the email we sent, then press Continue.'; x.hidden=false; } }
+ catch(e){ console.warn(e); const x=$('vf-err'); x.textContent=authMsg(e); x.hidden=false; }
+ finally{ busy(b,false); }
+}
+async function verifyResend(){
+ const u=auth.currentUser; if(!u) return;
+ try{ await u.sendEmailVerification(ACS()); $('vf-err').hidden=true; const o=$('vf-ok'); o.textContent='Sent — check your inbox.'; o.hidden=false; }
+ catch(e){ const x=$('vf-err'); x.textContent=authMsg(e); x.hidden=false; }
+}
+document.addEventListener('submit',e=>{
+ if(e.target.id==='pw-in'){ e.preventDefault(); pwSignIn(); }
+ if(e.target.id==='pw-up'){ e.preventDefault(); pwSignUp(); }
+ if(e.target.id==='pw-reset'){ e.preventDefault(); pwReset(); }
+});
+document.addEventListener('click',e=>{
+ const t=e.target.closest('button'); if(!t) return;
+ if(t.dataset.pw) pwTab(t.dataset.pw);
+ if(t.id==='vf-continue') verifyContinue();
+ if(t.id==='vf-resend') verifyResend();
+ if(t.id==='vf-out'){ pendingVerify=false; auth.signOut().catch(()=>{}); pwTab('in'); }
+});
+
+/* ---- Email sign-in link (passwordless; kept so older links still work) ---- */
 const EM_KEY='bpEmailForSignIn';
 const lsGet=k=>{ try{ return localStorage.getItem(k); }catch(e){ return null; } };
 const lsSet=(k,v)=>{ try{ localStorage.setItem(k,v); }catch(e){} };
@@ -1398,6 +1507,12 @@ document.addEventListener('submit',e=>{
  if(e.target.id==='cf-form'){ e.preventDefault(); const em=$('cf-input').value.trim(); if(!okDomain(em)){ const x=$('cf-err'); x.textContent='Enter a valid email address.'; x.hidden=false; return; } finishLink(em); }
 });
 
+async function enterApp(u){
+ user=u; ready=false; authErr='';
+ $('acct-email').textContent=u.email;
+ const ph=$('acct-photo'); if(u.photoURL){ ph.src=u.photoURL; ph.hidden=false; } else ph.hidden=true;
+ gate('app'); await loadPlan();
+}
 function configured(){
  const c=window.BP_FIREBASE_CONFIG;
  return !!(c&&c.apiKey&&c.projectId&&!/PASTE/.test(c.apiKey+c.projectId+c.appId));
@@ -1439,13 +1554,11 @@ function init(){
  auth.getRedirectResult().catch(e=>{ console.warn(e); });
  if(auth.isSignInWithEmailLink&&auth.isSignInWithEmailLink(location.href)){ pendingLink=true; const em=lsGet(EM_KEY); if(em) finishLink(em); }
  auth.onAuthStateChanged(async u=>{
-  if(u&&!allowed(u)){ authErr=`${u.email||'That account'} hasn\u2019t been verified. Try signing in with the email link instead.`; user=null; gate('signin',authErr); try{ await auth.signOut(); }catch(e){} return; }
+  if(u&&!u.emailVerified&&u.providerData.some(p=>p&&p.providerId==='password')){ showVerify(u); return; }
+  if(u&&!allowed(u)){ authErr=`${u.email||'That account'} hasn\u2019t been verified.`; user=null; gate('signin',authErr); try{ await auth.signOut(); }catch(e){} return; }
   user=u||null; ready=false;
   if(!user){ if(unsub){ unsub(); unsub=null; } S=DEFAULT(); $('sections').innerHTML=''; if(pendingLink){ if(!lsGet(EM_KEY)) gate('confirm'); return; } gate('signin',authErr); authErr=''; return; }
-  authErr='';
-  $('acct-email').textContent=user.email;
-  const ph=$('acct-photo'); if(user.photoURL){ ph.src=user.photoURL; ph.hidden=false; } else ph.hidden=true;
-  gate('app'); await loadPlan();
+  authErr=''; await enterApp(user);
  });
 }
 init();
