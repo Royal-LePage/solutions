@@ -9,7 +9,9 @@
       for (var i = 0; i < str.length; i++) { hash = ((hash << 5) + hash) + str.charCodeAt(i); hash = hash & hash; }
       return Math.abs(hash).toString(16);
     }
-    if (sessionStorage.getItem(PASS_KEY) !== simpleHash('Solutions')) {
+    window.__rlsHubGrant = function () { try { sessionStorage.setItem(PASS_KEY, simpleHash('Solutions')); } catch (e) {} };
+    var isLink = /[?&]mode=signIn/.test(location.search) && /[?&]oobCode=/.test(location.search);
+    if (!isLink && sessionStorage.getItem(PASS_KEY) !== simpleHash('Solutions')) {
       window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/?next=' + encodeURIComponent(window.location.pathname);
     }
   })();
@@ -83,6 +85,13 @@ body{margin:0;background:var(--bp-light-grey);color:var(--bp-black);font-family:
 .g-btn{display:inline-flex;align-items:center;gap:12px;background:#fff;border:1px solid #C9C4BC;border-radius:4px;padding:11px 20px;font:700 14.5px var(--bp-sans);color:#1f1f1f;cursor:pointer;transition:border-color .15s,box-shadow .15s}
 .g-btn:hover{border-color:#000;box-shadow:0 1px 6px rgba(0,0,0,.12)}
 .g-btn[disabled]{opacity:.6;cursor:wait}
+.or{display:flex;align-items:center;gap:12px;margin:22px 0 14px;color:#999;font-size:12.5px;font-weight:600}
+.or:before,.or:after{content:'';flex:1;height:1px;background:var(--bp-warm-grey)}
+.em-form{display:flex;gap:8px;max-width:440px;margin:0 auto}
+.em-form input{flex:1;min-width:0}
+.em-form .btn{white-space:nowrap}
+.ok-msg{background:#DFF2E6;color:var(--green);border-radius:4px;padding:10px 12px;font-size:13.5px;margin:12px auto 0;max-width:440px;text-align:left}
+@media (max-width:640px){.em-form{flex-direction:column}}
 .spin{width:28px;height:28px;border:3px solid var(--bp-warm-grey);border-top-color:var(--bp-red);border-radius:50%;animation:sp 0.8s linear infinite;margin:6px auto 14px}
 @keyframes sp{to{transform:rotate(360deg)}}
 .bp-conflict{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:1001;width:calc(100% - 32px);max-width:680px;box-shadow:0 6px 24px rgba(0,0,0,.35);background:#3a1016;border:1px solid var(--bp-red);border-radius:4px;padding:10px 12px;font-size:13px;color:#fff;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -356,13 +365,28 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
     <div id="g-loading"><div class="spin"></div><p style="margin:0">Checking your sign-in…</p></div>
     <div id="g-signin" hidden>
       <h2>Sign in to your plan</h2>
-      <p>Your business plan is private to you. Sign in with your Royal LePage Google account to open it on any device.</p>
+      <p>Your business plan is private to you. Sign in with Google or your email to open it on any device.</p>
       <div class="err" id="g-err" hidden></div>
       <button class="g-btn" id="g-btn" type="button">
         <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.7 6c4.5-4.2 6.9-10.3 6.9-17.7z"/><path fill="#FBBC05" d="M10.6 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.1C1 16.6 0 20.2 0 24s1 7.4 2.7 10.7l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.7-6c-2.1 1.4-4.9 2.3-8.2 2.3-6.2 0-11.5-4.1-13.4-9.9l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/></svg>
         Sign in with Google
       </button>
-      <p class="fine">Use your <b>@royallepage.ca</b> email. You’ll stay signed in until you close your browser.</p>
+      <div class="or"><span>or sign in with email</span></div>
+      <form class="em-form" id="em-form" novalidate>
+        <input type="email" id="em-input" placeholder="you@example.com" autocomplete="email" aria-label="Your email address">
+        <button class="btn btn-red" id="em-btn" type="submit">Email me a sign-in link</button>
+      </form>
+      <div class="ok-msg" id="em-sent" hidden></div>
+      <p class="fine">Any email address works — use the same one each time so you always get the same plan. With email, we send you a one-time link — no password needed. You’ll stay signed in until you close your browser.</p>
+    </div>
+    <div id="g-confirm" hidden>
+      <h2>Finish signing in</h2>
+      <p>You opened your sign-in link on a different browser or device. Confirm your email to continue.</p>
+      <div class="err" id="cf-err" hidden></div>
+      <form class="em-form" id="cf-form" novalidate>
+        <input type="email" id="cf-input" placeholder="you@example.com" autocomplete="email" aria-label="Your email address">
+        <button class="btn btn-red" id="cf-btn" type="submit">Continue</button>
+      </form>
     </div>
     <div id="g-config" hidden>
       <h2>Sign-in isn’t set up yet</h2>
@@ -1238,7 +1262,7 @@ function renderSummary(){
 
 /* ---------------------------------------------------------------
    Sign-in + private storage
-   Each agent signs in with Google (@royallepage.ca only). Plans live in
+   Each agent signs in with Google or an emailed link (any verified email). Plans live in
    Firestore at plans/{uid}/years/{year}; security rules allow only the
    owner to read or write them. Nothing is kept in the browser.
 ---------------------------------------------------------------- */
@@ -1249,11 +1273,12 @@ function setStatus(html){statusEl.innerHTML=html;}
 function clean(){return JSON.parse(JSON.stringify(S));}
 function docRef(y){return db.collection('plans').doc(user.uid).collection('years').doc(String(y||year));}
 const DOMAIN=(window.BP_ALLOWED_DOMAIN||'royallepage.ca').toLowerCase();
-function allowed(u){ return !!(u&&u.email&&u.emailVerified&&u.email.toLowerCase().endsWith('@'+DOMAIN)); }
+/* Any verified email can sign in; each person only ever sees their own plan. */
+function allowed(u){ return !!(u&&u.email&&u.emailVerified); }
 
 function gate(state,msg){
  $('bp-gate').hidden=state==='app'; $('bp-app').hidden=state!=='app';
- $('g-loading').hidden=state!=='loading'; $('g-signin').hidden=state!=='signin'; $('g-config').hidden=state!=='config';
+ $('g-loading').hidden=state!=='loading'; $('g-signin').hidden=state!=='signin'; $('g-config').hidden=state!=='config'; $('g-confirm').hidden=state!=='confirm';
  const e=$('g-err'); e.hidden=!msg; e.textContent=msg||'';
  $('g-btn').disabled=false;
 }
@@ -1317,7 +1342,7 @@ async function clearPlan(){
 async function signIn(){
  const btn=$('g-btn'); btn.disabled=true; $('g-err').hidden=true;
  const provider=new firebase.auth.GoogleAuthProvider();
- provider.setCustomParameters({hd:DOMAIN,prompt:'select_account'});
+ provider.setCustomParameters({prompt:'select_account'});
  try{ await auth.signInWithPopup(provider); }
  catch(e){
   if(e&&(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment')){ try{ await auth.signInWithRedirect(provider); return; }catch(e2){ e=e2; } }
@@ -1331,6 +1356,47 @@ async function signOut(){
  if(dirty||saving){ clearTimeout(saveTimer); try{ await saveNow(); }catch(e){} }
  try{ await auth.signOut(); }catch(e){}
 }
+
+/* ---- Email sign-in link (passwordless) ---- */
+const EM_KEY='bpEmailForSignIn';
+const lsGet=k=>{ try{ return localStorage.getItem(k); }catch(e){ return null; } };
+const lsSet=(k,v)=>{ try{ localStorage.setItem(k,v); }catch(e){} };
+const lsDel=k=>{ try{ localStorage.removeItem(k); }catch(e){} };
+let pendingLink=false;
+function okDomain(em){ return /^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(em); }
+async function sendLink(){
+ const em=$('em-input').value.trim(), btn=$('em-btn'); $('g-err').hidden=true; $('em-sent').hidden=true;
+ if(!okDomain(em)){ gate('signin','Enter a valid email address.'); return; }
+ btn.disabled=true; btn.textContent='Sending…';
+ try{
+  await auth.sendSignInLinkToEmail(em,{url:location.origin+location.pathname,handleCodeInApp:true});
+  lsSet(EM_KEY,em);
+  const m=$('em-sent'); m.innerHTML=`<b>Check your inbox.</b> We sent a sign-in link to ${esc(em)}. Open it on this device to get straight into your plan. Don’t see it? Check your spam folder.`; m.hidden=false;
+ }catch(e){
+  console.warn('Email link failed',e);
+  gate('signin',e&&e.code==='auth/operation-not-allowed'?'Email sign-in isn’t turned on yet. Use Sign in with Google for now, or ask the Agent Hub administrator.'
+   :e&&e.code==='auth/quota-exceeded'?'Too many sign-in emails were sent today. Please use Sign in with Google, or try again tomorrow.'
+   :'We couldn’t send the link. Check the address and try again.');
+ }finally{ btn.disabled=false; btn.textContent='Email me a sign-in link'; }
+}
+async function finishLink(em){
+ gate('loading');
+ try{
+  await auth.signInWithEmailLink(em,location.href);
+  lsDel(EM_KEY); pendingLink=false;
+  if(window.__rlsHubGrant) window.__rlsHubGrant();
+  history.replaceState(null,'',location.pathname);
+ }catch(e){
+  console.warn('Email link sign-in failed',e); pendingLink=false;
+  if(e&&e.code==='auth/invalid-email'){ pendingLink=true; gate('confirm'); const x=$('cf-err'); x.textContent='That email doesn’t match the one the link was sent to.'; x.hidden=false; return; }
+  history.replaceState(null,'',location.pathname);
+  gate('signin','That sign-in link has expired or was already used. Request a new one below.');
+ }
+}
+document.addEventListener('submit',e=>{
+ if(e.target.id==='em-form'){ e.preventDefault(); sendLink(); }
+ if(e.target.id==='cf-form'){ e.preventDefault(); const em=$('cf-input').value.trim(); if(!okDomain(em)){ const x=$('cf-err'); x.textContent='Enter a valid email address.'; x.hidden=false; return; } finishLink(em); }
+});
 
 function configured(){
  const c=window.BP_FIREBASE_CONFIG;
@@ -1371,10 +1437,11 @@ function init(){
  gate('loading');
  auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(()=>{});
  auth.getRedirectResult().catch(e=>{ console.warn(e); });
+ if(auth.isSignInWithEmailLink&&auth.isSignInWithEmailLink(location.href)){ pendingLink=true; const em=lsGet(EM_KEY); if(em) finishLink(em); }
  auth.onAuthStateChanged(async u=>{
-  if(u&&!allowed(u)){ authErr=`${u.email||'That account'} isn’t a Royal LePage email. Sign in with your @${DOMAIN} account.`; user=null; gate('signin',authErr); try{ await auth.signOut(); }catch(e){} return; }
+  if(u&&!allowed(u)){ authErr=`${u.email||'That account'} hasn\u2019t been verified. Try signing in with the email link instead.`; user=null; gate('signin',authErr); try{ await auth.signOut(); }catch(e){} return; }
   user=u||null; ready=false;
-  if(!user){ if(unsub){ unsub(); unsub=null; } S=DEFAULT(); $('sections').innerHTML=''; gate('signin',authErr); authErr=''; return; }
+  if(!user){ if(unsub){ unsub(); unsub=null; } S=DEFAULT(); $('sections').innerHTML=''; if(pendingLink){ if(!lsGet(EM_KEY)) gate('confirm'); return; } gate('signin',authErr); authErr=''; return; }
   authErr='';
   $('acct-email').textContent=user.email;
   const ph=$('acct-photo'); if(user.photoURL){ ph.src=user.photoURL; ph.hidden=false; } else ph.hidden=true;
