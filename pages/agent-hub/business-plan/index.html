@@ -123,7 +123,7 @@ body{margin:0;background:var(--bp-light-grey);color:var(--bp-black);font-family:
 .bp-tools select{background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:4px;padding:8px 10px;font:600 13px var(--bp-sans);width:auto}
 .bp-status{font-size:12px;color:#aaa;margin-top:8px}
 .bp-status b{color:#fff;font-weight:600}
-.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:#333;margin-top:20px;border-radius:4px;overflow:hidden}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:#333;margin-top:20px;border-radius:4px;overflow:hidden}
 .kpi{background:#222;padding:14px 16px}
 .kpi .v{font-size:22px;font-weight:800;white-space:nowrap}
 .kpi .l{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#aaa;font-weight:600}
@@ -211,6 +211,7 @@ textarea{resize:vertical;min-height:70px;line-height:1.5}
 input[type=number]{-moz-appearance:textfield}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 
+.cf-cap{font-size:12.5px;color:var(--bp-dark-grey);margin:10px 0 0}
 .tip{background:var(--bp-light-grey);border-left:3px solid var(--bp-red);padding:12px 14px;border-radius:0 4px 4px 0;font-size:13.5px;color:var(--bp-dark-grey);margin:16px 0}
 .tip b{color:var(--bp-black)}
 .seg{display:inline-flex;border:1px solid #D6D1CA;border-radius:4px;overflow:hidden}
@@ -450,8 +451,7 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
       <div class="kpi"><div class="v" data-o="gci">$0</div><div class="l">GCI goal</div></div>
       <div class="kpi"><div class="v" data-o="netTop">$0</div><div class="l">Net after cap &amp; expenses</div></div>
       <div class="kpi"><div class="v" data-o="sides">0</div><div class="l">Closed sides</div></div>
-      <div class="kpi"><div class="v" data-o="convDay">0</div><div class="l">Conversations / day</div></div>
-      <div class="kpi"><div class="v" data-o="contactsDay">0</div><div class="l">Referral contacts / day</div></div>
+      <div class="kpi"><div class="v" data-o="talkDay">0</div><div class="l">Conversations / day</div></div>
       <div class="kpi"><div class="v" data-o="surplus" data-sign="1">$0</div><div class="l">Budget surplus</div></div>
     </div>
   </div>
@@ -480,6 +480,7 @@ const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov',
 const MONTHS_FULL=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const SOURCES=['Sphere / referrals','Past clients','Geographic farming','Open houses','Social media','Paid advertising','Networking','Professional partners','Online search / SEO','Other'];
 const COMPETITORS=[['agents','Other agents'],['discount','Discount brokerages'],['teams','Teams'],['fsbo','FSBO (for sale by owner)'],['online','Online platforms'],['family','Friends / family'],['nothing','Doing nothing']];
+const REF_SOURCES=['Sphere / referrals','Past clients','Professional partners'];
 const CX_STAGES=['Lead','Consultation','Search / preparation','Offer','Contract','Closing','Post-close'];
 const CANVA_URL='https://www.canva.com/s/templates?query=vision+board';
 const PHASES=[['Foundation',['vision','values']],['Positioning',['position','swot']],['Strategy',['model','sources','calendar','cx','marketing','ops','priorities']],['Business Plan',['numbers','money','season','activity']],['Execution',['score','summary']]];
@@ -584,7 +585,7 @@ const moneyK=v=>{const a=Math.abs(v);const s=v<0?'-$':'$';return a>=1e6?s+(a/1e6
 const int=v=>Math.round(v).toLocaleString('en-CA');
 const dec=v=>(Math.round(v*10)/10).toLocaleString('en-CA');
 const pct=v=>Math.round(v*100)+'%';
-const small=v=>v>0&&v<0.1?'<0.1':dec(v);
+const small=(v,yr)=>v>0&&v<0.1?(yr?dec(yr/12)+'/mo':'<0.1'):dec(v);
 
 function F(label,key,o={}){
  const type=o.type||'text';
@@ -814,17 +815,18 @@ const SECTIONS=[
   ${tip('<b>First year using the plan?</b> These are typical starting ratios — leave them as they are for now. Track your real numbers this year and update them next year.')}
   <div class="row c4">${F('Listing appts that sign','kpi.lApptSign',{type:'pct'})}${F('Signed listings that close','kpi.lSignClose',{type:'pct'})}${F('Buyer consults that sign','kpi.bConsSign',{type:'pct'})}${F('Signed buyers that close','kpi.bSignClose',{type:'pct'})}</div>
   <div class="row c4">${F('Conversations per appointment','kpi.convPerAppt',{type:'num'})}${F('Conversations per prospecting hour','kpi.convPerHour',{type:'num'})}${F('Prospecting days per week','kpi.daysPerWeek',{type:'num'})}${F('Weeks off this year','kpi.weeksOff',{type:'num'})}</div>
+  <div id="mix-note"></div>
   <h3>Prospecting targets</h3>
   <div class="funnel">
    <div class="h">Activity</div><div class="h" style="text-align:right">Year</div><div class="h" style="text-align:right">Week</div><div class="h" style="text-align:right">Day</div>
-   <div class="k">Conversations</div><div class="x" data-o="convY"></div><div class="x" data-o="convW"></div><div class="x today" data-o="convDay"></div>
+   <div class="k">Prospecting conversations <small style="font-weight:400;color:var(--bp-dark-grey)">non-referral share</small></div><div class="x" data-o="convY"></div><div class="x" data-o="convW"></div><div class="x today" data-o="convDay"></div>
    <div class="k">Prospecting hours</div><div class="x" data-o="hrsY"></div><div class="x" data-o="hrsW"></div><div class="x today" data-o="hrsD"></div>
    <div class="k">Listing appointments</div><div class="x" data-o="lApY"></div><div class="x" data-o="lApW"></div><div class="x today" data-o="lApD"></div>
    <div class="k">Buyer consultations</div><div class="x" data-o="bCoY"></div><div class="x" data-o="bCoW"></div><div class="x today" data-o="bCoD"></div>
    <div class="k">Listings taken</div><div class="x" data-o="lTkY"></div><div class="x" data-o="lTkW"></div><div class="x today" data-o="lTkD"></div>
   </div>
   <p style="color:var(--bp-dark-grey);font-size:13.5px">That works out to about <b data-o="convPerClose"></b> conversations for every closed side, over <b data-o="workDays"></b> prospecting days.</p>
-  <h3>Referral targets</h3>
+  <h3>Referral targets <small style="font-weight:400;color:var(--bp-dark-grey)">sphere, past clients &amp; partners</small></h3>
   <div class="row c4">${F('Referrals needed per close','kpi.refPerClose',{type:'num',hint:'typical: 3'})}${F('Contacts needed per referral','kpi.contactsPerRef',{type:'num',hint:'typical: 20'})}</div>
   <div class="res">${RC('Referrals needed (year)','refY')}${RC('Referrals per month','refM')}${RC('Contacts per month','conM')}${RC('Contacts per day','contactsDay','dark')}</div>
   ${tip('<b>What counts as a contact:</b> a real voice-to-voice or face-to-face conversation where you ask for a referral. Likes, emails and mailers don’t count. A simple way to stay on pace: reach out to 5 people every day across 3 channels — calls, DMs and in person.')}
@@ -1027,9 +1029,7 @@ function toggleVis(){
 function sumObj(o){return Object.values(o).reduce((a,v)=>a+n(v),0);}
 function distribute(total,weights){
  const w=weights.map(x=>Math.max(n(x),0)); const tw=w.reduce((a,b)=>a+b,0)||1;
- const raw=w.map(x=>total*x/tw); const fl=raw.map(Math.floor); let rem=Math.round(total)-fl.reduce((a,b)=>a+b,0);
- raw.map((r,i)=>[r-fl[i],i]).sort((a,b)=>b[0]-a[0]).forEach(([,i])=>{if(rem>0){fl[i]++;rem--;}});
- return fl;
+ let cum=0, prev=0; return w.map(x=>{ cum+=total*x/tw; const r=Math.round(cum+1e-9), u=r-prev; prev=r; return u; });
 }
 /* Commission engine: walk through the plan year month by month, charging the
    split until the cap is reached, resetting the cap on the anniversary month,
@@ -1133,16 +1133,18 @@ function calc(){
  // activity
  const lRate=(n(k.lApptSign)/100)*(n(k.lSignClose)/100), bRate=(n(k.bConsSign)/100)*(n(k.bSignClose)/100);
  const lAp=lRate>0?L/lRate:0, bCo=bRate>0?B/bRate:0, lTk=n(k.lSignClose)>0?L/(n(k.lSignClose)/100):0;
- const conv=(lAp+bCo)*n(k.convPerAppt);
+ const srcTot=S.sources.reduce((a,x)=>a+n(x.goal),0), srcRef=S.sources.filter(x=>REF_SOURCES.includes(x.name)).reduce((a,x)=>a+n(x.goal),0);
+ const hasSrc=srcTot>0, refShare=hasSrc?srcRef/srcTot:0.5;
+ const convAll=(lAp+bCo)*n(k.convPerAppt), conv=convAll*(1-refShare);
  const weeks=Math.max(52-n(k.weeksOff),1), days=Math.max(weeks*Math.min(Math.max(n(k.daysPerWeek),1),7),1);
  const hrs=n(k.convPerHour)>0?conv/n(k.convPerHour):0;
- const refY=sides*n(k.refPerClose), conY=refY*n(k.contactsPerRef);
+ const refY=sides*refShare*n(k.refPerClose), conY=refY*n(k.contactsPerRef);
  const months=E.months;
- const qs=[0,1,2,3].map(q=>months[q*3]+months[q*3+1]+months[q*3+2]);
+ const qs=[0,1,2,3].map(q=>{ const g3=E.monthG[q*3]+E.monthG[q*3+1]+E.monthG[q*3+2]; return gciSide>0?g3/gciSide:0; });
  const reserveMonthly=(persAnnual+bizAnnual)/12;
  return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
   sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persAnnual>0,
-  lAp,bCo,lTk,conv,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed};
+  lAp,bCo,lTk,conv,convAll,refShare,hasSrc,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed};
 }
 
 function out(key,val,cls){
@@ -1178,15 +1180,16 @@ function recompute(){
  // season
  const mx=Math.max(...c.months,1);
  c.months.forEach((u,i)=>{const b=document.getElementById('bar'+i); if(b){b.style.height=(u/mx*100)+'%'; b.classList.toggle('pk',u===mx&&u>0&&c.months.filter(x=>x===mx).length<=3); document.getElementById('bu'+i).textContent=u; const mn=document.getElementById('mn'+i); if(mn){ mn.textContent=c.monthNet[i]?moneyK(c.monthNet[i]):'–'; mn.classList.toggle('cap',c.caps.some(x=>x.m===i)); }}});
- c.qs.forEach((q,i)=>out('q'+(i+1),int(q)+(q===1?' side':' sides')));
+ c.qs.forEach((q,i)=>out('q'+(i+1),dec(q)+(Math.round(q*10)===10?' side':' sides')));
  // activity
  out('convY',int(c.conv)); out('convW',dec(perW(c.conv))); out('convDay',dec(perD(c.conv)));
- out('hrsY',int(c.hrs)); out('hrsW',small(perW(c.hrs))); out('hrsD',small(perD(c.hrs)));
- out('lApY',dec(c.lAp)); out('lApW',small(perW(c.lAp))); out('lApD',small(perD(c.lAp)));
- out('bCoY',dec(c.bCo)); out('bCoW',small(perW(c.bCo))); out('bCoD',small(perD(c.bCo)));
- out('lTkY',dec(c.lTk)); out('lTkW',small(perW(c.lTk))); out('lTkD',small(perD(c.lTk)));
- out('convPerClose',c.sides?int(c.conv/c.sides):'0'); out('workDays',int(c.days));
- out('refY',int(c.refY)); out('refM',dec(c.refY/12)); out('conM',int(c.conY/12)); out('contactsDay',dec(perD(c.conY)));
+ out('hrsY',int(c.hrs)); out('hrsW',small(perW(c.hrs),c.hrs)); out('hrsD',small(perD(c.hrs),c.hrs));
+ out('lApY',dec(c.lAp)); out('lApW',small(perW(c.lAp),c.lAp)); out('lApD',small(perD(c.lAp),c.lAp));
+ out('bCoY',dec(c.bCo)); out('bCoW',small(perW(c.bCo),c.bCo)); out('bCoD',small(perD(c.bCo),c.bCo));
+ out('lTkY',dec(c.lTk)); out('lTkW',small(perW(c.lTk),c.lTk)); out('lTkD',small(perD(c.lTk),c.lTk));
+ out('convPerClose',c.sides?int(c.convAll/c.sides):'0'); out('workDays',int(c.days));
+ out('refY',int(c.refY)); out('refM',dec(c.refY/12)); out('conM',int(c.conY/12)); out('contactsDay',dec(perD(c.conY))); out('talkDay',dec(perD(c.conv+c.conY)));
+ { const el=document.getElementById('mix-note'); if(el) el.innerHTML=c.hasSrc?`<div class="tip">Your lead-source goals put <b>${pct(c.refShare)}</b> of your sides from referrals (sphere, past clients, partners) and <b>${pct(1-c.refShare)}</b> from prospecting and marketing. Prospecting targets cover the ${pct(1-c.refShare)}; referral targets cover the ${pct(c.refShare)}. Together that’s about <b>${dec(perD(c.conv+c.conY))}</b> conversations a day.</div>`:`<div class="tip">Set your <b>goal by source</b> on Lead Generation to split these accurately. Until then the plan assumes half your sides come from referrals and half from prospecting.</div>`; }
  // sources
  const sl=S.sources.reduce((a,s)=>a+n(s.last),0), sg=S.sources.reduce((a,s)=>a+n(s.goal),0);
  S.sources.forEach((s,i)=>{out('srcL'+i,sl&&s.last!==''?pct(n(s.last)/sl):'–');out('srcG'+i,sg&&s.goal!==''?pct(n(s.goal)/sg):'–');});
@@ -1214,7 +1217,7 @@ function recompute(){
  if(gn) gn.innerHTML=S.goals.method==='gci'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${n(S.save.rrsp)?' and RRSP':''}.${c.hasBudget?(c.surplus<0?` <span class="flag bad">${money(-c.surplus)} short of your budget</span>`:` <span class="flag ok">Covers your budget with ${money(c.surplus)} to spare</span>`):''}`:'';
 
  // positioning statement
- { const ps=S.pos.ps, b=(x,ph)=>x?`<b>${esc(x)}</b>`:`<span class="blank">${ph}</span>`;
+ { const ps=psClean(S.pos.ps), b=(x,ph)=>x?`<b>${esc(x)}</b>`:`<span class="blank">${ph}</span>`;
    const el=document.querySelector('[data-o="psPreview"]'); if(el) el.innerHTML=`For ${b(ps.client,'[ideal client]')}, I am the real estate professional who ${b(ps.value,'[primary value / difference]')} because ${b(ps.proof,'[proof / strength]')}, so they can ${b(ps.outcome,'[desired outcome]')}.`; }
  // vision board link
  { const vb=document.getElementById('vb-open'), u=(S.vision.board||'').trim(); if(vb) vb.innerHTML=/^https?:\/\//i.test(u)?`<a class="btn btn-line btn-sm" style="margin-top:8px" href="${esc(u)}" target="_blank" rel="noopener">Open my vision board ↗</a>`:''; }
@@ -1231,21 +1234,22 @@ function recompute(){
     for(let m=0;m<12;m++){ const nt=c.monthNet[m]||0, h=nt*hold, fl=nt-h-biz-pers; bal+=fl; if(bal<low){low=bal;lowM=m;}
      rows.cl.push(c.gciSide>0?(c.monthG[m]||0)/c.gciSide:0); rows.net.push(nt); rows.hold.push(-h); rows.biz.push(-biz); rows.pers.push(-pers); rows.flow.push(fl); rows.bal.push(bal); }
     const fm=v=>v===0?'–':(v<0?'−':'')+'$'+Math.round(Math.abs(v)).toLocaleString('en-CA');
-    const row=(lbl,arr,cls,fn)=>`<tr class="${cls||''}"><th>${lbl}</th>${arr.map(v=>`<td class="num${v<0&&cls?' neg':''}">${fn?fn(v):fm(v)}</td>`).join('')}<td class="num tot">${cls==='bal'?fm(arr[11]):fn?int(arr.reduce((a,b)=>a+b,0)):fm(arr.reduce((a,b)=>a+b,0))}</td></tr>`;
+    const row=(lbl,arr,cls,fn)=>`<tr class="${cls||''}"><th>${lbl}</th>${arr.map(v=>`<td class="num${v<0&&cls?' neg':''}">${fn?fn(v):fm(v)}</td>`).join('')}<td class="num tot">${cls==='bal'?fm(arr[11]):fn?dec(arr.reduce((a,b)=>a+b,0)):fm(arr.reduce((a,b)=>a+b,0))}</td></tr>`;
     tb.innerHTML=`<thead><tr><th></th>${MONTHS.map(m=>`<th class="num">${m}</th>`).join('')}<th class="num">Year</th></tr></thead><tbody>
      ${row('Expected closings',rows.cl,'',v=>v?dec(v):'–')}${row('Net commission',rows.net)}${row('Income tax holdback',rows.hold)}${row('Business expenses',rows.biz)}${row('Personal, savings &amp; RRSP',rows.pers)}
      ${row('Net cash flow',rows.flow,'flow')}${row('Running balance',rows.bal,'bal')}</tbody>`;
-    const cn=document.getElementById('cf-note');
-    if(cn) cn.innerHTML=!c.hasBudget&&!c.bizAnnual?'<div class="tip">Add your expenses on <b>Budget &amp; Finances</b> to see your real cash flow.</div>'
+    const cn=document.getElementById('cf-note'), st=c.capStart||0;
+    const capNote=st>0?`<p class="cf-cap">This table runs January to December ${y}. Your split, cap and fees are worked out over your cap year (${MONTHS[st]} ${y} – ${MONTHS[(st+11)%12]} ${y+1}) and placed in the month each deal closes.</p>`:'';
+    if(cn) cn.innerHTML=capNote+(!c.hasBudget&&!c.bizAnnual?'<div class="tip">Add your expenses on <b>Budget &amp; Finances</b> to see your real cash flow.</div>'
       :low<0?`<div class="tip"><span class="flag bad">Your balance dips to ${fm(low)} in ${MONTHS_FULL[lowM]}</span> You’d need about <b>${money(-low)}</b> more in reserves, or more closings before then, to cover the slow months.</div>`
-      :`<div class="tip"><span class="flag ok">You stay positive all year</span> Your lowest balance is <b>${fm(low)}</b> in ${MONTHS_FULL[lowM]}.</div>`;
+      :`<div class="tip"><span class="flag ok">You stay positive all year</span> Your lowest balance is <b>${fm(low)}</b> in ${MONTHS_FULL[lowM]}.</div>`);
    } }
  // vs last year
  const vl=document.getElementById('vs-last'), ls=n(S.last.listings)+n(S.last.buyers);
  if(vl) vl.innerHTML=ls?`<div class="tip">Last year you closed <b>${int(ls)}</b> sides${n(S.last.gci)?` for <b>${money(n(S.last.gci))}</b> GCI`:''}. This plan calls for <b>${int(c.sides)}</b> — ${c.sides>=ls?`<b>${pct((c.sides-ls)/ls)}</b> more`:`<b>${pct((ls-c.sides)/ls)}</b> fewer`}.</div>`:'';
  // scorecard
  c.qs.forEach((q,i)=>{
-  const tg=c.monthG[i*3]+c.monthG[i*3+1]+c.monthG[i*3+2]; out('tq'+i,int(q)); out('tg'+i,money(tg));
+  const tg=c.monthG[i*3]+c.monthG[i*3+1]+c.monthG[i*3+2]; out('tq'+i,dec(q)); out('tg'+i,money(tg));
   const au=S.score.q[i].units, ag=S.score.q[i].gci;
   out('pace'+i,(au===''&&ag==='')?'–':(ag!==''&&tg>0)?pct(n(ag)/tg):(q>0?pct(n(au)/q):'–'));
  });
@@ -1261,11 +1265,16 @@ function recompute(){
 /* ---------------------------------------------------------------
    Summary
 ---------------------------------------------------------------- */
+function psClean(ps){
+ const strip=(v,re)=>String(v||'').trim().replace(re,'').replace(/[\s.,;]+$/,'').trim();
+ return {client:strip(ps.client,/^for\s+/i), value:strip(ps.value,/^(i am the real estate professional\s+)?(who|that)\s+/i),
+  proof:strip(ps.proof,/^because\s+/i), outcome:strip(ps.outcome,/^(so\s+)?(that\s+)?(they\s+can)\s+/i)};
+}
 function agentName(){ return (S.vision&&S.vision.name)||''; }
 function renderSummary(){
  const c=C||calc(), v=S.vision, el=document.getElementById('summary'); if(!el) return;
  const t=x=>x?esc(x):'<span class="muted">Not filled in yet</span>';
- const ps=S.pos.ps, psTxt=(ps.client&&ps.value)?`For ${esc(ps.client)}, I am the real estate professional who ${esc(ps.value)}${ps.proof?` because ${esc(ps.proof)}`:''}${ps.outcome?`, so they can ${esc(ps.outcome)}`:''}.`:'';
+ const ps=psClean(S.pos.ps), psTxt=(ps.client&&ps.value)?`For ${esc(ps.client)}, I am the real estate professional who ${esc(ps.value)}${ps.proof?` because ${esc(ps.proof)}`:''}${ps.outcome?`, so they can ${esc(ps.outcome)}`:''}.`:'';
  const vals=S.values.core.map(x=>x.v).filter(Boolean);
  const pris=S.pri.items.filter(x=>x.priority||x.measure);
  const prim=S.sources.filter(x=>x.pri==='Primary');
@@ -1284,7 +1293,7 @@ function renderSummary(){
   <div class="sum-card" style="margin-top:14px"><h4>Closings by month</h4><div class="sum-months">${c.months.map((u,i)=>`<div>${MONTHS[i]}<b>${u}</b></div>`).join('')}</div></div>
   <div class="sum-grid" style="margin-top:14px">
    <div class="sum-card"><h4>Activity</h4><dl>
-    <dt>Conversations per day</dt><dd>${dec(c.conv/c.days)}</dd><dt>Referral contacts per day</dt><dd>${dec(c.conY/c.days)}</dd>
+    <dt>Conversations per day</dt><dd>${dec((c.conv+c.conY)/c.days)} <small class="muted">(${dec(c.conv/c.days)} prospecting · ${dec(c.conY/c.days)} referral)</small></dd>
     <dt>Listing appointments per month</dt><dd>${dec(c.lAp/12)}</dd><dt>Buyer consultations per month</dt><dd>${dec(c.bCo/12)}</dd></dl></div>
    <div class="sum-card"><h4>Primary lead channels</h4>${prim.length?`<p>${prim.map(x=>esc(x.name)).join(' · ')}</p>`:t('')}
     <h4 style="margin-top:12px">Mission</h4><p>${t(v.mission)}</p></div>
