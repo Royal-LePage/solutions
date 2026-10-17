@@ -257,12 +257,24 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
 .mkt-l{font-size:12px;color:var(--bp-dark-grey)}
 .mkt-tag{display:inline-block;font:700 10.5px var(--bp-sans);letter-spacing:.04em;text-transform:uppercase;border-radius:3px;padding:2px 6px;line-height:1.3}
 .mkt-tag.busy{background:var(--bp-red);color:#fff}.mkt-tag.neutral{background:var(--bp-dark-grey);color:#fff}.mkt-tag.slow{background:var(--bp-warm-grey);color:var(--bp-dark-grey)}
-.mkt{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px}
-.mkt-mo{display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 2px;border-radius:4px;background:var(--bp-light-grey)}
-.mkt-mo.busy{background:#FDEBEE}
-.mkt-mo .ml{font-size:12px;font-weight:700;color:var(--bp-dark-grey)}
-.mkt-ix{font-size:12px;color:var(--bp-dark-grey)}
-.mkt-d{font:800 14px var(--bp-sans);color:var(--bp-black);white-space:nowrap}
+.mc{position:relative;border:1px solid var(--bp-warm-grey);border-radius:4px;background:#fff;padding:14px 14px 8px;margin:6px 0 4px}
+.mc-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 2px}
+.mc-t{font:700 14px var(--bp-sans);color:var(--bp-black)}
+.mc-lg{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--bp-dark-grey)}
+.mc-lg i{display:inline-block;vertical-align:-1px;margin-right:5px}
+.mc-lg .k-bar{width:11px;height:11px;border-radius:2px;background:#8A8178}
+.mc-lg .k-bar2{width:11px;height:11px;border-radius:2px;background:var(--bp-stone)}
+.mc-lg .k-line{width:16px;height:2px;background:var(--bp-red);vertical-align:3px}
+.mc-lg .k-avg{width:16px;height:0;border-top:2px dashed var(--bp-dark-grey);vertical-align:3px}
+.mc svg{display:block;width:100%;overflow:visible}
+.mc svg text{font-family:var(--bp-sans);fill:var(--bp-dark-grey)}
+.mc .gap{height:10px;border-top:1px solid var(--bp-light-grey);margin-top:6px}
+.mc-tt{position:absolute;pointer-events:none;background:#fff;border:1px solid var(--bp-warm-grey);box-shadow:0 4px 14px rgba(0,0,0,.12);border-radius:4px;padding:9px 11px;font-size:12.5px;color:var(--bp-black);min-width:190px;z-index:5;display:none}
+.mc-tt b{font-weight:800}.mc-tt .r{display:flex;justify-content:space-between;gap:14px;margin-top:3px;color:var(--bp-dark-grey)}.mc-tt .r b{color:var(--bp-black)}
+.mc-tbl summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--bp-dark-grey);margin:8px 0}
+.sw-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px}
+.sw-grid label{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--bp-dark-grey)}
+.sw-grid input{text-align:center;padding:6px 2px;font-size:13px}
 .mkt-note{font-size:13px;color:var(--bp-dark-grey);margin:10px 0 0}
 .mkt-src{font-size:11.5px;color:var(--bp-taupe);margin:8px 0 22px}
 .season{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;align-items:end;margin:30px 0 10px}
@@ -337,7 +349,7 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
   .vwords{grid-template-columns:repeat(2,minmax(0,1fr))}
   .kpis{grid-template-columns:repeat(2,1fr)}
   .season{grid-template-columns:repeat(6,minmax(0,1fr))}
-  .mkt{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .sw-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
   .mkt-sum{grid-template-columns:minmax(0,1fr)}
   .qs{grid-template-columns:repeat(2,minmax(0,1fr))}
   .funnel{font-size:13px}
@@ -518,6 +530,9 @@ const DEFAULT_TASKS=['CRM','Database management','Lead follow-up','Transaction m
    averaged over 2016–2025, scaled so 100 = an average month. CREB counts a sale when it goes firm. */
 const SEASON_W=[64,88,114,115,127,130,112,105,97,100,85,64];
 const SEASON_W_OLD=[20,25,50,60,90,100,90,70,55,45,25,20]; /* pre-Oct 2026 default, used only to migrate saved plans */
+/* CREB® City of Calgary total residential sales, 10-year average by month (2016–2025). From the RLP Solutions
+   "Calgary Monthly Sales – 10-Year Average" report (Oct 2026). 21,986 sales in an average year. */
+const CAL_SALES=[1184,1643,2158,2170,2357,2351,2008,1898,1748,1789,1527,1153];
 const seasonTag=v=>v>=110?'busy':v>=90?'neutral':'slow';
 const SEASON_TAGS={busy:'Busy',neutral:'Neutral',slow:'Slow'};
 
@@ -828,20 +843,23 @@ const SECTIONS=[
   <div id="alloc-ex"></div>
  `},
  {id:'season',t:'Seasonality & Cash Flow',d:'Calgary real estate runs on a predictable yearly rhythm. Deals go firm on one curve and close — and pay you — on another. Plan for both so the slow months don’t catch you off guard.',html:()=>`
-  <h3 style="margin-top:0">When Calgary homes sell</h3>
-  ${intro('Ten years of City of Calgary sales show the same pattern every year: a spring rush, a steady fall and a quiet winter. Here is what that means for <b>your</b> deal goal, month by month.')}
-  <div class="mkt-sum">${['busy','neutral','slow'].map(k=>`<div class="mkt-card ${k}"><div class="mkt-k"><span class="mkt-tag ${k}">${SEASON_TAGS[k]}</span> ${MONTHS.filter((m,i)=>seasonTag(SEASON_W[i])===k).length} months</div><div class="mkt-m">${{busy:'March – July',neutral:'August – October',slow:'November – February'}[k]}</div><div class="mkt-v" data-o="sd-${k}">–</div><div class="mkt-l" data-o="sh-${k}">–</div></div>`).join('')}</div>
-  <div class="mkt" role="table" aria-label="Calgary market pattern and your expected firm deals by month">${MONTHS.map((m,i)=>{const t=seasonTag(SEASON_W[i]);return `<div class="mkt-mo ${t}" role="row"><div class="ml" role="rowheader">${m}</div><span class="mkt-tag ${t}" role="cell">${SEASON_TAGS[t]}</span><div class="mkt-ix" role="cell" title="Share of a typical month's Calgary sales">${SEASON_W[i]}%</div><div class="mkt-d" role="cell" data-o="fd${i}">–</div></div>`;}).join('')}</div>
-  <p class="mkt-note">Top line: how busy each month is versus an average Calgary month. Bottom line: deals you can expect to <b>go firm</b> that month at your goal.</p>
+  <h3 style="margin-top:0">When Calgary homes sell — and the deals you need</h3>
+  ${intro('Ten years of City of Calgary sales follow the same rhythm every year: a spring rush, a steady fall and a quiet winter. The top chart is the market. The bottom chart is <b>your</b> year — the deals you need to go firm each month to hit your goal, and when they close and pay you.')}
+  <div class="mc" id="mkt-chart">
+   <div class="mc-h"><div class="mc-t">Calgary sales by month · 10-year average</div><div class="mc-lg"><span><i class="k-bar"></i>Average sales that month</span><span><i class="k-avg"></i>Average month (1,832)</span></div></div>
+   <svg id="mc-a" role="img" aria-label="City of Calgary 10-year average residential sales by month"></svg>
+   <div class="gap"></div>
+   <div class="mc-h"><div class="mc-t">Your deals by month · <span data-o="mcGoal">–</span></div><div class="mc-lg"><span><i class="k-line"></i>Deals you need to go firm</span><span><i class="k-bar2"></i>Closings (paid)</span><span><i class="k-avg"></i>Your average month</span></div></div>
+   <svg id="mc-b" role="img" aria-label="Deals you need to go firm and closings by month"></svg>
+   <div class="mc-tt" id="mc-tt"></div>
+  </div>
+  <details class="mc-tbl"><summary>Show as a table</summary><div class="tbl-wrap"><table class="cf" id="mc-table"></table></div></details>
+  <div class="mkt-sum" style="margin-top:14px">${['busy','neutral','slow'].map(k=>`<div class="mkt-card ${k}"><div class="mkt-k"><span class="mkt-tag ${k}">${SEASON_TAGS[k]}</span> ${MONTHS.filter((m,i)=>seasonTag(SEASON_W[i])===k).length} months</div><div class="mkt-m">${{busy:'March – July',neutral:'August – October',slow:'November – February'}[k]}</div><div class="mkt-v" data-o="sd-${k}">–</div><div class="mkt-l" data-o="sh-${k}">–</div></div>`).join('')}</div>
   ${tip('<b>Use the slow months to fill the busy ones.</b> Listings taken and buyers met in January and February are what go firm in the spring peak. Plan your heaviest prospecting, listing presentations and client events for November through February.')}
-  <p class="mkt-src">Source: CREB®, City of Calgary total residential sales by month, 2016–2025. Each month’s share of its year’s sales, averaged across the ten years. Busy = 110%+ of an average month, Neutral = 90–110%, Slow = under 90%.</p>
-  <h3>Your deals and paydays by month</h3>
   <div class="row c3"><label class="f"><span>Firm to possession <small>typical time to close</small></span><select data-k="season.lag"><option value="30">About 30 days</option><option value="45">About 45 days</option><option value="60">About 60 days</option><option value="90">About 90 days</option></select></label></div>
-  <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">The numbers under each month set <b>when your deals go firm</b>. They start on the Calgary pattern (100 = an average month) — change any month if your business runs differently. The bars show when those deals <b>close and pay you</b>, shifted by your firm-to-possession time. Each bar shows closings and net commission; your cap month is highlighted.</p>
-  <div class="season" id="season"></div>
-  <div class="season-legend"><span><i class="lg-bar"></i> Closings (paid)</span><span><i class="lg-in"></i> Deals going firm (weight)</span></div>
   <div class="qs">${RC('Q1 closings','q1')}${RC('Q2 closings','q2')}${RC('Q3 closings','q3')}${RC('Q4 closings','q4')}</div>
-  <div class="no-print" style="margin-top:14px"><button class="btn btn-line btn-sm" id="season-reset" type="button">Reset to the Calgary 10-year pattern</button></div>
+  ${deeper('Change your monthly pattern',`<p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">Your deals start on the Calgary pattern (100 = an average month). If your business runs differently — say you work mostly with condo investors, or take July off — change any month. The red line updates as you type.</p><div class="sw-grid" id="season"></div><div class="no-print" style="margin-top:12px"><button class="btn btn-line btn-sm" id="season-reset" type="button">Reset to the Calgary 10-year pattern</button></div>`)}
+  <p class="mkt-src">Source: CREB®, City of Calgary total residential sales (detached, semi-detached, row and apartment), 2016–2025; RLP Solutions “Calgary Monthly Sales – 10-Year Average” report. CREB® counts a sale in the month it goes firm. Busy = 110%+ of an average month, Neutral = 90–110%, Slow = under 90%.</p>
   <h3>Cash flow projection</h3>
   ${intro('What actually lands in your account each month, after holdbacks, against what goes out. The running balance starts from your <b>cash reserves today</b> (Budget &amp; Finances).')}
   <div class="tbl-wrap"><table class="cf" id="cf-table"></table></div>
@@ -903,7 +921,7 @@ function renderShell(){
    <div class="sec-foot">${i>0?`<button class="btn btn-line" data-go="${SECTIONS[i-1].id}" type="button">← ${SECTIONS[i-1].t}</button>`:'<span></span>'}
    ${i<SECTIONS.length-1?`<button class="btn btn-red" data-go="${SECTIONS[i+1].id}" type="button">${SECTIONS[i+1].t} →</button>`:'<button class="btn btn-red" id="b-print-sum2" type="button">Print one-page summary</button>'}</div>
  </section>`).join('');
- renderSources();renderSrcCards();renderTasks();renderInits();renderCal();renderPri();renderScore();renderSeason();
+ renderSources();renderSrcCards();renderTasks();renderInits();renderCal();renderPri();renderScore();renderSeason();bindMkt();
  show(current,false);
 }
 
@@ -979,7 +997,7 @@ function renderScore(){
  document.getElementById('ryg-body').innerHTML=PILLARS.map(([k,l])=>`<tr><td><b>${l}</b></td>${[0,1,2,3].map(q=>{const s=S.score.ryg[k][q]||0;return `<td><button type="button" data-ryg="${k}.${q}" data-s="${s}">${['—','Red','Yellow','Green'][s]}</button></td>`;}).join('')}</tr>`).join('');
 }
 function renderSeason(){
- document.getElementById('season').innerHTML=MONTHS.map((m,i)=>`<div class="mo"><div class="bar-box"><div class="bar" id="bar${i}"><b id="bu${i}"></b></div></div><div class="ml">${m}</div><div class="mnet" id="mn${i}"></div><input type="number" inputmode="decimal" min="0" data-k="season.w.${i}" aria-label="${MONTHS_FULL[i]} deals going firm"></div>`).join('');
+ document.getElementById('season').innerHTML=MONTHS.map((m,i)=>`<label>${m}<input type="number" inputmode="decimal" min="0" data-k="season.w.${i}" aria-label="${MONTHS_FULL[i]} pattern"></label>`).join('');
 }
 
 /* ---------------------------------------------------------------
@@ -1049,7 +1067,7 @@ document.addEventListener('click',e=>{
  }
 });
 window.addEventListener('afterprint',()=>document.body.classList.remove('print-summary'));
-window.addEventListener('beforeprint',()=>{ document.querySelectorAll('details.deeper').forEach(d=>{ d.dataset.wasOpen=d.open?'1':''; d.open=true; }); renderSummary(); document.querySelectorAll('textarea').forEach(t=>{t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px';}); });
+window.addEventListener('beforeprint',()=>{ if(C) drawMkt(C); document.querySelectorAll('details.deeper').forEach(d=>{ d.dataset.wasOpen=d.open?'1':''; d.open=true; }); renderSummary(); document.querySelectorAll('textarea').forEach(t=>{t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px';}); });
 window.addEventListener('afterprint',()=>{ document.querySelectorAll('textarea').forEach(t=>t.style.height=''); document.querySelectorAll('details.deeper').forEach(d=>{ d.open=!!d.dataset.wasOpen; }); });
 
 function toggleVis(){
@@ -1192,6 +1210,73 @@ function out(key,val,cls){
 }
 
 let C;
+/* Step 14 chart: two stacked panels that share the month axis (Calgary market on top, the agent's year below).
+   Two panels rather than one chart with two y-axes, because Calgary sales (~2,000/month) and an agent's deals (~1–3/month)
+   are on very different scales. */
+function mcData(c){
+ const w=S.season.w.map(x=>Math.max(n(x),0)), tw=w.reduce((a,b)=>a+b,0), tot=c.sidesExact||0;
+ const firm=w.map(x=>tw?tot*x/tw:0), close=c.monthG.map(g=>c.gciSide>0?g/c.gciSide:0);
+ return {firm,close,tot};
+}
+let mcHover=-1;
+function drawMkt(c){
+ const box=document.getElementById('mkt-chart'); if(!box) return;
+ const W=box.clientWidth>0?box.clientWidth-28:900; const d=mcData(c);
+ // table view (always kept current)
+ const tb=document.getElementById('mc-table');
+ if(tb) tb.innerHTML=`<thead><tr><th></th>${MONTHS.map(m=>`<th class="num">${m}</th>`).join('')}<th class="num">Year</th></tr></thead><tbody>
+  <tr><th>Calgary 10-yr avg sales</th>${CAL_SALES.map(v=>`<td class="num">${int(v)}</td>`).join('')}<td class="num tot">21,986</td></tr>
+  <tr><th>vs. an average month</th>${SEASON_W.map(v=>`<td class="num">${v}%</td>`).join('')}<td class="num tot">100%</td></tr>
+  <tr><th>Your deals to go firm</th>${d.firm.map(v=>`<td class="num">${v?dec(v):'–'}</td>`).join('')}<td class="num tot">${dec(d.tot)}</td></tr>
+  <tr><th>Your closings (paid)</th>${d.close.map(v=>`<td class="num">${v?dec(v):'–'}</td>`).join('')}<td class="num tot">${dec(d.close.reduce((a,b)=>a+b,0))}</td></tr></tbody>`;
+ out('mcGoal',d.tot?`${int(c.sides)} sides this year`:'set your goal first');
+
+ const small=W<560, L=small?34:44, Rr=small?6:12, cw=(W-L-Rr)/12, X=i=>L+cw*(i+.5), fs=small?10.5:12;
+ const grid=(y0,h,max,fmt,ticks)=>ticks.map(t=>{const y=y0+h-(t/max)*h;return `<line x1="${L}" x2="${W-Rr}" y1="${y}" y2="${y}" stroke="${t?'#EFECE7':'#CFC9C0'}" stroke-width="1"/><text x="${L-6}" y="${y+4}" text-anchor="end" font-size="${fs}">${fmt(t)}</text>`;}).join('');
+ const months=(y)=>MONTHS.map((m,i)=>`<text x="${X(i)}" y="${y}" text-anchor="middle" font-size="${fs}" font-weight="${i===mcHover?800:600}">${small?m[0]:m}</text>`).join('');
+ const bw=Math.max(Math.min(cw*.62,34),4), top=16;
+ const hit=h=>MONTHS.map((m,i)=>`<rect x="${L+cw*i}" y="0" width="${cw}" height="${h}" fill="transparent" data-mi="${i}"/>`).join('');
+ const cross=h=>mcHover>=0?`<rect x="${L+cw*mcHover}" y="0" width="${cw}" height="${h}" fill="#F5F3F0"/>`:'';
+ // panel A: Calgary
+ { const H=small?150:170, ph=H-top-22, max=2500, avg=21986/12, yA=v=>top+ph-(v/max)*ph;
+   let g=cross(H)+grid(top,ph,max,v=>v?(v/1000)+'k':'0',[0,500,1000,1500,2000,2500]);
+   g+=CAL_SALES.map((v,i)=>{const y=yA(v),x=X(i)-bw/2,r=Math.min(4,bw/2);return `<path d="M${x},${top+ph}V${y+r}Q${x},${y} ${x+r},${y}H${x+bw-r}Q${x+bw},${y} ${x+bw},${y+r}V${top+ph}Z" fill="${i===mcHover?'#4A4A4A':'#8A8178'}"/>`;}).join('');
+   g+=`<line x1="${L}" x2="${W-Rr}" y1="${yA(avg)}" y2="${yA(avg)}" stroke="#4A4A4A" stroke-width="2" stroke-dasharray="6 4"/>`;
+   const pk=5, lo=11; g+=`<text x="${X(pk)}" y="${yA(CAL_SALES[pk])-6}" text-anchor="middle" font-size="${fs}" font-weight="800" style="fill:#000">${int(CAL_SALES[pk])}</text><text x="${X(lo)}" y="${yA(CAL_SALES[lo])-6}" text-anchor="middle" font-size="${fs}" font-weight="700">${int(CAL_SALES[lo])}</text>`;
+   g+=months(H-4)+hit(H);
+   const sv=document.getElementById('mc-a'); sv.setAttribute('viewBox',`0 0 ${W} ${H}`); sv.setAttribute('height',H); sv.innerHTML=g; }
+ // panel B: agent
+ { const H=small?150:170, ph=H-top-22, mxv=Math.max(...d.firm,...d.close,0.5), step=mxv<=1.2?0.5:mxv<=3?1:mxv<=6?2:mxv<=15?5:10, max=Math.ceil(mxv*1.12/step)*step;
+   const ticks=[]; for(let t=0;t<=max+1e-9;t+=step) ticks.push(+t.toFixed(2));
+   const yB=v=>top+ph-(v/max)*ph, avg=d.tot/12;
+   let g=cross(H)+grid(top,ph,max,v=>String(v),ticks);
+   g+=d.close.map((v,i)=>{ if(!v) return ''; const y=yB(v),x=X(i)-bw/2,r=Math.min(4,bw/2,(top+ph-y)); return `<path d="M${x},${top+ph}V${y+r}Q${x},${y} ${x+r},${y}H${x+bw-r}Q${x+bw},${y} ${x+bw},${y+r}V${top+ph}Z" fill="#D6D1C8"/>`;}).join('');
+   if(d.tot){
+    g+=`<line x1="${L}" x2="${W-Rr}" y1="${yB(avg)}" y2="${yB(avg)}" stroke="#4A4A4A" stroke-width="2" stroke-dasharray="6 4"/>`;
+    g+=`<path d="${d.firm.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+yB(v).toFixed(1)).join('')}" fill="none" stroke="#EA002A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+    g+=d.firm.map((v,i)=>`<circle cx="${X(i)}" cy="${yB(v)}" r="${i===mcHover?5.5:4}" fill="#EA002A" stroke="#fff" stroke-width="2"/>`).join('');
+    const pk=d.firm.indexOf(Math.max(...d.firm)); g+=`<text x="${X(pk)}" y="${yB(d.firm[pk])-10}" text-anchor="middle" font-size="${fs}" font-weight="800" style="fill:#000">${dec(d.firm[pk])}</text>`;
+    if(c.cap&&c.caps.length){ const m=c.caps[0].m; g+=`<text x="${X(m)}" y="${top+ph-4}" text-anchor="middle" font-size="${small?9:10.5}" font-weight="800" style="fill:#EA002A">CAP</text>`; }
+   } else g+=`<text x="${(L+W)/2}" y="${top+ph/2}" text-anchor="middle" font-size="13">Set your GCI goal on Goals &amp; Numbers to see your deals</text>`;
+   g+=months(H-4)+hit(H);
+   const sv=document.getElementById('mc-b'); sv.setAttribute('viewBox',`0 0 ${W} ${H}`); sv.setAttribute('height',H); sv.innerHTML=g; }
+ // tooltip
+ const tt=document.getElementById('mc-tt');
+ if(mcHover>=0&&tt){ const i=mcHover, t=seasonTag(SEASON_W[i]);
+  tt.innerHTML=`<div><b>${MONTHS_FULL[i]}</b> <span class="mkt-tag ${t}" style="margin-left:6px">${SEASON_TAGS[t]}</span></div>
+   <div class="r">Calgary avg sales <b>${int(CAL_SALES[i])}</b></div><div class="r">vs. an average month <b>${SEASON_W[i]}%</b></div>
+   <div class="r">Your deals to go firm <b>${d.tot?dec(d.firm[i]):'–'}</b></div><div class="r">Your closings (paid) <b>${d.tot?dec(d.close[i]):'–'}</b></div>
+   <div class="r">Net commission <b>${c.monthNet[i]?money(c.monthNet[i]):'–'}</b></div>${c.cap&&c.caps.length&&c.caps[0].m===i?'<div class="r" style="color:#EA002A;font-weight:700">You reach your cap this month</div>':''}`;
+  tt.style.display='block'; const x=14+L+cw*(i+1)+8, bw2=tt.offsetWidth; tt.style.left=(x+bw2>box.clientWidth?Math.max(14+L+cw*i-bw2-8,4):x)+'px'; tt.style.top='40px'; }
+ else if(tt) tt.style.display='none';
+}
+function bindMkt(){
+ const box=document.getElementById('mkt-chart'); if(!box||box.dataset.b) return; box.dataset.b='1';
+ const pick=e=>{ const r=e.target.closest&&e.target.closest('[data-mi]'); const v=r?+r.dataset.mi:-1; if(v!==mcHover){ mcHover=v; if(C) drawMkt(C); } };
+ box.addEventListener('mousemove',pick); box.addEventListener('click',pick);
+ box.addEventListener('mouseleave',()=>{ mcHover=-1; if(C) drawMkt(C); });
+}
+let mcRT; window.addEventListener('resize',()=>{ clearTimeout(mcRT); mcRT=setTimeout(()=>{ if(C) drawMkt(C); },120); });
 function capText(c,long){
  const y=+S.meta.year||year, st=c.capStart||0;
  if(c.cap&&c.caps.length){ const m=c.caps[0].m; return `${long?MONTHS_FULL[m]:MONTHS[m]} ${st>0&&m<st?y+1:y}`; }
@@ -1215,12 +1300,11 @@ function recompute(){
  out('gci',moneyK(c.gci)); out('netTop',moneyK(c.profit)); out('netGoalBox',money(c.profit)); out('sides',int(c.sides)); out('lb',`${int(c.L)} / ${int(c.B)}`); out('volume',moneyK(c.volume));
  if(c.hasBudget) out('surplus',moneyK(c.surplus),c.surplus<0?'neg':'pos'); else out('surplus','Add budget','');
  // season
- const mx=Math.max(...c.months,1);
- c.months.forEach((u,i)=>{const b=document.getElementById('bar'+i); if(b){b.style.height=(u/mx*100)+'%'; b.classList.toggle('pk',u===mx&&u>0&&c.months.filter(x=>x===mx).length<=3); document.getElementById('bu'+i).textContent=u; const mn=document.getElementById('mn'+i); if(mn){ mn.textContent=c.monthNet[i]?moneyK(c.monthNet[i]):'–'; mn.classList.toggle('cap',c.caps.some(x=>x.m===i)); }}});
+ drawMkt(c);
  c.qs.forEach((q,i)=>out('q'+(i+1),dec(q)+(Math.round(q*10)===10?' side':' sides')));
  { /* Firm deals by month and by busy / neutral / slow season, from the agent's firm-date weights */
   const w=S.season.w.map(x=>Math.max(n(x),0)), tw=w.reduce((a,b)=>a+b,0), g={busy:0,neutral:0,slow:0};
-  w.forEach((x,i)=>{ const sh=tw?x/tw:0; g[seasonTag(SEASON_W[i])]+=sh; out('fd'+i,c.sides&&tw?'≈ '+dec(c.sides*sh):'–'); });
+  w.forEach((x,i)=>{ const sh=tw?x/tw:0; g[seasonTag(SEASON_W[i])]+=sh;  });
   Object.keys(g).forEach(k=>{ const d=c.sides*g[k]; out('sd-'+k,c.sides&&tw?'≈ '+dec(d)+(Math.round(d*10)===10?' deal':' deals'):'–'); out('sh-'+k,tw?Math.round(g[k]*100)+'% of your year':'–'); });
  }
  // activity
