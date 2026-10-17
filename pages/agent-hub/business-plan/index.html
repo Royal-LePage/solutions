@@ -248,6 +248,23 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
 .funnel .today{background:#FFF1F3}
 
 /* Seasonality */
+.mkt-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:6px 0 16px}
+.mkt-card{border:1px solid var(--bp-warm-grey);border-top:3px solid var(--bp-stone);border-radius:4px;padding:12px 14px;background:#fff}
+.mkt-card.busy{border-top-color:var(--bp-red)}.mkt-card.neutral{border-top-color:var(--bp-dark-grey)}
+.mkt-k{font-size:12px;color:var(--bp-dark-grey);display:flex;align-items:center;gap:6px}
+.mkt-m{font:700 15px var(--bp-sans);margin:6px 0 2px}
+.mkt-v{font:800 22px var(--bp-sans);color:var(--bp-black)}
+.mkt-l{font-size:12px;color:var(--bp-dark-grey)}
+.mkt-tag{display:inline-block;font:700 10.5px var(--bp-sans);letter-spacing:.04em;text-transform:uppercase;border-radius:3px;padding:2px 6px;line-height:1.3}
+.mkt-tag.busy{background:var(--bp-red);color:#fff}.mkt-tag.neutral{background:var(--bp-dark-grey);color:#fff}.mkt-tag.slow{background:var(--bp-warm-grey);color:var(--bp-dark-grey)}
+.mkt{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px}
+.mkt-mo{display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 2px;border-radius:4px;background:var(--bp-light-grey)}
+.mkt-mo.busy{background:#FDEBEE}
+.mkt-mo .ml{font-size:12px;font-weight:700;color:var(--bp-dark-grey)}
+.mkt-ix{font-size:12px;color:var(--bp-dark-grey)}
+.mkt-d{font:800 14px var(--bp-sans);color:var(--bp-black);white-space:nowrap}
+.mkt-note{font-size:13px;color:var(--bp-dark-grey);margin:10px 0 0}
+.mkt-src{font-size:11.5px;color:var(--bp-taupe);margin:8px 0 22px}
 .season{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;align-items:end;margin:30px 0 10px}
 .mo{display:flex;flex-direction:column;align-items:center;gap:6px}
 .bar-box{height:140px;width:100%;display:flex;align-items:flex-end;justify-content:center}
@@ -320,6 +337,8 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
   .vwords{grid-template-columns:repeat(2,minmax(0,1fr))}
   .kpis{grid-template-columns:repeat(2,1fr)}
   .season{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .mkt{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .mkt-sum{grid-template-columns:minmax(0,1fr)}
   .qs{grid-template-columns:repeat(2,minmax(0,1fr))}
   .funnel{font-size:13px}
   .funnel div{padding:8px}
@@ -495,7 +514,12 @@ const PERS=[['housing','Housing (mortgage/rent, tax, insurance)'],['transport','
 const MKTG=[['paid','Paid social & online ads'],['print','Print & mailers'],['events','Client events & appreciation'],['popby','Pop-bys & client gifts'],['email','Email, newsletter & CRM add-ons'],['signage','Signage, photos & listing marketing'],['other','Other marketing']];
 const BRAND=[['google','My first three Google results are professional and accurate'],['gbp','Google Business Profile is claimed and has reviews from the last 90 days'],['photo','The same current headshot is used on every platform'],['bio','My Royal LePage bio page and website are current'],['linkedin','LinkedIn headline and profile are up to date'],['social','Every social profile links back to my website or bio page']];
 const DEFAULT_TASKS=['CRM','Database management','Lead follow-up','Transaction management','Marketing','Client communication','Accounting','Administrative support','Technology','Automation'];
-const SEASON_W=[20,25,50,60,90,100,90,70,55,45,25,20]; /* when deals go firm (sales curve) */
+/* Calgary seasonal index: each month's share of the year's City of Calgary residential sales (CREB®),
+   averaged over 2016–2025, scaled so 100 = an average month. CREB counts a sale when it goes firm. */
+const SEASON_W=[64,88,114,115,127,130,112,105,97,100,85,64];
+const SEASON_W_OLD=[20,25,50,60,90,100,90,70,55,45,25,20]; /* pre-Oct 2026 default, used only to migrate saved plans */
+const seasonTag=v=>v>=110?'busy':v>=90?'neutral':'slow';
+const SEASON_TAGS={busy:'Busy',neutral:'Neutral',slow:'Slow'};
 
 const IDEAS={
  call:['New-year market outlook','Spring plans check-in','Spring market is here: home value update','Tax season wrap-up: any plans this year?','Yard season check-in','Summer plans and a home value update','Stampede invite','Back-to-school check-in','Fall market update','Thanksgiving thank-you calls','Year-end review: any moves next year?','Holiday greetings and referral thank-yous'],
@@ -565,7 +589,12 @@ let S=DEFAULT();
 /* Bring plans saved by earlier versions into the current shape. */
 function normalize(){
  if(!S.sources||S.sources.length!==SOURCES.length||S.sources.some((x,i)=>x.name!==SOURCES[i])) S.sources=DEFAULT().sources;
- if(S.season.curve!=='firm'){ S.season.w=SEASON_W.slice(); S.season.curve='firm'; }
+ if(S.season.curve!=='creb10'){
+  /* Move plans onto the Calgary 10-year curve unless the agent had set their own weights. */
+  const w=(S.season.w||[]).map(Number);
+  if(S.season.curve!=='firm'||w.length!==12||w.join()===SEASON_W_OLD.join()) S.season.w=SEASON_W.slice();
+  S.season.curve='creb10';
+ }
  (S.tasks||[]).forEach(t=>{ if(t.action==='Do') t.action='Only I do'; });
  if(!S.vision.five&&S.vision.ten) S.vision.five=S.vision.ten;
  if(!Array.isArray(S.pri.items)||!S.pri.items.length) S.pri.items=DEFAULT().pri.items;
@@ -798,13 +827,21 @@ const SECTIONS=[
   <div class="row c3">${F('To business account','alloc.biz',{type:'pct'})}${F('Extra to tax account','alloc.tax',{type:'pct',hint:'beyond your holdbacks'})}${F('To personal & savings','alloc.pers',{type:'pct'})}</div>
   <div id="alloc-ex"></div>
  `},
- {id:'season',t:'Seasonality & Cash Flow',d:'Deals go firm on one curve and close — and pay you — on another. Plan for both so the slow months don’t catch you off guard.',html:()=>`
+ {id:'season',t:'Seasonality & Cash Flow',d:'Calgary real estate runs on a predictable yearly rhythm. Deals go firm on one curve and close — and pay you — on another. Plan for both so the slow months don’t catch you off guard.',html:()=>`
+  <h3 style="margin-top:0">When Calgary homes sell</h3>
+  ${intro('Ten years of City of Calgary sales show the same pattern every year: a spring rush, a steady fall and a quiet winter. Here is what that means for <b>your</b> deal goal, month by month.')}
+  <div class="mkt-sum">${['busy','neutral','slow'].map(k=>`<div class="mkt-card ${k}"><div class="mkt-k"><span class="mkt-tag ${k}">${SEASON_TAGS[k]}</span> ${MONTHS.filter((m,i)=>seasonTag(SEASON_W[i])===k).length} months</div><div class="mkt-m">${{busy:'March – July',neutral:'August – October',slow:'November – February'}[k]}</div><div class="mkt-v" data-o="sd-${k}">–</div><div class="mkt-l" data-o="sh-${k}">–</div></div>`).join('')}</div>
+  <div class="mkt" role="table" aria-label="Calgary market pattern and your expected firm deals by month">${MONTHS.map((m,i)=>{const t=seasonTag(SEASON_W[i]);return `<div class="mkt-mo ${t}" role="row"><div class="ml" role="rowheader">${m}</div><span class="mkt-tag ${t}" role="cell">${SEASON_TAGS[t]}</span><div class="mkt-ix" role="cell" title="Share of a typical month's Calgary sales">${SEASON_W[i]}%</div><div class="mkt-d" role="cell" data-o="fd${i}">–</div></div>`;}).join('')}</div>
+  <p class="mkt-note">Top line: how busy each month is versus an average Calgary month. Bottom line: deals you can expect to <b>go firm</b> that month at your goal.</p>
+  ${tip('<b>Use the slow months to fill the busy ones.</b> Listings taken and buyers met in January and February are what go firm in the spring peak. Plan your heaviest prospecting, listing presentations and client events for November through February.')}
+  <p class="mkt-src">Source: CREB®, City of Calgary total residential sales by month, 2016–2025. Each month’s share of its year’s sales, averaged across the ten years. Busy = 110%+ of an average month, Neutral = 90–110%, Slow = under 90%.</p>
+  <h3>Your deals and paydays by month</h3>
   <div class="row c3"><label class="f"><span>Firm to possession <small>typical time to close</small></span><select data-k="season.lag"><option value="30">About 30 days</option><option value="45">About 45 days</option><option value="60">About 60 days</option><option value="90">About 90 days</option></select></label></div>
-  <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">Set <b>when your deals go firm</b> using the weights under each month (higher = busier). The bars show when those deals <b>close and pay you</b>, shifted by your firm-to-possession time. Each bar shows closings and net commission; your cap month is highlighted.</p>
+  <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">The numbers under each month set <b>when your deals go firm</b>. They start on the Calgary pattern (100 = an average month) — change any month if your business runs differently. The bars show when those deals <b>close and pay you</b>, shifted by your firm-to-possession time. Each bar shows closings and net commission; your cap month is highlighted.</p>
   <div class="season" id="season"></div>
   <div class="season-legend"><span><i class="lg-bar"></i> Closings (paid)</span><span><i class="lg-in"></i> Deals going firm (weight)</span></div>
   <div class="qs">${RC('Q1 closings','q1')}${RC('Q2 closings','q2')}${RC('Q3 closings','q3')}${RC('Q4 closings','q4')}</div>
-  <div class="no-print" style="margin-top:14px"><button class="btn btn-line btn-sm" id="season-reset" type="button">Reset to a typical Calgary curve</button></div>
+  <div class="no-print" style="margin-top:14px"><button class="btn btn-line btn-sm" id="season-reset" type="button">Reset to the Calgary 10-year pattern</button></div>
   <h3>Cash flow projection</h3>
   ${intro('What actually lands in your account each month, after holdbacks, against what goes out. The running balance starts from your <b>cash reserves today</b> (Budget &amp; Finances).')}
   <div class="tbl-wrap"><table class="cf" id="cf-table"></table></div>
@@ -1181,6 +1218,11 @@ function recompute(){
  const mx=Math.max(...c.months,1);
  c.months.forEach((u,i)=>{const b=document.getElementById('bar'+i); if(b){b.style.height=(u/mx*100)+'%'; b.classList.toggle('pk',u===mx&&u>0&&c.months.filter(x=>x===mx).length<=3); document.getElementById('bu'+i).textContent=u; const mn=document.getElementById('mn'+i); if(mn){ mn.textContent=c.monthNet[i]?moneyK(c.monthNet[i]):'–'; mn.classList.toggle('cap',c.caps.some(x=>x.m===i)); }}});
  c.qs.forEach((q,i)=>out('q'+(i+1),dec(q)+(Math.round(q*10)===10?' side':' sides')));
+ { /* Firm deals by month and by busy / neutral / slow season, from the agent's firm-date weights */
+  const w=S.season.w.map(x=>Math.max(n(x),0)), tw=w.reduce((a,b)=>a+b,0), g={busy:0,neutral:0,slow:0};
+  w.forEach((x,i)=>{ const sh=tw?x/tw:0; g[seasonTag(SEASON_W[i])]+=sh; out('fd'+i,c.sides&&tw?'≈ '+dec(c.sides*sh):'–'); });
+  Object.keys(g).forEach(k=>{ const d=c.sides*g[k]; out('sd-'+k,c.sides&&tw?'≈ '+dec(d)+(Math.round(d*10)===10?' deal':' deals'):'–'); out('sh-'+k,tw?Math.round(g[k]*100)+'% of your year':'–'); });
+ }
  // activity
  out('convY',int(c.conv)); out('convW',dec(perW(c.conv))); out('convDay',dec(perD(c.conv)));
  out('hrsY',int(c.hrs)); out('hrsW',small(perW(c.hrs),c.hrs)); out('hrsD',small(perD(c.hrs),c.hrs));
