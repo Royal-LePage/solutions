@@ -651,7 +651,7 @@ function DEFAULT(){
   bizY:{board:'',gli:''},
   biz:{desk:'',board:'',license:'',tech:'',vehicle:'',coaching:'',assistant:'',prof:'',other:''},
   pers:{housing:'',transport:'',groceries:'',utilities:'',insurance:'',family:'',debt:'',lifestyle:'',giving:'',other:''},
-  save:{rrsp:'',postTax:'',rrspM:'',postTaxM:'',rrspP:'',postTaxP:'',resMonths:'',resAdd:false,rrspWhen:'first',postTaxWhen:'first',debtWhen:'first',resWhen:'first',debt:'',reserves:''},
+  save:{extraM:'',rrsp:'',postTax:'',rrspM:'',postTaxM:'',rrspP:'',postTaxP:'',resMonths:'',resAdd:false,rrspWhen:'first',postTaxWhen:'first',debtWhen:'first',resWhen:'first',debt:'',reserves:''},
   alloc:{biz:'',tax:'',pers:''},
   swot:{s:'',w:'',o:'',t:''},
   score:{q:[0,1,2,3].map(()=>({units:'',gci:'',notes:'',conv:'',appts:'',listings:'',exp:''})),rygP:[0,1,2,3,4].map(()=>({q:[0,0,0,0]})),ryg:{build:[0,0,0,0],brand:[0,0,0,0],amplify:[0,0,0,0],connect:[0,0,0,0],simplify:[0,0,0,0]}},
@@ -930,21 +930,20 @@ const SECTIONS=[
  `},
  {id:'savings',t:'Savings & Reserves',d:'Now that you know what you can earn, decide what you keep. Pay yourself first — long-term savings, debt paydown and a cash cushion for the slow months.',html:()=>`
   <h3 style="margin-top:0">Long-term savings</h3>
-  ${intro('Save monthly, in a lump sum each year, as a % of every commission cheque — or any mix. The % comes off your commission after brokerage deductions, before your tax holdback. Then choose <b>when</b> each one happens.')}
-  <div class="tbl-wrap"><table class="sav"><thead><tr><th></th><th>Monthly</th><th>Lump sum / year</th><th>% of each cheque</th><th style="width:190px">When</th><th class="num">Total / year</th></tr></thead><tbody>
-   <tr><td>RRSP <small style="color:#888">pre-tax</small></td><td>${F('','save.rrspM',{type:'money',aria:'RRSP monthly'})}</td><td>${F('','save.rrsp',{type:'money',aria:'RRSP lump sum per year'})}</td><td>${F('','save.rrspP',{type:'pct',aria:'RRSP percent of each commission cheque'})}</td><td><select data-k="save.rrspWhen" aria-label="RRSP when"><option value="first">Pay myself first</option><option value="after">From what’s left</option></select></td><td class="num" data-o="rrspY">–</td></tr>
-   <tr><td>TFSA <small style="color:#888">after-tax</small></td><td>${F('','save.postTaxM',{type:'money',aria:'TFSA monthly'})}</td><td>${F('','save.postTax',{type:'money',aria:'TFSA lump sum per year'})}</td><td>${F('','save.postTaxP',{type:'pct',aria:'TFSA percent of each commission cheque'})}</td><td><select data-k="save.postTaxWhen" aria-label="TFSA when"><option value="first">Pay myself first</option><option value="after">From what’s left</option></select></td><td class="num" data-o="tfsaY">–</td></tr>
+  ${intro('Save monthly, in a lump sum each year, as a % of each transaction — or any mix. The % comes off your commission on each deal after brokerage deductions, before your tax holdback. ')}
+  <div class="tbl-wrap"><table class="sav"><thead><tr><th></th><th>Monthly</th><th>Lump sum / year</th><th>% of each transaction</th><th class="num">Total / year</th></tr></thead><tbody>
+   <tr><td>RRSP <small style="color:#888">pre-tax</small></td><td>${F('','save.rrspM',{type:'money',aria:'RRSP monthly'})}</td><td>${F('','save.rrsp',{type:'money',aria:'RRSP lump sum per year'})}</td><td>${F('','save.rrspP',{type:'pct',aria:'RRSP percent of each transaction'})}</td><td class="num" data-o="rrspY">–</td></tr>
+   <tr><td>TFSA <small style="color:#888">after-tax</small></td><td>${F('','save.postTaxM',{type:'money',aria:'TFSA monthly'})}</td><td>${F('','save.postTax',{type:'money',aria:'TFSA lump sum per year'})}</td><td>${F('','save.postTaxP',{type:'pct',aria:'TFSA percent of each transaction'})}</td><td class="num" data-o="tfsaY">–</td></tr>
   </tbody></table></div>
-  <div class="row c4" style="margin-top:14px">${F('Debt reduction goal','save.debt',{type:'money',hint:'per year, beyond your regular payments'})}<label class="f"><span>When</span><select data-k="save.debtWhen"><option value="first">Pay myself first</option><option value="after">From what’s left</option></select></label></div>
-  <p class="fine"><b>Pay myself first</b> savings are non-negotiable — they count toward your minimum GCI, like your mortgage. <b>From what’s left</b> savings only happen once you hit your goal, as part of your spending plan on Your Money.</p>
+  <div class="row c4" style="margin-top:14px">${F('Debt reduction goal','save.debt',{type:'money',hint:'per year, beyond your regular payments'})}</div>
+  <p class="fine">Everything on this page is <b>pay yourself first</b> — non-negotiable, like your mortgage, and counted in your minimum GCI. Want to save more once you hit your goal? Add <b>extra savings</b> to your spending plan on Your Money.</p>
   <h3>Cash reserve</h3>
   ${intro('Commission income is lumpy — slow months, deals that collapse, a cap that resets. A cash reserve keeps your life running in between. A common guideline for commission earners is <b>3 to 6 months</b> of your non-negotiables.')}
   <div class="row c4">${F('Cash reserves today','save.reserves',{type:'money'})}<label class="f"><span>My reserve target</span><select data-k="save.resMonths"><option value="">Choose…</option><option value="3">3 months</option><option value="4">4 months</option><option value="6">6 months</option><option value="9">9 months</option><option value="12">12 months</option></select></label></div>
   <div class="res">${RC('Reserve target','resTarget')}${RC('You have','resHave')}${RC('Still to save','resGap')}${RC('Per month to get there this year','resPerMo','dark')}</div>
-  <div class="row c4" id="res-add-wrap" style="align-items:end"><label class="chk" style="margin:0"><input type="checkbox" data-k="save.resAdd">Add my reserve top-up to this year’s plan</label><label class="f"><span>When</span><select data-k="save.resWhen"><option value="first">Pay myself first</option><option value="after">From what’s left</option></select></label></div>
+  <div class="row c4" id="res-add-wrap" style="align-items:end"><label class="chk" style="margin:0"><input type="checkbox" data-k="save.resAdd">Add my reserve top-up to this year’s plan</label></div>
   <h3>Your savings this year</h3>
   <div class="res">${RC('RRSP / yr','rrspY2')}${RC('TFSA / yr','tfsaY2')}${RC('Debt reduction / yr','debtY')}${RC('Reserve top-up / yr','resTopY')}</div>
-  <div class="res c2">${RC('Pay myself first / yr','savFirstY','dark')}${RC('From what’s left / yr','savAfterY')}</div>
   <div id="sav-note"></div>
  `},
  {id:'money',t:'Your Money',d:'What your year looks like at goal: what the brokerage takes, what your non-negotiables cost, what’s left — and your plan for it, including marketing.',html:()=>`
@@ -964,7 +963,8 @@ const SECTIONS=[
   <div id="mktg-flag"></div>
   <div class="row c2" style="align-items:start;margin-top:10px">
    <div><h4 class="sp-h">Growth <small>monthly</small></h4><table><tbody>${BIZ_GROW.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table></div>
-   <div><h4 class="sp-h">Lifestyle <small>monthly</small></h4><table><tbody>${PERS_LIFE.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table></div>
+   <div><h4 class="sp-h">Lifestyle <small>monthly</small></h4><table><tbody>${PERS_LIFE.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table>
+    <h4 class="sp-h">Extra savings <small>monthly</small></h4><table><tbody><tr><td>Extra RRSP, TFSA or investments</td><td style="width:150px">${F('','save.extraM',{type:'money',aria:'Extra savings monthly'})}</td></tr></tbody></table></div>
   </div>
   <div class="tbl-wrap" style="margin-top:14px"><table class="wf" id="plan-wf"></table></div>
   <div data-o-html="budFlag"></div>
@@ -1380,7 +1380,7 @@ function calc(){
     (commission after brokerage deductions). The % parts are added once commission is known. */
  const pc=v=>Math.min(Math.max(n(v),0),100)/100, pR=pc(S.save.rrspP), pT=pc(S.save.postTaxP);
  const rrspFix=n(S.save.rrsp)+n(S.save.rrspM)*12, postFix=n(S.save.postTax)+n(S.save.postTaxM)*12, debtRed=n(S.save.debt);
- const first=k=>S.save[k+'When']!=='after';
+ const first=k=>true; const extraSav=n(S.save.extraM)*12;
  const costMonth=(persNN+bizNN)/12, resTarget=n(S.save.resMonths)*costMonth, resGap=Math.max(resTarget-n(S.save.reserves),0), resTop=S.save.resAdd?resGap:0;
  const needsFix=persAnnual+postFix+debtRed+resTop;
  /* Pay-myself-first savings are non-negotiable; the rest come out of what's left at goal. */
@@ -1390,7 +1390,7 @@ function calc(){
  const netAt=G=>engineG(G,gciSide,split,Math.ceil(G/gciSide)).net;
  const minGci=solveG(G=>netAt(G)*(1-t-pFirst)-nnTotal>=0);
  const recGci=solveG(G=>netAt(G)*(1-t-pFirst)-nnTotal-MKTG_PCT*G>=0);
- const fullGci=solveG(G=>netAt(G)*(1-t-pR-pT)-(persAnnual+bizAnnual+rrspFix+postFix+debtRed+resTop)>=0);
+ const fullGci=solveG(G=>netAt(G)*(1-t-pR-pT)-(persAnnual+bizAnnual+rrspFix+postFix+extraSav+debtRed+resTop)>=0);
  let L,B,sides,E,gciTot=null,sidesExact=null;
  if(g.method==='units'){ L=Math.max(0,Math.round(n(g.listings))); B=Math.max(0,Math.round(n(g.buyers))); sides=L+B; E=engine(sides,gciSide,split); }
  else if(g.method==='gci'||g.method==='budget'){
@@ -1414,7 +1414,7 @@ function calc(){
  if(gciTot===null){ gciTot=sides*gciSide; sidesExact=sides; }
  const netSide=sidesExact>0?E.net/sidesExact:gciSide*(1-split)-(ci.feeAfter?0:ci.fee)-Math.min(gciSide*ci.rlpPct,ci.rlpMax)-ci.perDeal;
  const gci=gciTot, volume=sidesExact*price, netComm=E.net;
- const rrsp=rrspFix+pR*Math.max(netComm,0), post=postFix+pT*Math.max(netComm,0), needs=persAnnual+post+debtRed+resTop;
+ const rrsp=rrspFix+pR*Math.max(netComm,0), post=postFix+pT*Math.max(netComm,0)+extraSav, needs=persAnnual+post+debtRed+resTop;
  const profit=netComm-bizAnnual;
  const taxAmt=Math.max(netComm,0)*t, gstHoldPct=Math.min(Math.max(n(g.gstHold),0),100)/100, gstAmt=Math.max(netComm,0)*gstHoldPct;
  const takeHome=profit-rrsp-taxAmt;
@@ -1437,7 +1437,7 @@ function calc(){
  const reserveMonthly=(persAnnual+bizAnnual)/12;
  return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
   sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persNN+bizNN>0,
-  lAp,bCo,lTk,conv,convAll,refShare,hasSrc,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed,rrspFix,postFix,pR,pT,costMonth,resTarget,resGap,resTop,bizNN,bizGrow,persNN,persLife,savFirst,savAfter,leftToPlan,minGci,recGci,fullGci,pFirst};
+  lAp,bCo,lTk,conv,convAll,refShare,hasSrc,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed,rrspFix,postFix,pR,pT,costMonth,resTarget,resGap,resTop,bizNN,bizGrow,persNN,persLife,savFirst,savAfter,leftToPlan,minGci,recGci,fullGci,pFirst,extraSav};
 }
 
 function out(key,val,cls){
@@ -1535,12 +1535,12 @@ function recompute(){
   out('capLbl',!c.cap?'Cap paid':mm>=0?`Cap paid · you cap in ${MONTHS_FULL[mm]} ${st>0&&mm<st?y+1:y}`:`Cap paid · ${money(c.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
  { const td=c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid; out('effSplit',money(td)); out('effPct',c.gci?pct(td/c.gci):'–'); }
   out('bizAnnual',money(c.bizAnnual)); out('profitNeed',money(c.profitNeed));
- out('gciLbl',S.goals.method==='budget'?'GCI needed':'GCI goal'); out('gciNeedBox',c.gci?money(c.gci):'Add your budget first'); out('profitBox',money(c.profit)); out('rrspY',c.rrsp?money(c.rrsp):'–'); out('tfsaY',c.post?money(c.post):'–');
+ out('gciLbl',S.goals.method==='budget'?'GCI needed':'GCI goal'); out('gciNeedBox',c.gci?money(c.gci):'Add your budget first'); out('profitBox',money(c.profit)); out('rrspY',c.rrsp?money(c.rrsp):'–'); out('tfsaY',c.post-c.extraSav?money(c.post-c.extraSav):'–');
  out('oneGoals',(S.vision.one||'').trim()||'Not filled in yet — add your 1-year goals on Vision & Goals.');
  { const sh=document.getElementById('split-hint'), g=S.goals; if(sh) sh.style.display=(g.cap!==''||g.dealFee!==''||g.capDate!==''||(S.meta.visited||[]).includes('deal'))?'none':''; }
  { const mb=document.getElementById('m-bud'); if(mb) mb.innerHTML=!c.hasBudget?'<div class="tip">Add your non-negotiables on <b>Your Budget</b> first — this option works out the GCI you need to cover them.</div>'
     :`<div class="res c2" style="margin:0 0 12px">${RC('Your minimum <small>non-negotiables only</small>','minGciBox')}${RC('Your recommended goal <small>+ 10% marketing</small>','recGciBox','dark')}</div>
-     <div class="bud-row"><span>Personal non-negotiables</span><b>${money(c.persNN)}</b></div><div class="bud-row"><span>+ Business non-negotiables</span><b>${money(c.bizNN)}</b></div><div class="bud-row"><span>+ Pay-myself-first savings</span><b>${money(c.savFirst)}</b></div><div class="bud-row"><span>+ Income tax holdback (${pct(c.t)})</span><b>${money(c.taxAmt)}</b></div><div class="bud-row"><span>+ Brokerage split, cap, fees &amp; RLP fee</span><b>${money(c.gci-c.netComm)}</b></div><div class="bud-row"><span>+ Room for marketing (10%) &amp; the rest of your plan</span><b>${money(c.leftToPlan)}</b></div><div class="bud-row tot"><span>Your GCI goal</span><b>${money(c.gci)}</b></div>`; }
+     <div class="bud-row"><span>Personal non-negotiables</span><b>${money(c.persNN)}</b></div><div class="bud-row"><span>+ Business non-negotiables</span><b>${money(c.bizNN)}</b></div><div class="bud-row"><span>+ Your savings</span><b>${money(c.savFirst)}</b></div><div class="bud-row"><span>+ Income tax holdback (${pct(c.t)})</span><b>${money(c.taxAmt)}</b></div><div class="bud-row"><span>+ Brokerage split, cap, fees &amp; RLP fee</span><b>${money(c.gci-c.netComm)}</b></div><div class="bud-row"><span>+ Room for marketing (10%) &amp; the rest of your plan</span><b>${money(c.leftToPlan)}</b></div><div class="bud-row tot"><span>Your GCI goal</span><b>${money(c.gci)}</b></div>`; }
  { const fl=c.hasBudget&&c.persNN<36000&&c.surplus>Math.max(c.takeHome*0.4,25000)&&S.goals.method!=='budget';
    document.querySelectorAll('[data-o-html="budFlag"]').forEach(el=>el.innerHTML=fl?`<div class="tip"><span class="flag warn">Is your budget complete?</span> Your personal non-negotiables are ${money(c.persNN)} a year and this plan leaves a ${money(c.surplus)} surplus. Check that housing, transportation, insurance and family costs are all in — or try <b>Work back from my budget</b> on Your Goal.</div>`:''); }
  out('minGciBox',c.minGci?money(c.minGci):'–'); out('recGciBox',c.recGci?money(c.recGci):'–');
@@ -1576,9 +1576,9 @@ function recompute(){
  out('persAnnual',money(c.persAnnual)); out('netComm',money(c.netComm)); out('taxAmt',money(c.taxAmt)); out('gstAmt',money(c.gstAmt)); out('gstColl',money(c.netComm*0.05)); out('afterHold',money(c.netComm*1.05-c.taxAmt-c.gstAmt)); out('takeHome',money(c.takeHome));
  out('needs',money(c.needs)); if(!c.hasBudget){ out('surplus','Add budget',''); } out('bizPct',c.gci?pct(c.bizAnnual/c.gci):'–');
  out('costMonth',c.costMonth?money(c.costMonth):'–'); out('resTarget',c.resTarget?money(c.resTarget):'–'); out('resHave',money(c.reserves)); out('resGap',c.resTarget?money(c.resGap):'–'); out('resPerMo',c.resTarget?money(c.resGap/12):'–');
- out('rrspY2',money(c.rrsp)); out('tfsaY2',money(c.post)); out('debtY',money(c.debtRed)); out('resTopY',money(c.resTop));
+ out('rrspY2',money(c.rrsp)); out('tfsaY2',money(c.post-c.extraSav)); out('debtY',money(c.debtRed)); out('resTopY',money(c.resTop));
  { const w=document.getElementById('res-add-wrap'); if(w) w.style.display=c.resGap>0?'':'none';
-   const el=document.getElementById('sav-note'), tot=c.rrsp+c.post+c.debtRed+c.resTop; if(el) el.innerHTML=(tot&&!c.savFirst?'<div class="tip"><span class="flag warn">Nothing set to pay-myself-first</span> In a slow year, savings from what’s left are the first thing to disappear. Consider making at least a small amount non-negotiable.</div>':'')+(!tot?'':`<div class="tip">You’re setting aside <b>${money(tot)}</b> this year${c.gci?` — ${pct(tot/c.gci)} of your GCI`:''}.${S.goals.method==='budget'?` Because you’re working back from your budget, <b>Your Goal</b> includes your <b>pay-myself-first</b> savings (${money(c.savFirst)}): you need <b>${money(c.gci)}</b> GCI. Savings from what’s left come out of your spending plan on Your Money.`:c.hasBudget?(c.surplus<0?` <span class="flag bad">At your goal you’re ${money(-c.surplus)} short</span> once these savings are included — raise your goal on <b>Your Goal</b> or adjust here.`:` <span class="flag ok">Your goal covers it</span> with ${money(c.surplus)} to spare.`):''}</div>`); }
+   const el=document.getElementById('sav-note'), tot=c.rrsp+c.post-c.extraSav+c.debtRed+c.resTop; if(el) el.innerHTML=(!tot?'':`<div class="tip">You’re setting aside <b>${money(tot)}</b> this year${c.gci?` — ${pct(tot/c.gci)} of your GCI`:''}.${S.goals.method==='budget'?` Because you’re working back from your budget, <b>Your Goal</b> includes these savings: you need <b>${money(c.gci)}</b> GCI.`:c.hasBudget?(c.surplus<0?` <span class="flag bad">At your goal you’re ${money(-c.surplus)} short</span> once these savings are included — raise your goal on <b>Your Goal</b> or adjust here.`:` <span class="flag ok">Your goal covers it</span> with ${money(c.surplus)} to spare.`):''}</div>`); }
  out('reserveMonths',c.reserveMonthly>0?dec(c.reserves/c.reserveMonthly)+' mo':'–');
  out('mktgYr',money(c.mktgTotal)); out('bizNN',money(c.bizNN)); out('persNN',money(c.persNN)); out('savFirstY',money(c.savFirst)); out('savAfterY',money(c.savAfter));
  out('mktgSug',c.gci?`suggested 10% of GCI: ${money(MKTG_PCT*c.gci)} · planned ${money(c.mktgTotal)}`:'suggested: 10% of your GCI');
@@ -1586,11 +1586,11 @@ function recompute(){
    :c.mktgTotal<sug*0.8?`<div class="tip"><span class="flag warn">Below 10%</span> You’ve planned ${money(c.mktgTotal)} (${pct(c.mktgTotal/c.gci)} of GCI). The suggestion is ${money(sug)}.</div>`:''; }
  { const el=document.getElementById('left-wf'); if(el){ if(!c.gci) el.innerHTML='<tbody><tr><td class="muted">Set your goal on <b>Your Goal</b> first.</td></tr></tbody>';
    else { const r=(l,v,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="num">${v}</td></tr>`;
-    el.innerHTML='<tbody>'+r('Commission after brokerage deductions',money(c.netComm),'strong')+r(`− Income tax holdback (${pct(c.t)})`,'−'+money(c.taxAmt))+r('− Business non-negotiables','−'+money(c.bizNN))+r('− Personal non-negotiables','−'+money(c.persNN))+r('− Pay-myself-first savings','−'+money(c.savFirst))
+    el.innerHTML='<tbody>'+r('Commission after brokerage deductions',money(c.netComm),'strong')+r(`− Income tax holdback (${pct(c.t)})`,'−'+money(c.taxAmt))+r('− Business non-negotiables','−'+money(c.bizNN))+r('− Personal non-negotiables','−'+money(c.persNN))+r('− Your savings (Savings &amp; Reserves)','−'+money(c.savFirst))
      +r('Left to plan with',money(c.leftToPlan),'tot'+(c.leftToPlan<0?' neg':''))+'</tbody>'; } } }
  { const el=document.getElementById('plan-wf'); if(el){ if(!c.gci) el.innerHTML='';
    else { const r=(l,v,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="num">${v}</td></tr>`, left=c.surplus;
-    el.innerHTML='<tbody>'+r('Left to plan with',money(c.leftToPlan),'strong')+r('− Marketing','−'+money(c.mktgTotal))+r('− Growth (coaching, assistant)','−'+money(c.bizGrow))+r('− Lifestyle (dining, travel, giving)','−'+money(c.persLife))+r('− Savings from what’s left','−'+money(c.savAfter))
+    el.innerHTML='<tbody>'+r('Left to plan with',money(c.leftToPlan),'strong')+r('− Marketing','−'+money(c.mktgTotal))+r('− Growth (coaching, assistant)','−'+money(c.bizGrow))+r('− Lifestyle (dining, travel, giving)','−'+money(c.persLife))+r('− Extra savings','−'+money(c.savAfter))
      +r(left<0?'Over your plan by':'Still unplanned',money(Math.abs(left)),'tot'+(left<0?' neg':''))+'</tbody>'+(left<0&&c.fullGci?`<tfoot><tr><td colspan="2" style="font-weight:500;color:var(--bp-dark-grey);border:0">To fund this whole plan you’d need about <b>${money(c.fullGci)}</b> GCI — raise your goal on <b>Your Goal</b>, or trim the plan.</td></tr></tfoot>`:''); } } }
  { // One deal, start to finish (Your Deal)
   const el=document.getElementById('deal-wf'), g=S.goals, ci=capInfo(), sp=c.split, gs=c.gciSide, rlp=Math.min(gs*ci.rlpPct,ci.rlpMax), gh=n(g.gstHold)/100;
@@ -1608,7 +1608,7 @@ function recompute(){
   const el=document.getElementById('chq-wf'); if(el){
    const chq0=c.chequeBefore>0?c.chequeBefore:c.chequeAfter, gh=n(S.goals.gstHold)/100, xt=n(S.alloc.tax)/100, bizSh=c.netComm>0?Math.min(c.bizAnnual/c.netComm,1):0;
    if(!(chq0>0)) el.innerHTML='<tbody><tr><td class="muted">Set your deal on <b>Your Deal</b> and a goal above to see how to split each cheque.</td></tr></tbody>';
-   else { const parts=[['GST account',chq0*gh,`GST holdback (${pct(gh)})`],['Tax account',chq0*(c.t+xt),`Income tax holdback (${pct(c.t)})${xt?` + extra ${pct(xt)}`:''}`],['RRSP',chq0*c.pR,`${pct(c.pR)} of each cheque`],['TFSA',chq0*c.pT,`${pct(c.pT)} of each cheque`],['Business account',chq0*bizSh,`${pct(bizSh)} — covers your business expenses`]].filter(x=>x[1]>0.5);
+   else { const parts=[['GST account',chq0*gh,`GST holdback (${pct(gh)})`],['Tax account',chq0*(c.t+xt),`Income tax holdback (${pct(c.t)})${xt?` + extra ${pct(xt)}`:''}`],['RRSP',chq0*c.pR,`${pct(c.pR)} of each transaction`],['TFSA',chq0*c.pT,`${pct(c.pT)} of each transaction`],['Business account',chq0*bizSh,`${pct(bizSh)} — covers your business expenses`]].filter(x=>x[1]>0.5);
     const tot=chq0*1.05, pay=tot-parts.reduce((a,x)=>a+x[1],0);
     el.innerHTML=`<thead><tr><th>A typical cheque${c.cap?' before you cap':''}</th><th class="num">Amount</th></tr></thead><tbody>
      <tr class="strong"><td>Commission cheque</td><td class="num">${money(chq0)}</td></tr><tr><td>+ GST collected (5%)</td><td class="num">+${money(chq0*0.05)}</td></tr>
@@ -1650,7 +1650,7 @@ function recompute(){
  S.pri.items.forEach((x,i)=>{ const filled=x.q.filter(v=>v!==''); const tot=filled.reduce((a,v)=>a+n(v),0); out('pmY'+i,filled.length?(x.target!==''&&n(x.target)>0?`${int(tot)} · ${pct(tot/n(x.target))}`:int(tot)):'–'); });
  // cash flow
  { const tb=document.getElementById('cf-table');
-   if(tb){ const y=+S.meta.year||year, hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers0=(c.persAnnual+c.postFix+c.debtRed+c.rrspFix+c.resTop)/12, pp=c.pR+c.pT;
+   if(tb){ const y=+S.meta.year||year, hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers0=(c.persAnnual+c.postFix+c.extraSav+c.debtRed+c.rrspFix+c.resTop)/12, pp=c.pR+c.pT;
     let bal=c.reserves, low=Infinity, lowM=0; const rows={cl:[],net:[],hold:[],biz:[],pers:[],flow:[],bal:[]};
     for(let m=0;m<12;m++){ const nt=c.monthNet[m]||0, h=nt*hold, pers=pers0+pp*Math.max(nt,0), fl=nt-h-biz-pers; bal+=fl; if(bal<low){low=bal;lowM=m;}
      rows.cl.push(c.gciSide>0?(c.monthG[m]||0)/c.gciSide:0); rows.net.push(nt); rows.hold.push(-h); rows.biz.push(-biz); rows.pers.push(-pers); rows.flow.push(fl); rows.bal.push(bal); }
