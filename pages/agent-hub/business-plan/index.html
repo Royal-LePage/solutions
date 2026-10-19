@@ -257,6 +257,18 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
 .sc2 th{white-space:nowrap}
 .commit .sig{display:flex;gap:28px;flex-wrap:wrap;margin-top:22px}.commit .sig div{flex:1;min-width:160px;font-size:11.5px;color:var(--bp-dark-grey)}.commit .sig span{display:block;border-bottom:1px solid #333;height:26px;margin-bottom:4px}
 @media (max-width:760px){ .sr-g{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.dbg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px;margin:6px 0 12px}
+.dbg .grade{display:inline-block;min-width:26px;text-align:center;background:var(--bp-black);color:#fff;border-radius:3px;padding:1px 5px;margin-right:4px;font-size:12px}
+@media (max-width:760px){ .dbg{grid-template-columns:minmax(0,1fr)} }
+.st-hero{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px;align-items:start}
+.st-list{margin:0;padding-left:18px;font-size:14.5px;line-height:1.55}.st-list li{margin:0 0 8px}
+.st-have{background:var(--bp-light-grey);border-left:3px solid var(--bp-red);border-radius:0 4px 4px 0;padding:14px 16px}
+.st-have h4{margin:0 0 8px;font-size:12px;letter-spacing:.12em;text-transform:uppercase}.st-have ul{margin:0;padding-left:18px;font-size:14px;line-height:1.6}
+.st-ch{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.st-c{all:unset;box-sizing:border-box;cursor:pointer;border:1px solid var(--bp-warm-grey);border-top:3px solid var(--bp-black);border-radius:4px;padding:12px 14px;background:#fff;display:flex;flex-direction:column;gap:4px;font-family:var(--bp-sans)}
+.st-c:hover,.st-c:focus-visible{border-top-color:var(--bp-red);box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.st-c .st-k{font:800 12px var(--bp-sans);color:var(--bp-red)}.st-c b{font-size:15px}.st-c small{font-size:12px;color:var(--bp-dark-grey)}.st-c em{font-style:normal;font-size:13px;color:var(--bp-black);margin-top:2px}
+@media (max-width:760px){ .st-hero{grid-template-columns:minmax(0,1fr)} }
 /* Activity funnel */
 .funnel{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;border:1px solid var(--bp-warm-grey);border-radius:4px;overflow:hidden;margin:16px 0}
 .funnel div{padding:10px 14px;border-bottom:1px solid var(--bp-warm-grey)}
@@ -399,6 +411,7 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
   body.print-summary .bp-hero{display:none}
   .bp-gate,.bp-acct{display:none!important}
   body.print-summary .sec{display:none}
+  .sec#s-start{display:none!important}
   body.print-summary .sec#s-summary{display:block;break-before:auto}
   body.print-summary .sec#s-summary .sec-h{display:none}
   body.print-summary{font-size:10.5px}
@@ -538,7 +551,7 @@ const COMPETITORS=[['agents','Other agents'],['discount','Discount brokerages'],
 const REF_SOURCES=['Sphere / referrals','Past clients','Professional partners'];
 const CX_STAGES=['Lead','Consultation','Search / preparation','Offer','Contract','Closing','Post-close'];
 const CANVA_URL='https://www.canva.com/s/templates?query=vision+board';
-const PHASES=[['Look back',['lookback','swot']],['Foundation',['vision','values']],['Positioning',['position','model']],['Numbers',['budget','numbers','money']],['Strategy',['priorities','sources']],['The plan',['activity','week','calendar','cx','marketing','ops','season']],['Execution',['action90','score','summary']]];
+const PHASES=[['Start',['start']],['Look back',['lookback','swot']],['Foundation',['vision','values']],['Positioning',['position','model']],['Numbers',['budget','numbers','money']],['Strategy',['priorities','sources']],['The plan',['activity','week','calendar','cx','marketing','ops','season']],['Execution',['action90','score','summary']]];
 const ESSENTIAL=['lookback','vision','values','position','budget','numbers','money','priorities','sources','activity'];
 const TASK_ACTIONS=['Only I do','Systemize','Delegate','Automate','Delete'];
 const VALUE_EX=[['Integrity','Tell the truth even when uncomfortable','Give clients honest opinions about pricing'],['Service','Put the client’s interests first','Respond promptly and anticipate needs'],['Excellence','Continually improve','Invest in education and review every transaction'],['Relationships','Build long-term trust','Stay connected after closing'],['','','']];
@@ -557,6 +570,9 @@ const SWOT_Q={s:['What do clients compliment you on?','Which communities, price 
  w:['Where do deals stall or fall through?','What do you avoid or put off?','Which skills or systems would a coach say you need?'],
  o:['What is changing in the Calgary market — rates, inventory, new communities?','Which client groups are underserved?','What could you start that competitors aren’t doing?'],
  t:['What could slow the market this year?','Who competes for your ideal clients — teams, discount brokerages, FSBO?','What in your business depends on one person or one lead source?']};
+/* Buffini & Company database grades. Touch rhythm used for the capacity check:
+   A+ and A monthly, B every other month, C quarterly; D and O aren't counted. */
+const DB_GRADES=[['ap','A+','Have sent you referrals',1],['a','A','Would refer you',1],['b','B','Would refer you if trained and shown how',1/2],['c','C','Could refer you in the future',1/4],['o','O','Online leads — move up to C or down to D',0],['d','D','To be deleted from your database',0]];
 const DEFAULT_TASKS=['CRM','Database management','Lead follow-up','Transaction management','Marketing','Client communication','Accounting','Administrative support','Technology','Automation'];
 /* Calgary seasonal index: each month's share of the year's City of Calgary residential sales (CREB®),
    averaged over 2016–2025, scaled so 100 = an average month. CREB counts a sale when it goes firm. */
@@ -576,6 +592,9 @@ const IDEAS={
  event:['','','Spring client kickoff','','Community shred day or garage sale','Summer BBQ or lake day','Stampede pancake breakfast','','Fall client appreciation','Pumpkin patch day','','Holiday open house']
 };
 
+/* Typical ratios used when an agent leaves an Activity Plan field blank (shown as the field's placeholder). */
+const KPI_DEF={lApptSign:60,lSignClose:85,bConsSign:60,bSignClose:75,convPerAppt:25,convPerHour:5,weeksOff:4,daysPerWeek:5,refPerClose:3,contactsPerRef:20};
+function KPI(){ const k=S.kpi||{}; return Object.fromEntries(Object.keys(KPI_DEF).map(x=>[x,(k[x]===''||k[x]==null)?KPI_DEF[x]:k[x]])); }
 function nextYearDefault(){const d=new Date();return d.getMonth()>=6?d.getFullYear()+1:d.getFullYear();}
 
 function DEFAULT(){
@@ -594,15 +613,15 @@ function DEFAULT(){
   obj:{primary:'',sec1:'',sec2:''},
   last:{listings:'',buyers:'',avgPrice:'',gci:''},
   reflect:{worked:'',didnt:'',best:'',worst:'',stop:'',start:'',cont:'',waste:''},
-  db:{a:'',b:'',c:'',add:''},
-  week:{d:WEEK_DAYS.map(()=>WEEK_SLOTS.map(()=>''))},
+  db:{ap:'',a:'',b:'',c:'',d:'',o:'',add:''},
+  week:{d:WEEK_DAYS.map(()=>({s:WEEK_SLOTS.map(()=>'')}))},
   acc:{partner:'',cadence:'',first:''},
   act:[0,1,2,3,4].map(()=>({what:'',pri:'',owner:'Me',due:'',done:false})),
-  goals:{method:'gci',gciGoal:200000,netGoal:120000,tax:30,split:20,avgPrice:650000,commModel:'tier',t1:3.5,t2:1.5,flat:2.5,listShare:50,buyShare:50,listings:10,buyers:10,cap:'',dealFee:'',feeMode:'all',capDate:'',capPaid:'',rlpPct:1,rlpMax:1525,gstHold:5,don:'',otherFee:''},
+  goals:{method:'gci',gciGoal:'',netGoal:'',tax:'',split:'',avgPrice:'',commModel:'tier',t1:'',t2:'',flat:'',listShare:'',buyShare:'',listings:'',buyers:'',cap:'',dealFee:'',feeMode:'all',capDate:'',capPaid:'',rlpPct:1,rlpMax:1525,gstHold:'',don:'',otherFee:''},
   season:{w:SEASON_W.slice(),lag:30,curve:''},
-  kpi:{lApptSign:60,lSignClose:85,bConsSign:60,bSignClose:75,convPerAppt:25,convPerHour:5,weeksOff:4,daysPerWeek:5,refPerClose:3,contactsPerRef:20},
+  kpi:{lApptSign:'',lSignClose:'',bConsSign:'',bSignClose:'',convPerAppt:'',convPerHour:'',weeksOff:'',daysPerWeek:'',refPerClose:'',contactsPerRef:''},
   sources:SOURCES.map(nm=>({name:nm,pri:'',last:'',goal:'',why:'',who:'',strat:'',res:'',result:''})),
-  content:{personal:1,professional:2,and:1,andTopic:'',platforms:'',themes:'',process:''},
+  content:{personal:'',professional:'',and:'',andTopic:'',platforms:'',themes:'',process:''},
   mktg:{paid:'',print:'',events:'',popby:'',email:'',signage:'',other:''},
   brand:{},
   cal:MONTHS.map(()=>({call:'',text:'',popby:'',video:'',event:''})),
@@ -614,7 +633,7 @@ function DEFAULT(){
   save:{rrsp:'',postTax:'',debt:'',reserves:''},
   alloc:{biz:'',tax:'',pers:''},
   swot:{s:'',w:'',o:'',t:''},
-  score:{q:[0,1,2,3].map(()=>({units:'',gci:'',notes:'',conv:'',appts:'',listings:'',exp:''})),rygP:[0,1,2,3,4].map(()=>[0,0,0,0]),ryg:{build:[0,0,0,0],brand:[0,0,0,0],amplify:[0,0,0,0],connect:[0,0,0,0],simplify:[0,0,0,0]}},
+  score:{q:[0,1,2,3].map(()=>({units:'',gci:'',notes:'',conv:'',appts:'',listings:'',exp:''})),rygP:[0,1,2,3,4].map(()=>({q:[0,0,0,0]})),ryg:{build:[0,0,0,0],brand:[0,0,0,0],amplify:[0,0,0,0],connect:[0,0,0,0],simplify:[0,0,0,0]}},
   letter:''
  };
 }
@@ -650,7 +669,10 @@ function normalize(){
  (S.tasks||[]).forEach(t=>{ if(t.action==='Do') t.action='Only I do'; });
  if(!S.vision.five&&S.vision.ten) S.vision.five=S.vision.ten;
  if(S.obj&&(S.obj.primary||S.obj.sec1||S.obj.sec2)){ const o=[S.obj.primary,S.obj.sec1,S.obj.sec2].filter(Boolean).join('\n'); if(!(S.vision.one||'').includes(o)) S.vision.one=(S.vision.one?S.vision.one+'\n':'')+o; S.obj={primary:'',sec1:'',sec2:''}; }
- if(!Array.isArray(S.score.rygP)||S.score.rygP.length<5) S.score.rygP=[0,1,2,3,4].map(i=>(S.score.rygP&&S.score.rygP[i])||[0,0,0,0]);
+ /* Firestore can't store an array directly inside an array, so these are arrays of objects. */
+ S.score.rygP=[0,1,2,3,4].map(i=>{ const r=(S.score.rygP||[])[i]; return Array.isArray(r)?{q:r.slice(0,4)}:(r&&Array.isArray(r.q)?r:{q:[0,0,0,0]}); });
+ S.week.d=WEEK_DAYS.map((d,i)=>{ const r=(S.week.d||[])[i]; const a=Array.isArray(r)?r:(r&&Array.isArray(r.s)?r.s:[]); return {s:WEEK_SLOTS.map((x,j)=>a[j]||'')}; });
+ if(S.db&&S.db.ap===undefined) S.db.ap='';
  if(!Array.isArray(S.pri.items)||!S.pri.items.length) S.pri.items=DEFAULT().pri.items;
  S.pri.items.forEach(x=>{ if(!Array.isArray(x.q)||x.q.length!==4) x.q=['','','','']; });
  if(!Array.isArray(S.values.words)||S.values.words.length<15) S.values.words=(S.values.words||[]).concat(Array(15).fill('')).slice(0,15);
@@ -694,6 +716,18 @@ function RC(label,key,cls=''){return `<div class="rc ${cls}"><div class="v" data
    Sections
 ---------------------------------------------------------------- */
 const SECTIONS=[
+ {id:'start',t:'Start Here',d:'Your business plan for the year ahead, built step by step — from an honest look back to the daily activities that will get you there.',html:()=>`
+  <div class="st-hero">
+   <div><h3 style="margin-top:0">How it works</h3>
+    <ul class="st-list"><li><b>Work through the steps in order.</b> Each chapter builds on the one before: where you are → where you’re going → what it takes → how you’ll win → what you’ll do → how you’ll track it.</li>
+    <li><b>Short on time? Do the ★ steps first.</b> They take about an hour and give you a complete, working plan. Come back for the rest.</li>
+    <li><b>Everything saves as you type.</b> Your plan is private to you, and you can pick up where you left off on any device.</li>
+    <li><b>Print your one-page summary</b> at the end and bring it to your quarterly check-ins.</li></ul></div>
+   <div class="st-have"><h4>Have these handy</h4><ul><li>Last year’s closed sides and GCI</li><li>Your commission plan — split, cap and cap anniversary</li><li>A rough monthly budget, personal and business</li><li>How many people are in your database</li></ul></div>
+  </div>
+  <h3>The seven chapters</h3>
+  <div class="st-ch">${PHASES.filter(([ph])=>ph!=='Start').map(([ph,ids],k)=>`<button type="button" class="st-c" data-go="${ids[0]}"><span class="st-k">${k+1}</span><b>${ph}</b><small>${ids.map(id=>(SECTIONS.find(x=>x.id===id)||{}).t).filter(Boolean).join(' · ')}</small><em>${{'Look back':'Where you are today','Foundation':'Where you’re going and why','Positioning':'Who you serve and why they choose you','Numbers':'What your life and your goal really take','Strategy':'Where you’ll focus to win','The plan':'What you’ll do, week by week','Execution':'How you’ll stay on track'}[ph]||''}</em></button>`).join('')}</div>
+ `},
  {id:'lookback',t:'Look Back',d:'A good plan starts with an honest look at the year behind you — what you produced, what worked, and what to leave behind.',html:()=>`
   <h3 style="margin-top:0">Your last 12 months <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— rough numbers are fine</small></h3>
   <div class="row c4">${F('Listing sides closed','last.listings',{type:'num'})}${F('Buyer sides closed','last.buyers',{type:'num'})}${F('Average sale price','last.avgPrice',{type:'money'})}${F('Gross commission (GCI)','last.gci',{type:'money'})}</div>
@@ -856,32 +890,32 @@ const SECTIONS=[
   <div class="seg" id="method-seg"><button data-m="gci" type="button">GCI goal</button><button data-m="budget" type="button">Work back from my budget</button><button data-m="units" type="button">Number of deals</button></div>
   <div id="m-bud" class="bud-calc"></div>
   <div class="row c4" style="margin-top:16px" id="m-set">
-   <div id="m-gci" style="display:contents">${F('GCI goal','goals.gciGoal',{type:'money',hint:'before split, cap & expenses'})}</div><div id="m-gcin" class="f" style="display:none"><span>GCI needed <small>to cover your budget</small></span><div class="netbox" data-o="gciNeedBox">–</div></div><div class="f"><span>Net income <small>after deductions &amp; business expenses</small></span><div class="netbox" data-o="netGoalBox">–</div></div>
+   <div id="m-gci" style="display:contents">${F('GCI goal','goals.gciGoal',{type:'money',hint:'before split, cap & expenses',ph:'e.g. 200,000'})}</div><div id="m-gcin" class="f" style="display:none"><span>GCI needed <small>to cover your budget</small></span><div class="netbox" data-o="gciNeedBox">–</div></div><div class="f"><span>Net income <small>after deductions &amp; business expenses</small></span><div class="netbox" data-o="netGoalBox">–</div></div>
    ${F('Sellers you want to work with','goals.listShare',{type:'pct',hint:'% of your deals'})}${F('Buyers you want to work with','goals.buyShare',{type:'pct',hint:'% of your deals'})}
    </div>
   <p id="gci-note" style="margin:-4px 0 0;font-size:13px;color:var(--bp-dark-grey)"></p>
   <div class="row c4" style="margin-top:16px" id="m-units">${F('Listing sides goal','goals.listings',{type:'num'})}${F('Buyer sides goal','goals.buyers',{type:'num'})}</div>
   <h3>Your average deal</h3>
-  <div class="row c4">${F('Average sale price','goals.avgPrice',{type:'money'})}
+  <div class="row c4">${F('Average sale price','goals.avgPrice',{type:'money',ph:'e.g. 650,000'})}
    <label class="f"><span>Commission per side</span><select data-k="goals.commModel"><option value="tier">Tiered (first $100K / balance)</option><option value="flat">Flat % of price</option></select></label>
-   <div id="c-tier" style="display:contents">${F('On the first $100K','goals.t1',{type:'pct'})}${F('On the balance','goals.t2',{type:'pct'})}</div>
-   <div id="c-flat" style="display:contents">${F('Flat rate per side','goals.flat',{type:'pct'})}</div></div>
+   <div id="c-tier" style="display:contents">${F('On the first $100K','goals.t1',{type:'pct',ph:'e.g. 3.5'})}${F('On the balance','goals.t2',{type:'pct',ph:'e.g. 1.5'})}</div>
+   <div id="c-flat" style="display:contents">${F('Flat rate per side','goals.flat',{type:'pct',ph:'e.g. 2.5'})}</div></div>
   <div class="res">${RC('GCI per side','gciSide')}${RC('Your average net per side','netSide')}${RC('Business expenses / yr','bizAnnual')}${RC('Take-home after tax','takeHome')}</div>
   <div class="res">${RC('GCI goal','gci','dark')}${RC('Total closed sides','sides','dark')}${RC('Listings / buyers','lb','dark')}${RC('Sales volume','volume','dark')}</div>
   <div id="vs-last"></div>
-  <div class="tip"><b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Your net comes from your budget and the commission plan and deductions on the next page, <b>Commission &amp; Finances</b>.<span id="split-hint"> Until you fill that in, the plan uses a 20% split with no cap.</span></div>
+  <div class="tip"><b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side. Your net comes from your budget and the commission plan and deductions on the next page, <b>Commission &amp; Finances</b>.<span id="split-hint"> Until you fill that in, no split, cap or fees are taken off.</span></div>
  `},
  {id:'money',t:'Commission & Finances',d:'It is not what you gross, it is what you keep. Set your commission plan and deductions, see your financial picture at goal, and decide how every cheque gets split.',html:()=>`
   <h3>Your commission plan &amp; deductions</h3>
   <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Enter your plan with the brokerage — these match the deduction summary on your deal statement. Deductions are calculated over one cap year, starting at $0 on your cap anniversary (January if you leave it blank). Not sure of your numbers? Ask the office. Leave the cap blank if you don’t have one.</p>
-  <div class="row c4">${F('Brokerage split','goals.split',{type:'pct',hint:'until you cap'})}${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}${F('Cap anniversary','goals.capDate',{type:'date',hint:'when your cap resets'})}<div class="f"><span>Your cap year</span><div class="netbox" data-o="cyBox">–</div></div></div>
+  <div class="row c4">${F('Brokerage split','goals.split',{type:'pct',hint:'until you cap',ph:'e.g. 20'})}${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}${F('Cap anniversary','goals.capDate',{type:'date',hint:'when your cap resets'})}<div class="f"><span>Your cap year</span><div class="netbox" data-o="cyBox">–</div></div></div>
   <div class="row c4">${F('Deal fee per side','goals.dealFee',{type:'money',hint:'blank = none'})}
    <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></label>
    ${F('Donation per deal','goals.don',{type:'money',hint:'DON'})}
    <div class="f"><span>RLP franchise fee <small>set by Royal LePage</small></span><div class="netbox locked">1% of GCI · max $1,525/yr</div></div></div>
   <h3>Holdbacks</h3>
   <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">The share of each commission cheque you have held back for CRA. This is your money set aside, not a cost — income tax comes off your take-home, and GST is collected on top of your commission and paid to CRA.</p>
-  <div class="row c4">${F('Income tax holdback','goals.tax',{type:'pct',hint:'% of each cheque'})}${F('GST holdback','goals.gstHold',{type:'pct',hint:'% of each cheque'})}</div>
+  <div class="row c4">${F('Income tax holdback','goals.tax',{type:'pct',hint:'% of each cheque',ph:'e.g. 30'})}${F('GST holdback','goals.gstHold',{type:'pct',hint:'% of each cheque',ph:'e.g. 5'})}</div>
   <div class="res">${RC('Split paid','splitPaid')}${RC('<span data-o="capLbl">Cap paid</span>','capPaidOut')}${RC('Deal fees','feesPaid')}${RC('Donations','donPaid')}</div>
   <div class="res c3">${RC('RLP franchise fee','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('Deduction period','cyCard')}</div>
   <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
@@ -920,9 +954,9 @@ const SECTIONS=[
  `},
  {id:'activity',t:'Activity Plan',d:'Your production model: GCI → transactions → leads → appointments → activities. Turn your goal into the daily conversations that produce it.',html:()=>`
   <h3>Your conversion ratios</h3>
-  ${tip('<b>First year using the plan?</b> These are typical starting ratios — leave them as they are for now. Track your real numbers this year and update them next year.')}
-  <div class="row c4">${F('Listing appts that sign','kpi.lApptSign',{type:'pct'})}${F('Signed listings that close','kpi.lSignClose',{type:'pct'})}${F('Buyer consults that sign','kpi.bConsSign',{type:'pct'})}${F('Signed buyers that close','kpi.bSignClose',{type:'pct'})}</div>
-  <div class="row c4">${F('Conversations per appointment','kpi.convPerAppt',{type:'num'})}${F('Conversations per prospecting hour','kpi.convPerHour',{type:'num'})}${F('Prospecting days per week','kpi.daysPerWeek',{type:'num'})}${F('Weeks off this year','kpi.weeksOff',{type:'num'})}</div>
+  ${tip('<b>First year using the plan?</b> Leave these blank to use the typical ratios shown in grey. Track your real numbers this year and update them next year.')}
+  <div class="row c4">${F('Listing appts that sign','kpi.lApptSign',{type:'pct',ph:'typical '+KPI_DEF.lApptSign})}${F('Signed listings that close','kpi.lSignClose',{type:'pct',ph:'typical '+KPI_DEF.lSignClose})}${F('Buyer consults that sign','kpi.bConsSign',{type:'pct',ph:'typical '+KPI_DEF.bConsSign})}${F('Signed buyers that close','kpi.bSignClose',{type:'pct',ph:'typical '+KPI_DEF.bSignClose})}</div>
+  <div class="row c4">${F('Conversations per appointment','kpi.convPerAppt',{type:'num',ph:'typical '+KPI_DEF.convPerAppt})}${F('Conversations per prospecting hour','kpi.convPerHour',{type:'num',ph:'typical '+KPI_DEF.convPerHour})}${F('Prospecting days per week','kpi.daysPerWeek',{type:'num',ph:'typical '+KPI_DEF.daysPerWeek})}${F('Weeks off this year','kpi.weeksOff',{type:'num',ph:'typical '+KPI_DEF.weeksOff})}</div>
   <div id="mix-note"></div>
   <h3>Prospecting targets</h3>
   <div class="funnel">
@@ -931,11 +965,12 @@ const SECTIONS=[
   </div>
   <p style="color:var(--bp-dark-grey);font-size:13.5px">That works out to about <b data-o="convPerClose"></b> conversations for every closed side, over <b data-o="workDays"></b> prospecting days.</p>
   <h3>Referral targets <small style="font-weight:400;color:var(--bp-dark-grey)">sphere, past clients &amp; partners</small></h3>
-  <div class="row c4">${F('Referrals needed per close','kpi.refPerClose',{type:'num',hint:'typical: 3'})}${F('Contacts needed per referral','kpi.contactsPerRef',{type:'num',hint:'typical: 20'})}</div>
+  <div class="row c4">${F('Referrals needed per close','kpi.refPerClose',{type:'num',ph:'typical 3'})}${F('Contacts needed per referral','kpi.contactsPerRef',{type:'num',ph:'typical 20'})}</div>
   <div class="res">${RC('Referrals needed (year)','refY')}${RC('Referrals per month','refM')}${RC('Contacts per month','conM')}${RC('Contacts per day','contactsDay','dark')}</div>
   <h3>Is your database big enough?</h3>
-  ${intro('Referral contacts have to come from somewhere. Count the people in your database by how well they know you.')}
-  <div class="row c4">${F('A — would refer you today','db.a',{type:'num'})}${F('B — know you, not yet raving fans','db.b',{type:'num'})}${F('C — met once / cold','db.c',{type:'num'})}${F('New contacts you’ll add per month','db.add',{type:'num'})}</div>
+  ${intro('Referral contacts have to come from somewhere. Rank your database the Buffini way (A+, A, B, C, O, D) and enter how many people are in each group.')}
+  <div class="dbg">${DB_GRADES.map(([k,g,l])=>`<label class="f"><span><b class="grade">${g}</b> ${l}</span><input data-k="db.${k}" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></label>`).join('')}</div>
+  <div class="row c4">${F('New contacts you’ll add per month','db.add',{type:'num'})}</div>
   <div id="db-check"></div>
   ${tip('<b>What counts as a contact:</b> a real voice-to-voice or face-to-face conversation where you ask for a referral. Likes, emails and mailers don’t count. A simple way to stay on pace: reach out to 5 people every day across 3 channels — calls, DMs and in person.')}
  `},
@@ -979,20 +1014,21 @@ const SECTIONS=[
 
 /* order steps by phase */
 { const ord=PHASES.flatMap(p=>p[1]); SECTIONS.sort((x,y)=>ord.indexOf(x.id)-ord.indexOf(y.id)); }
+const NUM={}; { let k=0; SECTIONS.forEach(x=>{ if(x.id!=='start') NUM[x.id]=++k; }); } const NSTEPS=Object.keys(NUM).length;
 const PHASE_OF=Object.fromEntries(PHASES.flatMap(([ph,ids])=>ids.map(i=>[i,ph])));
 /* ---------------------------------------------------------------
    Render
 ---------------------------------------------------------------- */
 const nav=document.getElementById('nav'), main=document.getElementById('sections');
-let current='lookback', calQ=0;
+let current='start', calQ=0;
 
 function renderShell(){
  let last='';
  nav.innerHTML=SECTIONS.map((s,i)=>{ const ph=PHASE_OF[s.id], head=ph!==last?`<div class="ph">${ph}</div>`:''; last=ph;
-  return head+`<button type="button" data-go="${s.id}" id="nav-${s.id}"><span class="n">${i+1}</span><span class="t">${s.t}</span>${ESSENTIAL.includes(s.id)?'<span class="ess" title="Essential">★</span>':''}</button>`; }).join('')
+  return head+`<button type="button" data-go="${s.id}" id="nav-${s.id}"><span class="n">${s.id==="start"?"▸":NUM[s.id]}</span><span class="t">${s.t}</span>${ESSENTIAL.includes(s.id)?'<span class="ess" title="Essential">★</span>':''}</button>`; }).join('')
   +'<div class="nav-key"><span class="ess">★</span> Essential — start here</div>';
  main.innerHTML=SECTIONS.map((s,i)=>`<section class="sec" id="s-${s.id}">
-   <div class="sec-h"><div><div class="sec-num">${PHASE_OF[s.id]} · Step ${i+1} of ${SECTIONS.length}${ESSENTIAL.includes(s.id)?' · <span class="ess-t">★ Essential</span>':''}</div><h2>${s.t}</h2><p>${s.d}</p></div></div>
+   <div class="sec-h"><div><div class="sec-num">${s.id==="start"?"Welcome":`${PHASE_OF[s.id]} · Step ${NUM[s.id]} of ${NSTEPS}`}${ESSENTIAL.includes(s.id)?' · <span class="ess-t">★ Essential</span>':''}</div><h2>${s.t}</h2><p>${s.d}</p></div></div>
    ${s.html()}
    <div class="sec-foot">${i>0?`<button class="btn btn-line" data-go="${SECTIONS[i-1].id}" type="button">← ${SECTIONS[i-1].t}</button>`:'<span></span>'}
    ${i<SECTIONS.length-1?`<button class="btn btn-red" data-go="${SECTIONS[i+1].id}" type="button">${SECTIONS[i+1].t} →</button>`:'<button class="btn btn-red" id="b-print-sum2" type="button">Print one-page summary</button>'}</div>
@@ -1078,12 +1114,12 @@ function renderScore(){
 function renderRyg(){
  const el=document.getElementById('ryg-body'); if(!el) return;
  const rows=S.pri.items.map((x,i)=>[x,i]).filter(([x])=>x.priority);
- el.innerHTML=rows.length?rows.map(([x,i])=>`<tr><td><b>${esc(x.priority)}</b></td>${[0,1,2,3].map(q=>{const s=(S.score.rygP[i]||[])[q]||0;return `<td><button type="button" data-ryg="${i}.${q}" data-s="${s}">${['—','Red','Yellow','Green'][s]}</button></td>`;}).join('')}</tr>`).join('')
+ el.innerHTML=rows.length?rows.map(([x,i])=>`<tr><td><b>${esc(x.priority)}</b></td>${[0,1,2,3].map(q=>{const s=((S.score.rygP[i]||{}).q||[])[q]||0;return `<td><button type="button" data-ryg="${i}.${q}" data-s="${s}">${['—','Red','Yellow','Green'][s]}</button></td>`;}).join('')}</tr>`).join('')
   :'<tr><td colspan="5" class="muted">Add your strategic priorities first — they’ll appear here.</td></tr>';
 }
 function renderWeek(){
  const el=document.getElementById('week-body'); if(!el) return;
- el.innerHTML=WEEK_SLOTS.map((sl,j)=>`<tr><th>${sl}</th>${WEEK_DAYS.map((d,i)=>{const v=S.week.d[i][j]||'';return `<td><select data-k="week.d.${i}.${j}" data-t="${v}" aria-label="${d} ${sl}"><option value=""></option>${WEEK_TYPES.map(([k,l])=>`<option value="${k}">${l}</option>`).join('')}</select></td>`;}).join('')}</tr>`).join('');
+ el.innerHTML=WEEK_SLOTS.map((sl,j)=>`<tr><th>${sl}</th>${WEEK_DAYS.map((d,i)=>{const v=S.week.d[i].s[j]||'';return `<td><select data-k="week.d.${i}.s.${j}" data-t="${v}" aria-label="${d} ${sl}"><option value=""></option>${WEEK_TYPES.map(([k,l])=>`<option value="${k}">${l}</option>`).join('')}</select></td>`;}).join('')}</tr>`).join('');
  fillAll(el);
 }
 function renderAct(){
@@ -1146,7 +1182,7 @@ document.addEventListener('click',e=>{
  if(t.dataset.go){ show(t.dataset.go,true); return; }
  if(t.dataset.m){ if(t.dataset.m!==S.goals.method){ const c=calc(); if(t.dataset.m==='units'){ S.goals.listings=c.L; S.goals.buyers=c.B; } if(t.dataset.m==='gci'&&c.gci>0) S.goals.gciGoal=Math.ceil(c.gci/1000)*1000; if(t.dataset.m==='budget'&&!c.hasBudget) toast('Add your personal budget on Your Budget first'); } S.goals.method=t.dataset.m; fillAll(); toggleVis(); recompute(); queueSave(); return; }
  if(t.dataset.calq!==undefined){ calQ=+t.dataset.calq; renderCal(); return; }
- if(t.dataset.ryg){ const [k,q]=t.dataset.ryg.split('.').map(Number); const r=S.score.rygP[k]||(S.score.rygP[k]=[0,0,0,0]); const s=((r[q]||0)+1)%4; r[q]=s; t.dataset.s=s; t.textContent=['—','Red','Yellow','Green'][s]; queueSave(); return; }
+ if(t.dataset.ryg){ const [k,q]=t.dataset.ryg.split('.').map(Number); const r=(S.score.rygP[k]||(S.score.rygP[k]={q:[0,0,0,0]})).q; const s=((r[q]||0)+1)%4; r[q]=s; t.dataset.s=s; t.textContent=['—','Red','Yellow','Green'][s]; queueSave(); return; }
  if(t.dataset.delAct!==undefined){ S.act.splice(+t.dataset.delAct,1); renderAct(); queueSave(); return; }
  if(t.dataset.delTask!==undefined){ S.tasks.splice(+t.dataset.delTask,1); renderTasks(); fillAll(document.getElementById('task-body')); queueSave(); return; }
  if(t.dataset.delPri!==undefined){ S.pri.items.splice(+t.dataset.delPri,1); renderPri(); recompute(); queueSave(); return; }
@@ -1155,11 +1191,11 @@ document.addEventListener('click',e=>{
   case 'pri-add': if(S.pri.items.length<5){ S.pri.items.push({goal:'',priority:'',why:'',strategy:'',measure:'',target:'',q:['','','','']}); renderPri(); queueSave(); } break;
   case 'task-add': S.tasks.push({task:'',owner:'',action:'',tool:''}); renderTasks(); fillAll(document.getElementById('task-body')); queueSave(); break;
   case 'act-add': S.act.push({what:'',pri:'',owner:'Me',due:'',done:false}); renderAct(); queueSave(); break;
-  case 'week-fill': { const dp=Math.min(Math.max(Math.round(n(S.kpi.daysPerWeek))||5,1),6); let k=0;
+  case 'week-fill': { const dp=Math.min(Math.max(Math.round(n(KPI().daysPerWeek))||5,1),6); let k=0;
    const plan=(i,j)=>{ if(i===6) return 'off'; if(i===5) return j===1||j===2?'appt':'personal';
     if(j===4) return 'personal'; if(j===0) return i<dp?'prospect':'admin'; if(j===1) return i===4?'mktg':'client'; if(j===2) return 'appt'; return i===2?'learn':'admin'; };
-   S.week.d.forEach((row,i)=>row.forEach((v,j)=>{ if(!v){ row[j]=plan(i,j); k++; } })); renderWeek(); recompute(); queueSave(); toast(k?'Starting week added — change any block':'Every block is already set'); break; }
-  case 'week-clear': S.week.d=WEEK_DAYS.map(()=>WEEK_SLOTS.map(()=>'')); renderWeek(); recompute(); queueSave(); break;
+   S.week.d.forEach((row,i)=>row.s.forEach((v,j)=>{ if(!v){ row.s[j]=plan(i,j); k++; } })); renderWeek(); recompute(); queueSave(); toast(k?'Starting week added — change any block':'Every block is already set'); break; }
+  case 'week-clear': S.week.d=WEEK_DAYS.map(()=>({s:WEEK_SLOTS.map(()=>'')})); renderWeek(); recompute(); queueSave(); break;
   case 'init-add': S.inits.push({what:'',date:'',priority:'Medium'}); renderInits(); fillAll(document.getElementById('init-body')); queueSave(); break;
   case 'season-reset': S.season.w=SEASON_W.slice(); S.season.lag=30; fillAll(document.getElementById('s-season')); recompute(); queueSave(); break;
   case 'use-budget': { const c=calc(); if(c.needs<=0){ toast('Add your personal budget on the Budget & Finances page first'); break; } S.goals.netGoal=Math.round(c.needs); fillAll(); recompute(); queueSave(); toast('Take-home goal set to '+money(c.needs)); break; }
@@ -1259,7 +1295,7 @@ function engineG(gciTotal,gciSide,splitPct,sidesWhole){
  return {months:distribute(sidesWhole,closeW()),monthG,split,fees,rlp,other,capTot,net,caps,monthNet,start,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:-1};
 }
 function calc(){
- const g=S.goals, k=S.kpi;
+ const g=S.goals, k=KPI(), lsh=g.listShare===''?50:Math.min(Math.max(n(g.listShare),0),100);
  const price=n(g.avgPrice);
  const gciSide=g.commModel==='flat'?price*n(g.flat)/100:Math.min(price,100000)*n(g.t1)/100+Math.max(price-100000,0)*n(g.t2)/100;
  const split=Math.min(Math.max(n(g.split),0),100)/100, t=Math.min(Math.max(n(g.tax),0),95)/100;
@@ -1282,7 +1318,7 @@ function calc(){
    gciTot=needs>0?Math.ceil(hi/100)*100:0;
   } else gciTot=Math.max(n(g.gciGoal),0); sidesExact=gciSide>0?gciTot/gciSide:0;
   sides=Math.min(Math.ceil(sidesExact-1e-9),1000);
-  L=Math.round(sides*Math.min(Math.max(n(g.listShare),0),100)/100); B=sides-L; E=engineG(gciTot,gciSide,split,sides);
+  L=Math.round(sides*lsh/100); B=sides-L; E=engineG(gciTot,gciSide,split,sides);
  }
  else{
   const netCommNeeded=n(g.netGoal)/(1-t)+rrsp+bizAnnual;
@@ -1291,7 +1327,7 @@ function calc(){
   if(netCommNeeded>0&&gciSide>0&&(perSideMax>0||ci.cap>0)){
    while(E.net<netCommNeeded-1e-6&&sides<1000){ sides++; E=engine(sides,gciSide,split); }
   }
-  L=Math.round(sides*Math.min(Math.max(n(g.listShare),0),100)/100); B=sides-L;
+  L=Math.round(sides*lsh/100); B=sides-L;
  }
  if(gciTot===null){ gciTot=sides*gciSide; sidesExact=sides; }
  const netSide=sidesExact>0?E.net/sidesExact:gciSide*(1-split)-(ci.feeAfter?0:ci.fee)-Math.min(gciSide*ci.rlpPct,ci.rlpMax)-ci.perDeal;
@@ -1421,7 +1457,7 @@ function recompute(){
     :`<div class="bud-row"><span>Personal budget, savings &amp; debt</span><b>${money(c.needs)}</b></div><div class="bud-row"><span>+ RRSP</span><b>${money(c.rrsp)}</b></div><div class="bud-row"><span>+ Business expenses</span><b>${money(c.bizAnnual)}</b></div><div class="bud-row"><span>+ Income tax holdback (${pct(c.t)})</span><b>${money(c.taxAmt)}</b></div><div class="bud-row"><span>+ Brokerage split, cap, fees &amp; RLP fee</span><b>${money(c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid)}</b></div><div class="bud-row tot"><span>GCI needed</span><b>${money(c.gci)}</b></div>`; }
  { const fl=c.hasBudget&&c.persAnnual<36000&&c.surplus>Math.max(c.takeHome*0.4,25000)&&S.goals.method!=='budget';
    document.querySelectorAll('[data-o-html="budFlag"]').forEach(el=>el.innerHTML=fl?`<div class="tip"><span class="flag warn">Is your budget complete?</span> Your personal budget is ${money(c.persAnnual)} a year and this plan leaves a ${money(c.surplus)} surplus. Check that housing, transportation, insurance and family costs are all in — or try <b>Work back from my budget</b> on Goals &amp; Numbers.</div>`:''); }
- out('gci',moneyK(c.gci)); out('netTop',moneyK(c.profit)); out('netGoalBox',money(c.profit)); out('sides',int(c.sides)); out('lb',`${int(c.L)} / ${int(c.B)}`); out('volume',moneyK(c.volume));
+ out('gci',c.gci?moneyK(c.gci):'–'); out('netTop',c.gci?moneyK(c.profit):'–'); out('netGoalBox',money(c.profit)); out('sides',c.sides?int(c.sides):'–'); out('lb',`${int(c.L)} / ${int(c.B)}`); out('volume',moneyK(c.volume));
  if(c.hasBudget) out('surplus',moneyK(c.surplus),c.surplus<0?'neg':'pos'); else out('surplus','Add budget','');
  // season
  drawMkt(c);
@@ -1436,7 +1472,7 @@ function recompute(){
    row('conv',c.conv,true); row('hrs',c.hrs,true); row('lAp',c.lAp); row('bCo',c.bCo); row('lTk',c.lTk);
    out('convDay',dec(perD(c.conv))); }
  out('convPerClose',c.sides?int(c.convAll/c.sides):'0'); out('workDays',int(c.days));
- out('refY',int(c.refY)); out('refM',dec(c.refY/12)); out('conM',int(c.conY/12)); out('contactsDay',dec(perD(c.conY))); out('talkDay',dec(perD(c.conv+c.conY)));
+ out('refY',int(c.refY)); out('refM',dec(c.refY/12)); out('conM',int(c.conY/12)); out('contactsDay',dec(perD(c.conY))); out('talkDay',c.sides?dec(perD(c.conv+c.conY)):'–');
  { const el=document.getElementById('mix-note'); if(el) el.innerHTML=c.hasSrc?`<div class="tip">Your lead-source goals put <b>${pct(c.refShare)}</b> of your sides from referrals (sphere, past clients, partners) and <b>${pct(1-c.refShare)}</b> from prospecting and marketing. Prospecting targets cover the ${pct(1-c.refShare)}; referral targets cover the ${pct(c.refShare)}. Together that’s about <b>${dec(perD(c.conv+c.conY))}</b> conversations a day.</div>`:`<div class="tip">Set your <b>goal by source</b> on Lead Generation to split these accurately. Until then the plan assumes half your sides come from referrals and half from prospecting.</div>`; }
  // sources
  const sl=S.sources.reduce((a,s)=>a+n(s.last),0), sg=S.sources.reduce((a,s)=>a+n(s.goal),0);
@@ -1470,19 +1506,19 @@ function recompute(){
  // vision board link
  { const vb=document.getElementById('vb-open'), u=(S.vision.board||'').trim(); if(vb) vb.innerHTML=/^https?:\/\//i.test(u)?`<a class="btn btn-line btn-sm" style="margin-top:8px" href="${esc(u)}" target="_blank" rel="noopener">Open my vision board ↗</a>`:''; }
  // business model
- { const vis=(S.meta.visited||[]).includes('numbers'), st=SECTIONS.findIndex(x=>x.id==='numbers')+1;
+ { const vis=(S.meta.visited||[]).includes('numbers'), st=NUM.numbers;
    out('modelIncome',vis&&c.gci?`${money(c.profit)} net income · ${money(c.takeHome)} take-home`:`You’ll set this on Goals & Numbers (step ${st})`); out('modelVol',vis&&c.sides?`${int(c.sides)} sides · ${moneyK(c.volume)} volume`:`You’ll set this on Goals & Numbers (step ${st})`); }
  // SWOT recap on Strategic Priorities
  { const el=document.getElementById('swot-recap'), w=S.swot, any=w.s||w.w||w.o||w.t;
    if(el) el.innerHTML=any?`<div class="swot-recap"><div class="swot-l">From your SWOT</div><div class="sr-g">${[['s','Strengths'],['w','Weaknesses'],['o','Opportunities'],['t','Threats']].map(([k,l])=>`<div><b>${l}</b><p>${w[k]?esc(w[k]):'<span class="muted">—</span>'}</p></div>`).join('')}</div></div>`:''; }
  // database check
- { const el=document.getElementById('db-check'), A=n(S.db.a), B=n(S.db.b), Cc=n(S.db.c), add=n(S.db.add);
-   if(el){ const need=c.conY/12, cap=A+B/2+Cc/4, tot=A+B+Cc;
-    el.innerHTML=!tot?'':`<div class="tip">${cap>=need?`<span class="flag ok">Your database can support this plan</span>`:`<span class="flag bad">Your database is too small for this plan</span>`} Calling every A monthly, every B every other month and every C quarterly gives you about <b>${int(cap)}</b> referral conversations a month. Your plan needs <b>${int(need)}</b>.${cap<need?` Grow your A and B list${add?` — at ${int(add)} new contacts a month you’ll add ${int(add*12)} this year`:', or add new contacts every month'}, or plan more of your business from prospecting.`:''} Database: ${int(tot)} people (${int(A)} A · ${int(B)} B · ${int(Cc)} C).</div>`; } }
+ { const el=document.getElementById('db-check'), add=n(S.db.add), cnt=Object.fromEntries(DB_GRADES.map(([k])=>[k,n(S.db[k])]));
+   if(el){ const need=c.conY/12, cap=DB_GRADES.reduce((a,[k,,,r])=>a+cnt[k]*r,0), tot=DB_GRADES.reduce((a,[k])=>a+cnt[k],0), core=cnt.ap+cnt.a;
+    el.innerHTML=!tot?'':`<div class="tip">${cap>=need?`<span class="flag ok">Your database can support this plan</span>`:`<span class="flag bad">Your database is too small for this plan</span>`} Calling your A+ and A contacts monthly, B every other month and C quarterly gives you about <b>${int(cap)}</b> referral conversations a month. Your plan needs <b>${int(need)}</b>.${cap<need?` Move more people up to A and B${add?` — at ${int(add)} new contacts a month you’ll add ${int(add*12)} this year`:', add new contacts every month'}, or plan more of your business from prospecting.`:''} Database: ${int(tot)} people · ${DB_GRADES.map(([k,g])=>`${int(cnt[k])} ${g}`).join(' · ')}.${cnt.d?` Remove your ${int(cnt.d)} D contacts.`:''}${cnt.o?` Follow up with your ${int(cnt.o)} online leads and move each one up to C or down to D.`:''}</div>`; } }
  // ideal week
- { const cnt={}; let days=0; S.week.d.forEach(row=>{ let pd=false; row.forEach(v=>{ if(v){ cnt[v]=(cnt[v]||0)+2; if(v==='prospect') pd=true; } }); if(pd) days++; });
+ { const cnt={}; let days=0; S.week.d.forEach(row=>{ let pd=false; row.s.forEach(v=>{ if(v){ cnt[v]=(cnt[v]||0)+2; if(v==='prospect') pd=true; } }); if(pd) days++; });
    const work=WORK_TYPES.reduce((a,k)=>a+(cnt[k]||0),0), pros=cnt.prospect||0, pers=(cnt.personal||0), needP=c.hrs/c.weeks, want=n(S.model.hours);
-   out('wkWork',work+' h'); out('wkPros',pros+' h'); out('wkDays',days+' of '+(n(S.kpi.daysPerWeek)||5)); out('wkPers',pers+' h'); out('wkOff',int(n(S.kpi.weeksOff)));
+   out('wkWork',work+' h'); out('wkPros',pros+' h'); out('wkDays',days+' of '+(n(KPI().daysPerWeek)||5)); out('wkPers',pers+' h'); out('wkOff',int(n(KPI().weeksOff)));
    const fl=document.getElementById('week-flag'), msgs=[];
    if(work){ if(pros<needP-0.01) msgs.push(`<span class="flag bad">Not enough prospecting time</span> Your Activity Plan needs about <b>${dec(needP)} hours</b> of prospecting a week; this week has ${pros}.`);
     else msgs.push(`<span class="flag ok">Prospecting time covers your plan</span> Your Activity Plan needs about <b>${dec(needP)} hours</b> a week; this week has ${pros}.`);
@@ -1635,7 +1671,7 @@ async function loadPlan(){
  try{ const d=await docRef().get(); if(d.exists) data=d.data().plan; }
  catch(e){ console.warn('Load failed',e); gate('app'); S=DEFAULT(); renderShell(); fillAll(); toggleVis(); recompute();
   setStatus('<b style="color:#ff8a9b">Couldn’t load your plan</b> · refresh the page to try again. Changes won’t be saved until it loads.'); return; }
- S=merge(DEFAULT(),data||{}); normalize(); S.meta.year=year; if(S.goals.method==='income'){ const c0=calc(); S.goals.gciGoal=Math.round(c0.gci/1000)*1000; S.goals.method='gci'; } S.goals.buyShare=Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; lastStamp=data&&data.meta?data.meta.updated:null;
+ S=merge(DEFAULT(),data||{}); normalize(); S.meta.year=year; if(S.goals.method==='income'){ const c0=calc(); S.goals.gciGoal=Math.round(c0.gci/1000)*1000; S.goals.method='gci'; } S.goals.buyShare=S.goals.listShare===''?'':Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; lastStamp=data&&data.meta?data.meta.updated:null;
  if(!S.vision.name&&user.displayName) S.vision.name=user.displayName;
  $('h-year').textContent=year;
  renderShell(); fillAll(); toggleVis(); recompute(); updateName();
@@ -1811,7 +1847,7 @@ document.getElementById('import-file').addEventListener('change',e=>{
  const r=new FileReader();
  r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d||typeof d!=='object'||!d.goals) throw new Error('bad');
    if(!confirm(`Replace your ${year} plan with the imported file?`)) return;
-   S=merge(DEFAULT(),d); normalize(); S.meta.year=year; if(S.goals.method==='income'){ const c0=calc(); S.goals.gciGoal=Math.round(c0.gci/1000)*1000; S.goals.method='gci'; } S.goals.buyShare=Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; renderShell(); fillAll(); toggleVis(); recompute(); ready=true; saveNow(); toast('Plan imported'); }
+   S=merge(DEFAULT(),d); normalize(); S.meta.year=year; if(S.goals.method==='income'){ const c0=calc(); S.goals.gciGoal=Math.round(c0.gci/1000)*1000; S.goals.method='gci'; } S.goals.buyShare=S.goals.listShare===''?'':Math.round((100-Math.min(Math.max(n(S.goals.listShare),0),100))*10)/10; renderShell(); fillAll(); toggleVis(); recompute(); ready=true; saveNow(); toast('Plan imported'); }
   catch(err){ toast('That file isn’t a business plan export'); } finally{ e.target.value=''; } };
  r.readAsText(f);
 });
