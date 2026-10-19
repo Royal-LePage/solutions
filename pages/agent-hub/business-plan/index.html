@@ -113,13 +113,21 @@ body{margin:0;background:var(--bp-light-grey);color:var(--bp-black);font-family:
 .bp-foot-note a{color:var(--bp-taupe);text-decoration:underline}
 
 /* Hero */
-.bp-hero{background:#141414;color:#fff;border-radius:6px;padding:22px 28px 22px;margin-bottom:20px;position:relative;overflow:hidden}
+.bp-hero{background:#141414;color:#fff;border-radius:6px;padding:22px 28px 22px;margin-bottom:20px;position:relative;overflow:visible}
 .bp-hero:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--bp-red)}
 .bp-hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
 .bp-eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#bbb;font-weight:600}
 .bp-hero-title{margin:4px 0 0;font:800 22px var(--bp-sans);letter-spacing:-.01em}
 .bp-hero-title span{color:var(--bp-red)}
 .bp-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.more{position:relative}.more>summary{list-style:none;cursor:pointer}.more>summary::-webkit-details-marker{display:none}
+.more-menu{position:absolute;right:0;top:calc(100% + 6px);z-index:30;background:#1d1d1d;border:1px solid #444;border-radius:6px;padding:8px;min-width:240px;display:flex;flex-direction:column;gap:4px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.more-menu label{display:flex;justify-content:space-between;align-items:center;gap:10px;color:#ccc;font:600 12.5px var(--bp-sans);padding:6px 8px}
+.more-menu button{all:unset;cursor:pointer;color:#fff;font:600 13px var(--bp-sans);padding:9px 10px;border-radius:4px}.more-menu button:hover{background:#333}.more-menu button small{color:#999;font-weight:500;margin-left:4px}
+.more-menu button.danger{color:#ff8a9b;border-top:1px solid #333;margin-top:4px;padding-top:11px}
+.demo-bar{background:#FFF4D6;border:1px solid #E8C770;color:#5a4300;border-radius:4px;padding:10px 14px;margin:0 0 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:13.5px}
+.need{background:#FFF8EC;border-left:3px solid #E8A33D;border-radius:0 4px 4px 0;padding:10px 14px;margin:0 0 16px;font-size:13.5px}
+.need button{all:unset;cursor:pointer;font-weight:700;text-decoration:underline;margin-right:12px}
 .bp-tools select{background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:4px;padding:8px 10px;font:600 13px var(--bp-sans);width:auto}
 .bp-status{font-size:12px;color:#aaa;margin-top:8px}
 .bp-status b{color:#fff;font-weight:600}
@@ -284,6 +292,7 @@ table.wf tr.strong td{font-weight:700}table.wf tr.sub td{border-top:2px solid va
 table.wf tr.tot td{border-top:2px solid var(--bp-black);font-weight:800;font-size:15px;background:var(--bp-light-grey)}table.wf tr.tot.neg td{color:var(--bp-red)}
 #res-add-wrap{margin-top:12px;max-width:520px}
 h4.sp-h{margin:16px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:uppercase}h4.sp-h small{text-transform:none;letter-spacing:0;font-weight:500;color:var(--bp-dark-grey);margin-left:6px}
+.sess{display:block;margin:3px 0 0 0;color:var(--bp-dark-grey)}
 /* Activity funnel */
 .funnel{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;border:1px solid var(--bp-warm-grey);border-radius:4px;overflow:hidden;margin:16px 0}
 .funnel div{padding:10px 14px;border-bottom:1px solid var(--bp-warm-grey)}
@@ -484,7 +493,7 @@ h4.sp-h{margin:16px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:upp
         <label class="f"><span>Email</span><input type="email" id="rs-email" autocomplete="email"></label>
         <div class="pw-row"><button type="button" class="linkbtn" data-pw="in">← Back to sign in</button><button class="btn btn-red" type="submit" id="rs-btn">Send reset link</button></div>
       </form>
-      <p class="fine">Any email address works — use the same one each time so you always get the same plan. You’ll stay signed in until you close your browser.</p>
+      <p class="fine">Use your <b>@royallepage.ca</b> email if you have one — and the <b>same email every time</b>, so you always get the same plan. You’ll stay signed in until you close your browser.</p>
     </div>
     <div id="g-verify" hidden>
       <h2>Verify your email</h2>
@@ -521,12 +530,16 @@ h4.sp-h{margin:16px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:upp
         <div class="bp-acct"><img id="acct-photo" alt="" hidden referrerpolicy="no-referrer"><span id="acct-email"></span> · <button id="b-signout" type="button">Sign out</button></div>
       </div>
       <div class="bp-tools">
-        <select id="year-sel" aria-label="Plan year"></select>
-        <button class="btn btn-ghost btn-sm" id="b-export" type="button">Export</button>
-        <button class="btn btn-ghost btn-sm" id="b-import" type="button">Import</button>
         <button class="btn btn-ghost btn-sm" id="b-print-full" type="button">Print full plan</button>
         <button class="btn btn-red btn-sm" id="b-print-sum" type="button">Print one-page summary</button>
-        <button class="btn btn-ghost btn-sm" id="b-reset" type="button">Clear plan</button>
+        <details class="more" id="more"><summary class="btn btn-ghost btn-sm">More ▾</summary>
+         <div class="more-menu">
+          <label>Plan year<select id="year-sel" aria-label="Plan year"></select></label>
+          <button type="button" id="b-sample">Show a sample plan <small>doesn’t save</small></button>
+          <button type="button" id="b-export">Export a copy</button>
+          <button type="button" id="b-import">Import a copy</button>
+          <button type="button" id="b-reset" class="danger">Clear plan</button>
+         </div></details>
         <input type="file" id="import-file" accept="application/json" hidden>
       </div>
     </div>
@@ -539,6 +552,7 @@ h4.sp-h{margin:16px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:upp
     </div>
   </div>
 
+  <div class="demo-bar" id="demo-bar" hidden><span><b>You’re looking at a sample plan</b> for a made-up agent. Nothing you change here is saved — use it to walk through the steps.</span><button class="btn btn-red btn-sm" id="demo-exit" type="button">Back to my plan</button></div>
   <div class="bp-grid">
     <nav class="bp-nav" id="nav" aria-label="Plan sections"></nav>
     <main id="sections"></main>
@@ -710,8 +724,8 @@ const n=v=>{const x=parseFloat(v);return isFinite(x)?x:0;};
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const money=v=>(v<0?'-$':'$')+Math.round(Math.abs(v)).toLocaleString('en-CA');
 const moneyK=v=>{const a=Math.abs(v);const s=v<0?'-$':'$';return a>=1e6?s+(a/1e6).toFixed(2)+'M':a>=1e4?s+Math.round(a/1e3)+'K':money(v);};
-const int=v=>Math.round(v).toLocaleString('en-CA');
-const dec=v=>(Math.round(v*10)/10).toLocaleString('en-CA');
+const int=v=>{ const r=Math.round(v)||0; return (r===0?0:r).toLocaleString('en-CA'); };
+const dec=v=>{ const r=Math.round(v*10)/10||0; return (r===0?0:r).toLocaleString('en-CA'); };
 const pct=v=>Math.round(v*100)+'%';
 const small=(v,yr)=>v>0&&v<0.1?(yr?dec(yr/12)+'/mo':'<0.1'):dec(v);
 
@@ -744,7 +758,8 @@ const SECTIONS=[
   <div class="st-hero">
    <div><h3 style="margin-top:0">How it works</h3>
     <ul class="st-list"><li><b>Work through the steps in order.</b> Each chapter builds on the one before: where you are → where you’re going → what it takes → how you’ll win → what you’ll do → how you’ll track it.</li>
-    <li><b>Short on time? Do the ★ steps first.</b> They take about an hour and give you a complete, working plan. Come back for the rest.</li>
+    <li><b>Plan on three sittings.</b> <span class="sess">Session 1: Look Back, Vision &amp; Goals, Values &amp; Mission, Ideal Client &amp; UVP.</span> <span class="sess">Session 2: Your Budget, Your Deal, Your Goal, Your Money.</span> <span class="sess">Session 3: Strategic Priorities, Lead Generation, Activity Plan, Ideal Week.</span> Everything else is homework — and you’ll fill in the Quarterly Scorecard at each quarterly check-in.</li>
+    <li><b>Rough numbers are fine.</b> If you don’t know a number yet, leave it blank and come back.</li>
     <li><b>Everything saves as you type.</b> Your plan is private to you, and you can pick up where you left off on any device.</li>
     <li><b>Print your one-page summary</b> at the end and bring it to your quarterly check-ins.</li></ul></div>
    <div class="st-have"><h4>Have these handy</h4><ul><li>Last year’s closed sides and GCI</li><li>Your commission plan — split, cap and cap anniversary</li><li>A rough monthly budget, personal and business</li><li>How many people are in your database</li></ul></div>
@@ -834,7 +849,7 @@ const SECTIONS=[
   <div class="tbl-wrap"><table>
    <thead><tr><th>Source</th><th style="width:150px">Priority</th><th class="num">Last year (sides)</th><th class="num">%</th><th class="num">Goal (sides)</th><th class="num">%</th></tr></thead>
    <tbody id="src-body"></tbody>
-   <tfoot><tr><td>Total</td><td id="src-pri"></td><td class="num" data-o="srcLast"></td><td></td><td class="num" data-o="srcGoal"></td><td></td></tr><tr><td colspan="6" id="src-flag" style="border:0;font-weight:500"></td></tr></tfoot>
+   <tfoot><tr><td>Total</td><td id="src-pri"></td><td class="num" data-o="srcLast"></td><td></td><td class="num" data-o="srcGoal"></td><td></td></tr><tr><td colspan="6" id="src-flag" style="border:0;font-weight:500"></td></tr><tr><td colspan="6" id="src-last-chk" style="border:0;font-weight:500;padding-top:0"></td></tr></tfoot>
   </table></div>
   <h3>My primary channels</h3>
   <div id="src-cards"></div>
@@ -896,7 +911,7 @@ const SECTIONS=[
   <div class="row">${T('','pri.notFocus',{rows:3}).replace('<span></span>','')}</div>
  `},
  {id:'budget',t:'Your Budget',d:'Your non-negotiables — the bills that get paid whether you close 5 deals or 25. Together they set your minimum: the GCI you need just to keep the lights on.',html:()=>`
-  ${intro('Monthly amounts, except the annual fees, which you enter once for the year. Rough numbers are fine. <b>Only the must-pays go here</b> — marketing, coaching, an assistant, dining and travel come later on <b>Your Money</b>, once you know what your goal leaves you.')}
+  ${intro('Monthly amounts, except the annual fees, which you enter once for the year. Rough numbers are fine. <b>Only the must-pays go here</b>. Your plan is private, and rough or blank figures are fine — marketing, coaching, an assistant, dining and travel come later on <b>Your Money</b>, once you know what your goal leaves you.')}
   <div class="row c2" style="align-items:start">
    <div><h3>Business must-pays (monthly)</h3><table><tbody>${BIZ.filter(([k])=>BIZ_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l})}</td></tr>`).join('')}
     <tr class="sub-h"><td colspan="2">Annual fees <small style="color:#888">— enter the yearly amount</small></td></tr>
@@ -983,7 +998,7 @@ const SECTIONS=[
   <div id="m-bud" class="bud-calc"></div>
   <div class="row c4" style="margin-top:16px" id="m-set">
    <div id="m-gci" style="display:contents">${F('GCI goal','goals.gciGoal',{type:'money',hint:'before split, cap & expenses',ph:'e.g. 200,000'})}</div><div id="m-gcin" class="f" style="display:none"><span>GCI needed <small>to cover your budget</small></span><div class="netbox" data-o="gciNeedBox">–</div></div><div class="f"><span>Net income <small>after deductions &amp; business expenses</small></span><div class="netbox" data-o="netGoalBox">–</div></div>
-   ${F('Sellers you want to work with','goals.listShare',{type:'pct',hint:'% of your deals'})}${F('Buyers you want to work with','goals.buyShare',{type:'pct',hint:'% of your deals'})}
+   ${F('Sellers you want to work with','goals.listShare',{type:'pct',hint:'% of your deals',ph:'e.g. 50'})}<div class="f"><span>Buyers <small>the rest of your deals</small></span><div class="netbox" data-o="buyShareBox">–</div></div>
    </div>
   <p id="gci-note" style="margin:-4px 0 0;font-size:13px;color:var(--bp-dark-grey)"></p>
   <div class="row c4" style="margin-top:16px" id="m-units">${F('Listing sides goal','goals.listings',{type:'num'})}${F('Buyer sides goal','goals.buyers',{type:'num'})}</div>
@@ -1026,7 +1041,7 @@ const SECTIONS=[
    <div class="h">Activity</div><div class="h" style="text-align:right">Year</div><div class="h" style="text-align:right">Month</div><div class="h" style="text-align:right">Week</div><div class="h" style="text-align:right">Day</div>
    ${[['Prospecting conversations <small style="font-weight:400;color:var(--bp-dark-grey)">non-referral share</small>','conv'],['Prospecting hours','hrs'],['Listing appointments','lAp'],['Buyer consultations','bCo'],['Listings taken','lTk']].map(([l,k])=>`<div class="k">${l}</div><div class="x" data-o="${k}Y"></div><div class="x" data-o="${k}M"></div><div class="x" data-o="${k}W"></div><div class="x today" data-o="${k}D"></div>`).join('')}
   </div>
-  <p style="color:var(--bp-dark-grey);font-size:13.5px">That works out to about <b data-o="convPerClose"></b> conversations for every closed side, over <b data-o="workDays"></b> prospecting days.</p>
+  <p id="cpc-p" style="color:var(--bp-dark-grey);font-size:13.5px">That works out to about <b data-o="convPerClose"></b> conversations for every closed side, over <b data-o="workDays"></b> prospecting days.</p>
   <h3>Referral targets <small style="font-weight:400;color:var(--bp-dark-grey)">sphere, past clients &amp; partners</small></h3>
   <div class="row c4">${F('Referrals needed per close','kpi.refPerClose',{type:'num',ph:'typical 3'})}${F('Contacts needed per referral','kpi.contactsPerRef',{type:'num',ph:'typical 20'})}</div>
   <div class="res">${RC('Referrals needed (year)','refY')}${RC('Referrals per month','refM')}${RC('Contacts per month','conM')}${RC('Contacts per day','contactsDay','dark')}</div>
@@ -1059,7 +1074,7 @@ const SECTIONS=[
   <div class="tbl-wrap"><table class="wk"><thead><tr><th></th>${WEEK_DAYS.map(d=>`<th>${d}</th>`).join('')}</tr></thead><tbody id="week-body"></tbody></table></div>
   <div class="res" id="week-res">${RC('Working hours / week','wkWork')}${RC('Prospecting hours / week','wkPros')}${RC('Prospecting days','wkDays')}${RC('Family & personal hours','wkPers')}</div>
   <div id="week-flag"></div>
-  <div class="tip"><b>Schedule your time off first.</b> You planned <b data-o="wkOff">–</b> weeks off this year (Activity Plan). Put them in your calendar now — then protect your prospecting blocks like client appointments.</div>
+  <div class="tip"><b>Schedule your time off first.</b> <span data-o="wkOffTxt"></span> Put them in your calendar now — then protect your prospecting blocks like client appointments.</div>
  `},
  {id:'action90',t:'90-Day Action Plan',d:'Turn your priorities into dated actions for the next 90 days — and decide who will hold you to them.',html:()=>`
   <h3 style="margin-top:0">Accountability</h3>
@@ -1092,6 +1107,7 @@ function renderShell(){
   +'<div class="nav-key"><span class="ess">★</span> Essential — start here<br><span class="nk-done">✓</span> Started</div>';
  main.innerHTML=SECTIONS.map((s,i)=>`<section class="sec" id="s-${s.id}">
    <div class="sec-h"><div><div class="sec-num">${s.id==="start"?"Welcome":`${PHASE_OF[s.id]} · Step ${NUM[s.id]} of ${NSTEPS}`}${ESSENTIAL.includes(s.id)?' · <span class="ess-t">★ Essential</span>':''}</div><h2>${s.t}</h2><p>${s.d}</p></div></div>
+   <div class="need" id="need-${s.id}" hidden></div>
    ${s.html()}
    <div class="sec-foot">${i>0?`<button class="btn btn-line" data-go="${SECTIONS[i-1].id}" type="button">← ${SECTIONS[i-1].t}</button>`:'<span></span>'}
    ${i<SECTIONS.length-1?`<button class="btn btn-red" data-go="${SECTIONS[i+1].id}" type="button">${SECTIONS[i+1].t} →</button>`:'<button class="btn btn-red" id="b-print-sum2" type="button">Print one-page summary</button>'}</div>
@@ -1109,6 +1125,7 @@ function show(id,scroll){
  if(id==='summary') renderSummary();
  if(id==='score'){ renderPM(); renderRyg(); }
  if(id==='action90') renderAct();
+ if(id==='deal'&&S.goals.avgPrice===''&&n(S.last.avgPrice)>0){ S.goals.avgPrice=n(S.last.avgPrice); fillAll(document.getElementById('s-deal')); queueSave(); setTimeout(()=>toast('Average sale price filled in from Look Back — change it if this year will be different'),50); }
  if(C) recompute();
  if(scroll){ const hh=(document.querySelector('.app-bar')||{offsetHeight:0}).offsetHeight; const top=document.querySelector('.bp-grid').getBoundingClientRect().top+window.scrollY-hh-16; if(window.scrollY>top) window.scrollTo({top,behavior:'smooth'}); }
 }
@@ -1246,7 +1263,7 @@ document.addEventListener('focusout',e=>{
 });
 document.addEventListener('change',e=>{ const t=e.target; if(t.tagName==='SELECT'||t.type==='checkbox'||t.type==='date') onField(t); });
 
-document.addEventListener('click',e=>{
+document.addEventListener('click',e=>{ const mo=document.getElementById('more'); if(mo&&mo.open&&!e.target.closest('#more')) mo.open=false; if(e.target.closest('.more-menu button')&&mo) mo.open=false;
  const t=e.target.closest('button'); if(!t) return;
  if(t.dataset.go){ show(t.dataset.go,true); return; }
  if(t.dataset.m){ if(t.dataset.m!==S.goals.method){ const c=calc(); if(t.dataset.m==='units'){ S.goals.listings=c.L; S.goals.buyers=c.B; } if(t.dataset.m==='gci'&&c.gci>0) S.goals.gciGoal=Math.ceil(c.gci/1000)*1000; if(t.dataset.m==='budget'&&!c.hasBudget) toast('Add your personal budget on Your Budget first'); } S.goals.method=t.dataset.m; fillAll(); toggleVis(); recompute(); queueSave(); return; }
@@ -1276,7 +1293,9 @@ document.addEventListener('click',e=>{
   case 'b-print-full': renderSummary(); document.body.classList.remove('print-summary'); window.print(); break;
   case 'b-export': exportPlan(); break;
   case 'b-import': document.getElementById('import-file').click(); break;
-  case 'b-reset': clearPlan(); break;
+  case 'b-reset': if(demo){ toast('You’re viewing the sample plan — exit it first'); break; } clearPlan(); break;
+  case 'b-sample': loadSample(); break;
+  case 'demo-exit': exitSample(); break;
   case 'b-signout': signOut(); break;
   case 'cf-load': dirty=false; loadPlan(); break;
   case 'cf-keep': showConflict(false); saveNow(); break;
@@ -1535,6 +1554,7 @@ function recompute(){
   out('capLbl',!c.cap?'Cap paid':mm>=0?`Cap paid · you cap in ${MONTHS_FULL[mm]} ${st>0&&mm<st?y+1:y}`:`Cap paid · ${money(c.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
  { const td=c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid; out('effSplit',money(td)); out('effPct',c.gci?pct(td/c.gci):'–'); }
   out('bizAnnual',money(c.bizAnnual)); out('profitNeed',money(c.profitNeed));
+ out('buyShareBox',S.goals.listShare===''?'–':pct((100-Math.min(Math.max(n(S.goals.listShare),0),100))/100));
  out('gciLbl',S.goals.method==='budget'?'GCI needed':'GCI goal'); out('gciNeedBox',c.gci?money(c.gci):'Add your budget first'); out('profitBox',money(c.profit)); out('rrspY',c.rrsp?money(c.rrsp):'–'); out('tfsaY',c.post-c.extraSav?money(c.post-c.extraSav):'–');
  out('oneGoals',(S.vision.one||'').trim()||'Not filled in yet — add your 1-year goals on Vision & Goals.');
  { const sh=document.getElementById('split-hint'), g=S.goals; if(sh) sh.style.display=(g.cap!==''||g.dealFee!==''||g.capDate!==''||(S.meta.visited||[]).includes('deal'))?'none':''; }
@@ -1565,6 +1585,7 @@ function recompute(){
  const sl=S.sources.reduce((a,s)=>a+n(s.last),0), sg=S.sources.reduce((a,s)=>a+n(s.goal),0);
  S.sources.forEach((s,i)=>{out('srcL'+i,sl&&s.last!==''?pct(n(s.last)/sl):'–');out('srcG'+i,sg&&s.goal!==''?pct(n(s.goal)/sg):'–');});
  out('srcLast',int(sl)); out('srcGoal',int(sg));
+ { const ls=n(S.last.listings)+n(S.last.buyers), el=document.getElementById('src-last-chk'); if(el) el.innerHTML=ls&&sl&&Math.round(sl)!==Math.round(ls)?`<span class="flag warn">Your Look Back shows ${int(ls)} sides last year; this column adds up to ${int(sl)}</span>`:ls&&!sl?`<span class="muted">Look Back shows ${int(ls)} sides last year — split them by source in the Last year column.</span>`:''; }
  const sf=document.getElementById('src-flag');
  if(sf) sf.innerHTML=!sg?'<span class="flag warn">Add your goal by source</span>':Math.round(sg)===c.sides?`<span class="flag ok">Matches your goal of ${c.sides} sides</span>`:`<span class="flag ${sg<c.sides?'bad':'warn'}">${sg<c.sides?'Short by '+int(c.sides-sg):'Over by '+int(sg-c.sides)} vs. your goal of ${c.sides}</span>`;
  // marketing
@@ -1636,7 +1657,7 @@ function recompute(){
  // ideal week
  { const cnt={}; let days=0; S.week.d.forEach(row=>{ let pd=false; row.s.forEach(v=>{ if(v){ cnt[v]=(cnt[v]||0)+2; if(v==='prospect') pd=true; } }); if(pd) days++; });
    const work=WORK_TYPES.reduce((a,k)=>a+(cnt[k]||0),0), pros=cnt.prospect||0, pers=(cnt.personal||0), needP=c.hrs/c.weeks, want=n(S.model.hours);
-   out('wkWork',work+' h'); out('wkPros',pros+' h'); out('wkDays',days+' of '+(n(KPI().daysPerWeek)||5)); out('wkPers',pers+' h'); out('wkOff',int(n(KPI().weeksOff)));
+   out('wkWork',work+' h'); out('wkPros',pros+' h'); out('wkDays',days+' of '+(n(KPI().daysPerWeek)||5)); out('wkPers',pers+' h'); out('wkOffTxt',S.kpi.weeksOff===''?'You haven’t set your weeks off yet on the Activity Plan — the plan assumes 4.':`You planned ${int(n(S.kpi.weeksOff))} weeks off this year (Activity Plan).`);
    const fl=document.getElementById('week-flag'), msgs=[];
    if(work){ if(pros<needP-0.01) msgs.push(`<span class="flag bad">Not enough prospecting time</span> Your Activity Plan needs about <b>${dec(needP)} hours</b> of prospecting a week; this week has ${pros}.`);
     else msgs.push(`<span class="flag ok">Prospecting time covers your plan</span> Your Activity Plan needs about <b>${dec(needP)} hours</b> a week; this week has ${pros}.`);
@@ -1674,6 +1695,13 @@ function recompute(){
   const au=S.score.q[i].units, ag=S.score.q[i].gci;
   out('pace'+i,(au===''&&ag==='')?'–':(ag!==''&&tg>0)?pct(n(ag)/tg):(q>0?pct(n(au)/q):'–'));
  });
+ if(!c.gci){ ['netGoalBox','profitBox','takeHome','netComm','splitPaid','capPaidOut','feesPaid','donPaid','rlpPaid','effSplit','taxAmt','gstAmt','afterHold','lb','volume','bizPct','sides','gci'].forEach(k=>out(k,'–')); out('effPct','–'); }
+ { const cp=document.getElementById('cpc-p'); if(cp) cp.hidden=!c.sides; }
+ // "you need these first"
+ { const have={budget:c.hasBudget,deal:c.gciSide>0,numbers:c.gci>0}, lbl={budget:'Your Budget',deal:'Your Deal',numbers:'Your Goal'};
+   const needs={numbers:S.goals.method==='budget'?['budget','deal']:['deal'],savings:['numbers'],money:['budget','deal','numbers'],season:['deal','numbers'],sources:['numbers'],activity:['numbers'],week:['numbers'],score:['numbers']};
+   Object.entries(needs).forEach(([id,req])=>{ const el=document.getElementById('need-'+id); if(!el) return; const miss=req.filter(r=>!have[r]);
+    el.hidden=!miss.length; el.innerHTML=miss.length?`<b>Finish these first</b> — this step uses their numbers: ${miss.map(r=>`<button type="button" data-go="${r}">${lbl[r]}</button>`).join('')}`:''; }); }
  // nav progress
  SECTIONS.forEach(s=>{
   const els=[...document.querySelectorAll('#s-'+s.id+' [data-k]')];
@@ -1785,6 +1813,7 @@ async function saveNow(){
 function updateName(){ const nm=S.vision&&S.vision.name; $('h-name').textContent=nm?nm:'Your plan'; }
 
 async function loadPlan(){
+ demo=false; { const bar=document.getElementById('demo-bar'); if(bar) bar.hidden=true; }
  ready=false; showConflict(false); if(unsub){ unsub(); unsub=null; } setStatus('Loading your plan…');
  let data=null;
  try{ const d=await docRef().get(); if(d.exists) data=d.data().plan; }
@@ -1799,11 +1828,29 @@ async function loadPlan(){
  ready=true; watchPlan();
 }
 
+let demo=false;
+const SAMPLE={meta:{year:0},vision:{name:'Sample Agent (Jordan Lee)',one:'Close 18 sides\nGrow my sphere to 250 A and B contacts\nTake 4 full weeks off',five:'A referral-based business in the SE lake communities that funds a paid-off home by 50.',ninety:'Rebuild my database and book 10 listing appointments.',why:'Freedom and time with my family.',mission:'I help move-up families buy and sell with confidence.',commitment:'Five real conversations every working day.'},
+ values:{words:['Integrity','Family','Growth','Service','Communication'].concat(Array(10).fill('')),core:[{v:'Integrity',means:'Tell the truth',practice:'Honest pricing advice'},{v:'Service',means:'Client first',practice:'Same-day replies'},{v:'Growth',means:'Keep learning',practice:'Monthly coaching'},{v:'',means:'',practice:''},{v:'',means:'',practice:''}]},
+ last:{listings:7,buyers:8,avgPrice:620000,gci:168000},reflect:{worked:'Sphere calls and open houses',didnt:'Paid online leads',stop:'Buying cold leads',start:'Monthly client events',cont:'Pop-bys'},
+ pos:{ideal:'Move-up families in Mahogany, Auburn Bay and Seton',ps:{client:'move-up families in the SE lake communities',value:'knows every lake community street by street',proof:'I live here and have sold 100+ homes nearby',outcome:'buy the right home and sell for top dollar'}},
+ pers:{housing:2800,transport:600,groceries:1100,utilities:350,insurance:300,family:400,debt:250,lifestyle:700,giving:100},biz:{desk:300,license:120,tech:180,vehicle:450,prof:100,coaching:250},bizY:{board:1400,gli:600},
+ goals:{method:'gci',gciGoal:210000,avgPrice:650000,commModel:'tier',t1:3.5,t2:1.5,split:20,cap:12000,capDate:'2027-06-01',dealFee:250,feeMode:'cap',tax:30,gstHold:5,listShare:50,buyShare:50},
+ save:{rrspM:300,postTaxP:5,reserves:8000,resMonths:'3'},mktg:{paid:3000,print:4000,events:3500,popby:2000,email:1000,signage:1500},
+ sources:[{goal:9,last:7,pri:'Primary'},{goal:4,last:3,pri:'Primary'},{goal:0,last:0},{goal:2,last:2,pri:'Primary'},{goal:2,last:2,pri:'Secondary'},{goal:0,last:1},{goal:1,last:0}],
+ db:{ap:20,a:45,b:110,c:180,o:40,d:25,add:8},pri:{items:[{goal:'18 sides',priority:'Referral growth',why:'Most of my business comes from my sphere',strategy:'Monthly touch + quarterly events',measure:'Referrals',target:45,q:['','','','']},{goal:'9 listings',priority:'Listing pipeline',why:'Listings drive buyer leads',strategy:'Geographic authority',measure:'Listing appointments',target:16,q:['','','','']}]}};
+async function loadSample(){
+ if(unsub){ unsub(); unsub=null; } ready=false; demo=true; clearTimeout(saveTimer);
+ const d=JSON.parse(JSON.stringify(SAMPLE)); d.meta.year=year; d.sources=DEFAULT().sources.map((x,i)=>Object.assign(x,(SAMPLE.sources[i]||{})));
+ S=merge(DEFAULT(),d); normalize(); current='start'; renderShell(); fillAll(); toggleVis(); recompute(); updateName();
+ setStatus('<b style="color:#ffd27a">Sample plan</b> · nothing you change here is saved');
+ const bar=document.getElementById('demo-bar'); if(bar) bar.hidden=false;
+}
+async function exitSample(){ demo=false; const bar=document.getElementById('demo-bar'); if(bar) bar.hidden=true; current='start'; await loadPlan(); }
 async function clearPlan(){
  if(!confirm(`Erase your ${year} plan? This can’t be undone. Use Export first if you want a copy.`)) return;
  clearTimeout(saveTimer); dirty=false;
  try{ await docRef().delete(); }catch(e){ toast('Couldn’t clear the plan — check your connection'); return; }
- current='vision'; await loadPlan(); toast('Plan cleared');
+ current='start'; await loadPlan(); toast('Plan cleared');
 }
 
 async function signIn(){
