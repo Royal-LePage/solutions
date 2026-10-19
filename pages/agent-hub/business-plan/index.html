@@ -276,6 +276,8 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
 .vchip{font:600 12.5px var(--bp-sans);padding:6px 11px;border-radius:999px;border:1px solid var(--bp-warm-grey);background:#fff;color:var(--bp-black);cursor:pointer}
 .vchip:hover{border-color:var(--bp-dark-grey)}.vchip.on{background:var(--bp-black);border-color:var(--bp-black);color:#fff}
 .vchip.on:before{content:'✓ '}
+table.sav td{vertical-align:middle}table.sav td:nth-child(2),table.sav td:nth-child(3){width:190px}
+tr.sub-h td{background:var(--bp-light-grey);font-weight:700;font-size:12.5px;letter-spacing:.04em}
 /* Activity funnel */
 .funnel{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;border:1px solid var(--bp-warm-grey);border-radius:4px;overflow:hidden;margin:16px 0}
 .funnel div{padding:10px 14px;border-bottom:1px solid var(--bp-warm-grey)}
@@ -565,7 +567,8 @@ const VALUE_EX=[['Integrity','Tell the truth even when uncomfortable','Give clie
 const PRI_EX=[['25 transactions','Lead generation','Need more qualified opportunities','Referral + sphere strategy','Qualified leads'],['25 transactions','Conversion','Current conversion is too low','Improve consultation process','Lead → client %'],['15 listings','Listing pipeline','Need more seller opportunities','Geographic authority','Listing appointments'],['$250K GCI','Average transaction value','Current mix is too low','Target a higher-value market','Average sale price'],['','','','','']];
 const CAL_ROWS=[['call','Reason to call'],['text','Reason to text / email'],['popby','Pop-by idea'],['video','Video / social post'],['event','Event / client party']];
 const PILLARS=[['build','Build — goals & numbers'],['brand','Brand — reputation & presence'],['amplify','Amplify — content & marketing'],['connect','Connect — sphere & referrals'],['simplify','Simplify — systems & delegation']];
-const BIZ=[['desk','Brokerage desk / admin fees'],['board','Board & association dues'],['license','Licence & E&O insurance'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other business']];
+const BIZ_Y=[['board','Board & association fees','CREB®, AREA, CREA'],['gli','General liability insurance','']];
+const BIZ=[['desk','Brokerage desk / admin fees'],['license','Licence & E&O insurance'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other business']];
 const PERS=[['housing','Housing (mortgage/rent, tax, insurance)'],['transport','Personal transportation'],['groceries','Groceries & household'],['utilities','Utilities & internet'],['insurance','Life, health & other insurance'],['family','Childcare & family'],['debt','Personal debt payments'],['lifestyle','Lifestyle, dining & travel'],['giving','Giving & charity'],['other','Other personal']];
 const MKTG=[['paid','Paid social & online ads'],['print','Print & mailers'],['events','Client events & appreciation'],['popby','Pop-bys & client gifts'],['email','Email, newsletter & CRM add-ons'],['signage','Signage, photos & listing marketing'],['other','Other marketing']];
 const BRAND=[['google','My first three Google results are professional and accurate'],['gbp','Google Business Profile is claimed and has reviews from the last 90 days'],['photo','The same current headshot is used on every platform'],['bio','My Royal LePage bio page and website are current'],['linkedin','LinkedIn headline and profile are up to date'],['social','Every social profile links back to my website or bio page']];
@@ -636,9 +639,10 @@ function DEFAULT(){
   tech:{crm:'',tm:'',forms:'',acct:'',social:'',other:''},
   tasks:DEFAULT_TASKS.map(t=>({task:t,owner:'Me',action:'',tool:''})),
   inits:[{what:'',date:'',priority:'High'},{what:'',date:'',priority:'Medium'},{what:'',date:'',priority:'Medium'}],
+  bizY:{board:'',gli:''},
   biz:{desk:'',board:'',license:'',tech:'',vehicle:'',coaching:'',assistant:'',prof:'',other:''},
   pers:{housing:'',transport:'',groceries:'',utilities:'',insurance:'',family:'',debt:'',lifestyle:'',giving:'',other:''},
-  save:{rrsp:'',postTax:'',debt:'',reserves:''},
+  save:{rrsp:'',postTax:'',rrspM:'',postTaxM:'',debt:'',reserves:''},
   alloc:{biz:'',tax:'',pers:''},
   swot:{s:'',w:'',o:'',t:''},
   score:{q:[0,1,2,3].map(()=>({units:'',gci:'',notes:'',conv:'',appts:'',listings:'',exp:''})),rygP:[0,1,2,3,4].map(()=>({q:[0,0,0,0]})),ryg:{build:[0,0,0,0],brand:[0,0,0,0],amplify:[0,0,0,0],connect:[0,0,0,0],simplify:[0,0,0,0]}},
@@ -682,6 +686,7 @@ function normalize(){
  S.score.rygP=[0,1,2,3,4].map(i=>{ const r=(S.score.rygP||[])[i]; return Array.isArray(r)?{q:r.slice(0,4)}:(r&&Array.isArray(r.q)?r:{q:[0,0,0,0]}); });
  S.week.d=WEEK_DAYS.map((d,i)=>{ const r=(S.week.d||[])[i]; const a=Array.isArray(r)?r:(r&&Array.isArray(r.s)?r.s:[]); return {s:WEEK_SLOTS.map((x,j)=>a[j]||'')}; });
  if(S.db&&S.db.ap===undefined) S.db.ap='';
+ if(S.biz&&S.biz.board!==''&&S.biz.board!=null&&(S.bizY.board===''||S.bizY.board==null)){ S.bizY.board=Math.round(n(S.biz.board)*12*100)/100; } if(S.biz) S.biz.board='';
  if(!Array.isArray(S.pri.items)||!S.pri.items.length) S.pri.items=DEFAULT().pri.items;
  S.pri.items.forEach(x=>{ if(!Array.isArray(x.q)||x.q.length!==4) x.q=['','','','']; });
  if(!Array.isArray(S.values.words)||S.values.words.length<15) S.values.words=(S.values.words||[]).concat(Array(15).fill('')).slice(0,15);
@@ -885,16 +890,23 @@ const SECTIONS=[
   <div class="row">${T('','pri.notFocus',{rows:3}).replace('<span></span>','')}</div>
  `},
  {id:'budget',t:'Your Budget',d:'Start with what your life and your business cost. It’s what makes your goal meaningful — and you can work your GCI goal back from it on the next step.',html:()=>`
-  ${intro('Monthly amounts. Rough numbers are fine — you can refine them later. Leave a line blank if it doesn’t apply.')}
+  ${intro('Monthly amounts, except the annual fees, which you enter once for the year. Rough numbers are fine — you can refine them later. Leave a line blank if it doesn’t apply.')}
   <div class="row c2" style="align-items:start">
    <div><h3>Business expenses (monthly)</h3><table><tbody>${BIZ.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l})}</td></tr>`).join('')}
-    <tr><td>Marketing <small style="color:#888">(from Brand &amp; Marketing)</small></td><td class="num" data-o="mktgMonthly"></td></tr></tbody>
+    <tr><td>Marketing <small style="color:#888">(from Brand &amp; Marketing)</small></td><td class="num" data-o="mktgMonthly"></td></tr>
+    <tr class="sub-h"><td colspan="2">Annual fees <small style="color:#888">— enter the yearly amount</small></td></tr>
+    ${BIZ_Y.map(([k,l,h])=>`<tr><td>${l}${h?` <small style="color:#888">(${h})</small>`:''}</td><td style="width:150px">${F('','bizY.'+k,{type:'money',aria:l+' per year'})}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Annual business total</td><td class="num" data-o="bizAnnual"></td></tr></tfoot></table></div>
    <div><h3>Personal expenses (monthly)</h3><table><tbody>${PERS.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Annual personal total</td><td class="num" data-o="persAnnual"></td></tr></tfoot></table></div>
   </div>
-  <h3>Savings & reserves (annual)</h3>
-  <div class="row c4">${F('RRSP / pre-tax savings','save.rrsp',{type:'money'})}${F('TFSA / after-tax savings','save.postTax',{type:'money'})}${F('Debt reduction goal','save.debt',{type:'money'})}${F('Cash reserves today','save.reserves',{type:'money'})}</div>
+  <h3>Savings &amp; reserves</h3>
+  ${intro('Save monthly, in a lump sum each year, or both — the plan adds them together.')}
+  <div class="tbl-wrap"><table class="sav"><thead><tr><th></th><th>Monthly</th><th>Lump sum / year</th><th class="num">Total / year</th></tr></thead><tbody>
+   <tr><td>RRSP <small style="color:#888">pre-tax</small></td><td>${F('','save.rrspM',{type:'money',aria:'RRSP monthly'})}</td><td>${F('','save.rrsp',{type:'money',aria:'RRSP lump sum per year'})}</td><td class="num" data-o="rrspY">–</td></tr>
+   <tr><td>TFSA <small style="color:#888">after-tax</small></td><td>${F('','save.postTaxM',{type:'money',aria:'TFSA monthly'})}</td><td>${F('','save.postTax',{type:'money',aria:'TFSA lump sum per year'})}</td><td class="num" data-o="tfsaY">–</td></tr>
+  </tbody></table></div>
+  <div class="row c4" style="margin-top:14px">${F('Debt reduction goal','save.debt',{type:'money',hint:'per year'})}${F('Cash reserves today','save.reserves',{type:'money'})}</div>
   <div class="res">${RC('Personal budget / yr','persAnnual')}${RC('Business expenses / yr','bizAnnual')}${RC('Needed for budget & savings','needs')}${RC('Months of reserves','reserveMonths')}</div>
   <div data-o-html="budFlag"></div>
  `},
@@ -1325,9 +1337,9 @@ function calc(){
  const split=Math.min(Math.max(n(g.split),0),100)/100, t=Math.min(Math.max(n(g.tax),0),95)/100;
  const ci=capInfo();
  const mktgTotal=sumObj(S.mktg);
- const bizAnnual=sumObj(S.biz)*12+mktgTotal;
+ const bizYear=sumObj(S.bizY), bizAnnual=sumObj(S.biz)*12+bizYear+mktgTotal;
  const persAnnual=sumObj(S.pers)*12;
- const rrsp=n(S.save.rrsp), post=n(S.save.postTax), debtRed=n(S.save.debt);
+ const rrsp=n(S.save.rrsp)+n(S.save.rrspM)*12, post=n(S.save.postTax)+n(S.save.postTaxM)*12, debtRed=n(S.save.debt);
  const needs=persAnnual+post+debtRed;
  let L,B,sides,E,gciTot=null,sidesExact=null;
  if(g.method==='units'){ L=Math.max(0,Math.round(n(g.listings))); B=Math.max(0,Math.round(n(g.buyers))); sides=L+B; E=engine(sides,gciSide,split); }
@@ -1474,7 +1486,7 @@ function recompute(){
   out('capLbl',!c.cap?'Cap paid':mm>=0?`Cap paid · you cap in ${MONTHS_FULL[mm]} ${st>0&&mm<st?y+1:y}`:`Cap paid · ${money(c.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
  { const td=c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid; out('effSplit',money(td)); out('effPct',c.gci?pct(td/c.gci):'–'); }
   out('bizAnnual',money(c.bizAnnual)); out('profitNeed',money(c.profitNeed));
- out('gciLbl',S.goals.method==='budget'?'GCI needed':'GCI goal'); out('gciNeedBox',c.gci?money(c.gci):'Add your budget first'); out('profitBox',money(c.profit));
+ out('gciLbl',S.goals.method==='budget'?'GCI needed':'GCI goal'); out('gciNeedBox',c.gci?money(c.gci):'Add your budget first'); out('profitBox',money(c.profit)); out('rrspY',c.rrsp?money(c.rrsp):'–'); out('tfsaY',c.post?money(c.post):'–');
  out('oneGoals',(S.vision.one||'').trim()||'Not filled in yet — add your 1-year goals on Vision & Goals.');
  { const sh=document.getElementById('split-hint'), g=S.goals; if(sh) sh.style.display=(g.cap!==''||g.dealFee!==''||g.capDate!==''||(S.meta.visited||[]).includes('money'))?'none':''; }
  { const mb=document.getElementById('m-bud'); if(mb) mb.innerHTML=!c.hasBudget?'<div class="tip">Add your personal budget on <b>Your Budget</b> first — this option works out the GCI you need to cover it.</div>'
@@ -1522,7 +1534,7 @@ function recompute(){
  const chq0=c.chequeBefore>0?c.chequeBefore:c.chequeAfter, chq=chq0*hf;
  if(ex) ex.innerHTML=chq>0?`<div class="tip">A typical cheque of <b>${money(chq0)}</b> after split and fees, plus ${money(chq0*0.05)} GST, less your holdbacks (${money(chq0*c.t)} income tax, ${money(chq0*n(S.goals.gstHold)/100)} GST) leaves <b>${money(chq)}</b>${c.cap?` (more once you cap)`:''}. Split that as: <b>${money(chq*ab)}</b> to business, <b>${money(chq*at)}</b> extra to tax, <b>${money(chq*ap)}</b> to personal & savings.${tot!==100?` <span class="flag warn">Your split adds up to ${tot}%</span>`:''}</div>`:'';
  const gn=document.getElementById('gci-note');
- if(gn) gn.innerHTML=S.goals.method==='gci'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${n(S.save.rrsp)?' and RRSP':''}.${c.hasBudget?(c.surplus<0?` <span class="flag bad">${money(-c.surplus)} short of your budget</span>`:` <span class="flag ok">Covers your budget with ${money(c.surplus)} to spare</span>`):''}`:'';
+ if(gn) gn.innerHTML=S.goals.method==='gci'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${c.rrsp?' and RRSP':''}.${c.hasBudget?(c.surplus<0?` <span class="flag bad">${money(-c.surplus)} short of your budget</span>`:` <span class="flag ok">Covers your budget with ${money(c.surplus)} to spare</span>`):''}`:'';
 
  // positioning statement
  { const ps=psClean(S.pos.ps), b=(x,ph)=>x?`<b>${esc(x)}</b>`:`<span class="blank">${ph}</span>`;
