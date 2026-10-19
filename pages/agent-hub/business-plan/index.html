@@ -276,7 +276,7 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
 .vchip{font:600 12.5px var(--bp-sans);padding:6px 11px;border-radius:999px;border:1px solid var(--bp-warm-grey);background:#fff;color:var(--bp-black);cursor:pointer}
 .vchip:hover{border-color:var(--bp-dark-grey)}.vchip.on{background:var(--bp-black);border-color:var(--bp-black);color:#fff}
 .vchip.on:before{content:'✓ '}
-table.sav td{vertical-align:middle}table.sav td:nth-child(2),table.sav td:nth-child(3){width:190px}
+table.sav td{vertical-align:middle}table.sav td:nth-child(2),table.sav td:nth-child(3){width:170px}table.sav td:nth-child(4){width:130px}
 tr.sub-h td{background:var(--bp-light-grey);font-weight:700;font-size:12.5px;letter-spacing:.04em}
 /* Activity funnel */
 .funnel{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;border:1px solid var(--bp-warm-grey);border-radius:4px;overflow:hidden;margin:16px 0}
@@ -642,7 +642,7 @@ function DEFAULT(){
   bizY:{board:'',gli:''},
   biz:{desk:'',board:'',license:'',tech:'',vehicle:'',coaching:'',assistant:'',prof:'',other:''},
   pers:{housing:'',transport:'',groceries:'',utilities:'',insurance:'',family:'',debt:'',lifestyle:'',giving:'',other:''},
-  save:{rrsp:'',postTax:'',rrspM:'',postTaxM:'',debt:'',reserves:''},
+  save:{rrsp:'',postTax:'',rrspM:'',postTaxM:'',rrspP:'',postTaxP:'',debt:'',reserves:''},
   alloc:{biz:'',tax:'',pers:''},
   swot:{s:'',w:'',o:'',t:''},
   score:{q:[0,1,2,3].map(()=>({units:'',gci:'',notes:'',conv:'',appts:'',listings:'',exp:''})),rygP:[0,1,2,3,4].map(()=>({q:[0,0,0,0]})),ryg:{build:[0,0,0,0],brand:[0,0,0,0],amplify:[0,0,0,0],connect:[0,0,0,0],simplify:[0,0,0,0]}},
@@ -901,10 +901,10 @@ const SECTIONS=[
     <tfoot><tr><td>Annual personal total</td><td class="num" data-o="persAnnual"></td></tr></tfoot></table></div>
   </div>
   <h3>Savings &amp; reserves</h3>
-  ${intro('Save monthly, in a lump sum each year, or both — the plan adds them together.')}
-  <div class="tbl-wrap"><table class="sav"><thead><tr><th></th><th>Monthly</th><th>Lump sum / year</th><th class="num">Total / year</th></tr></thead><tbody>
-   <tr><td>RRSP <small style="color:#888">pre-tax</small></td><td>${F('','save.rrspM',{type:'money',aria:'RRSP monthly'})}</td><td>${F('','save.rrsp',{type:'money',aria:'RRSP lump sum per year'})}</td><td class="num" data-o="rrspY">–</td></tr>
-   <tr><td>TFSA <small style="color:#888">after-tax</small></td><td>${F('','save.postTaxM',{type:'money',aria:'TFSA monthly'})}</td><td>${F('','save.postTax',{type:'money',aria:'TFSA lump sum per year'})}</td><td class="num" data-o="tfsaY">–</td></tr>
+  ${intro('Save monthly, in a lump sum each year, as a % of every commission cheque — or any mix. The plan adds them together. The % comes off your commission after brokerage deductions, before your tax holdback.')}
+  <div class="tbl-wrap"><table class="sav"><thead><tr><th></th><th>Monthly</th><th>Lump sum / year</th><th>% of each cheque</th><th class="num">Total / year</th></tr></thead><tbody>
+   <tr><td>RRSP <small style="color:#888">pre-tax</small></td><td>${F('','save.rrspM',{type:'money',aria:'RRSP monthly'})}</td><td>${F('','save.rrsp',{type:'money',aria:'RRSP lump sum per year'})}</td><td>${F('','save.rrspP',{type:'pct',aria:'RRSP percent of each commission cheque'})}</td><td class="num" data-o="rrspY">–</td></tr>
+   <tr><td>TFSA <small style="color:#888">after-tax</small></td><td>${F('','save.postTaxM',{type:'money',aria:'TFSA monthly'})}</td><td>${F('','save.postTax',{type:'money',aria:'TFSA lump sum per year'})}</td><td>${F('','save.postTaxP',{type:'pct',aria:'TFSA percent of each commission cheque'})}</td><td class="num" data-o="tfsaY">–</td></tr>
   </tbody></table></div>
   <div class="row c4" style="margin-top:14px">${F('Debt reduction goal','save.debt',{type:'money',hint:'per year'})}${F('Cash reserves today','save.reserves',{type:'money'})}</div>
   <div class="res">${RC('Personal budget / yr','persAnnual')}${RC('Business expenses / yr','bizAnnual')}${RC('Needed for budget & savings','needs')}${RC('Months of reserves','reserveMonths')}</div>
@@ -1339,25 +1339,28 @@ function calc(){
  const mktgTotal=sumObj(S.mktg);
  const bizYear=sumObj(S.bizY), bizAnnual=sumObj(S.biz)*12+bizYear+mktgTotal;
  const persAnnual=sumObj(S.pers)*12;
- const rrsp=n(S.save.rrsp)+n(S.save.rrspM)*12, post=n(S.save.postTax)+n(S.save.postTaxM)*12, debtRed=n(S.save.debt);
- const needs=persAnnual+post+debtRed;
+ /* Savings: fixed amounts (monthly ×12 + lump sum) plus an optional % of each commission cheque
+    (commission after brokerage deductions). The % parts are added once commission is known. */
+ const pc=v=>Math.min(Math.max(n(v),0),100)/100, pR=pc(S.save.rrspP), pT=pc(S.save.postTaxP);
+ const rrspFix=n(S.save.rrsp)+n(S.save.rrspM)*12, postFix=n(S.save.postTax)+n(S.save.postTaxM)*12, debtRed=n(S.save.debt);
+ const needsFix=persAnnual+postFix+debtRed;
  let L,B,sides,E,gciTot=null,sidesExact=null;
  if(g.method==='units'){ L=Math.max(0,Math.round(n(g.listings))); B=Math.max(0,Math.round(n(g.buyers))); sides=L+B; E=engine(sides,gciSide,split); }
  else if(g.method==='gci'||g.method==='budget'){
   if(g.method==='budget'){
    /* Work back from the budget: find the GCI whose take-home covers personal budget + savings + debt,
       after the commission plan, business expenses, RRSP and the income tax holdback. */
-   const target=(needs+bizAnnual+rrsp)/Math.max(1-t,0.05);
+   const target=(needsFix+bizAnnual+rrspFix)/Math.max(1-t-pR-pT,0.05);
    let lo=0, hi=0;
-   if(needs>0&&gciSide>0){ hi=50000; while(hi<2e7&&engineG(hi,gciSide,split,Math.ceil(hi/gciSide)).net<target) hi*=2;
+   if(needsFix>0&&gciSide>0){ hi=50000; while(hi<2e7&&engineG(hi,gciSide,split,Math.ceil(hi/gciSide)).net<target) hi*=2;
     for(let it=0;it<50;it++){ const mid=(lo+hi)/2; if(engineG(mid,gciSide,split,Math.ceil(mid/gciSide)).net<target) lo=mid; else hi=mid; } }
-   gciTot=needs>0?Math.ceil(hi/100)*100:0;
+   gciTot=needsFix>0?Math.ceil(hi/100)*100:0;
   } else gciTot=Math.max(n(g.gciGoal),0); sidesExact=gciSide>0?gciTot/gciSide:0;
   sides=Math.min(Math.ceil(sidesExact-1e-9),1000);
   L=Math.round(sides*lsh/100); B=sides-L; E=engineG(gciTot,gciSide,split,sides);
  }
  else{
-  const netCommNeeded=n(g.netGoal)/(1-t)+rrsp+bizAnnual;
+  const netCommNeeded=n(g.netGoal)/(1-t)+rrspFix+bizAnnual;
   sides=0; E=engine(0,gciSide,split);
   const perSideMax=gciSide-(ci.feeAfter?0:ci.fee);
   if(netCommNeeded>0&&gciSide>0&&(perSideMax>0||ci.cap>0)){
@@ -1368,6 +1371,7 @@ function calc(){
  if(gciTot===null){ gciTot=sides*gciSide; sidesExact=sides; }
  const netSide=sidesExact>0?E.net/sidesExact:gciSide*(1-split)-(ci.feeAfter?0:ci.fee)-Math.min(gciSide*ci.rlpPct,ci.rlpMax)-ci.perDeal;
  const gci=gciTot, volume=sidesExact*price, netComm=E.net;
+ const rrsp=rrspFix+pR*Math.max(netComm,0), post=postFix+pT*Math.max(netComm,0), needs=persAnnual+post+debtRed;
  const profit=netComm-bizAnnual;
  const taxAmt=Math.max(netComm,0)*t, gstHoldPct=Math.min(Math.max(n(g.gstHold),0),100)/100, gstAmt=Math.max(netComm,0)*gstHoldPct;
  const takeHome=profit-rrsp-taxAmt;
@@ -1388,7 +1392,7 @@ function calc(){
  const reserveMonthly=(persAnnual+bizAnnual)/12;
  return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
   sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persAnnual>0,
-  lAp,bCo,lTk,conv,convAll,refShare,hasSrc,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed};
+  lAp,bCo,lTk,conv,convAll,refShare,hasSrc,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed,rrspFix,postFix,pR,pT};
 }
 
 function out(key,val,cls){
@@ -1568,9 +1572,9 @@ function recompute(){
  S.pri.items.forEach((x,i)=>{ const filled=x.q.filter(v=>v!==''); const tot=filled.reduce((a,v)=>a+n(v),0); out('pmY'+i,filled.length?(x.target!==''&&n(x.target)>0?`${int(tot)} · ${pct(tot/n(x.target))}`:int(tot)):'–'); });
  // cash flow
  { const tb=document.getElementById('cf-table');
-   if(tb){ const y=+S.meta.year||year, hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers=(c.persAnnual+c.post+c.debtRed+c.rrsp)/12;
+   if(tb){ const y=+S.meta.year||year, hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers0=(c.persAnnual+c.postFix+c.debtRed+c.rrspFix)/12, pp=c.pR+c.pT;
     let bal=c.reserves, low=Infinity, lowM=0; const rows={cl:[],net:[],hold:[],biz:[],pers:[],flow:[],bal:[]};
-    for(let m=0;m<12;m++){ const nt=c.monthNet[m]||0, h=nt*hold, fl=nt-h-biz-pers; bal+=fl; if(bal<low){low=bal;lowM=m;}
+    for(let m=0;m<12;m++){ const nt=c.monthNet[m]||0, h=nt*hold, pers=pers0+pp*Math.max(nt,0), fl=nt-h-biz-pers; bal+=fl; if(bal<low){low=bal;lowM=m;}
      rows.cl.push(c.gciSide>0?(c.monthG[m]||0)/c.gciSide:0); rows.net.push(nt); rows.hold.push(-h); rows.biz.push(-biz); rows.pers.push(-pers); rows.flow.push(fl); rows.bal.push(bal); }
     const fm=v=>v===0?'–':(v<0?'−':'')+'$'+Math.round(Math.abs(v)).toLocaleString('en-CA');
     const row=(lbl,arr,cls,fn)=>`<tr class="${cls||''}"><th>${lbl}</th>${arr.map(v=>`<td class="num${v<0&&cls?' neg':''}">${fn?fn(v):fm(v)}</td>`).join('')}<td class="num tot">${cls==='bal'?fm(arr[11]):fn?dec(arr.reduce((a,b)=>a+b,0)):fm(arr.reduce((a,b)=>a+b,0))}</td></tr>`;
