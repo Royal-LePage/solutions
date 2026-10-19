@@ -144,12 +144,14 @@ body{margin:0;background:var(--bp-light-grey);color:var(--bp-black);font-family:
 .bp-nav button:hover{background:var(--bp-light-grey);color:var(--bp-black)}
 .bp-nav button.on{background:var(--bp-black);color:#fff}
 .bp-nav .n{flex:0 0 22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-size:11px;font-weight:700}
-.bp-nav button.done .n{background:var(--bp-red);border-color:var(--bp-red);color:#fff}
+.bp-nav button.done .n{background:var(--bp-red);border-color:var(--bp-red);color:#fff;font-size:0}
+.bp-nav button.done .n:after{content:'✓';font-size:12px;font-weight:800}
 .bp-nav .t{flex:1}
 .bp-nav .ph{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--bp-red);font-weight:800;padding:12px 10px 4px}
 .bp-nav .ph:first-child{padding-top:4px}
 .ess{color:var(--bp-red);font-size:12px;line-height:1}
 .bp-nav button.on .ess{color:#fff}
+.nav-key .nk-done{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;background:var(--bp-red);color:#fff;font-size:10px;font-weight:800;margin:4px 2px 0 0}
 .nav-key{font-size:11.5px;color:#888;padding:10px 10px 4px;border-top:1px solid var(--bp-warm-grey);margin-top:8px}
 .ess-t{color:var(--bp-dark-grey)}
 .intro{color:var(--bp-dark-grey);font-size:14px;margin:0 0 12px;max-width:820px}
@@ -269,6 +271,11 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
 .st-c:hover,.st-c:focus-visible{border-top-color:var(--bp-red);box-shadow:0 2px 10px rgba(0,0,0,.08)}
 .st-c .st-k{font:800 12px var(--bp-sans);color:var(--bp-red)}.st-c b{font-size:15px}.st-c small{font-size:12px;color:var(--bp-dark-grey)}.st-c em{font-style:normal;font-size:13px;color:var(--bp-black);margin-top:2px}
 @media (max-width:760px){ .st-hero{grid-template-columns:minmax(0,1fr)} }
+.v-steps{margin:6px 0 14px;padding-left:20px;font-size:14px;line-height:1.55;max-width:860px}.v-steps li{margin:0 0 6px}
+.vbank{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 14px}
+.vchip{font:600 12.5px var(--bp-sans);padding:6px 11px;border-radius:999px;border:1px solid var(--bp-warm-grey);background:#fff;color:var(--bp-black);cursor:pointer}
+.vchip:hover{border-color:var(--bp-dark-grey)}.vchip.on{background:var(--bp-black);border-color:var(--bp-black);color:#fff}
+.vchip.on:before{content:'✓ '}
 /* Activity funnel */
 .funnel{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;border:1px solid var(--bp-warm-grey);border-radius:4px;overflow:hidden;margin:16px 0}
 .funnel div{padding:10px 14px;border-bottom:1px solid var(--bp-warm-grey)}
@@ -573,6 +580,7 @@ const SWOT_Q={s:['What do clients compliment you on?','Which communities, price 
 /* Buffini & Company database grades. Touch rhythm used for the capacity check:
    A+ and A monthly, B every other month, C quarterly; D and O aren't counted. */
 const DB_GRADES=[['ap','A+','Have sent you referrals',1],['a','A','Would refer you',1],['b','B','Would refer you if trained and shown how',1/2],['c','C','Could refer you in the future',1/4],['o','O','Online leads — move up to C or down to D',0],['d','D','To be deleted from your database',0]];
+const VALUE_BANK=['Integrity','Honesty','Trust','Respect','Service','Generosity','Kindness','Gratitude','Family','Community','Relationships','Loyalty','Communication','Transparency','Accountability','Reliability','Responsiveness','Excellence','Professionalism','Growth','Learning','Curiosity','Hard work','Discipline','Consistency','Courage','Resilience','Fun','Humour','Balance','Health','Faith','Freedom','Independence','Creativity','Innovation','Leadership','Teamwork','Advocacy','Patience','Empathy','Fairness'];
 const DEFAULT_TASKS=['CRM','Database management','Lead follow-up','Transaction management','Marketing','Client communication','Accounting','Administrative support','Technology','Automation'];
 /* Calgary seasonal index: each month's share of the year's City of Calgary residential sales (CREB®),
    averaged over 2016–2025, scaled so 100 = an average month. CREB counts a sale when it goes firm. */
@@ -657,6 +665,7 @@ function merge(base,src){
 }
 
 let S=DEFAULT();
+const BLANK=DEFAULT();
 /* Bring plans saved by earlier versions into the current shape. */
 function normalize(){
  if(!S.sources||S.sources.length!==SOURCES.length||S.sources.some((x,i)=>x.name!==SOURCES[i])) S.sources=DEFAULT().sources;
@@ -717,6 +726,7 @@ function RC(label,key,cls=''){return `<div class="rc ${cls}"><div class="v" data
 ---------------------------------------------------------------- */
 const SECTIONS=[
  {id:'start',t:'Start Here',d:'Your business plan for the year ahead, built step by step — from an honest look back to the daily activities that will get you there.',html:()=>`
+  <div class="row c2" style="margin-bottom:6px">${F('Your name','vision.name',{hint:'appears on your printed plan'})}</div>
   <div class="st-hero">
    <div><h3 style="margin-top:0">How it works</h3>
     <ul class="st-list"><li><b>Work through the steps in order.</b> Each chapter builds on the one before: where you are → where you’re going → what it takes → how you’ll win → what you’ll do → how you’ll track it.</li>
@@ -739,7 +749,6 @@ const SECTIONS=[
   <div class="row">${T('Biggest time-wasters','reflect.waste',{rows:2,hint:'what ate your week without producing business?'})}</div>
  `},
  {id:'vision',t:'Vision & Goals',d:'Where are you going, and why does it matter? Everything else in this plan should point back to this page.',html:()=>`
-  <div class="row c2">${F('Your name','vision.name',{hint:'appears on your printed plan'})}</div>
   <div class="vb">
    <div><h3 style="margin-top:0">Start by creating your vision board</h3>
     <p>Think about every area of your life: lifestyle, family &amp; relationships, financial, career, clients, impact, personal growth, experiences and environment. Then place your vision board somewhere you’ll see it every day.</p>
@@ -752,9 +761,15 @@ const SECTIONS=[
  `},
  {id:'values',t:'Values & Mission',d:'What you stand for and who you serve. These are the principles that guide how you operate.',html:()=>`
   <h3>Core values</h3>
-  ${intro('Think about 2–3 moments in your life and career when you felt especially proud, fulfilled or energized — like you were doing exactly what you were meant to do. What values were present? It also helps to think about experiences that frustrated, disappointed or angered you, and turn those into values.')}
-  ${intro('<b>List 10–15, then narrow down to your top 3–5.</b> These should be genuine values, not aspirational words that simply sound good.')}
-  <div class="vwords">${Array.from({length:15},(_,i)=>F('','values.words.'+i,{aria:'Value '+(i+1),ph:i<4?['Integrity','Communication','Service','Relationships'][i]:''})).join('')}</div>
+  ${intro('A core value is a word that describes <b>how you act</b> — the principles you won’t trade away, even when it costs you a deal. It’s not a goal (“success”, “wealth”) and not a skill (“negotiating”). Your clients should be able to see it in how you work.')}
+  <ol class="v-steps">
+   <li><b>Remember.</b> Think of 2–3 moments in your life or career when you felt proud, fulfilled or energized. What values were you living? Then think of a time you were frustrated or angry — what value was being stepped on?</li>
+   <li><b>Brainstorm 10–15 words.</b> Tap words below that genuinely fit you, or type your own.</li>
+   <li><b>Narrow to your top 3–5.</b> For each word ask: <i>Would I keep this even if it cost me money? Would people who know me well say it describes me?</i> If not, cross it off.</li>
+  </ol>
+  <div class="vbank no-print" id="vbank"></div>
+  <div class="vwords">${Array.from({length:15},(_,i)=>F('','values.words.'+i,{aria:'Value '+(i+1)})).join('')}</div>
+  <p class="fine">Tap a word again to remove it. Your top 3–5 go in the table below.</p>
   <h3>Turn your values into behaviours</h3>
   ${intro('A value isn’t useful if it stays an abstract word. For your 3–5 core values:')}
   <div class="tbl-wrap"><table class="vt"><thead><tr><th style="width:20%">Core value</th><th>What it means</th><th>What it looks like in practice</th></tr></thead>
@@ -1026,14 +1041,14 @@ function renderShell(){
  let last='';
  nav.innerHTML=SECTIONS.map((s,i)=>{ const ph=PHASE_OF[s.id], head=ph!==last?`<div class="ph">${ph}</div>`:''; last=ph;
   return head+`<button type="button" data-go="${s.id}" id="nav-${s.id}"><span class="n">${s.id==="start"?"▸":NUM[s.id]}</span><span class="t">${s.t}</span>${ESSENTIAL.includes(s.id)?'<span class="ess" title="Essential">★</span>':''}</button>`; }).join('')
-  +'<div class="nav-key"><span class="ess">★</span> Essential — start here</div>';
+  +'<div class="nav-key"><span class="ess">★</span> Essential — start here<br><span class="nk-done">✓</span> Started</div>';
  main.innerHTML=SECTIONS.map((s,i)=>`<section class="sec" id="s-${s.id}">
    <div class="sec-h"><div><div class="sec-num">${s.id==="start"?"Welcome":`${PHASE_OF[s.id]} · Step ${NUM[s.id]} of ${NSTEPS}`}${ESSENTIAL.includes(s.id)?' · <span class="ess-t">★ Essential</span>':''}</div><h2>${s.t}</h2><p>${s.d}</p></div></div>
    ${s.html()}
    <div class="sec-foot">${i>0?`<button class="btn btn-line" data-go="${SECTIONS[i-1].id}" type="button">← ${SECTIONS[i-1].t}</button>`:'<span></span>'}
    ${i<SECTIONS.length-1?`<button class="btn btn-red" data-go="${SECTIONS[i+1].id}" type="button">${SECTIONS[i+1].t} →</button>`:'<button class="btn btn-red" id="b-print-sum2" type="button">Print one-page summary</button>'}</div>
  </section>`).join('');
- renderSources();renderSrcCards();renderTasks();renderInits();renderCal();renderPri();renderScore();renderSeason();renderWeek();renderAct();bindMkt();
+ renderSources();renderSrcCards();renderTasks();renderInits();renderCal();renderPri();renderScore();renderSeason();renderVBank();renderWeek();renderAct();bindMkt();
  show(current,false);
 }
 
@@ -1132,6 +1147,11 @@ function renderAct(){
   <td class="no-print"><button class="btn-x" data-del-act="${i}" title="Remove" type="button">×</button></td></tr>`).join('');
  fillAll(el);
 }
+function renderVBank(){
+ const el=document.getElementById('vbank'); if(!el) return;
+ const used=S.values.words.map(w=>String(w||'').trim().toLowerCase());
+ el.innerHTML=VALUE_BANK.map(w=>`<button type="button" class="vchip${used.includes(w.toLowerCase())?' on':''}" data-vw="${esc(w)}">${esc(w)}</button>`).join('');
+}
 function renderSeason(){
  document.getElementById('season').innerHTML=MONTHS.map((m,i)=>`<label>${m}<input type="number" inputmode="decimal" min="0" data-k="season.w.${i}" aria-label="${MONTHS_FULL[i]} pattern"></label>`).join('');
 }
@@ -1161,6 +1181,7 @@ function onField(el){
  if(/^sources\.\d+\.pri$/.test(el.dataset.k)) renderSrcCards();
  if(/^pri\.items\.\d+\.priority$/.test(el.dataset.k)){ renderRyg(); clearTimeout(window.__actT); window.__actT=setTimeout(renderAct,600); }
  if(/^week\.d\./.test(el.dataset.k)) el.dataset.t=v;
+ if(/^values\.words\./.test(el.dataset.k)) renderVBank();
  if(el.dataset.k==='season.lag') setP('season.lag',+v||30);
  if((el.dataset.k==='goals.listShare'||el.dataset.k==='goals.buyShare')&&v!==''){
   const x=Math.min(Math.max(v,0),100), other=el.dataset.k==='goals.listShare'?'goals.buyShare':'goals.listShare';
@@ -1183,6 +1204,9 @@ document.addEventListener('click',e=>{
  if(t.dataset.m){ if(t.dataset.m!==S.goals.method){ const c=calc(); if(t.dataset.m==='units'){ S.goals.listings=c.L; S.goals.buyers=c.B; } if(t.dataset.m==='gci'&&c.gci>0) S.goals.gciGoal=Math.ceil(c.gci/1000)*1000; if(t.dataset.m==='budget'&&!c.hasBudget) toast('Add your personal budget on Your Budget first'); } S.goals.method=t.dataset.m; fillAll(); toggleVis(); recompute(); queueSave(); return; }
  if(t.dataset.calq!==undefined){ calQ=+t.dataset.calq; renderCal(); return; }
  if(t.dataset.ryg){ const [k,q]=t.dataset.ryg.split('.').map(Number); const r=(S.score.rygP[k]||(S.score.rygP[k]={q:[0,0,0,0]})).q; const s=((r[q]||0)+1)%4; r[q]=s; t.dataset.s=s; t.textContent=['—','Red','Yellow','Green'][s]; queueSave(); return; }
+ if(t.dataset.vw){ const w=t.dataset.vw, ws=S.values.words, i=ws.findIndex(x=>String(x||'').trim().toLowerCase()===w.toLowerCase());
+  if(i>=0) ws[i]=''; else { const e=ws.findIndex(x=>!String(x||'').trim()); if(e<0){ toast('All 15 spots are full — clear one first'); return; } ws[e]=w; }
+  fillAll(document.getElementById('s-values')); renderVBank(); recompute(); queueSave(); return; }
  if(t.dataset.delAct!==undefined){ S.act.splice(+t.dataset.delAct,1); renderAct(); queueSave(); return; }
  if(t.dataset.delTask!==undefined){ S.tasks.splice(+t.dataset.delTask,1); renderTasks(); fillAll(document.getElementById('task-body')); queueSave(); return; }
  if(t.dataset.delPri!==undefined){ S.pri.items.splice(+t.dataset.delPri,1); renderPri(); recompute(); queueSave(); return; }
@@ -1559,8 +1583,9 @@ function recompute(){
  // nav progress
  SECTIONS.forEach(s=>{
   const els=[...document.querySelectorAll('#s-'+s.id+' [data-k]')];
-  const filled=els.filter(e=>e.type==='checkbox'?e.checked:e.value!=='').length;
-  const b=document.getElementById('nav-'+s.id); if(b) b.classList.toggle('done',(S.meta.visited||[]).includes(s.id)&&filled>0);
+  const filled=els.filter(e=>{ const k=e.dataset.k, v=getP(k), d=k.split('.').reduce((o,x)=>o==null?undefined:o[x],BLANK);
+   return e.type==='checkbox'?!!v:(v!==''&&v!=null&&String(v)!==String(d==null?'':d)); }).length;
+  const b=document.getElementById('nav-'+s.id); if(b) b.classList.toggle('done',s.id!=='start'&&(S.meta.visited||[]).includes(s.id)&&filled>0);
  });
  if(current==='summary') renderSummary();
 }
