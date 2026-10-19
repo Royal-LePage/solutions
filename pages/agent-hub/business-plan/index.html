@@ -831,7 +831,6 @@ const SECTIONS=[
    <label class="f"><span>Approach</span><select data-k="model.approach"><option value="">Choose…</option><option>Referral-based</option><option>Prospecting-based</option><option>Marketing-based</option><option>Hybrid</option></select></label>
    <label class="f"><span>Full-time / part-time</span><select data-k="model.fulltime"><option value="">Choose…</option><option>Full-time</option><option>Part-time</option></select></label></div>
   <div class="row c4">${F('Geographic market','model.geo',{ph:'e.g. SE Calgary'})}${F('Primary property types','model.types',{ph:'e.g. detached, lake homes'})}${F('Price range','model.price',{ph:'e.g. $500K–$900K'})}${F('Desired working hours','model.hours',{type:'num',hint:'per week'})}</div>
-  <div class="row c2"><div class="f"><span>Desired income <small>set on Your Goal</small></span><div class="netbox" data-o="modelIncome">–</div></div><div class="f"><span>Desired transaction volume <small>set on Your Goal</small></span><div class="netbox" data-o="modelVol">–</div></div></div>
   <div class="row">${T('Does this business model support the life described in my vision?','model.fit',{rows:3})}</div>
   <h3>Target market</h3>
   ${intro('You’ve already identified your ideal client — now turn that into a market strategy.')}
