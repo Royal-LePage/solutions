@@ -670,7 +670,7 @@ function DEFAULT(){
   cx:{experience:'',standard:'',journey:CX_STAGES.map(()=>({need:'',provide:'',comm:'',distinct:''}))},
   brandpos:{want:['','',''],now:['','','']},
   sys:{consistent:'',onlyMe:'',systemize:'',delegate:''},
-  pri:{items:[0,1,2].map(()=>({goal:'',priority:'',why:'',strategy:'',measure:'',target:'',unit:'year',q:['','','','']})),notFocus:''},
+  pri:{items:[0,1,2].map(()=>({goal:'',priority:'',why:'',strategy:'',measure:'',target:'',unit:'year',dir:'up',q:['','','','']})),notFocus:''},
   obj:{primary:'',sec1:'',sec2:''},
   last:{listings:'',buyers:'',avgPrice:'',gci:''},
   reflect:{worked:'',didnt:'',best:'',worst:'',stop:'',start:'',cont:'',waste:''},
@@ -1090,7 +1090,7 @@ const SECTIONS=[
   <div class="tbl-wrap"><table class="sc2"><thead><tr><th rowspan="2">Quarter</th><th colspan="2" class="num">Conversations</th><th colspan="2" class="num">Appointments</th><th colspan="2" class="num">Listings taken</th><th colspan="2" class="num">Business expenses</th></tr>
    <tr><th class="num">Target</th><th>Actual</th><th class="num">Target</th><th>Actual</th><th class="num">Target</th><th>Actual</th><th class="num">Budget</th><th>Actual</th></tr></thead><tbody id="sc2-body"></tbody></table></div>
   <h3>Strategic priority measures</h3>
-  ${intro('Your key measures from <b>Strategic Priorities</b>. Enter the actual total for each quarter. Per-week and per-month targets are compared as an average, so a limit like “3 hours a week on admin” is checked against your weekly average, not a yearly total.')}
+  ${intro('Your key measures from <b>Strategic Priorities</b>. Enter the actual total for each quarter. For per-week or per-month measures, enter your <b>average</b> for the quarter (e.g. 4 hours a week) — year to date shows the average of the quarters you’ve entered. Measures set to “lower is better” (like a limit on admin hours) count as on track when you stay under them.')}
   <div class="tbl-wrap"><table><thead><tr><th>Priority</th><th>Key measure</th><th class="num">Annual target</th><th style="width:90px">Q1</th><th style="width:90px">Q2</th><th style="width:90px">Q3</th><th style="width:90px">Q4</th><th class="num">Year to date</th></tr></thead><tbody id="pm-body"></tbody></table></div>
   <h3>Red · Yellow · Green check-in</h3>
   <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">How is each of your strategic priorities going? Click a cell to cycle through red, yellow and green.</p>
@@ -1199,7 +1199,7 @@ function renderPri(){
  const el=document.getElementById('pri-body'); if(!el) return;
  el.innerHTML=S.pri.items.map((x,i)=>{ const ex=PRI_EX[i]||PRI_EX[4];
   return `<tr>${['goal','priority','why','strategy','measure'].map((k,j)=>`<td><textarea rows="2" data-k="pri.items.${i}.${k}" placeholder="${esc(ex[j])}" aria-label="${k}"></textarea></td>`).join('')}
-  <td><input type="number" inputmode="decimal" min="0" data-k="pri.items.${i}.target" aria-label="Target"><select data-k="pri.items.${i}.unit" aria-label="Target per" style="margin-top:6px"><option value="year">per year</option><option value="month">per month</option><option value="week">per week</option></select></td>
+  <td><input type="number" inputmode="decimal" min="0" data-k="pri.items.${i}.target" aria-label="Target"><select data-k="pri.items.${i}.unit" aria-label="Target per" style="margin-top:6px"><option value="year">per year</option><option value="month">per month</option><option value="week">per week</option></select><select data-k="pri.items.${i}.dir" aria-label="Direction" style="margin-top:6px"><option value="up">higher is better</option><option value="down">lower is better (a limit)</option></select></td>
   <td class="no-print">${S.pri.items.length>1?`<button class="btn-x" data-del-pri="${i}" title="Remove" type="button">×</button>`:''}</td></tr>`; }).join('');
  fillAll(el);
  const ab=document.getElementById('pri-add'); if(ab) ab.style.display=S.pri.items.length>=5?'none':'';
@@ -1209,7 +1209,7 @@ function renderPM(){
  const el=document.getElementById('pm-body'); if(!el) return;
  const rows=S.pri.items.map((x,i)=>[x,i]).filter(([x])=>x.priority||x.measure);
  el.innerHTML=rows.length?rows.map(([x,i])=>`<tr><td><b>${esc(x.priority)||'—'}</b></td><td>${esc(x.measure)||'—'}</td><td class="num">${x.target===''?'–':x.unit==='week'?`${dec(n(x.target))} / week`:x.unit==='month'?`${dec(n(x.target))} / month`:int(n(x.target))}</td>
-  ${[0,1,2,3].map(q=>`<td><input type="number" inputmode="decimal" data-k="pri.items.${i}.q.${q}" aria-label="Q${q+1} actual"></td>`).join('')}<td class="num" data-o="pmY${i}"></td></tr>`).join('')
+  ${[0,1,2,3].map(q=>`<td><input type="number" inputmode="decimal" data-k="pri.items.${i}.q.${q}" aria-label="Q${q+1} actual" placeholder="${x.unit==='week'?'avg / wk':x.unit==='month'?'avg / mo':'total'}"></td>`).join('')}<td class="num" data-o="pmY${i}"></td></tr>`).join('')
   :'<tr><td colspan="8" class="muted">Add your strategic priorities and key measures first.</td></tr>';
  fillAll(el);
 }
@@ -1707,10 +1707,14 @@ function recompute(){
  // primary channel count
  { const np=S.sources.filter(x=>x.pri==='Primary').length, el=document.getElementById('src-pri'); if(el) el.innerHTML=np>=3&&np<=5?`<span class="flag ok">${np} primary</span>`:np<3?`<span class="flag warn">${np} primary — mark at least 3</span>`:`<span class="flag warn">${np} primary — pick your top 5</span>`; }
  // strategic priority measures
- S.pri.items.forEach((x,i)=>{ const filled=x.q.filter(v=>v!==''); const tot=filled.reduce((a,v)=>a+n(v),0); if(!filled.length){ out('pmY'+i,'–'); return; }
-  if(x.unit==='week'||x.unit==='month'){ const per=x.unit==='week'?13:3, avg=tot/(filled.length*per), lbl=x.unit==='week'?'/wk':'/mo';
-   out('pmY'+i,`${dec(avg)}${lbl} avg${x.target!==''&&n(x.target)>0?` · target ${dec(n(x.target))}${lbl}`:''}`); }
-  else out('pmY'+i,x.target!==''&&n(x.target)>0?`${int(tot)} · ${pct(tot/n(x.target))}`:int(tot)); });
+ S.pri.items.forEach((x,i)=>{ const el=document.querySelector(`[data-o="pmY${i}"]`); if(!el) return;
+  const filled=x.q.filter(v=>v!==''), tot=filled.reduce((a,v)=>a+n(v),0), T=x.target!==''?n(x.target):0, down=x.dir==='down';
+  if(!filled.length){ el.textContent='–'; return; }
+  const flag=(ok,good,bad)=>` <span class="flag ${ok?'ok':'warn'}">${ok?good:bad}</span>`;
+  if(x.unit==='week'||x.unit==='month'){ const lbl=x.unit==='week'?'/wk':'/mo', avg=tot/filled.length;
+   el.innerHTML=`${dec(avg)}${lbl} avg${T>0?flag(down?avg<=T:avg>=T,down?'within limit':'on track',down?'over limit':'below target'):''}`; }
+  else { const q=filled.length, onPace=T*q/4;
+   el.innerHTML=T>0?(down?`${int(tot)} of ${int(T)} max${flag(tot<=onPace,'within limit','over pace')}`:`${int(tot)} · ${pct(tot/T)}${flag(tot>=onPace,'on pace','behind pace')}`):int(tot); } });
  // cash flow
  { const tb=document.getElementById('cf-table');
    if(tb){ const y=+S.meta.year||year, hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers0=(c.persAnnual+c.postFix+c.extraSav+c.debtRed+c.rrspFix)/12, pp=c.pR+c.pT;
@@ -1818,7 +1822,7 @@ function renderSummary(){
     ${c.cap&&has?`<dt>Cap reached</dt><dd>${capText(c,true)}</dd>`:''}${c.hasBudget&&has?`<dt>${c.surplus<0?'Over your plan':'Unplanned surplus'}</dt><dd style="color:${c.surplus<0?'var(--bp-red)':'var(--green)'}">${money(Math.abs(c.surplus))}</dd>`:''}</dl></div>
   </div>
   <div class="sum-card mt14"><h4>Quarterly targets</h4>
-   <table class="sum-q"><thead><tr><th></th><th class="num">Closings</th><th class="num">GCI <small style="text-transform:none;letter-spacing:0;font-weight:500">closings × per side</small></th><th class="num">Conversations</th><th class="num">Appointments</th></tr></thead><tbody>${qRows}</tbody></table></div>
+   <table class="sum-q"><thead><tr><th></th><th class="num">Closings</th><th class="num">GCI <small style="text-transform:none;letter-spacing:0;font-weight:500">closings × per side</small></th><th class="num">Conversations</th><th class="num">Appointments</th></tr></thead><tbody>${qRows}</tbody></table>${has&&Math.abs(c.sides*c.gciSide-c.gci)>1?`<p class="fine" style="margin-top:4px">${int(c.sides)} sides × ${money(c.gciSide)} = ${money(c.sides*c.gciSide)} — your ${money(c.gci)} goal rounded up to whole sides.</p>`:''}</div>
   <div class="sum-grid mt14">
    <div class="sum-card"><h4>Activity</h4><dl>
     <dt>Conversations per day</dt><dd>${has?`${dec((c.conv+c.conY)/c.days)} <small class="muted">(${dec(c.conv/c.days)} prospecting · ${dec(c.conY/c.days)} referral)</small>`:'–'}</dd>
