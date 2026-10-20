@@ -374,6 +374,14 @@ h4.sp-h{margin:16px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:upp
 /* Summary */
 .sum-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .sum-card{border:1px solid var(--bp-warm-grey);border-radius:4px;padding:16px}
+.yr-m tr.slow td{background:#F7F5F2}.yr-m tr.capm td:first-child{box-shadow:inset 3px 0 0 var(--bp-red)}.yr-m td.neg{color:var(--bp-red);font-weight:700}.yr-m small{color:var(--bp-dark-grey);font-weight:600}
+.yr-badge{display:inline-block;background:var(--bp-red);color:#fff;font:800 9.5px var(--bp-sans);border-radius:3px;padding:1px 5px;vertical-align:1px}
+.yr-wk{width:100%;border-collapse:collapse;font-size:10px;table-layout:fixed}.yr-wk th{font-size:10px;color:var(--bp-dark-grey);font-weight:700;padding:3px 2px;text-align:center}.yr-wk tbody th{text-align:left;white-space:nowrap;font-size:9px}.yr-wk thead th:first-child{width:56px}
+.yr-wk td{border:1px solid #fff;padding:4px 2px;text-align:center;background:#F7F5F2;border-radius:3px;font-weight:600}
+.yr-wk td.wk-prospect{background:#FDEBEE;color:var(--bp-red);font-weight:800}.yr-wk td.wk-appt{background:#E9E5DF}.yr-wk td.wk-personal,.yr-wk td.wk-off,.yr-wk td.wk-{background:#fff;color:#999}
+.yr-cal{width:100%;border-collapse:collapse;font-size:10.5px;line-height:1.35}.yr-cal td{padding:3px 6px;border-bottom:1px solid var(--bp-light-grey);vertical-align:top}.yr-cal td:first-child{width:34px}
+.sum-card h4.mt{margin-top:12px}.mt14{margin-top:14px}.sum-card p.pre{white-space:pre-wrap}
+.sum-q{width:100%;border-collapse:collapse;font-size:13px}.sum-q th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--bp-dark-grey);font-weight:700;padding:4px 8px;border-bottom:1px solid var(--bp-warm-grey)}.sum-q td{padding:5px 8px;border-bottom:1px solid var(--bp-light-grey)}
 .sum-card h4{margin:0 0 10px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--bp-red)}
 .sum-card dl{display:grid;grid-template-columns:1fr auto;gap:6px 12px;margin:0}
 .sum-card dt{color:var(--bp-dark-grey)}.sum-card dd{margin:0;font-weight:700;text-align:right}
@@ -444,6 +452,24 @@ h4.sp-h{margin:16px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:upp
   body.print-summary #summary [style*="margin-top:14px"]{margin-top:8px!important}
   body.print-summary .sum-card h4{margin:0 0 3px!important}
   body.print-summary .commit .sig{margin-top:14px}
+  body.print-summary .no-print-mission{display:none}
+  .demo-bar{display:none!important}
+  body.print-summary .sum-p2{display:none}
+  .toast{display:none!important}
+  body.print-summary.print-two .sum-p2{display:block;break-before:page;page-break-before:always}
+  body.print-summary .yr-m td,body.print-summary .yr-m th{padding:3px 6px}
+  .yr-m tr.slow td,.yr-wk td,.mkt-tag,.yr-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.print-summary .sum-card dl{grid-template-columns:auto minmax(0,1fr)}
+  body.print-summary .sum-card dt{white-space:nowrap}
+  body.print-summary .commit .sig{gap:14px}
+  body.print-summary .commit .sig div{min-width:0}
+  body.print-summary .sum-card p{margin:0}
+  body.print-summary{font-size:10px}
+  body.print-summary .mt14{margin-top:7px!important}
+  body.print-summary .sum-card h4.mt{margin-top:6px!important}
+  body.print-summary .sum-card dl{gap:2px 10px}
+  body.print-summary .sum-q td,body.print-summary .sum-q th{padding:2px 6px}
+  body.print-summary .sum-card ol{margin:0;padding-left:16px}
   input,textarea,select{border:0;border-bottom:1px solid #ccc;border-radius:0;padding:3px 0;resize:none}
   .print-only{display:block}
   ::placeholder{color:transparent}
@@ -535,6 +561,7 @@ h4.sp-h{margin:16px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:upp
         <details class="more" id="more"><summary class="btn btn-ghost btn-sm">More ▾</summary>
          <div class="more-menu">
           <label>Plan year<select id="year-sel" aria-label="Plan year"></select></label>
+          <button type="button" id="b-print-two">Print summary + year at a glance</button>
           <button type="button" id="b-sample">Show a sample plan <small>doesn’t save</small></button>
           <button type="button" id="b-export">Export a copy</button>
           <button type="button" id="b-import">Import a copy</button>
@@ -1109,7 +1136,7 @@ function renderShell(){
    <div class="need" id="need-${s.id}" hidden></div>
    ${s.html()}
    <div class="sec-foot">${i>0?`<button class="btn btn-line" data-go="${SECTIONS[i-1].id}" type="button">← ${SECTIONS[i-1].t}</button>`:'<span></span>'}
-   ${i<SECTIONS.length-1?`<button class="btn btn-red" data-go="${SECTIONS[i+1].id}" type="button">${SECTIONS[i+1].t} →</button>`:'<button class="btn btn-red" id="b-print-sum2" type="button">Print one-page summary</button>'}</div>
+   ${i<SECTIONS.length-1?`<button class="btn btn-red" data-go="${SECTIONS[i+1].id}" type="button">${SECTIONS[i+1].t} →</button>`:'<span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-line" id="b-print-two" type="button">Print summary + year at a glance</button><button class="btn btn-red" id="b-print-sum2" type="button">Print one-page summary</button></span>'}</div>
  </section>`).join('');
  renderSources();renderSrcCards();renderTasks();renderInits();renderCal();renderPri();renderScore();renderSeason();renderVBank();renderWeek();renderAct();bindMkt();
  show(current,false);
@@ -1288,7 +1315,8 @@ document.addEventListener('click',e=>{ const mo=document.getElementById('more');
   case 'season-reset': S.season.w=SEASON_W.slice(); S.season.lag=30; fillAll(document.getElementById('s-season')); recompute(); queueSave(); break;
   case 'use-budget': { const c=calc(); if(c.needs<=0){ toast('Add your personal budget on the Budget & Finances page first'); break; } S.goals.netGoal=Math.round(c.needs); fillAll(); recompute(); queueSave(); toast('Take-home goal set to '+money(c.needs)); break; }
   case 'cal-fill': { let k=0; S.cal.forEach((m,i)=>CAL_ROWS.forEach(([r])=>{ if(!m[r]&&IDEAS[r][i]){ m[r]=IDEAS[r][i]; k++; } })); renderCal(); recompute(); queueSave(); toast(k?`Added ${k} suggestions — edit any of them`:'Every cell already has something in it'); break; }
-  case 'b-print-sum': case 'b-print-sum2': renderSummary(); document.body.classList.add('print-summary'); window.print(); break;
+  case 'b-print-sum': case 'b-print-sum2': renderSummary(); document.body.classList.remove('print-two'); document.body.classList.add('print-summary'); window.print(); break;
+  case 'b-print-two': renderSummary(); document.body.classList.add('print-summary','print-two'); window.print(); break;
   case 'b-print-full': renderSummary(); document.body.classList.remove('print-summary'); window.print(); break;
   case 'b-export': exportPlan(); break;
   case 'b-import': document.getElementById('import-file').click(); break;
@@ -1301,7 +1329,7 @@ document.addEventListener('click',e=>{ const mo=document.getElementById('more');
   case 'g-btn': signIn(); break;
  }
 });
-window.addEventListener('afterprint',()=>document.body.classList.remove('print-summary'));
+window.addEventListener('afterprint',()=>document.body.classList.remove('print-summary','print-two'));
 window.addEventListener('beforeprint',()=>{ if(C) drawMkt(C); document.querySelectorAll('details.deeper').forEach(d=>{ d.dataset.wasOpen=d.open?'1':''; d.open=true; }); renderSummary(); document.querySelectorAll('textarea').forEach(t=>{t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px';}); });
 window.addEventListener('afterprint',()=>{ document.querySelectorAll('textarea').forEach(t=>t.style.height=''); document.querySelectorAll('details.deeper').forEach(d=>{ d.open=!!d.dataset.wasOpen; }); });
 
@@ -1731,38 +1759,78 @@ function psClean(ps){
   proof:strip(ps.proof,/^because\s+/i), outcome:strip(ps.outcome,/^(so\s+)?(that\s+)?(they\s+can)\s+/i)};
 }
 function agentName(){ return (S.vision&&S.vision.name)||''; }
+function cashBal(c){ const hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers0=(c.persAnnual+c.postFix+c.extraSav+c.debtRed+c.rrspFix+c.resTop)/12, pp=c.pR+c.pT;
+ let bal=c.reserves; return MONTHS.map((x,m)=>{ const nt=c.monthNet[m]||0; bal+=nt-nt*hold-biz-pers0-pp*Math.max(nt,0); return bal; }); }
+function renderYearPage(c){
+ const has=c.gci>0, d=mcData(c), bal=cashBal(c), low=Math.min(...bal), lowM=bal.indexOf(low), capM=c.cap&&c.caps.length?c.caps[0].m:-1;
+ const rows=MONTHS.map((mo,i)=>{ const tag=seasonTag(SEASON_W[i]), cls=[tag==='slow'?'slow':'',i===capM?'capm':'',i===lowM&&has?'lowm':''].join(' ');
+  return `<tr class="${cls}"><td><b>${MONTHS_FULL[i]}</b> <span class="mkt-tag ${tag}">${SEASON_TAGS[tag]}</span>${i===capM?' <span class="yr-badge">CAP</span>':''}</td><td class="num">${has?dec(d.firm[i]):'–'}</td><td class="num">${has?dec(d.close[i]):'–'}</td><td class="num">${has?money(c.monthNet[i]):'–'}</td><td class="num${bal[i]<0?' neg':''}">${has?money(bal[i]):'–'}${i===lowM&&has?' <small>lowest</small>':''}</td></tr>`; }).join('');
+ const ab={prospect:'Prosp',appt:'Appt',client:'Client',admin:'Admin',mktg:'Mktg',learn:'Learn',personal:'Family',off:'Off'};
+ const wk=`<table class="yr-wk"><thead><tr><th></th>${WEEK_DAYS.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${WEEK_SLOTS.map((sl,j)=>`<tr><th>${sl}</th>${WEEK_DAYS.map((x,i)=>{const v=(S.week.d[i]||{s:[]}).s[j]||'';return `<td class="wk-${v}">${ab[v]||''}</td>`;}).join('')}</tr>`).join('')}</tbody></table>`;
+ const anyWk=S.week.d.some(r=>r.s.some(Boolean));
+ const cal=MONTHS.map((mo,i)=>{ const m=S.cal[i]||{}, bits=[['call','Call'],['popby','Pop-by'],['event','Event']].filter(([k])=>m[k]).map(([k,l])=>`<b>${l}:</b> ${esc(m[k])}`); return bits.length?`<tr><td><b>${mo}</b></td><td>${bits.join(' · ')}</td></tr>`:''; }).join('');
+ return `<div class="sum-p2">
+  <div class="print-only" style="border-bottom:3px solid var(--bp-red);padding-bottom:6px;margin-bottom:10px"><div style="font-size:18px;font-weight:800">${esc(agentName())}${agentName()?' — ':''}${S.meta.year} · My year at a glance</div></div>
+  <h3 class="no-print" style="margin-top:28px">Page 2 · My year at a glance <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— optional when printing</small></h3>
+  <div class="sum-card"><h4>Month by month</h4>
+   <table class="sum-q yr-m"><thead><tr><th>Month</th><th class="num">Deals to go firm</th><th class="num">Closings (paid)</th><th class="num">Net commission</th><th class="num">Cash balance</th></tr></thead><tbody>${rows}</tbody></table>
+   <p class="fine" style="margin-top:6px">Slow months are shaded; the red bar marks the month you cap. Cash balance starts from your reserves today and follows your full spending plan.${has&&low<0?` <b style="color:var(--bp-red)">Your balance dips below zero in ${MONTHS_FULL[lowM]}.</b>`:''}</p></div>
+  <div class="sum-grid mt14">
+   <div class="sum-card"><h4>My ideal week</h4>${anyWk?wk:'<p class="muted">Not filled in yet — set it up on Ideal Week.</p>'}</div>
+   <div class="sum-card"><h4>Touch calendar</h4>${cal?`<table class="yr-cal"><tbody>${cal}</tbody></table>`:'<p class="muted">Not filled in yet — plan it on Touch Calendar.</p>'}</div>
+  </div></div>`;
+}
 function renderSummary(){
  const c=C||calc(), v=S.vision, el=document.getElementById('summary'); if(!el) return;
- const t=x=>x?esc(x):'<span class="muted">Not filled in yet</span>';
+ const t=x=>x?esc(x):'<span class="muted">Not filled in yet</span>', has=c.gci>0, m=x=>has?money(x):'–';
  const ps=psClean(S.pos.ps), psTxt=(ps.client&&ps.value)?`For ${esc(ps.client)}, I am the real estate professional who ${esc(ps.value)}${ps.proof?` because ${esc(ps.proof)}`:''}${ps.outcome?`, so they can ${esc(ps.outcome)}`:''}.`:'';
  const vals=S.values.core.map(x=>x.v).filter(Boolean);
  const pris=S.pri.items.filter(x=>x.priority||x.measure);
  const prim=S.sources.filter(x=>x.pri==='Primary');
- const who=agentName(), acts=(S.act||[]).filter(a=>a.what).slice(0,6);
+ const who=agentName(), acts=(S.act||[]).filter(a=>a.what).slice(0,5);
+ // quarterly targets
+ const qRows=[0,1,2,3].map(q=>{ const g=c.monthG[q*3]+c.monthG[q*3+1]+c.monthG[q*3+2]; return `<tr><td><b>Q${q+1}</b></td><td class="num">${has?dec(c.qs[q]):'–'}</td><td class="num">${has?money(g):'–'}</td><td class="num">${has?int((c.conv+c.conY)/4):'–'}</td><td class="num">${has?dec((c.lAp+c.bCo)/4):'–'}</td></tr>`; }).join('');
+ // every-cheque rule (share of a typical commission cheque)
+ const gh=n(S.goals.gstHold)/100, xt=n(S.alloc.tax)/100, bizSh=c.netComm>0?Math.min(c.bizAnnual/c.netComm,1):0;
+ const parts=[[c.t+xt,'tax'],[gh,'GST'],[c.pR,'RRSP'],[c.pT,'TFSA'],[bizSh,'business']].filter(x=>x[0]>0.004);
+ const pay=1.05-gh-c.t-xt-c.pR-c.pT-bizSh;
+ const chq=has&&c.gciSide>0?`From each cheque: ${parts.map(([p,l])=>`<b>${pct(p)}</b> ${l}`).join(' · ')} · the rest (about <b>${pct(Math.max(pay,0))}</b>) is your pay.`:t('');
+ // database
+ const dbt=DB_GRADES.reduce((a,[k])=>a+n(S.db[k]),0), dbStr=dbt?DB_GRADES.filter(([k])=>['ap','a','b','c'].includes(k)).map(([k,g])=>`${int(n(S.db[k]))} ${g}`).join(' · '):'';
  el.innerHTML=`
-  <div class="print-only" style="border-bottom:3px solid var(--bp-red);padding-bottom:8px;margin-bottom:14px"><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#666;font-weight:700">Royal LePage Solutions</div><div style="font-size:22px;font-weight:800">${esc(who)}${who?' — ':''}${S.meta.year} Business Plan</div></div>
+  <div class="print-only" style="border-bottom:3px solid var(--bp-red);padding-bottom:8px;margin-bottom:12px"><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#666;font-weight:700">Royal LePage Solutions</div><div style="font-size:21px;font-weight:800">${esc(who)}${who?' — ':''}${S.meta.year} Business Plan</div>${v.mission?`<div style="font-size:12px;color:#444;margin-top:3px">${esc(v.mission)}</div>`:''}</div>
   <div class="sum-grid">
-   <div class="sum-card"><h4>1-year goals</h4><p>${t(v.one)}</p><h4 style="margin-top:12px">90-day priorities</h4><p>${t(v.ninety)}</p></div>
-   <div class="sum-card"><h4>Positioning</h4><p style="font-weight:600">${psTxt||t('')}</p><h4 style="margin-top:12px">Core values</h4><p>${vals.length?vals.map(esc).join(' · '):t('')}</p></div>
+   <div class="sum-card"><h4>1-year goals</h4><p class="pre">${t(v.one)}</p><h4 class="mt">90-day priorities</h4><p class="pre">${t(v.ninety)}</p></div>
+   <div class="sum-card"><h4>Positioning</h4><p style="font-weight:600">${psTxt||t('')}</p><h4 class="mt">Core values</h4><p>${vals.length?vals.map(esc).join(' · '):t('')}</p>
+    <div class="no-print-mission"><h4 class="mt">Mission</h4><p>${t(v.mission)}</p></div></div>
    <div class="sum-card"><h4>Strategic priorities</h4>${pris.length?`<ol>${pris.map(x=>`<li><b>${esc(x.priority)}</b>${x.measure?` — ${esc(x.measure)}${x.target!==''?`: ${int(n(x.target))}`:''}`:''}</li>`).join('')}</ol>`:t('')}
-    ${S.pri.notFocus?`<h4 style="margin-top:12px">Not focusing on</h4><p>${esc(S.pri.notFocus)}</p>`:''}</div>
+    ${S.pri.notFocus?`<h4 class="mt">Not focusing on</h4><p>${esc(S.pri.notFocus)}</p>`:''}</div>
    <div class="sum-card"><h4>The numbers</h4><dl>
-    <dt>GCI goal</dt><dd>${money(c.gci)}</dd><dt>Net income after deductions &amp; expenses</dt><dd>${money(c.profit)}</dd><dt>Closed sides</dt><dd>${int(c.sides)} (${int(c.L)} listings / ${int(c.B)} buyers)</dd>
-    ${c.minGci?`<dt>Minimum GCI (non-negotiables)</dt><dd>${money(c.minGci)}</dd>`:''}<dt>Take-home after tax</dt><dd>${money(c.takeHome)}</dd>${c.cap?`<dt>Cap reached</dt><dd>${capText(c,true)}</dd>`:''}${c.hasBudget?`<dt>Budget surplus</dt><dd style="color:${c.surplus<0?'var(--bp-red)':'var(--green)'}">${money(c.surplus)}</dd>`:''}</dl></div>
+    <dt>GCI goal</dt><dd>${m(c.gci)}</dd>${c.minGci?`<dt>Minimum GCI <small class="muted">non-negotiables</small></dt><dd>${money(c.minGci)}</dd>`:''}
+    <dt>Closed sides</dt><dd>${has?`${int(c.sides)} <small class="muted">(${int(c.L)} listings / ${int(c.B)} buyers)</small>`:'–'}</dd>
+    <dt>Net income <small class="muted">after expenses</small></dt><dd>${m(c.profit)}</dd><dt>Take-home after tax</dt><dd>${m(c.takeHome)}</dd>
+    ${c.cap&&has?`<dt>Cap reached</dt><dd>${capText(c,true)}</dd>`:''}${c.hasBudget&&has?`<dt>${c.surplus<0?'Over your plan':'Unplanned surplus'}</dt><dd style="color:${c.surplus<0?'var(--bp-red)':'var(--green)'}">${money(Math.abs(c.surplus))}</dd>`:''}</dl></div>
   </div>
-  <div class="sum-card" style="margin-top:14px"><h4>Closings by month</h4><div class="sum-months">${c.months.map((u,i)=>`<div>${MONTHS[i]}<b>${u}</b></div>`).join('')}</div></div>
-  <div class="sum-grid" style="margin-top:14px">
+  <div class="sum-card mt14"><h4>Quarterly targets</h4>
+   <table class="sum-q"><thead><tr><th></th><th class="num">Closings</th><th class="num">GCI</th><th class="num">Conversations</th><th class="num">Appointments</th></tr></thead><tbody>${qRows}</tbody></table></div>
+  <div class="sum-grid mt14">
    <div class="sum-card"><h4>Activity</h4><dl>
-    <dt>Conversations per day</dt><dd>${dec((c.conv+c.conY)/c.days)} <small class="muted">(${dec(c.conv/c.days)} prospecting · ${dec(c.conY/c.days)} referral)</small></dd>
-    <dt>Listing appointments per month</dt><dd>${dec(c.lAp/12)}</dd><dt>Buyer consultations per month</dt><dd>${dec(c.bCo/12)}</dd></dl></div>
-   <div class="sum-card"><h4>Primary lead channels</h4>${prim.length?`<p>${prim.map(x=>esc(x.name)).join(' · ')}</p>`:t('')}
-    <h4 style="margin-top:12px">Mission</h4><p>${t(v.mission)}</p></div>
+    <dt>Conversations per day</dt><dd>${has?`${dec((c.conv+c.conY)/c.days)} <small class="muted">(${dec(c.conv/c.days)} prospecting · ${dec(c.conY/c.days)} referral)</small>`:'–'}</dd>
+    <dt>Referral contacts per month</dt><dd>${has?int(c.conY/12):'–'}</dd>
+    <dt>Appointments per month</dt><dd>${has?`${dec(c.lAp/12)} listing · ${dec(c.bCo/12)} buyer`:'–'}</dd>
+    <dt>Database</dt><dd>${dbt?`${int(dbt)} <small class="muted">(${dbStr})</small>`:'<span class="muted">–</span>'}</dd>
+    <dt>Primary lead channels</dt><dd>${prim.length?prim.map(x=>esc(x.name)).join(' · '):'<span class="muted">–</span>'}</dd></dl></div>
+   <div class="sum-card"><h4>Money at a glance</h4><dl>
+    <dt>Marketing budget</dt><dd>${c.mktgTotal?money(c.mktgTotal):'–'}${has&&c.mktgTotal?` <small class="muted">(${pct(c.mktgTotal/c.gci)} of GCI)</small>`:''}</dd>
+    <dt>Savings this year</dt><dd>${c.rrsp+c.post+c.debtRed+c.resTop?money(c.rrsp+c.post+c.debtRed+c.resTop):'–'}</dd>
+    <dt>Cash reserve</dt><dd>${c.resTarget?`${money(c.reserves)} of ${money(c.resTarget)}`:money(c.reserves)}</dd></dl>
+    <h4 class="mt">Every cheque</h4><p>${chq}</p></div>
   </div>
-  ${acts.length||S.acc.partner?`<div class="sum-grid" style="margin-top:14px">
+  <div class="sum-grid mt14">
    <div class="sum-card"><h4>Next 90 days</h4>${acts.length?`<ol>${acts.map(a=>`<li>${esc(a.what)}${a.due?` <small class="muted">· ${esc(a.due)}</small>`:''}${a.owner&&a.owner!=='Me'?` <small class="muted">· ${esc(a.owner)}</small>`:''}</li>`).join('')}</ol>`:t('')}</div>
-   <div class="sum-card"><h4>Accountability</h4><p>${S.acc.partner?`<b>${esc(S.acc.partner)}</b>${S.acc.cadence?` · ${esc(S.acc.cadence.toLowerCase())}`:''}${S.acc.first?` · first meeting ${esc(S.acc.first)}`:''}`:t('')}</p></div></div>`:''}
-  <div class="sum-card commit" style="margin-top:14px"><h4>My commitment</h4><p>${t(v.commitment)}</p>
-   <div class="sig"><div><span></span>Signature</div><div><span></span>Date</div>${S.acc.partner?`<div><span></span>${esc(S.acc.partner)} (accountability partner)</div>`:''}</div></div>`;
+   <div class="sum-card commit"><h4>My commitment</h4><p>${t(v.commitment)}</p>${S.acc.partner?`<p class="muted" style="margin-top:4px">Accountability: <b>${esc(S.acc.partner)}</b>${S.acc.cadence?` · ${esc(S.acc.cadence.toLowerCase())}`:''}${S.acc.first?` · first meeting ${esc(S.acc.first)}`:''}</p>`:''}
+    <div class="sig"><div><span></span>Signature</div><div><span></span>Date</div>${S.acc.partner?`<div><span></span>${esc(S.acc.partner)}</div>`:''}</div></div>
+  </div>`+renderYearPage(c);
 }
 
 /* ---------------------------------------------------------------
