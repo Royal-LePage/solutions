@@ -670,7 +670,7 @@ function DEFAULT(){
   cx:{experience:'',standard:'',journey:CX_STAGES.map(()=>({need:'',provide:'',comm:'',distinct:''}))},
   brandpos:{want:['','',''],now:['','','']},
   sys:{consistent:'',onlyMe:'',systemize:'',delegate:''},
-  pri:{items:[0,1,2].map(()=>({goal:'',priority:'',why:'',strategy:'',measure:'',target:'',q:['','','','']})),notFocus:''},
+  pri:{items:[0,1,2].map(()=>({goal:'',priority:'',why:'',strategy:'',measure:'',target:'',unit:'year',q:['','','','']})),notFocus:''},
   obj:{primary:'',sec1:'',sec2:''},
   last:{listings:'',buyers:'',avgPrice:'',gci:''},
   reflect:{worked:'',didnt:'',best:'',worst:'',stop:'',start:'',cont:'',waste:''},
@@ -930,7 +930,7 @@ const SECTIONS=[
   <div id="swot-recap"></div>
   <h3>My strategic priorities</h3>
   ${intro('Based on your goals and your SWOT, what <b>3–5 areas</b> need the most focus? Your key measures carry over to the quarterly scorecard.')}
-  <div class="tbl-wrap"><table class="pri"><thead><tr><th>Goal</th><th>Strategic priority</th><th>Why is this critical?</th><th>Strategy</th><th>Key measure</th><th style="width:110px">Annual target</th><th class="no-print"></th></tr></thead><tbody id="pri-body"></tbody></table></div>
+  <div class="tbl-wrap"><table class="pri"><thead><tr><th>Goal</th><th>Strategic priority</th><th>Why is this critical?</th><th>Strategy</th><th>Key measure</th><th style="width:150px">Target</th><th class="no-print"></th></tr></thead><tbody id="pri-body"></tbody></table></div>
   <button class="btn btn-line btn-sm no-print" id="pri-add" type="button" style="margin-top:10px">+ Add priority</button>
   <h3>What will I deliberately NOT focus on this year?</h3>
   ${intro('Strategy isn’t just deciding what you’re going to do. It’s also deciding what you’re <b>not</b> going to do.')}
@@ -958,6 +958,7 @@ const SECTIONS=[
   <h3>Your commission plan &amp; deductions</h3>
   <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Enter your plan with the brokerage — these match the deduction summary on your deal statement. Deductions are calculated over one cap year, starting at $0 on your cap anniversary (January if you leave it blank). Not sure of your numbers? Ask the office. Leave the cap blank if you don’t have one.</p>
   <div class="row c4" style="align-items:start"><div class="f"><span>Brokerage split <small>until you cap</small></span><select id="split-sel" aria-label="Brokerage split"><option value="">Choose…</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="custom">Custom…</option></select><div id="split-custom" style="margin-top:8px">${F('','goals.split',{type:'pct',aria:'Custom brokerage split',ph:'Enter your split, e.g. 25'})}</div></div>${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}${F('Cap anniversary','goals.capDate',{type:'date',hint:'when your cap resets'})}<div class="f"><span>Your cap year</span><div class="netbox" data-o="cyBox">–</div></div></div>
+  <div class="row c4" id="cap-paid-wrap" style="display:none">${F('Cap paid so far','goals.capPaid',{type:'money',hint:'in the cap year you’re in on Jan 1'})}<p class="fine" style="grid-column:span 3;align-self:center">Your cap year starts partway through the plan year, so January to <b data-o="capPrevName"></b> deals still count toward your current cap year. Enter what you’ll have paid toward your cap by January 1 — leave it blank if you’re not sure.</p></div>
   <div class="row c4">${F('Deal fee per side','goals.dealFee',{type:'money',hint:'blank = none'})}
    <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></label>
    ${F('Donation per deal','goals.don',{type:'money',hint:'DON'})}
@@ -993,6 +994,7 @@ const SECTIONS=[
   <div class="res c3">${RC('RLP franchise fee','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('Deduction period','cyCard')}</div>
   <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
   <h3>What’s left after your non-negotiables</h3>
+  <p class="fine" style="margin:-4px 0 10px">Your income tax holdback is money set aside, not your final tax bill. Business costs like marketing, an assistant and coaching are generally tax-deductible, so your actual tax may come in lower — check with your accountant before cutting marketing you can afford.</p>
   ${intro('At your goal, here’s what your commission covers first — and what’s left for you to plan with.')}
   <div class="tbl-wrap"><table class="wf" id="left-wf"></table></div>
   <h3>Your spending plan</h3>
@@ -1009,7 +1011,7 @@ const SECTIONS=[
   </div>
   <div class="tbl-wrap" style="margin-top:14px"><table class="wf" id="plan-wf"></table></div>
   <div data-o-html="budFlag"></div>
-  <div class="res c3">${RC('Net income <small>after business expenses</small>','profitBox')}${RC('Take-home after tax & RRSP','takeHome')}${RC('Months of reserves','reserveMonths')}</div>
+  <div class="res c3">${RC('Net income <small>after business expenses</small>','profitBox')}${RC('Take-home after tax & RRSP','takeHome')}${RC('Months of reserves <small>non-negotiables, after this year’s top-up</small>','reserveMonths')}</div>
   <h3>What to do with every cheque</h3>
   ${intro('Open separate accounts for business, tax and savings. Every time a cheque comes in, move the money right away — then pay yourself from what’s left.')}
   <div class="tbl-wrap"><table class="wf" id="chq-wf"></table></div>
@@ -1076,7 +1078,7 @@ const SECTIONS=[
   <div class="dbg">${DB_GRADES.map(([k,g,l])=>`<label class="f"><span><b class="grade">${g}</b> ${l}</span><input data-k="db.${k}" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></label>`).join('')}</div>
   <div class="row c4">${F('New contacts you’ll add per month','db.add',{type:'num'})}</div>
   <div id="db-check"></div>
-  ${tip('<b>What counts as a contact:</b> a real voice-to-voice or face-to-face conversation where you ask for a referral. Likes, emails and mailers don’t count. A simple way to stay on pace: reach out to 5 people every day across 3 channels — calls, DMs and in person.')}
+  ${tip('<b>What counts as a contact:</b> a real voice-to-voice or face-to-face conversation where you ask for a referral. Likes, emails and mailers don’t count. Your plan needs about <b data-o="refDayTip">–</b> referral conversations a working day — calls, DMs and in person all count.')}
  `},
  {id:'score',t:'Quarterly Scorecard',d:'Annual → quarterly → monthly. Sit down once a quarter, enter your actuals, and grade each part of your business.',html:()=>`
   <h3>Quarterly results</h3>
@@ -1195,15 +1197,16 @@ function renderPri(){
  const el=document.getElementById('pri-body'); if(!el) return;
  el.innerHTML=S.pri.items.map((x,i)=>{ const ex=PRI_EX[i]||PRI_EX[4];
   return `<tr>${['goal','priority','why','strategy','measure'].map((k,j)=>`<td><textarea rows="2" data-k="pri.items.${i}.${k}" placeholder="${esc(ex[j])}" aria-label="${k}"></textarea></td>`).join('')}
-  <td><input type="number" inputmode="decimal" min="0" data-k="pri.items.${i}.target" aria-label="Annual target"></td>
+  <td><input type="number" inputmode="decimal" min="0" data-k="pri.items.${i}.target" aria-label="Target"><select data-k="pri.items.${i}.unit" aria-label="Target per" style="margin-top:6px"><option value="year">per year</option><option value="month">per month</option><option value="week">per week</option></select></td>
   <td class="no-print">${S.pri.items.length>1?`<button class="btn-x" data-del-pri="${i}" title="Remove" type="button">×</button>`:''}</td></tr>`; }).join('');
  fillAll(el);
  const ab=document.getElementById('pri-add'); if(ab) ab.style.display=S.pri.items.length>=5?'none':'';
 }
+const PER={year:1,month:12,week:52}; const annualT=x=>x.target===''?'':n(x.target)*(PER[x.unit]||1);
 function renderPM(){
  const el=document.getElementById('pm-body'); if(!el) return;
  const rows=S.pri.items.map((x,i)=>[x,i]).filter(([x])=>x.priority||x.measure);
- el.innerHTML=rows.length?rows.map(([x,i])=>`<tr><td><b>${esc(x.priority)||'—'}</b></td><td>${esc(x.measure)||'—'}</td><td class="num">${x.target!==''?int(n(x.target)):'–'}</td>
+ el.innerHTML=rows.length?rows.map(([x,i])=>`<tr><td><b>${esc(x.priority)||'—'}</b></td><td>${esc(x.measure)||'—'}</td><td class="num">${x.target!==''?`${int(annualT(x))}${x.unit&&x.unit!=='year'?` <small class="muted">(${int(n(x.target))}/${x.unit==='month'?'mo':'wk'})</small>`:''}`:'–'}</td>
   ${[0,1,2,3].map(q=>`<td><input type="number" inputmode="decimal" data-k="pri.items.${i}.q.${q}" aria-label="Q${q+1} actual"></td>`).join('')}<td class="num" data-o="pmY${i}"></td></tr>`).join('')
   :'<tr><td colspan="8" class="muted">Add your strategic priorities and key measures first.</td></tr>';
  fillAll(el);
@@ -1375,53 +1378,40 @@ function capInfo(){
  return {cap, annM, hasDate:!!(d&&!isNaN(d)), fee:Math.max(n(g.dealFee),0), feeAfter:g.feeMode==='after', feeCap:g.feeMode==='cap', paid0:Math.max(n(g.capPaid),0),
   rlpPct:0.01, rlpMax:1525, perDeal:Math.max(n(g.don),0)};
 }
-/* Commission engines. Everything is calculated over ONE cap year: the 12 months
-   starting on the agent's cap anniversary (January if none is set), starting from
-   $0 paid toward the cap and the RLP maximum. Months after December follow this
-   plan's monthly pattern. Results are stored by calendar month for display. */
-function engine(sides,gciSide,splitPct){
- const ci=capInfo(), months=distribute(sides,closeW()), start=ci.hasDate?ci.annM:0;
- let paid=0, capped=false, split=0, fees=0, net=0, sideNo=0, rlp=0, other=0, capTot=0; const caps=[];
- const monthNet=new Array(12).fill(0);
- for(let j=0;j<12;j++){
-  const m=(start+j)%12, u=months[m];
-  for(let i=0;i<u;i++){
-   sideNo++;
-   let sp=gciSide*splitPct, fee=ci.fee;
-   const wasCapped=capped;
-   if(ci.cap>0){
-    if(capped){ sp=0; if(ci.feeCap) fee=0; }
-    else{ const charge=sp+(ci.feeCap?fee:0), room=ci.cap-paid;
-     if(charge>0&&charge>=room-0.005){ const k=room/charge; sp*=k; if(ci.feeCap) fee*=k; paid=ci.cap; capped=true; caps.push({m,j,side:sideNo}); capTot+=room; }
-     else{ paid+=charge; capTot+=charge; } }
-   }
-   if(ci.feeAfter) fee=wasCapped?ci.fee:0;
-   const rf=Math.max(Math.min(gciSide*ci.rlpPct,ci.rlpMax-rlp),0);
-   split+=sp; fees+=fee; rlp+=rf; other+=ci.perDeal; const nt=gciSide-sp-fee-rf-ci.perDeal; net+=nt; monthNet[m]+=nt;
-  }
- }
- return {months,monthG:months.map(u=>u*gciSide),split,fees,rlp,other,capTot,net,caps,monthNet,start,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:-1};
-}
-/* Dollar-based version used with a GCI goal: the goal is spread across the months
-   exactly (no rounding to whole deals); deal fees are charged per fractional side. */
-function engineG(gciTotal,gciSide,splitPct,sidesWhole){
- const ci=capInfo(), w=closeW(), tw=w.reduce((a,b)=>a+b,0)||1, start=ci.hasDate?ci.annM:0;
- const monthG=w.map(x=>gciTotal*x/tw);
- let paid=0, capped=false, split=0, fees=0, net=0, cumG=0, rlp=0, other=0, capTot=0; const caps=[], monthNet=new Array(12).fill(0);
- for(let j=0;j<12;j++){
-  const m=(start+j)%12, gm=monthG[m], mSides=gciSide>0?gm/gciSide:0;
+/* Commission engine. Walks the plan's calendar year (Jan–Dec). The cap follows the agent's
+   cap year: months before the anniversary belong to the cap year already in progress
+   (starting from "cap paid so far"); at the anniversary the cap resets to $0.
+   Deal fees and donations are charged per side, spread so the year adds up to the whole
+   number of sides in the plan. The RLP franchise fee maximum is per plan year. */
+function runYear(monthG,monthS,gciSide,splitPct){
+ const ci=capInfo(), ann=ci.hasDate?ci.annM:0;
+ let paid=ann>0?Math.min(ci.paid0,ci.cap>0?ci.cap:ci.paid0):0, capped=ci.cap>0&&ann>0&&paid>=ci.cap-0.005;
+ let split=0, fees=0, net=0, cumS=0, rlp=0, other=0, capTot=0; const caps=[], monthNet=new Array(12).fill(0);
+ for(let m=0;m<12;m++){
+  if(ann>0&&m===ann){ paid=0; capped=false; }
+  const gm=monthG[m]||0, mSides=monthS[m]||0;
   let sp=gm*splitPct, fee=ci.fee*mSides, pre=1;
   if(ci.cap>0){
    if(capped){ sp=0; pre=0; if(ci.feeCap) fee=0; }
    else{ const charge=sp+(ci.feeCap?fee:0), room=ci.cap-paid;
-    if(charge>0&&charge>=room-0.005){ pre=room/charge; sp*=pre; if(ci.feeCap) fee*=pre; paid=ci.cap; capped=true; caps.push({m,j,side:Math.max(1,Math.ceil((cumG+gm*pre)/gciSide-1e-9))}); capTot+=room; }
+    if(charge>0&&charge>=room-0.005){ pre=room/charge; sp*=pre; if(ci.feeCap) fee*=pre; paid=ci.cap; capped=true; caps.push({m,cy:ann>0&&m<ann?'prev':'cur',side:Math.max(1,Math.ceil(cumS+mSides*pre-1e-9))}); capTot+=room; }
     else{ paid+=charge; capTot+=charge; } }
   }
   if(ci.feeAfter) fee=ci.cap>0?ci.fee*mSides*(1-pre):0;
   const rf=Math.max(Math.min(gm*ci.rlpPct,ci.rlpMax-rlp),0), oth=ci.perDeal*mSides;
-  split+=sp; fees+=fee; rlp+=rf; other+=oth; const nt=gm-sp-fee-rf-oth; net+=nt; monthNet[m]=nt; cumG+=gm;
+  split+=sp; fees+=fee; rlp+=rf; other+=oth; const nt=gm-sp-fee-rf-oth; net+=nt; monthNet[m]=nt; cumS+=mSides;
  }
- return {months:distribute(sidesWhole,closeW()),monthG,split,fees,rlp,other,capTot,net,caps,monthNet,start,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:-1};
+ return {monthG,monthS,split,fees,rlp,other,capTot,net,caps,monthNet,start:ann,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:ann>0?ann:-1};
+}
+function engine(sides,gciSide,splitPct){
+ const months=distribute(sides,closeW()); const E=runYear(months.map(u=>u*gciSide),months,gciSide,splitPct); E.months=months; return E;
+}
+/* GCI goal: the dollars are spread across the months exactly; sides follow the same curve
+   and add up to sidesWhole (or the exact fraction when sidesWhole is null, used by the solver). */
+function engineG(gciTotal,gciSide,splitPct,sidesWhole){
+ const w=closeW(), tw=w.reduce((a,b)=>a+b,0)||1, monthG=w.map(x=>gciTotal*x/tw);
+ const tot=sidesWhole==null?(gciSide>0?gciTotal/gciSide:0):sidesWhole, monthS=monthG.map(g=>gciTotal>0?tot*g/gciTotal:0);
+ const E=runYear(monthG,monthS,gciSide,splitPct); E.months=distribute(Math.round(tot),closeW()); return E;
 }
 function calc(){
  const g=S.goals, k=KPI(), lsh=g.listShare===''?50:Math.min(Math.max(n(g.listShare),0),100);
@@ -1443,11 +1433,11 @@ function calc(){
  /* Pay-myself-first savings are non-negotiable; the rest come out of what's left at goal. */
  const fixFirst=(first('rrsp')?rrspFix:0)+(first('postTax')?postFix:0)+(first('debt')?debtRed:0)+(first('res')?resTop:0), pFirst=(first('rrsp')?pR:0)+(first('postTax')?pT:0);
  const nnTotal=persNN+bizNN+fixFirst;
- const solveG=ok=>{ if(!(gciSide>0)||nnTotal<=0) return 0; let lo=0,hi=50000; while(hi<2e7&&!ok(hi)) hi*=2; for(let it=0;it<50;it++){ const mid=(lo+hi)/2; if(ok(mid)) hi=mid; else lo=mid; } return Math.ceil(hi/100)*100; };
- const netAt=G=>engineG(G,gciSide,split,Math.ceil(G/gciSide)).net;
- const minGci=solveG(G=>netAt(G)*(1-t-pFirst)-nnTotal>=0);
- const recGci=solveG(G=>netAt(G)*(1-t-pFirst)-nnTotal-MKTG_PCT*G>=0);
- const fullGci=solveG(G=>netAt(G)*(1-t-pR-pT)-(persAnnual+bizAnnual+rrspFix+postFix+extraSav+debtRed+resTop)>=0);
+ const solveG=(ok,okW)=>{ if(!(gciSide>0)||nnTotal<=0) return 0; let lo=0,hi=50000; while(hi<2e7&&!ok(hi)) hi*=2; for(let it=0;it<50;it++){ const mid=(lo+hi)/2; if(ok(mid)) hi=mid; else lo=mid; } let G=Math.ceil(hi/100)*100; for(let k=0;k<300&&okW&&!okW(G);k++) G+=100; return G; };
+ const netAt=G=>engineG(G,gciSide,split,null).net, netAtW=G=>engineG(G,gciSide,split,Math.ceil(G/gciSide-1e-9)).net;
+ const minGci=solveG(G=>netAt(G)*(1-t-pFirst)-nnTotal>=0, G=>netAtW(G)*(1-t-pFirst)-nnTotal>=-0.5);
+ const recGci=solveG(G=>netAt(G)*(1-t-pFirst)-nnTotal-MKTG_PCT*G>=0, G=>netAtW(G)*(1-t-pFirst)-nnTotal-MKTG_PCT*G>=-0.5);
+ const fullGci=solveG(G=>netAt(G)*(1-t-pR-pT)-(persAnnual+bizAnnual+rrspFix+postFix+extraSav+debtRed+resTop)>=0, G=>netAtW(G)*(1-t-pR-pT)-(persAnnual+bizAnnual+rrspFix+postFix+extraSav+debtRed+resTop)>=-0.5);
  let L,B,sides,E,gciTot=null,sidesExact=null;
  if(g.method==='units'){ L=Math.max(0,Math.round(n(g.listings))); B=Math.max(0,Math.round(n(g.buyers))); sides=L+B; E=engine(sides,gciSide,split); }
  else if(g.method==='gci'||g.method==='budget'){
@@ -1469,7 +1459,7 @@ function calc(){
   L=Math.round(sides*lsh/100); B=sides-L;
  }
  if(gciTot===null){ gciTot=sides*gciSide; sidesExact=sides; }
- const netSide=sidesExact>0?E.net/sidesExact:gciSide*(1-split)-(ci.feeAfter?0:ci.fee)-Math.min(gciSide*ci.rlpPct,ci.rlpMax)-ci.perDeal;
+ const netSide=sides>0?E.net/sides:gciSide*(1-split)-(ci.feeAfter?0:ci.fee)-Math.min(gciSide*ci.rlpPct,ci.rlpMax)-ci.perDeal;
  const gci=gciTot, volume=sidesExact*price, netComm=E.net;
  const rrsp=rrspFix+pR*Math.max(netComm,0), post=postFix+pT*Math.max(netComm,0)+extraSav, needs=persAnnual+post+debtRed+resTop;
  const profit=netComm-bizAnnual;
@@ -1490,10 +1480,14 @@ function calc(){
  const hrs=n(k.convPerHour)>0?conv/n(k.convPerHour):0;
  const refY=sides*refShare*n(k.refPerClose), conY=refY*n(k.contactsPerRef);
  const months=E.months;
- const qs=[0,1,2,3].map(q=>{ const g3=E.monthG[q*3]+E.monthG[q*3+1]+E.monthG[q*3+2]; return gciSide>0?g3/gciSide:0; });
+ const closeM=E.monthS||E.months;
+ /* whole-number quarterly targets that add up to the year */
+ const qRound=(tot,parts)=>{ const T=parts.reduce((a,b)=>a+b,0)||1; let cum=0,prev=0; return parts.map(x=>{ cum+=tot*x/T; const r=Math.round(cum+1e-9), u=r-prev; prev=r; return u; }); };
+ const qParts=[0,1,2,3].map(q=>closeM[q*3]+closeM[q*3+1]+closeM[q*3+2]);
+ const qs=qRound(sides,qParts);
  const reserveMonthly=(persAnnual+bizAnnual)/12;
  return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
-  sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persNN+bizNN>0,
+  sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,closeM,qRound,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persNN+bizNN>0,
   lAp,bCo,lTk,conv,convAll,refShare,hasSrc,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed,rrspFix,postFix,pR,pT,costMonth,resTarget,resGap,resTop,bizNN,bizGrow,persNN,persLife,savFirst,savAfter,leftToPlan,minGci,recGci,fullGci,pFirst,extraSav};
 }
 
@@ -1509,8 +1503,8 @@ let C;
    Two panels rather than one chart with two y-axes, because Calgary sales (~2,000/month) and an agent's deals (~1–3/month)
    are on very different scales. */
 function mcData(c){
- const w=S.season.w.map(x=>Math.max(n(x),0)), tw=w.reduce((a,b)=>a+b,0), tot=c.sidesExact||0;
- const firm=w.map(x=>tw?tot*x/tw:0), close=c.monthG.map(g=>c.gciSide>0?g/c.gciSide:0);
+ const w=S.season.w.map(x=>Math.max(n(x),0)), tw=w.reduce((a,b)=>a+b,0), tot=c.sides||0;
+ const firm=w.map(x=>tw?tot*x/tw:0), close=c.closeM.slice();
  return {firm,close,tot};
 }
 let mcHover=-1;
@@ -1574,7 +1568,7 @@ function bindMkt(){
 let mcRT; window.addEventListener('resize',()=>{ clearTimeout(mcRT); mcRT=setTimeout(()=>{ if(C) drawMkt(C); },120); });
 function capText(c,long){
  const y=+S.meta.year||year, st=c.capStart||0;
- if(c.cap&&c.caps.length){ const m=c.caps[0].m; return `${long?MONTHS_FULL[m]:MONTHS[m]} ${st>0&&m<st?y+1:y}`; }
+ if(c.cap&&c.caps.length){ const cur=c.caps.find(x=>x.cy==='cur'), x=cur||c.caps[0]; return `${long?MONTHS_FULL[x.m]:MONTHS[x.m]} ${y}${cur?'':' (cap year ending '+MONTHS[(st+11)%12]+')'}`; }
  if(!c.cap) return 'No cap';
  if(!c.caps.length) return `Not this year · ${moneyK(c.capRemaining)} to go`;
  const parts=c.caps.map(x=>`${long?MONTHS_FULL[x.m]:MONTHS[x.m]} (side ${x.side})`);
@@ -1587,9 +1581,11 @@ function recompute(){
  out('splitPaid',money(c.splitPaid)); out('rlpPaid',money(c.rlpPaid)); out('feesPaid',money(c.feesPaid)); out('donPaid',money(c.otherPaid));
  { const y=+S.meta.year||year, st=c.capStart, mm=c.caps.length?c.caps[0].m:-1;
   const cyName=st>0?`${MONTHS[st]} ${y} – ${MONTHS[(st+11)%12]} ${y+1}`:`Jan – Dec ${y}`;
-  out('cyBox',cyName); out('cyCard',cyName);
+  out('cyBox',cyName); out('cyCard',st>0?`Jan – Dec ${y} · cap resets ${MONTHS[st]}`:`Jan – Dec ${y}`);
+  { const w=document.getElementById('cap-paid-wrap'); if(w) w.style.display=st>0&&c.cap?'':'none'; out('capPrevName',st>0?`${MONTHS[(st+11)%12]} ${y}`:''); }
   out('capPaidOut',c.cap?money(c.capTot):'No cap');
-  out('capLbl',!c.cap?'Cap paid':mm>=0?`Cap paid · you cap in ${MONTHS_FULL[mm]} ${st>0&&mm<st?y+1:y}`:`Cap paid · ${money(c.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
+  const cur=c.caps.find(x=>x.cy==='cur'), prev=c.caps.find(x=>x.cy==='prev');
+  out('capLbl',!c.cap?'Cap paid':cur?`Cap paid in ${y} · you cap in ${MONTHS_FULL[cur.m]}`:prev?`Cap paid in ${y} · current cap year capped in ${MONTHS_FULL[prev.m]}`:`Cap paid in ${y} · ${money(c.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
  { const td=c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid; out('effSplit',money(td)); out('effPct',c.gci?pct(td/c.gci):'–'); }
   out('bizAnnual',money(c.bizAnnual)); out('profitNeed',money(c.profitNeed));
  out('buyShareBox',S.goals.listShare===''?'–':pct((100-Math.min(Math.max(n(S.goals.listShare),0),100))/100));
@@ -1606,7 +1602,7 @@ function recompute(){
  if(c.hasBudget) out('surplus',moneyK(c.surplus),c.surplus<0?'neg':'pos'); else out('surplus','Add budget','');
  // season
  drawMkt(c);
- c.qs.forEach((q,i)=>out('q'+(i+1),dec(q)+(Math.round(q*10)===10?' side':' sides')));
+ c.qs.forEach((q,i)=>out('q'+(i+1),int(q)+(q===1?' side':' sides')));
  { /* Firm deals by month and by busy / neutral / slow season, from the agent's firm-date weights */
   const w=S.season.w.map(x=>Math.max(n(x),0)), tw=w.reduce((a,b)=>a+b,0), g={busy:0,neutral:0,slow:0};
   w.forEach((x,i)=>{ const sh=tw?x/tw:0; g[seasonTag(SEASON_W[i])]+=sh;  });
@@ -1617,7 +1613,7 @@ function recompute(){
    row('conv',c.conv,true); row('hrs',c.hrs,true); row('lAp',c.lAp); row('bCo',c.bCo); row('lTk',c.lTk);
    out('convDay',dec(perD(c.conv))); }
  out('convPerClose',c.sides?int(c.convAll/c.sides):'0'); out('workDays',int(c.days));
- out('refY',int(c.refY)); out('refM',dec(c.refY/12)); out('conM',int(c.conY/12)); out('contactsDay',dec(perD(c.conY))); out('talkDay',c.sides?dec(perD(c.conv+c.conY)):'–');
+ out('refDayTip',c.sides?dec(c.conY/c.days):'–'); out('refY',int(c.refY)); out('refM',dec(c.refY/12)); out('conM',int(c.conY/12)); out('contactsDay',dec(perD(c.conY))); out('talkDay',c.sides?dec(perD(c.conv+c.conY)):'–');
  { const el=document.getElementById('mix-note'); if(el) el.innerHTML=c.hasSrc?`<div class="tip">Your lead-source goals put <b>${pct(c.refShare)}</b> of your sides from referrals (sphere, past clients, partners) and <b>${pct(1-c.refShare)}</b> from prospecting and marketing. Prospecting targets cover the ${pct(1-c.refShare)}; referral targets cover the ${pct(c.refShare)}. Together that’s about <b>${dec(perD(c.conv+c.conY))}</b> conversations a day.</div>`:`<div class="tip">Set your <b>goal by source</b> on Lead Generation to split these accurately. Until then the plan assumes half your sides come from referrals and half from prospecting.</div>`; }
  // sources
  const sl=S.sources.reduce((a,s)=>a+n(s.last),0), sg=S.sources.reduce((a,s)=>a+n(s.goal),0);
@@ -1638,7 +1634,7 @@ function recompute(){
  out('rrspY2',money(c.rrsp)); out('tfsaY2',money(c.post-c.extraSav)); out('debtY',money(c.debtRed)); out('resTopY',money(c.resTop));
  { const w=document.getElementById('res-add-wrap'); if(w) w.style.display=c.resGap>0?'':'none';
    const el=document.getElementById('sav-note'), tot=c.rrsp+c.post-c.extraSav+c.debtRed+c.resTop; if(el) el.innerHTML=(!tot?'':`<div class="tip">You’re setting aside <b>${money(tot)}</b> this year${c.gci?` — ${pct(tot/c.gci)} of your GCI`:''}.${S.goals.method==='budget'?` Because you’re working back from your budget, <b>Your Goal</b> includes these savings: you need <b>${money(c.gci)}</b> GCI.`:c.hasBudget?(c.surplus<0?` <span class="flag bad">At your goal you’re ${money(-c.surplus)} short</span> once these savings are included — raise your goal on <b>Your Goal</b> or adjust here.`:` <span class="flag ok">Your goal covers it</span> with ${money(c.surplus)} to spare.`):''}</div>`); }
- out('reserveMonths',c.reserveMonthly>0?dec(c.reserves/c.reserveMonthly)+' mo':'–');
+ out('reserveMonths',c.costMonth>0?dec((c.reserves+c.resTop)/c.costMonth)+' mo':'–');
  out('mktgYr',money(c.mktgTotal)); out('bizNN',money(c.bizNN)); out('persNN',money(c.persNN)); out('savFirstY',money(c.savFirst)); out('savAfterY',money(c.savAfter));
  out('mktgSug',c.gci?`suggested 10% of GCI: ${money(MKTG_PCT*c.gci)} · planned ${money(c.mktgTotal)}`:'suggested: 10% of your GCI');
  { const el=document.getElementById('mktg-flag'), sug=MKTG_PCT*c.gci; if(el) el.innerHTML=!c.gci?'':c.mktgTotal===0?`<div class="tip">Start with about <b>${money(sug)}</b> — 10% of your GCI — spread across the channels above.</div>`
@@ -1690,36 +1686,36 @@ function recompute(){
    if(el) el.innerHTML=any?`<div class="swot-recap"><div class="swot-l">From your SWOT</div><div class="sr-g">${[['s','Strengths'],['w','Weaknesses'],['o','Opportunities'],['t','Threats']].map(([k,l])=>`<div><b>${l}</b><p>${w[k]?esc(w[k]):'<span class="muted">—</span>'}</p></div>`).join('')}</div></div>`:''; }
  // database check
  { const el=document.getElementById('db-check'), add=n(S.db.add), cnt=Object.fromEntries(DB_GRADES.map(([k])=>[k,n(S.db[k])]));
-   if(el){ const need=c.conY/12, cap=DB_GRADES.reduce((a,[k,,,r])=>a+cnt[k]*r,0), tot=DB_GRADES.reduce((a,[k])=>a+cnt[k],0), core=cnt.ap+cnt.a;
-    el.innerHTML=!tot?'':`<div class="tip">${cap>=need?`<span class="flag ok">Your database can support this plan</span>`:`<span class="flag bad">Your database is too small for this plan</span>`} Calling your A+ and A contacts monthly, B every other month and C quarterly gives you about <b>${int(cap)}</b> referral conversations a month. Your plan needs <b>${int(need)}</b>.${cap<need?` Move more people up to A and B${add?` — at ${int(add)} new contacts a month you’ll add ${int(add*12)} this year`:', add new contacts every month'}, or plan more of your business from prospecting.`:''} Database: ${int(tot)} people · ${DB_GRADES.map(([k,g])=>`${int(cnt[k])} ${g}`).join(' · ')}.${cnt.d?` Remove your ${int(cnt.d)} D contacts.`:''}${cnt.o?` Follow up with your ${int(cnt.o)} online leads and move each one up to C or down to D.`:''}</div>`; } }
+   if(el){ const need=c.conY/12, cap=DB_GRADES.reduce((a,[k,,,r])=>a+cnt[k]*r,0), tot=DB_GRADES.filter(([k])=>k!=='d').reduce((a,[k])=>a+cnt[k],0), core=cnt.ap+cnt.a;
+    el.innerHTML=!tot?'':`<div class="tip">${cap>=need?`<span class="flag ok">Your database can support this plan</span>`:`<span class="flag bad">Your database is too small for this plan</span>`} Calling your A+ and A contacts monthly, B every other month and C quarterly gives you the <b>capacity</b> for about <b>${int(cap)}</b> referral conversations a month. Your plan needs <b>${int(need)}</b> — that’s your target.${cap<need?` Move more people up to A and B${add?` — at ${int(add)} new contacts a month you’ll add ${int(add*12)} this year`:', add new contacts every month'}, or plan more of your business from prospecting.`:''} Usable database: ${int(tot)} people · ${DB_GRADES.filter(([k])=>k!=='d').map(([k,g])=>`${int(cnt[k])} ${g}`).join(' · ')}${cnt.d?` (plus ${int(cnt.d)} D to delete)`:''}.${cnt.d?` Remove your ${int(cnt.d)} D contacts.`:''}${cnt.o?` Follow up with your ${int(cnt.o)} online leads and move each one up to C or down to D.`:''}</div>`; } }
  // ideal week
  { const cnt={}; let days=0; S.week.d.forEach(row=>{ let pd=false; row.s.forEach(v=>{ if(v){ cnt[v]=(cnt[v]||0)+2; if(v==='prospect') pd=true; } }); if(pd) days++; });
-   const work=WORK_TYPES.reduce((a,k)=>a+(cnt[k]||0),0), pros=cnt.prospect||0, pers=(cnt.personal||0), needP=c.hrs/c.weeks, want=n(S.model.hours);
+   const work=WORK_TYPES.reduce((a,k)=>a+(cnt[k]||0),0), pros=cnt.prospect||0, pers=(cnt.personal||0), needP=(c.conv+c.conY)/Math.max(n(KPI().convPerHour),1)/c.weeks, want=n(S.model.hours);
    out('wkWork',work+' h'); out('wkPros',pros+' h'); out('wkDays',days+' of '+(n(KPI().daysPerWeek)||5)); out('wkPers',pers+' h'); out('wkOffTxt',S.kpi.weeksOff===''?'You haven’t set your weeks off yet on the Activity Plan — the plan assumes 4.':`You planned ${int(n(S.kpi.weeksOff))} weeks off this year (Activity Plan).`);
    const fl=document.getElementById('week-flag'), msgs=[];
-   if(work){ if(pros<needP-0.01) msgs.push(`<span class="flag bad">Not enough prospecting time</span> Your Activity Plan needs about <b>${dec(needP)} hours</b> of prospecting a week; this week has ${pros}.`);
-    else msgs.push(`<span class="flag ok">Prospecting time covers your plan</span> Your Activity Plan needs about <b>${dec(needP)} hours</b> a week; this week has ${pros}.`);
+   if(work){ if(pros<needP-0.01) msgs.push(`<span class="flag bad">Not enough prospecting time</span> Your Activity Plan needs about <b>${dec(needP)} hours</b> a week for prospecting and referral calls; this week has ${pros}.`);
+    else msgs.push(`<span class="flag ok">Prospecting time covers your plan</span> Your Activity Plan needs about <b>${dec(needP)} hours</b> a week for prospecting and referral calls; this week has ${pros}.`);
     if(want) msgs.push(work>want?`<span class="flag warn">More work than you want</span> This week has ${work} working hours; on Business Model you said ${int(want)}.`:`<span class="flag ok">Fits your hours</span> ${work} working hours against the ${int(want)} you set on Business Model.`); }
    if(fl) fl.innerHTML=msgs.map(m=>`<div class="tip">${m}</div>`).join(''); }
  // scorecard activity targets
- { const q4=v=>v/4; for(let q=0;q<4;q++){ out('tc'+q,int(q4(c.conv+c.conY))); out('ta'+q,dec(q4(c.lAp+c.bCo))); out('tl'+q,dec(q4(c.lTk))); out('te'+q,money(q4(c.bizAnnual))); } }
+ { const eq=[1,1,1,1], tc=c.qRound(Math.round(c.conv+c.conY),eq), ta=c.qRound(Math.round(c.lAp+c.bCo),eq), tl=c.qRound(Math.round(c.lTk),eq); for(let q=0;q<4;q++){ out('tc'+q,int(tc[q])); out('ta'+q,int(ta[q])); out('tl'+q,int(tl[q])); out('te'+q,money(c.bizAnnual/4)); } }
  // primary channel count
  { const np=S.sources.filter(x=>x.pri==='Primary').length, el=document.getElementById('src-pri'); if(el) el.innerHTML=np>=3&&np<=5?`<span class="flag ok">${np} primary</span>`:np<3?`<span class="flag warn">${np} primary — mark at least 3</span>`:`<span class="flag warn">${np} primary — pick your top 5</span>`; }
  // strategic priority measures
- S.pri.items.forEach((x,i)=>{ const filled=x.q.filter(v=>v!==''); const tot=filled.reduce((a,v)=>a+n(v),0); out('pmY'+i,filled.length?(x.target!==''&&n(x.target)>0?`${int(tot)} · ${pct(tot/n(x.target))}`:int(tot)):'–'); });
+ S.pri.items.forEach((x,i)=>{ const filled=x.q.filter(v=>v!==''); const tot=filled.reduce((a,v)=>a+n(v),0); out('pmY'+i,filled.length?(x.target!==''&&n(x.target)>0?`${int(tot)} · ${pct(tot/annualT(x))}`:int(tot)):'–'); });
  // cash flow
  { const tb=document.getElementById('cf-table');
-   if(tb){ const y=+S.meta.year||year, hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers0=(c.persAnnual+c.postFix+c.extraSav+c.debtRed+c.rrspFix+c.resTop)/12, pp=c.pR+c.pT;
+   if(tb){ const y=+S.meta.year||year, hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers0=(c.persAnnual+c.postFix+c.extraSav+c.debtRed+c.rrspFix)/12, pp=c.pR+c.pT;
     let bal=c.reserves, low=Infinity, lowM=0; const rows={cl:[],net:[],hold:[],biz:[],pers:[],flow:[],bal:[]};
     for(let m=0;m<12;m++){ const nt=c.monthNet[m]||0, h=nt*hold, pers=pers0+pp*Math.max(nt,0), fl=nt-h-biz-pers; bal+=fl; if(bal<low){low=bal;lowM=m;}
-     rows.cl.push(c.gciSide>0?(c.monthG[m]||0)/c.gciSide:0); rows.net.push(nt); rows.hold.push(-h); rows.biz.push(-biz); rows.pers.push(-pers); rows.flow.push(fl); rows.bal.push(bal); }
+     rows.cl.push(c.closeM[m]||0); rows.net.push(nt); rows.hold.push(-h); rows.biz.push(-biz); rows.pers.push(-pers); rows.flow.push(fl); rows.bal.push(bal); }
     const fm=v=>v===0?'–':(v<0?'−':'')+'$'+Math.round(Math.abs(v)).toLocaleString('en-CA');
     const row=(lbl,arr,cls,fn)=>`<tr class="${cls||''}"><th>${lbl}</th>${arr.map(v=>`<td class="num${v<0&&cls?' neg':''}">${fn?fn(v):fm(v)}</td>`).join('')}<td class="num tot">${cls==='bal'?fm(arr[11]):fn?dec(arr.reduce((a,b)=>a+b,0)):fm(arr.reduce((a,b)=>a+b,0))}</td></tr>`;
     tb.innerHTML=`<thead><tr><th></th>${MONTHS.map(m=>`<th class="num">${m}</th>`).join('')}<th class="num">Year</th></tr></thead><tbody>
      ${row('Expected closings',rows.cl,'',v=>v?dec(v):'–')}${row('Net commission',rows.net)}${row('Income tax holdback',rows.hold)}${row('Business expenses',rows.biz)}${row('Personal, savings &amp; RRSP',rows.pers)}
      ${row('Net cash flow',rows.flow,'flow')}${row('Running balance',rows.bal,'bal')}</tbody>`;
     const cn=document.getElementById('cf-note'), st=c.capStart||0;
-    const capNote=st>0?`<p class="cf-cap">This table runs January to December ${y}. Your split, cap and fees are worked out over your cap year (${MONTHS[st]} ${y} – ${MONTHS[(st+11)%12]} ${y+1}) and placed in the month each deal closes.</p>`:'';
+    const capNote=st>0?`<p class="cf-cap">This table runs January to December ${y}. January–${MONTHS_FULL[(st+11)%12]} deals count toward the cap year you’re already in${n(S.goals.capPaid)?` (${money(n(S.goals.capPaid))} paid so far)`:''}; your cap resets to $0 in ${MONTHS_FULL[st]}.</p>`:'';
     if(cn) cn.innerHTML=capNote+(!c.hasBudget&&!c.bizAnnual?'<div class="tip">Add your expenses on <b>Your Budget</b> to see your real cash flow.</div>'
       :low<0?`<div class="tip"><span class="flag bad">Your balance dips to ${fm(low)} in ${MONTHS_FULL[lowM]}</span> You’d need about <b>${money(-low)}</b> more in reserves, or more closings before then, to cover the slow months.</div>`
       :`<div class="tip"><span class="flag ok">You stay positive all year</span> Your lowest balance is <b>${fm(low)}</b> in ${MONTHS_FULL[lowM]}.</div>`);
@@ -1729,7 +1725,7 @@ function recompute(){
  if(vl) vl.innerHTML=ls?`<div class="tip">Last year you closed <b>${int(ls)}</b> sides${n(S.last.gci)?` for <b>${money(n(S.last.gci))}</b> GCI`:''}. This plan calls for <b>${int(c.sides)}</b> — ${c.sides>=ls?`<b>${pct((c.sides-ls)/ls)}</b> more`:`<b>${pct((ls-c.sides)/ls)}</b> fewer`}.</div>`:'';
  // scorecard
  c.qs.forEach((q,i)=>{
-  const tg=c.monthG[i*3]+c.monthG[i*3+1]+c.monthG[i*3+2]; out('tq'+i,dec(q)); out('tg'+i,money(tg));
+  const tg=c.monthG[i*3]+c.monthG[i*3+1]+c.monthG[i*3+2]; out('tq'+i,int(q)); out('tg'+i,money(tg));
   const au=S.score.q[i].units, ag=S.score.q[i].gci;
   out('pace'+i,(au===''&&ag==='')?'–':(ag!==''&&tg>0)?pct(n(ag)/tg):(q>0?pct(n(au)/q):'–'));
  });
@@ -1745,7 +1741,7 @@ function recompute(){
   const els=[...document.querySelectorAll('#s-'+s.id+' [data-k]')];
   const filled=els.filter(e=>{ const k=e.dataset.k, v=getP(k), d=k.split('.').reduce((o,x)=>o==null?undefined:o[x],BLANK);
    return e.type==='checkbox'?!!v:(v!==''&&v!=null&&String(v)!==String(d==null?'':d)); }).length;
-  const b=document.getElementById('nav-'+s.id); if(b) b.classList.toggle('done',s.id!=='start'&&(S.meta.visited||[]).includes(s.id)&&filled>0);
+  const b=document.getElementById('nav-'+s.id); if(b) b.classList.toggle('done',s.id!=='start'&&filled>0);
  });
  if(current==='summary') renderSummary();
 }
@@ -1759,10 +1755,10 @@ function psClean(ps){
   proof:strip(ps.proof,/^because\s+/i), outcome:strip(ps.outcome,/^(so\s+)?(that\s+)?(they\s+can)\s+/i)};
 }
 function agentName(){ return (S.vision&&S.vision.name)||''; }
-function cashBal(c){ const hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers0=(c.persAnnual+c.postFix+c.extraSav+c.debtRed+c.rrspFix+c.resTop)/12, pp=c.pR+c.pT;
+function cashBal(c){ const hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers0=(c.persAnnual+c.postFix+c.extraSav+c.debtRed+c.rrspFix)/12, pp=c.pR+c.pT;
  let bal=c.reserves; return MONTHS.map((x,m)=>{ const nt=c.monthNet[m]||0; bal+=nt-nt*hold-biz-pers0-pp*Math.max(nt,0); return bal; }); }
 function renderYearPage(c){
- const has=c.gci>0, d=mcData(c), bal=cashBal(c), low=Math.min(...bal), lowM=bal.indexOf(low), capM=c.cap&&c.caps.length?c.caps[0].m:-1;
+ const has=c.gci>0, d=mcData(c), bal=cashBal(c), low=Math.min(...bal), lowM=bal.indexOf(low), capM=c.cap&&c.caps.length?(c.caps.find(x=>x.cy==='cur')||c.caps[0]).m:-1;
  const rows=MONTHS.map((mo,i)=>{ const tag=seasonTag(SEASON_W[i]), cls=[tag==='slow'?'slow':'',i===capM?'capm':'',i===lowM&&has?'lowm':''].join(' ');
   return `<tr class="${cls}"><td><b>${MONTHS_FULL[i]}</b> <span class="mkt-tag ${tag}">${SEASON_TAGS[tag]}</span>${i===capM?' <span class="yr-badge">CAP</span>':''}</td><td class="num">${has?dec(d.firm[i]):'–'}</td><td class="num">${has?dec(d.close[i]):'–'}</td><td class="num">${has?money(c.monthNet[i]):'–'}</td><td class="num${bal[i]<0?' neg':''}">${has?money(bal[i]):'–'}${i===lowM&&has?' <small>lowest</small>':''}</td></tr>`; }).join('');
  const ab={prospect:'Prosp',appt:'Appt',client:'Client',admin:'Admin',mktg:'Mktg',learn:'Learn',personal:'Family',off:'Off'};
@@ -1787,23 +1783,24 @@ function renderSummary(){
  const vals=S.values.core.map(x=>x.v).filter(Boolean);
  const pris=S.pri.items.filter(x=>x.priority||x.measure);
  const prim=S.sources.filter(x=>x.pri==='Primary');
- const who=agentName(), acts=(S.act||[]).filter(a=>a.what).slice(0,5);
- // quarterly targets
- const qRows=[0,1,2,3].map(q=>{ const g=c.monthG[q*3]+c.monthG[q*3+1]+c.monthG[q*3+2]; return `<tr><td><b>Q${q+1}</b></td><td class="num">${has?dec(c.qs[q]):'–'}</td><td class="num">${has?money(g):'–'}</td><td class="num">${has?int((c.conv+c.conY)/4):'–'}</td><td class="num">${has?dec((c.lAp+c.bCo)/4):'–'}</td></tr>`; }).join('');
+ const who=agentName(), acts=(S.act||[]).filter(a=>a.what).slice().sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999')).slice(0,5);
+ // quarterly targets (whole numbers that add up to the year)
+ const qc=c.qRound(Math.round(c.conv+c.conY),[1,1,1,1]), qa=c.qRound(Math.round(c.lAp+c.bCo),[1,1,1,1]);
+ const qRows=[0,1,2,3].map(q=>{ const g=c.monthG[q*3]+c.monthG[q*3+1]+c.monthG[q*3+2]; return `<tr><td><b>Q${q+1}</b></td><td class="num">${has?int(c.qs[q]):'–'}</td><td class="num">${has?money(g):'–'}</td><td class="num">${has?int(qc[q]):'–'}</td><td class="num">${has?int(qa[q]):'–'}</td></tr>`; }).join('');
  // every-cheque rule (share of a typical commission cheque)
  const gh=n(S.goals.gstHold)/100, xt=n(S.alloc.tax)/100, bizSh=c.netComm>0?Math.min(c.bizAnnual/c.netComm,1):0;
  const parts=[[c.t+xt,'tax'],[gh,'GST'],[c.pR,'RRSP'],[c.pT,'TFSA'],[bizSh,'business']].filter(x=>x[0]>0.004);
  const pay=1.05-gh-c.t-xt-c.pR-c.pT-bizSh;
  const chq=has&&c.gciSide>0?`From each cheque: ${parts.map(([p,l])=>`<b>${pct(p)}</b> ${l}`).join(' · ')} · the rest (about <b>${pct(Math.max(pay,0))}</b>) is your pay.`:t('');
  // database
- const dbt=DB_GRADES.reduce((a,[k])=>a+n(S.db[k]),0), dbStr=dbt?DB_GRADES.filter(([k])=>['ap','a','b','c'].includes(k)).map(([k,g])=>`${int(n(S.db[k]))} ${g}`).join(' · '):'';
+ const dbt=DB_GRADES.filter(([k])=>k!=='d').reduce((a,[k])=>a+n(S.db[k]),0), dbStr=dbt?DB_GRADES.filter(([k])=>['ap','a','b','c'].includes(k)).map(([k,g])=>`${int(n(S.db[k]))} ${g}`).join(' · '):'';
  el.innerHTML=`
   <div class="print-only" style="border-bottom:3px solid var(--bp-red);padding-bottom:8px;margin-bottom:12px"><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#666;font-weight:700">Royal LePage Solutions</div><div style="font-size:21px;font-weight:800">${esc(who)}${who?' — ':''}${S.meta.year} Business Plan</div>${v.mission?`<div style="font-size:12px;color:#444;margin-top:3px">${esc(v.mission)}</div>`:''}</div>
   <div class="sum-grid">
    <div class="sum-card"><h4>1-year goals</h4><p class="pre">${t(v.one)}</p><h4 class="mt">90-day priorities</h4><p class="pre">${t(v.ninety)}</p></div>
    <div class="sum-card"><h4>Positioning</h4><p style="font-weight:600">${psTxt||t('')}</p><h4 class="mt">Core values</h4><p>${vals.length?vals.map(esc).join(' · '):t('')}</p>
     <div class="no-print-mission"><h4 class="mt">Mission</h4><p>${t(v.mission)}</p></div></div>
-   <div class="sum-card"><h4>Strategic priorities</h4>${pris.length?`<ol>${pris.map(x=>`<li><b>${esc(x.priority)}</b>${x.measure?` — ${esc(x.measure)}${x.target!==''?`: ${int(n(x.target))}`:''}`:''}</li>`).join('')}</ol>`:t('')}
+   <div class="sum-card"><h4>Strategic priorities</h4>${pris.length?`<ol>${pris.map(x=>`<li><b>${esc(x.priority)}</b>${x.measure?` — ${esc(x.measure)}${x.target!==''?`: ${int(n(x.target))}${x.unit&&x.unit!=='year'?(x.unit==='month'?'/mo':'/wk'):'/yr'}`:''}`:''}</li>`).join('')}</ol>`:t('')}
     ${S.pri.notFocus?`<h4 class="mt">Not focusing on</h4><p>${esc(S.pri.notFocus)}</p>`:''}</div>
    <div class="sum-card"><h4>The numbers</h4><dl>
     <dt>GCI goal</dt><dd>${m(c.gci)}</dd>${c.minGci?`<dt>Minimum GCI <small class="muted">non-negotiables</small></dt><dd>${money(c.minGci)}</dd>`:''}
@@ -1827,9 +1824,9 @@ function renderSummary(){
     <h4 class="mt">Every cheque</h4><p>${chq}</p></div>
   </div>
   <div class="sum-grid mt14">
-   <div class="sum-card"><h4>Next 90 days</h4>${acts.length?`<ol>${acts.map(a=>`<li>${esc(a.what)}${a.due?` <small class="muted">· ${esc(a.due)}</small>`:''}${a.owner&&a.owner!=='Me'?` <small class="muted">· ${esc(a.owner)}</small>`:''}</li>`).join('')}</ol>`:t('')}</div>
+   <div class="sum-card"><h4>Next 90 days</h4>${acts.length?`<ol>${acts.map(a=>`<li>${esc(a.what)}${a.due?` <small class="muted">· ${esc(a.due)}</small>`:''}${a.owner?` <small class="muted">· ${esc(a.owner)}</small>`:''}</li>`).join('')}</ol>`:t('')}</div>
    <div class="sum-card commit"><h4>My commitment</h4><p>${t(v.commitment)}</p>${S.acc.partner?`<p class="muted" style="margin-top:4px">Accountability: <b>${esc(S.acc.partner)}</b>${S.acc.cadence?` · ${esc(S.acc.cadence.toLowerCase())}`:''}${S.acc.first?` · first meeting ${esc(S.acc.first)}`:''}</p>`:''}
-    <div class="sig"><div><span></span>Signature</div><div><span></span>Date</div>${S.acc.partner?`<div><span></span>${esc(S.acc.partner)}</div>`:''}</div></div>
+    <div class="sig"><div><span></span>Signature</div><div><span></span>Date</div>${S.acc.partner?'<div><span></span>Accountability partner</div>':''}</div></div>
   </div>`+renderYearPage(c);
 }
 
