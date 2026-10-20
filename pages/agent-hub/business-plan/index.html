@@ -251,6 +251,7 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
 .tbl-wrap{overflow-x:auto}
 
 /* Fix-list additions */
+.sum-gnote{font-size:12px;color:var(--bp-dark-grey);margin:4px 0 0}
 .carry{white-space:pre-wrap;background:var(--bp-light-grey);border-left:3px solid var(--bp-stone);padding:10px 14px;border-radius:0 4px 4px 0;font-size:14px;color:var(--bp-black)}
 .fine{font-size:12.5px;color:var(--bp-dark-grey);margin:6px 0 0}
 .bud-calc{margin-top:14px;max-width:520px}
@@ -632,7 +633,7 @@ const SWOT_Q={s:['What do clients compliment you on?','Which communities, price 
  t:['What could slow the market this year?','Who competes for your ideal clients — teams, discount brokerages, FSBO?','What in your business depends on one person or one lead source?']};
 /* Buffini & Company database grades. Touch rhythm used for the capacity check:
    A+ and A monthly, B every other month, C quarterly; D and O aren't counted. */
-const DB_GRADES=[['ap','A+','Have sent you referrals',1],['a','A','Would refer you',1],['b','B','Would refer you if trained and shown how',1/2],['c','C','Could refer you in the future',1/4],['o','O','Online leads — move up to C or down to D',0],['d','D','To be deleted from your database',0]];
+const DB_GRADES=[['ap','A+','Have sent you referrals',1],['a','A','Would refer you',1],['b','B','Would refer you if trained and shown how',1/2],['c','C','Could refer you in the future',1/3],['o','O','Online leads — move up to C or down to D',0],['d','D','To be deleted from your database',0]];
 const VALUE_BANK=['Integrity','Honesty','Trust','Respect','Service','Generosity','Kindness','Gratitude','Family','Community','Relationships','Loyalty','Communication','Transparency','Accountability','Reliability','Responsiveness','Excellence','Professionalism','Growth','Learning','Curiosity','Hard work','Discipline','Consistency','Courage','Resilience','Fun','Humour','Balance','Health','Faith','Freedom','Independence','Creativity','Innovation','Leadership','Teamwork','Advocacy','Patience','Empathy','Fairness'];
 const DEFAULT_TASKS=['CRM','Database management','Lead follow-up','Transaction management','Marketing','Client communication','Accounting','Administrative support','Technology','Automation'];
 /* Calgary seasonal index: each month's share of the year's City of Calgary residential sales (CREB®),
@@ -790,7 +791,7 @@ const SECTIONS=[
     <li><b>Rough numbers are fine.</b> If you don’t know a number yet, leave it blank and come back.</li>
     <li><b>Everything saves as you type.</b> Your plan is private to you, and you can pick up where you left off on any device.</li>
     <li><b>Print your one-page summary</b> at the end and bring it to your quarterly check-ins.</li></ul></div>
-   <div class="st-have"><h4>Have these handy</h4><ul><li>Last year’s closed sides and GCI</li><li>Your commission plan — split, cap and cap anniversary</li><li>A rough monthly budget, personal and business</li><li>How many people are in your database</li></ul></div>
+   <div class="st-have"><h4>Have these handy</h4><ul><li>Last year’s closed sides and GCI</li><li>Your commission plan — split, cap, your cap anniversary and how much cap you’ve paid so far</li><li>A rough monthly budget, personal and business</li><li>How many people are in your database</li></ul></div>
   </div>
   <h3>The seven chapters</h3>
   <div class="st-ch">${PHASES.filter(([ph])=>ph!=='Start').map(([ph,ids],k)=>`<button type="button" class="st-c" data-go="${ids[0]}"><span class="st-k">${k+1}</span><b>${ph}</b><small>${ids.map(id=>(SECTIONS.find(x=>x.id===id)||{}).t).filter(Boolean).join(' · ')}</small><em>${{'Look back':'Where you are today','Foundation':'Where you’re going and why','Positioning':'Who you serve and why they choose you','Numbers':'What your life and your goal really take','Strategy':'Where you’ll focus to win','The plan':'What you’ll do, week by week','Execution':'How you’ll stay on track'}[ph]||''}</em></button>`).join('')}</div>
@@ -926,8 +927,8 @@ const SECTIONS=[
   <div class="tbl-wrap"><table><thead><tr><th>Initiative</th><th style="width:170px">Target date</th><th style="width:130px">Priority</th><th class="no-print"></th></tr></thead><tbody id="init-body"></tbody></table></div>
   <button class="btn btn-line btn-sm no-print" id="init-add" type="button" style="margin-top:10px">+ Add initiative</button>
  `},
- {id:'priorities',t:'Strategic Priorities',d:'Goals define the results you need. Strategic priorities are the few areas you will focus on to produce them. Tactics are what you will actually do.',html:()=>`
-  <div class="chain"><span><b>Vision</b></span><i>→</i><span><b>Business goals</b><small>What results do I want?</small></span><i>→</i><span><b>Strategic priorities</b><small>Where must I focus?</small></span><i>→</i><span><b>Strategies</b><small>How will I approach each one?</small></span><i>→</i><span><b>Tactics</b><small>What will I do?</small></span><i>→</i><span><b>Key measures</b><small>How will I know it’s working?</small></span></div>
+ {id:'priorities',t:'Strategic Priorities',d:'Goals define the results you need. Strategic priorities are the few areas you will focus on to produce them. Strategies are how you will approach each one.',html:()=>`
+  <div class="chain"><span><b>Vision</b></span><i>→</i><span><b>Business goals</b><small>What results do I want?</small></span><i>→</i><span><b>Strategic priorities</b><small>Where must I focus?</small></span><i>→</i><span><b>Strategies</b><small>How will I approach each one?</small></span><i>→</i><span><b>Key measures</b><small>How will I know it’s working?</small></span></div>
   <div id="swot-recap"></div>
   <h3>My strategic priorities</h3>
   ${intro('Based on your goals and your SWOT, what <b>3–5 areas</b> need the most focus? Your key measures carry over to the quarterly scorecard.')}
@@ -959,7 +960,7 @@ const SECTIONS=[
   <h3>Your commission plan &amp; deductions</h3>
   <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Enter your plan with the brokerage — these match the deduction summary on your deal statement. Deductions are calculated over one cap year, starting at $0 on your cap anniversary (January if you leave it blank). Not sure of your numbers? Ask the office. Leave the cap blank if you don’t have one.</p>
   <div class="row c4" style="align-items:start"><div class="f"><span>Brokerage split <small>until you cap</small></span><select id="split-sel" aria-label="Brokerage split"><option value="">Choose…</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="custom">Custom…</option></select><div id="split-custom" style="margin-top:8px">${F('','goals.split',{type:'pct',aria:'Custom brokerage split',ph:'Enter your split, e.g. 25'})}</div></div>${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}${F('Cap anniversary','goals.capDate',{type:'date',hint:'when your cap resets'})}<div class="f"><span>Your cap year</span><div class="netbox" data-o="cyBox">–</div></div></div>
-  <div class="row c4" id="cap-paid-wrap" style="display:none">${F('Cap paid so far','goals.capPaid',{type:'money',hint:'in the cap year you’re in on Jan 1'})}<p class="fine" style="grid-column:span 3;align-self:center">Your cap year starts partway through the plan year, so January to <b data-o="capPrevName"></b> deals still count toward your current cap year. Enter what you’ll have paid toward your cap by January 1 — leave it blank if you’re not sure.</p></div>
+  <div class="tip cap-paid" id="cap-paid-wrap" style="display:none"><div class="row c4" style="margin:0;align-items:center">${F('Cap paid so far in the cap year you’re in on Jan 1','goals.capPaid',{type:'money',hint:'Blank = $0',ph:'e.g. 12,000'})}<p style="grid-column:span 3;margin:0;font-size:13.5px">Your cap year starts partway through the plan year, so January to <b data-o="capPrevName"></b> deals still count toward the cap year you’re in now. Enter what you’ll have paid toward your cap by January 1. <b>Blank = $0. If you’ve already capped this cap year, enter your full cap.</b></p></div></div>
   <div class="row c4">${F('Deal fee per side','goals.dealFee',{type:'money',hint:'blank = none'})}
    <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></label>
    ${F('Donation per deal','goals.don',{type:'money',hint:'DON'})}
@@ -991,7 +992,7 @@ const SECTIONS=[
  `},
  {id:'money',t:'Your Money',d:'What your year looks like at goal: what the brokerage takes, what your non-negotiables cost, what’s left — and your plan for it, including marketing.',html:()=>`
   <h3 style="margin-top:0">Deductions over your cap year</h3>
-  <div class="res">${RC('Split paid','splitPaid')}${RC('<span data-o="capLbl">Cap paid</span>','capPaidOut')}${RC('Deal fees','feesPaid')}${RC('Donations','donPaid')}</div>
+  <div class="res" id="ded-tiles"><div id="split-tile" style="display:contents">${RC('Split paid','splitPaid')}</div>${RC('<span data-o="capLbl">Cap paid</span>','capPaidOut')}${RC('Deal fees','feesPaid')}${RC('Donations','donPaid')}</div>
   <div class="res c3">${RC('RLP franchise fee','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('Deduction period','cyCard')}</div>
   <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
   <h3>What’s left after your non-negotiables</h3>
@@ -1022,6 +1023,7 @@ const SECTIONS=[
  {id:'numbers',t:'Your Goal',d:'How many deals do you need? Set a GCI goal, work back from your budget, or start from the number of deals you want — then see what it means for your money.',html:()=>`
   <h3>Your 1-year goals <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— from Vision &amp; Goals</small></h3>
   <div class="carry" data-o="oneGoals">–</div>
+  <p id="goal-text-note" class="fine" style="margin:6px 0 0"></p>
   <h3>How do you want to set your goal?</h3>
   <div class="seg" id="method-seg"><button data-m="gci" type="button">GCI goal</button><button data-m="budget" type="button">Work back from my budget</button><button data-m="units" type="button">Number of deals</button></div>
   <div id="m-bud" class="bud-calc"></div>
@@ -1033,7 +1035,7 @@ const SECTIONS=[
   <div class="row c4" style="margin-top:16px" id="m-units">${F('Listing sides goal','goals.listings',{type:'num'})}${F('Buyer sides goal','goals.buyers',{type:'num'})}</div>
   <div class="res">${RC('GCI goal','gci','dark')}${RC('Total closed sides','sides','dark')}${RC('Listings / buyers','lb','dark')}${RC('Sales volume','volume','dark')}</div>
   <div id="vs-last"></div>
-  <div class="tip"><b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side from <b>Your Deal</b>. Your net income uses your commission plan from Your Deal and your expenses from <b>Your Budget</b>.<span id="split-hint"> You haven’t entered a split, cap or fees yet, so none are taken off.</span></div>
+  <div class="tip"><b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side from <b>Your Deal</b>. Your net income uses your commission plan from Your Deal and your expenses from <b>Your Budget</b> and <b>Your Money</b>.<span id="split-hint"> You haven’t entered a split, cap or fees yet, so none are taken off.</span></div>
 
  `},
  {id:'season',t:'Seasonality & Cash Flow',d:'Calgary real estate runs on a predictable yearly rhythm. Deals go firm on one curve and close — and pay you — on another. Plan for both so the slow months don’t catch you off guard.',html:()=>`
@@ -1439,14 +1441,17 @@ function calc(){
  const solveG=(ok,okW)=>{ if(!(gciSide>0)||nnTotal<=0) return 0; let lo=0,hi=50000; while(hi<2e7&&!ok(hi)) hi*=2; for(let it=0;it<50;it++){ const mid=(lo+hi)/2; if(ok(mid)) hi=mid; else lo=mid; } let G=Math.ceil(hi/100)*100; for(let k=0;k<300&&okW&&!okW(G);k++) G+=100; return G; };
  const netAt=G=>engineG(G,gciSide,split,null).net, netAtW=G=>engineG(G,gciSide,split,Math.ceil(G/gciSide-1e-9)).net;
  const minGci=solveG(G=>netAt(G)*(1-t-pFirst)-nnTotal>=0, G=>netAtW(G)*(1-t-pFirst)-nnTotal>=-0.5);
- const recGci=solveG(G=>netAt(G)*(1-t-pFirst)-nnTotal-MKTG_PCT*G>=0, G=>netAtW(G)*(1-t-pFirst)-nnTotal-MKTG_PCT*G>=-0.5);
+ /* Marketing: what the agent planned on Your Money; the 10% suggestion only while that's blank. */
+ const mktgPlanned=mktgTotal>0, mktgAt=G=>mktgPlanned?mktgTotal:MKTG_PCT*G;
+ const recGci=solveG(G=>netAt(G)*(1-t-pFirst)-nnTotal-mktgAt(G)>=0, G=>netAtW(G)*(1-t-pFirst)-nnTotal-mktgAt(G)>=-0.5);
  const fullGci=solveG(G=>netAt(G)*(1-t-pR-pT)-(persAnnual+bizAnnual+rrspFix+postFix+extraSav+debtRed+resTop)>=0, G=>netAtW(G)*(1-t-pR-pT)-(persAnnual+bizAnnual+rrspFix+postFix+extraSav+debtRed+resTop)>=-0.5);
  let L,B,sides,E,gciTot=null,sidesExact=null;
  if(g.method==='units'){ L=Math.max(0,Math.round(n(g.listings))); B=Math.max(0,Math.round(n(g.buyers))); sides=L+B; E=engine(sides,gciSide,split); }
  else if(g.method==='gci'||g.method==='budget'){
   if(g.method==='budget'){
    /* Work back from the budget: the GCI that covers your non-negotiables and pay-first savings
-      after the commission plan and tax holdback, and still leaves 10% of GCI for marketing. */
+      after the commission plan and tax holdback, and still leaves room for marketing
+      (the amount planned on Your Money, or 10% of GCI while that's blank). */
    gciTot=recGci;
   } else gciTot=Math.max(n(g.gciGoal),0); sidesExact=gciSide>0?gciTot/gciSide:0;
   sides=Math.min(Math.ceil(sidesExact-1e-9),1000);
@@ -1472,6 +1477,11 @@ function calc(){
  const savFirst=fixFirst+pFirst*Math.max(netComm,0), savAll=rrsp+post+debtRed+resTop, savAfter=savAll-savFirst;
  const leftToPlan=netComm-taxAmt-bizNN-persNN-savFirst;
  const profitNeed=profit;
+ /* One verdict for Your Goal and Your Money:
+    min = non-negotiables not covered; mktg = marketing blank and less than 10% of GCI is left;
+    over = the plan on Your Money (marketing, growth, lifestyle) spends more than is left; ok. */
+ const mktgSug=MKTG_PCT*gci, mktgNeed=mktgPlanned?mktgTotal:mktgSug;
+ const verdict=!(persNN+bizNN>0)||!(gci>0)?'none':leftToPlan<-0.5?'min':!mktgPlanned&&leftToPlan<mktgSug-0.5?'mktg':surplus<-0.5?'over':'ok';
  const rlpSide=Math.min(gciSide*ci.rlpPct,ci.rlpMax), chequeBefore=gciSide*(1-split)-(ci.feeAfter?0:ci.fee)-rlpSide-ci.perDeal, chequeAfter=gciSide-(ci.feeCap?0:ci.fee)-ci.perDeal;
  // activity
  const lRate=(n(k.lApptSign)/100)*(n(k.lSignClose)/100), bRate=(n(k.bConsSign)/100)*(n(k.bSignClose)/100);
@@ -1494,7 +1504,7 @@ function calc(){
  const reserveMonthly=(persAnnual+bizAnnual)/12;
  return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
   sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,closeM,qRound,actQ,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persNN+bizNN>0,
-  lAp,bCo,lTk,conv,convAll,refShare,hasSrc,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed,rrspFix,postFix,pR,pT,costMonth,resTarget,resGap,resTop,bizNN,bizGrow,persNN,persLife,savFirst,savAfter,leftToPlan,minGci,recGci,fullGci,pFirst,extraSav};
+  lAp,bCo,lTk,conv,convAll,refShare,hasSrc,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed,rrspFix,postFix,pR,pT,costMonth,resTarget,resGap,resTop,bizNN,bizGrow,persNN,persLife,savFirst,savAfter,leftToPlan,minGci,recGci,fullGci,pFirst,extraSav,mktgPlanned,mktgSug,mktgNeed,verdict};
 }
 
 function out(key,val,cls){
@@ -1572,6 +1582,24 @@ function bindMkt(){
  box.addEventListener('mouseleave',()=>{ mcHover=-1; if(C) drawMkt(C); });
 }
 let mcRT; window.addEventListener('resize',()=>{ clearTimeout(mcRT); mcRT=setTimeout(()=>{ if(C) drawMkt(C); },120); });
+/* Read sides and GCI figures out of the agent's 1-year goals text ("30 sides", "$260K", "260,000")
+   and note when they're more than 5% off the calculated goal. Volume figures are ignored. */
+function goalTextNote(c){
+ const txt=String(S.vision.one||''); if(!txt.trim()||!(c.sides>0)) return '';
+ let sides=null, gci=null, m;
+ const sRe=/(\d+(?:\.\d+)?)\s*(?:closed\s+|total\s+)?(?:sides|deals|transactions|closings|units)\b/gi;
+ if((m=sRe.exec(txt))) sides=parseFloat(m[1]);
+ const gRe=/(\$\s*)?(\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?)\s*(k|m)?\b(?!\s*(?:sides|deals|transactions|closings|units|contacts|people|weeks|days|hours|%))/gi;
+ while((m=gRe.exec(txt))){ const after=txt.slice(m.index+m[0].length,m.index+m[0].length+20);
+  if(/^\s*(?:in\s+)?(?:sales\s+)?volume/i.test(after)) continue;
+  const v=parseFloat(m[2].replace(/,/g,''))*(m[3]?(/k/i.test(m[3])?1e3:1e6):1);
+  if((m[1]||m[3]||/,/.test(m[2]))&&v>=20000&&v<=5e6){ gci=v; break; } }
+ const off=(a,b)=>b>0&&Math.abs(a-b)/b>0.05, bad=(sides!=null&&off(sides,c.sides))||(gci!=null&&c.gci>0&&off(gci,c.gci));
+ if(!bad) return '';
+ const say=[sides!=null?`${int(sides)} sides`:'',gci!=null?moneyK(gci):''].filter(Boolean).join(' / ');
+ const plan=[sides!=null?`${int(c.sides)} sides`:'',gci!=null?moneyK(c.gci):''].filter(Boolean).join(' / ');
+ return `<span class="flag warn">Check your goals</span> Your 1-year goals say ${say} — your numbers plan ${plan}. Update one so they match.`;
+}
 function capText(c,long){
  const y=+S.meta.year||year, st=c.capStart||0;
  if(c.cap&&c.caps.length){ const cur=c.caps.find(x=>x.cy==='cur'); return c.caps.map(x=>`${long?MONTHS_FULL[x.m]:MONTHS[x.m]} ${y}${x.cy==='prev'?' (previous cap year)':''}`).join(' · ')+(cur?'':' · new cap year starts '+MONTHS[st]); }
@@ -1590,6 +1618,7 @@ function recompute(){
   out('cyBox',cyName); out('cyCard',st>0?`Jan – Dec ${y} · cap resets ${MONTHS[st]}`:`Jan – Dec ${y}`);
   { const w=document.getElementById('cap-paid-wrap'); if(w) w.style.display=st>0&&c.cap?'':'none'; out('capPrevName',st>0?`${MONTHS[(st+11)%12]} ${y}`:''); }
   out('capPaidOut',c.cap?money(c.capTot):'No cap');
+  { const same=c.cap>0&&Math.round(c.splitPaid)===Math.round(c.capTot), st=document.getElementById('split-tile'), dt=document.getElementById('ded-tiles'); if(st) st.style.display=same?'none':'contents'; if(dt) dt.classList.toggle('c3',same); }
   const cur=c.caps.find(x=>x.cy==='cur'), prev=c.caps.find(x=>x.cy==='prev');
   out('capLbl',!c.cap?'Cap paid':cur?`Cap paid in ${y} · you cap in ${MONTHS_FULL[cur.m]}`:prev?`Cap paid in ${y} · current cap year capped in ${MONTHS_FULL[prev.m]}`:`Cap paid in ${y} · ${money(c.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
  { const td=c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid; out('effSplit',money(td)); out('effPct',c.gci?pct(td/c.gci):'–'); }
@@ -1597,10 +1626,11 @@ function recompute(){
  out('buyShareBox',S.goals.listShare===''?'–':pct((100-Math.min(Math.max(n(S.goals.listShare),0),100))/100));
  out('gciLbl',S.goals.method==='budget'?'GCI needed':'GCI goal'); out('gciNeedBox',c.gci?money(c.gci):'Add your budget first'); out('profitBox',money(c.profit)); out('rrspY',c.rrsp?money(c.rrsp):'–'); out('tfsaY',c.post-c.extraSav?money(c.post-c.extraSav):'–');
  out('oneGoals',(S.vision.one||'').trim()||'Not filled in yet — add your 1-year goals on Vision & Goals.');
+ { const el=document.getElementById('goal-text-note'); if(el){ const h=goalTextNote(c); el.innerHTML=h; el.hidden=!h; } }
  { const sh=document.getElementById('split-hint'), g=S.goals; if(sh) sh.style.display=(g.cap!==''||g.dealFee!==''||g.capDate!==''||(S.meta.visited||[]).includes('deal'))?'none':''; }
  { const mb=document.getElementById('m-bud'); if(mb) mb.innerHTML=!c.hasBudget?'<div class="tip">Add your non-negotiables on <b>Your Budget</b> first — this option works out the GCI you need to cover them.</div>'
-    :`<div class="res c3" style="margin:0 0 12px">${RC('Your minimum <small>non-negotiables only</small>','minGciBox')}${RC('Your recommended goal <small>+ 10% marketing</small>','recGciBox','dark')}${RC('Your whole plan <small>+ coaching, assistant &amp; lifestyle</small>','fullGciBox')}</div>
-     <div class="bud-row"><span>Personal non-negotiables</span><b>${money(c.persNN)}</b></div><div class="bud-row"><span>+ Business non-negotiables</span><b>${money(c.bizNN)}</b></div><div class="bud-row"><span>+ Your savings</span><b>${money(c.savFirst)}</b></div><div class="bud-row"><span>+ Income tax holdback (${pct(c.t)})</span><b>${money(c.taxAmt)}</b></div><div class="bud-row"><span>+ Brokerage split, cap, fees &amp; RLP fee</span><b>${money(c.gci-c.netComm)}</b></div><div class="bud-row"><span>+ Room for marketing (10% of GCI)</span><b>${money(c.leftToPlan)}</b></div><div class="bud-row tot"><span>Your GCI goal</span><b>${money(c.gci)}</b></div>${c.fullGci>c.gci+500?`<p class="tip" style="margin-top:10px">This goal covers your non-negotiables, savings and 10% marketing. It doesn’t cover the coaching, assistant or lifestyle spending on Your Money — to fund all of that too, aim for <b>${money(c.fullGci)}</b>.</p>`:''}`; }
+    :`<div class="res c3" style="margin:0 0 12px">${RC('Your minimum <small>non-negotiables only</small>','minGciBox')}${RC(`Your recommended goal <small>${c.mktgPlanned?'+ your marketing plan':'+ 10% marketing'}</small>`,'recGciBox','dark')}${RC('Your whole plan <small>+ coaching, assistant &amp; lifestyle</small>','fullGciBox')}</div>
+     <div class="bud-row"><span>Personal non-negotiables</span><b>${money(c.persNN)}</b></div><div class="bud-row"><span>+ Business non-negotiables</span><b>${money(c.bizNN)}</b></div><div class="bud-row"><span>+ Your savings</span><b>${money(c.savFirst)}</b></div><div class="bud-row"><span>+ Income tax holdback (${pct(c.t)})</span><b>${money(c.taxAmt)}</b></div><div class="bud-row"><span>+ Brokerage split, cap, fees &amp; RLP fee</span><b>${money(c.gci-c.netComm)}</b></div><div class="bud-row"><span>+ ${c.mktgPlanned?'Room for your marketing plan':'Room for marketing (10% of GCI)'}</span><b>${money(c.leftToPlan)}</b></div><div class="bud-row tot"><span>Your GCI goal</span><b>${money(c.gci)}</b></div>${c.fullGci>c.gci+500?`<p class="tip" style="margin-top:10px">This goal covers your non-negotiables, savings and ${c.mktgPlanned?'the marketing you planned':'10% marketing'}. It doesn’t cover the coaching, assistant or lifestyle spending on Your Money — to fund all of that too, aim for <b>${money(c.fullGci)}</b>.</p>`:''}`; }
  { const fl=c.hasBudget&&c.persNN<36000&&c.surplus>Math.max(c.takeHome*0.4,25000)&&S.goals.method!=='budget';
    document.querySelectorAll('[data-o-html="budFlag"]').forEach(el=>el.innerHTML=fl?`<div class="tip"><span class="flag warn">Is your budget complete?</span> Your personal non-negotiables are ${money(c.persNN)} a year and this plan leaves a ${money(c.surplus)} surplus. Check that housing, transportation, insurance and family costs are all in — or try <b>Work back from my budget</b> on Your Goal.</div>`:''); }
  out('minGciBox',c.minGci?money(c.minGci):'–'); out('recGciBox',c.recGci?money(c.recGci):'–'); out('fullGciBox',c.fullGci?money(c.fullGci):'–');
@@ -1643,8 +1673,9 @@ function recompute(){
  out('reserveMonths',c.costMonth>0?dec((c.reserves+c.resTop)/c.costMonth)+' mo':'–');
  out('mktgYr',money(c.mktgTotal)); out('bizNN',money(c.bizNN)); out('persNN',money(c.persNN)); out('savFirstY',money(c.savFirst)); out('savAfterY',money(c.savAfter));
  out('mktgSug',c.gci?`suggested 10% of GCI: ${money(MKTG_PCT*c.gci)} · planned ${money(c.mktgTotal)}`:'suggested: 10% of your GCI');
- { const el=document.getElementById('mktg-flag'), sug=MKTG_PCT*c.gci; if(el) el.innerHTML=!c.gci?'':c.mktgTotal===0?`<div class="tip">Start with about <b>${money(sug)}</b> — 10% of your GCI — spread across the channels above.</div>`
-   :c.mktgTotal<sug*0.8?`<div class="tip"><span class="flag warn">Below 10%</span> You’ve planned ${money(c.mktgTotal)} (${pct(c.mktgTotal/c.gci)} of GCI). The suggestion is ${money(sug)}.</div>`:''; }
+ { const el=document.getElementById('mktg-flag'), sug=c.mktgSug; if(el) el.innerHTML=!c.gci||c.verdict==='over'||c.verdict==='min'?''
+   :c.mktgTotal===0?(c.verdict==='mktg'?`<div class="tip"><span class="flag warn">Less than 10% left</span> Suggested 10% of GCI is <b>${money(sug)}</b>; you have <b>${money(Math.max(c.leftToPlan,0))}</b> available — raise your goal or start smaller.</div>`:`<div class="tip">Start with about <b>${money(sug)}</b> — 10% of your GCI — spread across the channels above.</div>`)
+   :c.mktgTotal<sug*0.8?`<div class="tip"><span class="flag warn">Below 10%</span> You’ve planned ${money(c.mktgTotal)} (${pct(c.mktgTotal/c.gci)} of GCI). The suggestion is ${money(sug)}${c.leftToPlan<sug?` — you have ${money(Math.max(c.leftToPlan,0))} available, so raise your goal or start smaller`:''}.</div>`:''; }
  { const el=document.getElementById('left-wf'); if(el){ if(!c.gci) el.innerHTML='<tbody><tr><td class="muted">Set your goal on <b>Your Goal</b> first.</td></tr></tbody>';
    else { const r=(l,v,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="num">${v}</td></tr>`;
     el.innerHTML='<tbody>'+r('Commission after brokerage deductions',money(c.netComm),'strong')+r(`− Income tax holdback (${pct(c.t)})`,'−'+money(c.taxAmt))+r('− Business non-negotiables','−'+money(c.bizNN))+r('− Personal non-negotiables','−'+money(c.persNN))+r('− Your savings (Savings &amp; Reserves)','−'+money(c.savFirst))
@@ -1677,11 +1708,14 @@ function recompute(){
      ${parts.map(([l,v,h])=>`<tr><td>→ ${l} <small class="muted">${h}</small></td><td class="num">${money(v)}</td></tr>`).join('')}
      <tr class="tot${pay<0?' neg':''}"><td>→ Your pay <small class="muted">to your personal account</small></td><td class="num">${money(pay)}</td></tr></tbody>`; } } }
  const gn=document.getElementById('gci-note');
- if(gn) gn.innerHTML=S.goals.method!=='budget'&&S.goals.method!=='units'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${c.rrsp?' and RRSP':''}.${c.hasBudget&&c.minGci?(c.gci<c.minGci?` <span class="flag bad">Below your minimum</span> Your non-negotiables need at least <b>${money(c.minGci)}</b>.`:c.gci<c.recGci?` <span class="flag warn">Covers your non-negotiables</span> but not 10% marketing — the recommended goal is <b>${money(c.recGci)}</b>.`:` <span class="flag ok">Covers your non-negotiables and 10% marketing</span> (minimum ${money(c.minGci)} for non-negotiables only, ${money(c.recGci)} with 10% marketing).`):''}`:'';
+ if(gn) gn.innerHTML=S.goals.method!=='budget'&&S.goals.method!=='units'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${c.rrsp?' and RRSP':''}.${{min:` <span class="flag bad">Below your minimum</span> Your non-negotiables need at least <b>${money(c.minGci)}</b>.`,
+   mktg:` <span class="flag warn">Covers your non-negotiables</span> Suggested 10% of GCI for marketing is <b>${money(c.mktgSug)}</b>; you have <b>${money(Math.max(c.leftToPlan,0))}</b> available — raise your goal to about ${money(c.recGci)} or start smaller.`,
+   over:` <span class="flag warn">Over your plan by ${money(-c.surplus)}</span> Your non-negotiables are covered, but the marketing, growth and lifestyle plan on <b>Your Money</b> needs more — raise your goal to about <b>${money(c.fullGci)}</b> or trim the plan.`,
+   ok:` <span class="flag ok">Covers your non-negotiables and ${c.mktgPlanned?'your plan on Your Money':'10% marketing'}</span> (minimum ${money(c.minGci)} for non-negotiables only, ${money(c.recGci)} with ${c.mktgPlanned?'your marketing plan':'10% marketing'}).`}[c.verdict]||''}`:'';
 
  // positioning statement
  { const ps=psClean(S.pos.ps), b=(x,ph)=>x?`<b>${esc(x)}</b>`:`<span class="blank">${ph}</span>`;
-   const el=document.querySelector('[data-o="psPreview"]'); if(el) el.innerHTML=`For ${b(ps.client,'[ideal client]')}, I am the real estate professional who ${b(ps.value,'[primary value / difference]')} because ${b(ps.proof,'[proof / strength]')}, so they can ${b(ps.outcome,'[desired outcome]')}.`; }
+   const el=document.querySelector('[data-o="psPreview"]'); if(el) el.innerHTML=`For ${b(ps.client,'[ideal client]')}, I am the real estate professional who ${b(ps.value,'[primary value / difference]')}, because ${b(ps.proof,'[proof / strength]')}, so they can ${b(ps.outcome,'[desired outcome]')}.`; }
  // vision board link
  { const vb=document.getElementById('vb-open'), u=(S.vision.board||'').trim(); if(vb) vb.innerHTML=/^https?:\/\//i.test(u)?`<a class="btn btn-line btn-sm" style="margin-top:8px" href="${esc(u)}" target="_blank" rel="noopener">Open my vision board ↗</a>`:''; }
  // business model
@@ -1714,8 +1748,10 @@ function recompute(){
   const flag=(ok,good,bad)=>` <span class="flag ${ok?'ok':'warn'}">${ok?good:bad}</span>`;
   if(x.unit==='week'||x.unit==='month'){ const lbl=x.unit==='week'?'/wk':'/mo', avg=tot/filled.length;
    el.innerHTML=`${dec(avg)}${lbl} avg${T>0?flag(down?avg<=T:avg>=T,down?'within limit':'on track',down?'over limit':'below target'):''}`; }
-  else { const q=filled.length, onPace=T*q/4;
-   el.innerHTML=T>0?(down?`${int(tot)} of ${int(T)} max${flag(tot<=onPace,'within limit','over pace')}`:`${int(tot)} · ${pct(tot/T)}${flag(tot>=onPace,'on pace','behind pace')}`):int(tot); } });
+  else { /* share of the year passed = quarters up to the last one with an actual */
+   const q=x.q.reduce((a,v,j)=>v!==''?j+1:a,0), onPace=T*q/4, r=onPace>0?tot/onPace:0;
+   const pace=r>=1.1?['ok','ahead of pace']:r>=0.95?['ok','on pace']:['warn','behind pace'];
+   el.innerHTML=T>0?(down?`${int(tot)} of ${int(T)} max${flag(tot<=onPace,'within limit','over pace')}`:`${int(tot)} of ${int(T)} <span class="flag ${pace[0]}">${pace[1]}</span>`):int(tot); } });
  // cash flow
  { const tb=document.getElementById('cf-table');
    if(tb){ const y=+S.meta.year||year, hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers0=(c.persAnnual+c.postFix+c.extraSav+c.debtRed+c.rrspFix)/12, pp=c.pR+c.pT;
@@ -1735,7 +1771,7 @@ function recompute(){
    } }
  // vs last year
  const vl=document.getElementById('vs-last'), ls=n(S.last.listings)+n(S.last.buyers);
- if(vl) vl.innerHTML=ls?`<div class="tip">Last year you closed <b>${int(ls)}</b> sides${n(S.last.gci)?` for <b>${money(n(S.last.gci))}</b> GCI`:''}. This plan calls for <b>${int(c.sides)}</b> — ${c.sides>=ls?`<b>${pct((c.sides-ls)/ls)}</b> more`:`<b>${pct((ls-c.sides)/ls)}</b> fewer`}.</div>`:'';
+ if(vl) vl.innerHTML=ls&&c.sides>0?`<div class="tip">Last year you closed <b>${int(ls)}</b> sides${n(S.last.gci)?` for <b>${money(n(S.last.gci))}</b> GCI`:''}. This plan calls for <b>${int(c.sides)}</b> — ${c.sides>=ls?`<b>${pct((c.sides-ls)/ls)}</b> more`:`<b>${pct((ls-c.sides)/ls)}</b> fewer`}.</div>`:'';
  // scorecard
  c.qs.forEach((q,i)=>{
   const tg=q*c.gciSide; out('tq'+i,int(q)); out('tg'+i,money(tg));
@@ -1755,7 +1791,7 @@ function recompute(){
   const els=[...document.querySelectorAll('#s-'+s.id+' [data-k]')];
   const filled=els.filter(e=>{ const k=e.dataset.k, v=getP(k), d=k.split('.').reduce((o,x)=>o==null?undefined:o[x],BLANK);
    return e.type==='checkbox'?!!v:(v!==''&&v!=null&&String(v)!==String(d==null?'':d)); }).length;
-  const b=document.getElementById('nav-'+s.id); if(b) b.classList.toggle('done',s.id!=='start'&&filled>0);
+  const b=document.getElementById('nav-'+s.id); if(b) b.classList.toggle('done',s.id!=='start'&&(filled>0||(s.id==='season'&&(S.meta.visited||[]).includes('season'))));
  });
  if(current==='summary') renderSummary();
 }
@@ -1793,7 +1829,7 @@ function renderYearPage(c){
 function renderSummary(){
  const c=C||calc(), v=S.vision, el=document.getElementById('summary'); if(!el) return;
  const t=x=>x?esc(x):'<span class="muted">Not filled in yet</span>', has=c.gci>0, m=x=>has?money(x):'–';
- const ps=psClean(S.pos.ps), psTxt=(ps.client&&ps.value)?`For ${esc(ps.client)}, I am the real estate professional who ${esc(ps.value)}${ps.proof?` because ${esc(ps.proof)}`:''}${ps.outcome?`, so they can ${esc(ps.outcome)}`:''}.`:'';
+ const ps=psClean(S.pos.ps), psTxt=(ps.client&&ps.value)?`For ${esc(ps.client)}, I am the real estate professional who ${esc(ps.value)}${ps.proof?`, because ${esc(ps.proof)}`:''}${ps.outcome?`, so they can ${esc(ps.outcome)}`:''}.`:'';
  const vals=S.values.core.map(x=>x.v).filter(Boolean);
  const pris=S.pri.items.filter(x=>x.priority||x.measure);
  const prim=S.sources.filter(x=>x.pri==='Primary');
@@ -1811,7 +1847,7 @@ function renderSummary(){
  el.innerHTML=`
   <div class="print-only" style="border-bottom:3px solid var(--bp-red);padding-bottom:8px;margin-bottom:12px"><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#666;font-weight:700">Royal LePage Solutions</div><div style="font-size:21px;font-weight:800">${esc(who)}${who?' — ':''}${S.meta.year} Business Plan</div>${v.mission?`<div style="font-size:12px;color:#444;margin-top:3px">${esc(v.mission)}</div>`:''}</div>
   <div class="sum-grid">
-   <div class="sum-card"><h4>1-year goals</h4><p class="pre">${t(v.one)}</p><h4 class="mt">90-day priorities</h4><p class="pre">${t(v.ninety)}</p></div>
+   <div class="sum-card"><h4>1-year goals</h4><p class="pre">${t(v.one)}</p>${goalTextNote(c)?`<p class="sum-gnote">${goalTextNote(c)}</p>`:''}<h4 class="mt">90-day priorities</h4><p class="pre">${t(v.ninety)}</p></div>
    <div class="sum-card"><h4>Positioning</h4><p style="font-weight:600">${psTxt||t('')}</p><h4 class="mt">Core values</h4><p>${vals.length?vals.map(esc).join(' · '):t('')}</p>
     <div class="no-print-mission"><h4 class="mt">Mission</h4><p>${t(v.mission)}</p></div></div>
    <div class="sum-card"><h4>Strategic priorities</h4>${pris.length?`<ol>${pris.map(x=>`<li><b>${esc(x.priority)}</b>${x.measure?` — ${esc(x.measure)}${x.target!==''?`: ${int(n(x.target))}${x.unit&&x.unit!=='year'?(x.unit==='month'?'/mo':'/wk'):'/yr'}`:''}`:''}</li>`).join('')}</ol>`:t('')}
@@ -1819,7 +1855,7 @@ function renderSummary(){
    <div class="sum-card"><h4>The numbers</h4><dl>
     <dt>GCI goal</dt><dd>${m(c.gci)}</dd>${c.minGci?`<dt>Minimum GCI <small class="muted">non-negotiables</small></dt><dd>${money(c.minGci)}</dd>`:''}
     <dt>Closed sides</dt><dd>${has?`${int(c.sides)} <small class="muted">(${int(c.L)} listings / ${int(c.B)} buyers)</small>`:'–'}</dd>
-    <dt>Net income <small class="muted">after expenses</small></dt><dd>${m(c.profit)}</dd><dt>Take-home after tax</dt><dd>${m(c.takeHome)}</dd>
+    <dt>Net income <small class="muted">after expenses</small></dt><dd>${m(c.profit)}</dd><dt>Take-home after tax &amp; RRSP</dt><dd>${m(c.takeHome)}</dd>
     ${c.cap&&has?`<dt>Cap reached</dt><dd>${capText(c,true)}</dd>`:''}${c.hasBudget&&has?`<dt>${c.surplus<0?'Over your plan':'Unplanned surplus'}</dt><dd style="color:${c.surplus<0?'var(--bp-red)':'var(--green)'}">${money(Math.abs(c.surplus))}</dd>`:''}</dl></div>
   </div>
   <div class="sum-card mt14"><h4>Quarterly targets</h4>
