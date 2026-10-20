@@ -754,6 +754,7 @@ const moneyK=v=>{const a=Math.abs(v);const s=v<0?'-$':'$';return a>=1e6?s+(a/1e6
 const int=v=>{ const r=Math.round(v)||0; return (r===0?0:r).toLocaleString('en-CA'); };
 const dec=v=>{ const r=Math.round(v*10)/10||0; return (r===0?0:r).toLocaleString('en-CA'); };
 const pct=v=>Math.round(v*100)+'%';
+const pct1=v=>{ const r=Math.round(v*1000)/10; return (Number.isInteger(r)?r:r.toFixed(1))+'%'; };
 const small=(v,yr)=>v>0&&v<0.1?(yr?dec(yr/12)+'/mo':'<0.1'):dec(v);
 
 function F(label,key,o={}){
@@ -1082,13 +1083,14 @@ const SECTIONS=[
  `},
  {id:'score',t:'Quarterly Scorecard',d:'Annual → quarterly → monthly. Sit down once a quarter, enter your actuals, and grade each part of your business.',html:()=>`
   <h3>Quarterly results</h3>
+  <p class="fine" id="q-gci-note" style="margin:-4px 0 8px"></p>
   <div class="tbl-wrap"><table><thead><tr><th>Quarter</th><th class="num">Target closings</th><th style="width:110px">Actual sides</th><th class="num">Target GCI</th><th style="width:160px">Actual GCI</th><th class="num">Pace</th><th>Notes</th></tr></thead><tbody id="score-body"></tbody></table></div>
   <h3>Activity &amp; expenses</h3>
-  ${intro('The leading numbers that produce closings. Targets are a quarter of your Activity Plan and budget.')}
+  ${intro('The leading numbers that produce closings. Activity targets follow the season — heaviest in the quarters that feed the spring market, since today’s conversations close about three months later. Expenses are a quarter of your budget.')}
   <div class="tbl-wrap"><table class="sc2"><thead><tr><th rowspan="2">Quarter</th><th colspan="2" class="num">Conversations</th><th colspan="2" class="num">Appointments</th><th colspan="2" class="num">Listings taken</th><th colspan="2" class="num">Business expenses</th></tr>
    <tr><th class="num">Target</th><th>Actual</th><th class="num">Target</th><th>Actual</th><th class="num">Target</th><th>Actual</th><th class="num">Budget</th><th>Actual</th></tr></thead><tbody id="sc2-body"></tbody></table></div>
   <h3>Strategic priority measures</h3>
-  ${intro('Your key measures from <b>Strategic Priorities</b>. Enter the actual result for each quarter.')}
+  ${intro('Your key measures from <b>Strategic Priorities</b>. Enter the actual total for each quarter. Per-week and per-month targets are compared as an average, so a limit like “3 hours a week on admin” is checked against your weekly average, not a yearly total.')}
   <div class="tbl-wrap"><table><thead><tr><th>Priority</th><th>Key measure</th><th class="num">Annual target</th><th style="width:90px">Q1</th><th style="width:90px">Q2</th><th style="width:90px">Q3</th><th style="width:90px">Q4</th><th class="num">Year to date</th></tr></thead><tbody id="pm-body"></tbody></table></div>
   <h3>Red · Yellow · Green check-in</h3>
   <p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">How is each of your strategic priorities going? Click a cell to cycle through red, yellow and green.</p>
@@ -1206,7 +1208,7 @@ const PER={year:1,month:12,week:52}; const annualT=x=>x.target===''?'':n(x.targe
 function renderPM(){
  const el=document.getElementById('pm-body'); if(!el) return;
  const rows=S.pri.items.map((x,i)=>[x,i]).filter(([x])=>x.priority||x.measure);
- el.innerHTML=rows.length?rows.map(([x,i])=>`<tr><td><b>${esc(x.priority)||'—'}</b></td><td>${esc(x.measure)||'—'}</td><td class="num">${x.target!==''?`${int(annualT(x))}${x.unit&&x.unit!=='year'?` <small class="muted">(${int(n(x.target))}/${x.unit==='month'?'mo':'wk'})</small>`:''}`:'–'}</td>
+ el.innerHTML=rows.length?rows.map(([x,i])=>`<tr><td><b>${esc(x.priority)||'—'}</b></td><td>${esc(x.measure)||'—'}</td><td class="num">${x.target===''?'–':x.unit==='week'?`${dec(n(x.target))} / week`:x.unit==='month'?`${dec(n(x.target))} / month`:int(n(x.target))}</td>
   ${[0,1,2,3].map(q=>`<td><input type="number" inputmode="decimal" data-k="pri.items.${i}.q.${q}" aria-label="Q${q+1} actual"></td>`).join('')}<td class="num" data-o="pmY${i}"></td></tr>`).join('')
   :'<tr><td colspan="8" class="muted">Add your strategic priorities and key measures first.</td></tr>';
  fillAll(el);
@@ -1485,9 +1487,12 @@ function calc(){
  const qRound=(tot,parts)=>{ const T=parts.reduce((a,b)=>a+b,0)||1; let cum=0,prev=0; return parts.map(x=>{ cum+=tot*x/T; const r=Math.round(cum+1e-9), u=r-prev; prev=r; return u; }); };
  const qParts=[0,1,2,3].map(q=>closeM[q*3]+closeM[q*3+1]+closeM[q*3+2]);
  const qs=qRound(sides,qParts);
+ /* Activity runs about 3 months ahead of the deals it produces, so quarterly activity targets
+    follow the firm-date curve shifted earlier (heaviest in winter, ahead of the spring market). */
+ const fw=S.season.w.map(x=>Math.max(n(x),0)), actW=MONTHS.map((x,m)=>fw[(m+3)%12]), actQ=[0,1,2,3].map(q=>actW[q*3]+actW[q*3+1]+actW[q*3+2]);
  const reserveMonthly=(persAnnual+bizAnnual)/12;
  return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
-  sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,closeM,qRound,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persNN+bizNN>0,
+  sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,closeM,qRound,actQ,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persNN+bizNN>0,
   lAp,bCo,lTk,conv,convAll,refShare,hasSrc,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed,rrspFix,postFix,pR,pT,costMonth,resTarget,resGap,resTop,bizNN,bizGrow,persNN,persLife,savFirst,savAfter,leftToPlan,minGci,recGci,fullGci,pFirst,extraSav};
 }
 
@@ -1663,7 +1668,7 @@ function recompute(){
   const el=document.getElementById('chq-wf'); if(el){
    const chq0=c.chequeBefore>0?c.chequeBefore:c.chequeAfter, gh=n(S.goals.gstHold)/100, xt=n(S.alloc.tax)/100, bizSh=c.netComm>0?Math.min(c.bizAnnual/c.netComm,1):0;
    if(!(chq0>0)) el.innerHTML='<tbody><tr><td class="muted">Set your deal on <b>Your Deal</b> and a goal above to see how to split each cheque.</td></tr></tbody>';
-   else { const parts=[['GST account',chq0*gh,`GST holdback (${pct(gh)})`],['Tax account',chq0*(c.t+xt),`Income tax holdback (${pct(c.t)})${xt?` + extra ${pct(xt)}`:''}`],['RRSP',chq0*c.pR,`${pct(c.pR)} of each transaction`],['TFSA',chq0*c.pT,`${pct(c.pT)} of each transaction`],['Business account',chq0*bizSh,`${pct(bizSh)} — covers your business expenses`]].filter(x=>x[1]>0.5);
+   else { const parts=[['GST account',chq0*gh,`GST holdback (${pct1(gh)})`],['Tax account',chq0*(c.t+xt),`Income tax holdback (${pct1(c.t)})${xt?` + extra ${pct1(xt)}`:''}`],['RRSP',chq0*c.pR,`${pct1(c.pR)} of each transaction`],['TFSA',chq0*c.pT,`${pct1(c.pT)} of each transaction`],['Business account',chq0*bizSh,`${pct1(bizSh)} — covers your business expenses`]].filter(x=>x[1]>0.5);
     const tot=chq0*1.05, pay=tot-parts.reduce((a,x)=>a+x[1],0);
     el.innerHTML=`<thead><tr><th>A typical cheque${c.cap?' before you cap':''}</th><th class="num">Amount</th></tr></thead><tbody>
      <tr class="strong"><td>Commission cheque</td><td class="num">${money(chq0)}</td></tr><tr><td>+ GST collected (5%)</td><td class="num">+${money(chq0*0.05)}</td></tr>
@@ -1698,11 +1703,14 @@ function recompute(){
     if(want) msgs.push(work>want?`<span class="flag warn">More work than you want</span> This week has ${work} working hours; on Business Model you said ${int(want)}.`:`<span class="flag ok">Fits your hours</span> ${work} working hours against the ${int(want)} you set on Business Model.`); }
    if(fl) fl.innerHTML=msgs.map(m=>`<div class="tip">${m}</div>`).join(''); }
  // scorecard activity targets
- { const eq=[1,1,1,1], tc=c.qRound(Math.round(c.conv+c.conY),eq), ta=c.qRound(Math.round(c.lAp+c.bCo),eq), tl=c.qRound(Math.round(c.lTk),eq); for(let q=0;q<4;q++){ out('tc'+q,int(tc[q])); out('ta'+q,int(ta[q])); out('tl'+q,int(tl[q])); out('te'+q,money(c.bizAnnual/4)); } }
+ { const eq=c.actQ, tc=c.qRound(Math.round(c.conv+c.conY),eq), ta=c.qRound(Math.round(c.lAp+c.bCo),eq), tl=c.qRound(Math.round(c.lTk),eq); for(let q=0;q<4;q++){ out('tc'+q,int(tc[q])); out('ta'+q,int(ta[q])); out('tl'+q,int(tl[q])); out('te'+q,money(c.bizAnnual/4)); } }
  // primary channel count
  { const np=S.sources.filter(x=>x.pri==='Primary').length, el=document.getElementById('src-pri'); if(el) el.innerHTML=np>=3&&np<=5?`<span class="flag ok">${np} primary</span>`:np<3?`<span class="flag warn">${np} primary — mark at least 3</span>`:`<span class="flag warn">${np} primary — pick your top 5</span>`; }
  // strategic priority measures
- S.pri.items.forEach((x,i)=>{ const filled=x.q.filter(v=>v!==''); const tot=filled.reduce((a,v)=>a+n(v),0); out('pmY'+i,filled.length?(x.target!==''&&n(x.target)>0?`${int(tot)} · ${pct(tot/annualT(x))}`:int(tot)):'–'); });
+ S.pri.items.forEach((x,i)=>{ const filled=x.q.filter(v=>v!==''); const tot=filled.reduce((a,v)=>a+n(v),0); if(!filled.length){ out('pmY'+i,'–'); return; }
+  if(x.unit==='week'||x.unit==='month'){ const per=x.unit==='week'?13:3, avg=tot/(filled.length*per), lbl=x.unit==='week'?'/wk':'/mo';
+   out('pmY'+i,`${dec(avg)}${lbl} avg${x.target!==''&&n(x.target)>0?` · target ${dec(n(x.target))}${lbl}`:''}`); }
+  else out('pmY'+i,x.target!==''&&n(x.target)>0?`${int(tot)} · ${pct(tot/n(x.target))}`:int(tot)); });
  // cash flow
  { const tb=document.getElementById('cf-table');
    if(tb){ const y=+S.meta.year||year, hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers0=(c.persAnnual+c.postFix+c.extraSav+c.debtRed+c.rrspFix)/12, pp=c.pR+c.pT;
@@ -1725,12 +1733,13 @@ function recompute(){
  if(vl) vl.innerHTML=ls?`<div class="tip">Last year you closed <b>${int(ls)}</b> sides${n(S.last.gci)?` for <b>${money(n(S.last.gci))}</b> GCI`:''}. This plan calls for <b>${int(c.sides)}</b> — ${c.sides>=ls?`<b>${pct((c.sides-ls)/ls)}</b> more`:`<b>${pct((ls-c.sides)/ls)}</b> fewer`}.</div>`:'';
  // scorecard
  c.qs.forEach((q,i)=>{
-  const tg=c.monthG[i*3]+c.monthG[i*3+1]+c.monthG[i*3+2]; out('tq'+i,int(q)); out('tg'+i,money(tg));
+  const tg=q*c.gciSide; out('tq'+i,int(q)); out('tg'+i,money(tg));
   const au=S.score.q[i].units, ag=S.score.q[i].gci;
   out('pace'+i,(au===''&&ag==='')?'–':(ag!==''&&tg>0)?pct(n(ag)/tg):(q>0?pct(n(au)/q):'–'));
  });
  if(!c.gci){ ['netGoalBox','profitBox','takeHome','netComm','splitPaid','capPaidOut','feesPaid','donPaid','rlpPaid','effSplit','taxAmt','gstAmt','afterHold','lb','volume','bizPct','sides','gci'].forEach(k=>out(k,'–')); out('effPct','–'); }
  { const cp=document.getElementById('cpc-p'); if(cp) cp.hidden=!c.sides; }
+ { const el=document.getElementById('q-gci-note'); if(el) el.innerHTML=c.sides&&c.gciSide?`Target GCI = closings × your GCI per side (${money(c.gciSide)}). The four quarters add up to <b>${money(c.sides*c.gciSide)}</b>${Math.abs(c.sides*c.gciSide-c.gci)>1?` — your ${money(c.gci)} goal rounded up to ${int(c.sides)} whole sides`:''}.`:''; }
  // "you need these first"
  { const have={budget:c.hasBudget,deal:c.gciSide>0,numbers:c.gci>0}, lbl={budget:'Your Budget',deal:'Your Deal',numbers:'Your Goal'};
    const needs={numbers:S.goals.method==='budget'?['budget','deal']:['deal'],savings:['numbers'],money:['budget','deal','numbers'],season:['deal','numbers'],sources:['numbers'],activity:['numbers'],week:['numbers'],score:['numbers']};
@@ -1785,15 +1794,15 @@ function renderSummary(){
  const prim=S.sources.filter(x=>x.pri==='Primary');
  const who=agentName(), acts=(S.act||[]).filter(a=>a.what).slice().sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999')).slice(0,5);
  // quarterly targets (whole numbers that add up to the year)
- const qc=c.qRound(Math.round(c.conv+c.conY),[1,1,1,1]), qa=c.qRound(Math.round(c.lAp+c.bCo),[1,1,1,1]);
- const qRows=[0,1,2,3].map(q=>{ const g=c.monthG[q*3]+c.monthG[q*3+1]+c.monthG[q*3+2]; return `<tr><td><b>Q${q+1}</b></td><td class="num">${has?int(c.qs[q]):'–'}</td><td class="num">${has?money(g):'–'}</td><td class="num">${has?int(qc[q]):'–'}</td><td class="num">${has?int(qa[q]):'–'}</td></tr>`; }).join('');
+ const qc=c.qRound(Math.round(c.conv+c.conY),c.actQ), qa=c.qRound(Math.round(c.lAp+c.bCo),c.actQ);
+ const qRows=[0,1,2,3].map(q=>{ const g=c.qs[q]*c.gciSide; return `<tr><td><b>Q${q+1}</b></td><td class="num">${has?int(c.qs[q]):'–'}</td><td class="num">${has?money(g):'–'}</td><td class="num">${has?int(qc[q]):'–'}</td><td class="num">${has?int(qa[q]):'–'}</td></tr>`; }).join('');
  // every-cheque rule (share of a typical commission cheque)
  const gh=n(S.goals.gstHold)/100, xt=n(S.alloc.tax)/100, bizSh=c.netComm>0?Math.min(c.bizAnnual/c.netComm,1):0;
  const parts=[[c.t+xt,'tax'],[gh,'GST'],[c.pR,'RRSP'],[c.pT,'TFSA'],[bizSh,'business']].filter(x=>x[0]>0.004);
  const pay=1.05-gh-c.t-xt-c.pR-c.pT-bizSh;
- const chq=has&&c.gciSide>0?`From each cheque: ${parts.map(([p,l])=>`<b>${pct(p)}</b> ${l}`).join(' · ')} · the rest (about <b>${pct(Math.max(pay,0))}</b>) is your pay.`:t('');
+ const chq=has&&c.gciSide>0?`From each cheque: ${parts.map(([p,l])=>`<b>${pct1(p)}</b> ${l}`).join(' · ')} · the rest (about <b>${pct1(Math.max(pay,0))}</b>) is your pay.`:t('');
  // database
- const dbt=DB_GRADES.filter(([k])=>k!=='d').reduce((a,[k])=>a+n(S.db[k]),0), dbStr=dbt?DB_GRADES.filter(([k])=>['ap','a','b','c'].includes(k)).map(([k,g])=>`${int(n(S.db[k]))} ${g}`).join(' · '):'';
+ const dbt=DB_GRADES.filter(([k])=>k!=='d').reduce((a,[k])=>a+n(S.db[k]),0), dbStr=dbt?DB_GRADES.filter(([k])=>['ap','a','b','c','o'].includes(k)).map(([k,g])=>`${int(n(S.db[k]))} ${g}`).join(' · '):'';
  el.innerHTML=`
   <div class="print-only" style="border-bottom:3px solid var(--bp-red);padding-bottom:8px;margin-bottom:12px"><div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#666;font-weight:700">Royal LePage Solutions</div><div style="font-size:21px;font-weight:800">${esc(who)}${who?' — ':''}${S.meta.year} Business Plan</div>${v.mission?`<div style="font-size:12px;color:#444;margin-top:3px">${esc(v.mission)}</div>`:''}</div>
   <div class="sum-grid">
@@ -1809,7 +1818,7 @@ function renderSummary(){
     ${c.cap&&has?`<dt>Cap reached</dt><dd>${capText(c,true)}</dd>`:''}${c.hasBudget&&has?`<dt>${c.surplus<0?'Over your plan':'Unplanned surplus'}</dt><dd style="color:${c.surplus<0?'var(--bp-red)':'var(--green)'}">${money(Math.abs(c.surplus))}</dd>`:''}</dl></div>
   </div>
   <div class="sum-card mt14"><h4>Quarterly targets</h4>
-   <table class="sum-q"><thead><tr><th></th><th class="num">Closings</th><th class="num">GCI</th><th class="num">Conversations</th><th class="num">Appointments</th></tr></thead><tbody>${qRows}</tbody></table></div>
+   <table class="sum-q"><thead><tr><th></th><th class="num">Closings</th><th class="num">GCI <small style="text-transform:none;letter-spacing:0;font-weight:500">closings × per side</small></th><th class="num">Conversations</th><th class="num">Appointments</th></tr></thead><tbody>${qRows}</tbody></table></div>
   <div class="sum-grid mt14">
    <div class="sum-card"><h4>Activity</h4><dl>
     <dt>Conversations per day</dt><dd>${has?`${dec((c.conv+c.conY)/c.days)} <small class="muted">(${dec(c.conv/c.days)} prospecting · ${dec(c.conY/c.days)} referral)</small>`:'–'}</dd>
