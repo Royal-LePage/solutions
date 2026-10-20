@@ -1070,6 +1070,7 @@ const SECTIONS=[
    <div class="h">Activity</div><div class="h" style="text-align:right">Year</div><div class="h" style="text-align:right">Month</div><div class="h" style="text-align:right">Week</div><div class="h" style="text-align:right">Day</div>
    ${[['Prospecting conversations <small style="font-weight:400;color:var(--bp-dark-grey)">non-referral share</small>','conv'],['Prospecting hours','hrs'],['Listing appointments','lAp'],['Buyer consultations','bCo'],['Listings taken','lTk']].map(([l,k])=>`<div class="k">${l}</div><div class="x" data-o="${k}Y"></div><div class="x" data-o="${k}M"></div><div class="x" data-o="${k}W"></div><div class="x today" data-o="${k}D"></div>`).join('')}
   </div>
+  <p style="color:var(--bp-dark-grey);font-size:12.5px;margin:6px 0 0">Conversations and hours cover only your prospecting share (the sides that don’t come from referrals). Appointments, consultations and listings cover <b>all</b> your sides, referrals included.</p>
   <p id="cpc-p" style="color:var(--bp-dark-grey);font-size:13.5px">That works out to about <b data-o="convPerClose"></b> conversations for every closed side, over <b data-o="workDays"></b> prospecting days.</p>
   <h3>Referral targets <small style="font-weight:400;color:var(--bp-dark-grey)">sphere, past clients &amp; partners</small></h3>
   <div class="row c4">${F('Referrals needed per close','kpi.refPerClose',{type:'num',ph:'typical 3'})}${F('Contacts needed per referral','kpi.contactsPerRef',{type:'num',ph:'typical 20'})}</div>
@@ -1297,7 +1298,7 @@ document.addEventListener('change',e=>{ const t=e.target; if(t.tagName==='SELECT
 document.addEventListener('click',e=>{ const mo=document.getElementById('more'); if(mo&&mo.open&&!e.target.closest('#more')) mo.open=false; if(e.target.closest('.more-menu button')&&mo) mo.open=false;
  const t=e.target.closest('button'); if(!t) return;
  if(t.dataset.go){ show(t.dataset.go,true); return; }
- if(t.dataset.m){ if(t.dataset.m!==S.goals.method){ const c=calc(); if(t.dataset.m==='units'){ S.goals.listings=c.L; S.goals.buyers=c.B; } if(t.dataset.m==='gci'&&c.gci>0) S.goals.gciGoal=Math.ceil(c.gci/1000)*1000; if(t.dataset.m==='budget'&&!c.hasBudget) toast('Add your personal budget on Your Budget first'); } S.goals.method=t.dataset.m; fillAll(); toggleVis(); recompute(); queueSave(); return; }
+ if(t.dataset.m){ if(t.dataset.m!==S.goals.method){ const c=calc(); if(t.dataset.m==='units'&&!(n(S.goals.listings)>0)&&!(n(S.goals.buyers)>0)){ S.goals.listings=c.L; S.goals.buyers=c.B; } if(t.dataset.m==='gci'&&c.gci>0&&!(n(S.goals.gciGoal)>0)) S.goals.gciGoal=Math.ceil(c.gci/1000)*1000; if(t.dataset.m==='budget'&&!c.hasBudget) toast('Add your personal budget on Your Budget first'); } S.goals.method=t.dataset.m; fillAll(); toggleVis(); recompute(); queueSave(); return; }
  if(t.dataset.calq!==undefined){ calQ=+t.dataset.calq; renderCal(); return; }
  if(t.dataset.ryg){ const [k,q]=t.dataset.ryg.split('.').map(Number); const r=(S.score.rygP[k]||(S.score.rygP[k]={q:[0,0,0,0]})).q; const s=((r[q]||0)+1)%4; r[q]=s; t.dataset.s=s; t.textContent=['—','Red','Yellow','Green'][s]; queueSave(); return; }
  if(t.dataset.vw){ const w=t.dataset.vw, ws=S.values.words, i=ws.findIndex(x=>String(x||'').trim().toLowerCase()===w.toLowerCase());
@@ -1573,7 +1574,7 @@ function bindMkt(){
 let mcRT; window.addEventListener('resize',()=>{ clearTimeout(mcRT); mcRT=setTimeout(()=>{ if(C) drawMkt(C); },120); });
 function capText(c,long){
  const y=+S.meta.year||year, st=c.capStart||0;
- if(c.cap&&c.caps.length){ const cur=c.caps.find(x=>x.cy==='cur'), x=cur||c.caps[0]; return `${long?MONTHS_FULL[x.m]:MONTHS[x.m]} ${y}${cur?'':' (cap year ending '+MONTHS[(st+11)%12]+')'}`; }
+ if(c.cap&&c.caps.length){ const cur=c.caps.find(x=>x.cy==='cur'); return c.caps.map(x=>`${long?MONTHS_FULL[x.m]:MONTHS[x.m]} ${y}${x.cy==='prev'?' (previous cap year)':''}`).join(' · ')+(cur?'':' · new cap year starts '+MONTHS[st]); }
  if(!c.cap) return 'No cap';
  if(!c.caps.length) return `Not this year · ${moneyK(c.capRemaining)} to go`;
  const parts=c.caps.map(x=>`${long?MONTHS_FULL[x.m]:MONTHS[x.m]} (side ${x.side})`);
@@ -1598,11 +1599,11 @@ function recompute(){
  out('oneGoals',(S.vision.one||'').trim()||'Not filled in yet — add your 1-year goals on Vision & Goals.');
  { const sh=document.getElementById('split-hint'), g=S.goals; if(sh) sh.style.display=(g.cap!==''||g.dealFee!==''||g.capDate!==''||(S.meta.visited||[]).includes('deal'))?'none':''; }
  { const mb=document.getElementById('m-bud'); if(mb) mb.innerHTML=!c.hasBudget?'<div class="tip">Add your non-negotiables on <b>Your Budget</b> first — this option works out the GCI you need to cover them.</div>'
-    :`<div class="res c2" style="margin:0 0 12px">${RC('Your minimum <small>non-negotiables only</small>','minGciBox')}${RC('Your recommended goal <small>+ 10% marketing</small>','recGciBox','dark')}</div>
-     <div class="bud-row"><span>Personal non-negotiables</span><b>${money(c.persNN)}</b></div><div class="bud-row"><span>+ Business non-negotiables</span><b>${money(c.bizNN)}</b></div><div class="bud-row"><span>+ Your savings</span><b>${money(c.savFirst)}</b></div><div class="bud-row"><span>+ Income tax holdback (${pct(c.t)})</span><b>${money(c.taxAmt)}</b></div><div class="bud-row"><span>+ Brokerage split, cap, fees &amp; RLP fee</span><b>${money(c.gci-c.netComm)}</b></div><div class="bud-row"><span>+ Room for marketing (10%) &amp; the rest of your plan</span><b>${money(c.leftToPlan)}</b></div><div class="bud-row tot"><span>Your GCI goal</span><b>${money(c.gci)}</b></div>`; }
+    :`<div class="res c3" style="margin:0 0 12px">${RC('Your minimum <small>non-negotiables only</small>','minGciBox')}${RC('Your recommended goal <small>+ 10% marketing</small>','recGciBox','dark')}${RC('Your whole plan <small>+ coaching, assistant &amp; lifestyle</small>','fullGciBox')}</div>
+     <div class="bud-row"><span>Personal non-negotiables</span><b>${money(c.persNN)}</b></div><div class="bud-row"><span>+ Business non-negotiables</span><b>${money(c.bizNN)}</b></div><div class="bud-row"><span>+ Your savings</span><b>${money(c.savFirst)}</b></div><div class="bud-row"><span>+ Income tax holdback (${pct(c.t)})</span><b>${money(c.taxAmt)}</b></div><div class="bud-row"><span>+ Brokerage split, cap, fees &amp; RLP fee</span><b>${money(c.gci-c.netComm)}</b></div><div class="bud-row"><span>+ Room for marketing (10% of GCI)</span><b>${money(c.leftToPlan)}</b></div><div class="bud-row tot"><span>Your GCI goal</span><b>${money(c.gci)}</b></div>${c.fullGci>c.gci+500?`<p class="tip" style="margin-top:10px">This goal covers your non-negotiables, savings and 10% marketing. It doesn’t cover the coaching, assistant or lifestyle spending on Your Money — to fund all of that too, aim for <b>${money(c.fullGci)}</b>.</p>`:''}`; }
  { const fl=c.hasBudget&&c.persNN<36000&&c.surplus>Math.max(c.takeHome*0.4,25000)&&S.goals.method!=='budget';
    document.querySelectorAll('[data-o-html="budFlag"]').forEach(el=>el.innerHTML=fl?`<div class="tip"><span class="flag warn">Is your budget complete?</span> Your personal non-negotiables are ${money(c.persNN)} a year and this plan leaves a ${money(c.surplus)} surplus. Check that housing, transportation, insurance and family costs are all in — or try <b>Work back from my budget</b> on Your Goal.</div>`:''); }
- out('minGciBox',c.minGci?money(c.minGci):'–'); out('recGciBox',c.recGci?money(c.recGci):'–');
+ out('minGciBox',c.minGci?money(c.minGci):'–'); out('recGciBox',c.recGci?money(c.recGci):'–'); out('fullGciBox',c.fullGci?money(c.fullGci):'–');
  out('gci',c.gci?moneyK(c.gci):'–'); out('netTop',c.gci?moneyK(c.profit):'–'); out('netGoalBox',money(c.profit)); out('sides',c.sides?int(c.sides):'–'); out('lb',`${int(c.L)} / ${int(c.B)}`); out('volume',moneyK(c.volume));
  if(c.hasBudget) out('surplus',moneyK(c.surplus),c.surplus<0?'neg':'pos'); else out('surplus','Add budget','');
  // season
@@ -1676,7 +1677,7 @@ function recompute(){
      ${parts.map(([l,v,h])=>`<tr><td>→ ${l} <small class="muted">${h}</small></td><td class="num">${money(v)}</td></tr>`).join('')}
      <tr class="tot${pay<0?' neg':''}"><td>→ Your pay <small class="muted">to your personal account</small></td><td class="num">${money(pay)}</td></tr></tbody>`; } } }
  const gn=document.getElementById('gci-note');
- if(gn) gn.innerHTML=S.goals.method!=='budget'&&S.goals.method!=='units'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${c.rrsp?' and RRSP':''}.${c.hasBudget&&c.minGci?(c.gci<c.minGci?` <span class="flag bad">Below your minimum</span> Your non-negotiables need at least <b>${money(c.minGci)}</b>.`:c.gci<c.recGci?` <span class="flag warn">Covers your non-negotiables</span> but not 10% marketing — the recommended goal is <b>${money(c.recGci)}</b>.`:` <span class="flag ok">Covers your non-negotiables and 10% marketing</span> (minimum ${money(c.minGci)}).`):''}`:'';
+ if(gn) gn.innerHTML=S.goals.method!=='budget'&&S.goals.method!=='units'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${c.rrsp?' and RRSP':''}.${c.hasBudget&&c.minGci?(c.gci<c.minGci?` <span class="flag bad">Below your minimum</span> Your non-negotiables need at least <b>${money(c.minGci)}</b>.`:c.gci<c.recGci?` <span class="flag warn">Covers your non-negotiables</span> but not 10% marketing — the recommended goal is <b>${money(c.recGci)}</b>.`:` <span class="flag ok">Covers your non-negotiables and 10% marketing</span> (minimum ${money(c.minGci)} for non-negotiables only, ${money(c.recGci)} with 10% marketing).`):''}`:'';
 
  // positioning statement
  { const ps=psClean(S.pos.ps), b=(x,ph)=>x?`<b>${esc(x)}</b>`:`<span class="blank">${ph}</span>`;
@@ -1802,9 +1803,9 @@ function renderSummary(){
  const qRows=[0,1,2,3].map(q=>{ const g=c.qs[q]*c.gciSide; return `<tr><td><b>Q${q+1}</b></td><td class="num">${has?int(c.qs[q]):'–'}</td><td class="num">${has?money(g):'–'}</td><td class="num">${has?int(qc[q]):'–'}</td><td class="num">${has?int(qa[q]):'–'}</td></tr>`; }).join('');
  // every-cheque rule (share of a typical commission cheque)
  const gh=n(S.goals.gstHold)/100, xt=n(S.alloc.tax)/100, bizSh=c.netComm>0?Math.min(c.bizAnnual/c.netComm,1):0;
- const parts=[[c.t+xt,'tax'],[gh,'GST'],[c.pR,'RRSP'],[c.pT,'TFSA'],[bizSh,'business']].filter(x=>x[0]>0.004);
- const pay=1.05-gh-c.t-xt-c.pR-c.pT-bizSh;
- const chq=has&&c.gciSide>0?`From each cheque: ${parts.map(([p,l])=>`<b>${pct1(p)}</b> ${l}`).join(' · ')} · the rest (about <b>${pct1(Math.max(pay,0))}</b>) is your pay.`:t('');
+ const parts=[[c.t+xt,'tax'],[c.pR,'RRSP'],[c.pT,'TFSA'],[bizSh,'business']].filter(x=>x[0]>0.004);
+ const pay=1-c.t-xt-c.pR-c.pT-bizSh;
+ const chq=has&&c.gciSide>0?`From each cheque: ${parts.map(([p,l])=>`<b>${pct1(p)}</b> ${l}`).join(' · ')} · the rest (about <b>${pct1(Math.max(pay,0))}</b>) is your pay. The 5% GST is collected on top and goes straight to your GST account.`:t('');
  // database
  const dbt=DB_GRADES.filter(([k])=>k!=='d').reduce((a,[k])=>a+n(S.db[k]),0), dbStr=dbt?DB_GRADES.filter(([k])=>['ap','a','b','c','o'].includes(k)).map(([k,g])=>`${int(n(S.db[k]))} ${g}`).join(' · '):'';
  el.innerHTML=`
@@ -1925,7 +1926,7 @@ const SAMPLE={meta:{year:0},vision:{name:'Sample Agent (Jordan Lee)',one:'Close 
  goals:{method:'gci',gciGoal:210000,avgPrice:650000,commModel:'tier',t1:3.5,t2:1.5,split:20,cap:12000,capDate:'2027-06-01',dealFee:250,feeMode:'cap',tax:30,gstHold:5,listShare:50,buyShare:50},
  save:{rrspM:300,postTaxP:5,reserves:8000,resMonths:'3'},mktg:{paid:3000,print:4000,events:3500,popby:2000,email:1000,signage:1500},
  sources:[{goal:9,last:7,pri:'Primary'},{goal:4,last:3,pri:'Primary'},{goal:0,last:0},{goal:2,last:2,pri:'Primary'},{goal:2,last:2,pri:'Secondary'},{goal:0,last:1},{goal:1,last:0}],
- db:{ap:20,a:45,b:110,c:180,o:40,d:25,add:8},pri:{items:[{goal:'18 sides',priority:'Referral growth',why:'Most of my business comes from my sphere',strategy:'Monthly touch + quarterly events',measure:'Referrals',target:45,q:['','','','']},{goal:'9 listings',priority:'Listing pipeline',why:'Listings drive buyer leads',strategy:'Geographic authority',measure:'Listing appointments',target:16,q:['','','','']}]}};
+ db:{ap:20,a:45,b:110,c:180,o:40,d:25,add:8},pri:{items:[{goal:'18 sides',priority:'Referral growth',why:'Most of my business comes from my sphere',strategy:'Monthly touch + quarterly events',measure:'Referrals',target:39,q:['','','','']},{goal:'9 listings',priority:'Listing pipeline',why:'Listings drive buyer leads',strategy:'Geographic authority',measure:'Listing appointments',target:18,q:['','','','']}]}};
 async function loadSample(){
  if(unsub){ unsub(); unsub=null; } ready=false; demo=true; clearTimeout(saveTimer);
  const d=JSON.parse(JSON.stringify(SAMPLE)); d.meta.year=year; d.sources=DEFAULT().sources.map((x,i)=>Object.assign(x,(SAMPLE.sources[i]||{})));
