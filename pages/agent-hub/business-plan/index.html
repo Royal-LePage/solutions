@@ -930,7 +930,7 @@ const SECTIONS=[
    <div id="c-flat" style="display:contents">${F('Flat rate per side','goals.flat',{type:'pct',ph:'e.g. 2.5'})}</div></div>
   <h3>Your commission plan &amp; deductions</h3>
   <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Enter your plan with the brokerage — these match the deduction summary on your deal statement. Deductions are calculated over one cap year, starting at $0 on your cap anniversary (January if you leave it blank). Not sure of your numbers? Ask the office. Leave the cap blank if you don’t have one.</p>
-  <div class="row c4">${F('Brokerage split','goals.split',{type:'pct',hint:'until you cap',ph:'e.g. 20'})}${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}${F('Cap anniversary','goals.capDate',{type:'date',hint:'when your cap resets'})}<div class="f"><span>Your cap year</span><div class="netbox" data-o="cyBox">–</div></div></div>
+  <div class="row c4" style="align-items:start"><div class="f"><span>Brokerage split <small>until you cap</small></span><select id="split-sel" aria-label="Brokerage split"><option value="">Choose…</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="custom">Custom…</option></select><div id="split-custom" style="margin-top:8px">${F('','goals.split',{type:'pct',aria:'Custom brokerage split',ph:'Enter your split, e.g. 25'})}</div></div>${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}${F('Cap anniversary','goals.capDate',{type:'date',hint:'when your cap resets'})}<div class="f"><span>Your cap year</span><div class="netbox" data-o="cyBox">–</div></div></div>
   <div class="row c4">${F('Deal fee per side','goals.dealFee',{type:'money',hint:'blank = none'})}
    <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></label>
    ${F('Donation per deal','goals.don',{type:'money',hint:'DON'})}
@@ -950,7 +950,7 @@ const SECTIONS=[
    <tr><td>TFSA <small style="color:#888">after-tax</small></td><td>${F('','save.postTaxM',{type:'money',aria:'TFSA monthly'})}</td><td>${F('','save.postTax',{type:'money',aria:'TFSA lump sum per year'})}</td><td>${F('','save.postTaxP',{type:'pct',aria:'TFSA percent of each transaction'})}</td><td class="num" data-o="tfsaY">–</td></tr>
   </tbody></table></div>
   <div class="row c4" style="margin-top:14px">${F('Debt reduction goal','save.debt',{type:'money',hint:'per year, beyond your regular payments'})}</div>
-  <p class="fine">Everything on this page is <b>pay yourself first</b> — non-negotiable, like your mortgage, and counted in your minimum GCI. Want to save more once you hit your goal? Add <b>extra savings</b> to your spending plan on Your Money.</p>
+  <p class="fine">Everything on this page is <b>pay yourself first</b> — non-negotiable, like your mortgage, and counted in your minimum GCI.</p>
   <h3>Cash reserve</h3>
   ${intro('Commission income is lumpy — slow months, deals that collapse, a cap that resets. A cash reserve keeps your life running in between. A common guideline for commission earners is <b>3 to 6 months</b> of your non-negotiables.')}
   <div class="row c4">${F('Cash reserves today','save.reserves',{type:'money'})}<label class="f"><span>My reserve target</span><select data-k="save.resMonths"><option value="">Choose…</option><option value="3">3 months</option><option value="4">4 months</option><option value="6">6 months</option><option value="9">9 months</option><option value="12">12 months</option></select></label></div>
@@ -978,7 +978,7 @@ const SECTIONS=[
   <div class="row c2" style="align-items:start;margin-top:10px">
    <div><h4 class="sp-h">Growth <small>monthly</small></h4><table><tbody>${BIZ_GROW.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table></div>
    <div><h4 class="sp-h">Lifestyle <small>monthly</small></h4><table><tbody>${PERS_LIFE.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table>
-    <h4 class="sp-h">Extra savings <small>monthly</small></h4><table><tbody><tr><td>Extra RRSP, TFSA or investments</td><td style="width:150px">${F('','save.extraM',{type:'money',aria:'Extra savings monthly'})}</td></tr></tbody></table></div>
+</div>
   </div>
   <div class="tbl-wrap" style="margin-top:14px"><table class="wf" id="plan-wf"></table></div>
   <div data-o-html="budFlag"></div>
@@ -1305,7 +1305,18 @@ window.addEventListener('afterprint',()=>document.body.classList.remove('print-s
 window.addEventListener('beforeprint',()=>{ if(C) drawMkt(C); document.querySelectorAll('details.deeper').forEach(d=>{ d.dataset.wasOpen=d.open?'1':''; d.open=true; }); renderSummary(); document.querySelectorAll('textarea').forEach(t=>{t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px';}); });
 window.addEventListener('afterprint',()=>{ document.querySelectorAll('textarea').forEach(t=>t.style.height=''); document.querySelectorAll('details.deeper').forEach(d=>{ d.open=!!d.dataset.wasOpen; }); });
 
+let splitCustom=false;
+function syncSplit(){
+ const sel=document.getElementById('split-sel'), box=document.getElementById('split-custom'); if(!sel) return;
+ const v=S.goals.split, std=v!==''&&[10,20,30].includes(+v);
+ sel.value=splitCustom||(v!==''&&!std)?'custom':(std?String(+v):'');
+ if(box) box.style.display=sel.value==='custom'?'':'none';
+}
+document.addEventListener('change',e=>{ if(e.target.id!=='split-sel') return; const v=e.target.value;
+ if(v==='custom'){ splitCustom=true; syncSplit(); const inp=document.querySelector('#split-custom input'); if(inp) inp.focus(); return; }
+ splitCustom=false; S.goals.split=v===''?'':+v; fillAll(document.getElementById('s-deal')); syncSplit(); recompute(); queueSave(); });
 function toggleVis(){
+ syncSplit();
  const m=S.goals.method, show=(id,on,d)=>{ const el=document.getElementById(id); if(el) el.style.display=on?(d||''):'none'; };
  show('m-set',m!=='units'); show('m-gci',m==='gci','contents'); show('m-gcin',m==='budget'); show('m-bud',m==='budget'); show('gci-note',m!=='units'); show('m-units',m==='units');
  const tier=S.goals.commModel!=='flat';
@@ -1398,7 +1409,7 @@ function calc(){
     (commission after brokerage deductions). The % parts are added once commission is known. */
  const pc=v=>Math.min(Math.max(n(v),0),100)/100, pR=pc(S.save.rrspP), pT=pc(S.save.postTaxP);
  const rrspFix=n(S.save.rrsp)+n(S.save.rrspM)*12, postFix=n(S.save.postTax)+n(S.save.postTaxM)*12, debtRed=n(S.save.debt);
- const first=k=>true; const extraSav=n(S.save.extraM)*12;
+ const first=k=>true; const extraSav=0;
  const costMonth=(persNN+bizNN)/12, resTarget=n(S.save.resMonths)*costMonth, resGap=Math.max(resTarget-n(S.save.reserves),0), resTop=S.save.resAdd?resGap:0;
  const needsFix=persAnnual+postFix+debtRed+resTop;
  /* Pay-myself-first savings are non-negotiable; the rest come out of what's left at goal. */
@@ -1610,7 +1621,7 @@ function recompute(){
      +r('Left to plan with',money(c.leftToPlan),'tot'+(c.leftToPlan<0?' neg':''))+'</tbody>'; } } }
  { const el=document.getElementById('plan-wf'); if(el){ if(!c.gci) el.innerHTML='';
    else { const r=(l,v,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="num">${v}</td></tr>`, left=c.surplus;
-    el.innerHTML='<tbody>'+r('Left to plan with',money(c.leftToPlan),'strong')+r('− Marketing','−'+money(c.mktgTotal))+r('− Growth (coaching, assistant)','−'+money(c.bizGrow))+r('− Lifestyle (dining, travel, giving)','−'+money(c.persLife))+r('− Extra savings','−'+money(c.savAfter))
+    el.innerHTML='<tbody>'+r('Left to plan with',money(c.leftToPlan),'strong')+r('− Marketing','−'+money(c.mktgTotal))+r('− Growth (coaching, assistant)','−'+money(c.bizGrow))+r('− Lifestyle (dining, travel, giving)','−'+money(c.persLife))
      +r(left<0?'Over your plan by':'Still unplanned',money(Math.abs(left)),'tot'+(left<0?' neg':''))+'</tbody>'+(left<0&&c.fullGci?`<tfoot><tr><td colspan="2" style="font-weight:500;color:var(--bp-dark-grey);border:0">To fund this whole plan you’d need about <b>${money(c.fullGci)}</b> GCI — raise your goal on <b>Your Goal</b>, or trim the plan.</td></tr></tfoot>`:''); } } }
  { // One deal, start to finish (Your Deal)
   const el=document.getElementById('deal-wf'), g=S.goals, ci=capInfo(), sp=c.split, gs=c.gciSide, rlp=Math.min(gs*ci.rlpPct,ci.rlpMax), gh=n(g.gstHold)/100;
