@@ -622,8 +622,8 @@ const PRI_EX=[['25 transactions','Lead generation','Need more qualified opportun
 const CAL_ROWS=[['call','Reason to call'],['text','Reason to text / email'],['popby','Pop-by idea'],['video','Video / social post'],['event','Event / client party']];
 const PILLARS=[['build','Build — goals & numbers'],['brand','Brand — reputation & presence'],['amplify','Amplify — content & marketing'],['connect','Connect — sphere & referrals'],['simplify','Simplify — systems & delegation']];
 const BIZ_Y=[['board','Board & association fees','CREB®, AREA, CREA'],['gli','General liability insurance','']];
-const BIZ=[['desk','Brokerage desk / admin fees'],['license','Licence & E&O insurance'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other must-pay business costs']];
-const BIZ_NN=['desk','license','tech','vehicle','prof','other'], BIZ_GROW=[['coaching','Coaching & education'],['assistant','Assistant / admin support']];
+const BIZ=[['desk','Brokerage fees'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other must-pay business costs']];
+const BIZ_NN=['desk','tech','vehicle','prof','other'], BIZ_GROW=[['coaching','Coaching & education'],['assistant','Assistant / admin support']];
 const PERS_NN=['housing','transport','groceries','utilities','insurance','family','debt','other'], PERS_LIFE=[['lifestyle','Dining, entertainment & travel'],['giving','Giving & charity']];
 const MKTG_PCT=0.10;
 const PERS=[['housing','Housing (mortgage/rent, tax, insurance)'],['transport','Personal transportation'],['groceries','Groceries & household'],['utilities','Utilities & internet'],['insurance','Life, health & other insurance'],['family','Childcare & family'],['debt','Personal debt payments'],['lifestyle','Lifestyle, dining & travel'],['giving','Giving & charity'],['other','Other must-pays']];
@@ -729,6 +729,8 @@ let S=DEFAULT();
 const BLANK=DEFAULT();
 /* Bring plans saved by earlier versions into the current shape. */
 function normalize(){
+ /* Licence & E&O is now part of desk fees: fold any saved amount into desk so the total doesn't change. */
+ if(S.biz&&S.biz.license!==''&&S.biz.license!=null&&n(S.biz.license)){ S.biz.desk=String(n(S.biz.desk)+n(S.biz.license)); S.biz.license=''; }
  if(!S.sources||S.sources.length!==SOURCES.length||S.sources.some((x,i)=>x.name!==SOURCES[i])) S.sources=DEFAULT().sources;
  if(S.season.curve!=='creb10'){
   /* Move plans onto the Calgary 10-year curve unless the agent had set their own weights. */
@@ -947,7 +949,7 @@ const SECTIONS=[
  {id:'budget',t:'Your Budget',d:'Your non-negotiables — the bills that get paid whether you close 5 deals or 25 — set your minimum. Then add the growth and lifestyle spending you’d like your goal to fund.',html:()=>`
   ${intro('Monthly amounts, except the annual fees, which you enter once for the year. Rough numbers are fine. Start with the <b>must-pays</b> — they set your minimum. Coaching, an assistant, dining and travel go in the second section below; marketing has its own step next. Your plan is private.')}
   <div class="row c2" style="align-items:start">
-   <div><h3>Business must-pays (monthly)</h3><table><tbody>${BIZ.filter(([k])=>BIZ_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l})}</td></tr>`).join('')}
+   <div><h3>Business must-pays (monthly)</h3><table><tbody>${BIZ.filter(([k])=>BIZ_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l.replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')})}</td></tr>`).join('')}
     <tr class="sub-h"><td colspan="2">Annual fees <small style="color:#888">— enter the yearly amount</small></td></tr>
     ${BIZ_Y.map(([k,l,h])=>`<tr><td>${l}${h?` <small style="color:#888">(${h})</small>`:''}</td><td style="width:150px">${F('','bizY.'+k,{type:'money',aria:l+' per year'})}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Business non-negotiables / yr</td><td class="num" data-o="bizNN"></td></tr></tfoot></table></div>
@@ -1993,7 +1995,7 @@ const SAMPLE={meta:{year:0},vision:{name:'Sample Agent (Jordan Lee)',one:'Close 
  values:{words:['Integrity','Family','Growth','Service','Communication'].concat(Array(10).fill('')),core:[{v:'Integrity',means:'Tell the truth',practice:'Honest pricing advice'},{v:'Service',means:'Client first',practice:'Same-day replies'},{v:'Growth',means:'Keep learning',practice:'Monthly coaching'},{v:'',means:'',practice:''},{v:'',means:'',practice:''}]},
  last:{listings:7,buyers:8,avgPrice:620000,gci:168000},reflect:{worked:'Sphere calls and open houses',didnt:'Paid online leads',stop:'Buying cold leads',start:'Monthly client events',cont:'Pop-bys'},
  pos:{ideal:'Move-up families in Mahogany, Auburn Bay and Seton',ps:{client:'move-up families in the SE lake communities',value:'knows every lake community street by street',proof:'I live here and have sold 100+ homes nearby',outcome:'buy the right home and sell for top dollar'}},
- pers:{housing:2800,transport:600,groceries:1100,utilities:350,insurance:300,family:400,debt:250,lifestyle:700,giving:100},biz:{desk:300,license:120,tech:180,vehicle:450,prof:100,coaching:250},bizY:{board:1400,gli:600},
+ pers:{housing:2800,transport:600,groceries:1100,utilities:350,insurance:300,family:400,debt:250,lifestyle:700,giving:100},biz:{desk:420,tech:180,vehicle:450,prof:100,coaching:250},bizY:{board:1400,gli:600},
  goals:{method:'gci',gciGoal:210000,avgPrice:650000,commModel:'tier',t1:3.5,t2:1.5,split:20,cap:12000,capDate:'2027-06-01',dealFee:250,feeMode:'cap',tax:30,gstHold:5,listShare:50,buyShare:50},
  save:{rrspM:300,postTaxP:5,reserves:8000,resMonths:'3'},mktg:{paid:3000,print:4000,events:3500,popby:2000,email:1000,signage:1500},
  sources:[{goal:9,last:7,pri:'Primary'},{goal:4,last:3,pri:'Primary'},{goal:0,last:0},{goal:2,last:2,pri:'Primary'},{goal:2,last:2,pri:'Secondary'},{goal:0,last:1},{goal:1,last:0}],
