@@ -614,8 +614,8 @@ const COMPETITORS=[['agents','Other agents'],['discount','Discount brokerages'],
 const REF_SOURCES=['Sphere / referrals','Past clients','Professional partners'];
 const CX_STAGES=['Lead','Consultation','Search / preparation','Offer','Contract','Closing','Post-close'];
 const CANVA_URL='https://www.canva.com/s/templates?query=vision+board';
-const PHASES=[['Start',['start']],['Look back',['lookback','swot']],['Foundation',['vision','values']],['Positioning',['position','model']],['Numbers',['deal','numbers','budget','money','savings','season','results']],['Strategy',['priorities','sources']],['The plan',['activity','week','calendar','cx','marketing','ops']],['Execution',['action90','score','summary']]];
-const ESSENTIAL=['lookback','vision','values','position','budget','deal','numbers','money','results','priorities','sources','activity'];
+const PHASES=[['Start',['start']],['Look back',['lookback','swot']],['Foundation',['vision','values']],['Positioning',['position','model']],['Numbers',['deal','numbers','budget','savings','season','results']],['Strategy',['priorities','sources']],['The plan',['activity','week','calendar','cx','marketing','ops']],['Execution',['action90','score','summary']]];
+const ESSENTIAL=['lookback','vision','values','position','budget','deal','numbers','results','priorities','sources','activity'];
 const TASK_ACTIONS=['Only I do','Systemize','Delegate','Automate','Delete'];
 const VALUE_EX=[['Integrity','Tell the truth even when uncomfortable','Give clients honest opinions about pricing'],['Service','Put the client’s interests first','Respond promptly and anticipate needs'],['Excellence','Continually improve','Invest in education and review every transaction'],['Relationships','Build long-term trust','Stay connected after closing'],['','','']];
 const PRI_EX=[['25 transactions','Lead generation','Need more qualified opportunities','Referral + sphere strategy','Qualified leads'],['25 transactions','Conversion','Current conversion is too low','Improve consultation process','Lead → client %'],['15 listings','Listing pipeline','Need more seller opportunities','Geographic authority','Listing appointments'],['$250K GCI','Average transaction value','Current mix is too low','Target a higher-value market','Average sale price'],['','','','','']];
@@ -795,7 +795,7 @@ const SECTIONS=[
   <div class="st-hero">
    <div><h3 style="margin-top:0">How it works</h3>
     <ul class="st-list"><li><b>Work through the steps in order.</b> Each chapter builds on the one before: where you are → where you’re going → what it takes → how you’ll win → what you’ll do → how you’ll track it.</li>
-    <li><b>Plan on three sittings.</b> <span class="sess">Session 1: Look Back, Vision &amp; Goals, Values &amp; Mission, Ideal Client &amp; UVP.</span> <span class="sess">Session 2: Your Commission Plan, Your Goal, Your Budget, Your Marketing Budget, Savings &amp; Reserves, Your Numbers.</span> <span class="sess">Session 3: Strategic Priorities, Lead Generation, Activity Plan, Ideal Week.</span> Everything else is homework — and you’ll fill in the Quarterly Scorecard at each quarterly check-in.</li>
+    <li><b>Plan on three sittings.</b> <span class="sess">Session 1: Look Back, Vision &amp; Goals, Values &amp; Mission, Ideal Client &amp; UVP.</span> <span class="sess">Session 2: Your Commission Plan, Your Goal, Your Budget, Savings &amp; Reserves, Your Numbers.</span> <span class="sess">Session 3: Strategic Priorities, Lead Generation, Activity Plan, Ideal Week.</span> Everything else is homework — and you’ll fill in the Quarterly Scorecard at each quarterly check-in.</li>
     <li><b>Rough numbers are fine.</b> If you don’t know a number yet, leave it blank and come back.</li>
     <li><b>Everything saves as you type.</b> Your plan is private to you, and you can pick up where you left off on any device.</li>
     <li><b>Print your one-page summary</b> at the end and bring it to your quarterly check-ins.</li></ul></div>
@@ -917,7 +917,7 @@ const SECTIONS=[
   <div class="row c4">${F('Personal posts / week','content.personal',{type:'num',hint:'family, hobbies'})}${F('Professional posts / week','content.professional',{type:'num',hint:'listings, market, wins'})}${F('“AND” posts / week','content.and',{type:'num',hint:'your niche'})}${F('My AND topic','content.andTopic',{ph:'e.g. lake living'})}</div>
   <p style="font-size:13.5px;color:var(--bp-dark-grey)">Total: <b data-o="postsW"></b> posts a week · <b data-o="postsY"></b> this year. Aim for at least 3 a week with a mix of all three.</p>
   <h3>Marketing budget</h3>
-  <p style="font-size:13.5px;color:var(--bp-dark-grey)">You set your marketing budget on <b>Your Marketing Budget</b>: <b data-o="mktgTotal"></b> this year (<span data-o="mktgPctGci"></span>). Make sure the platforms and themes above match where that money goes.</p>
+  <p style="font-size:13.5px;color:var(--bp-dark-grey)">You set your marketing budget on <b>Your Budget</b>: <b data-o="mktgTotal"></b> this year (<span data-o="mktgPctGci"></span>). Make sure the platforms and themes above match where that money goes.</p>
   ${deeper('Brand audit — Google yourself',`${BRAND.map(([k,l])=>`<label class="chk"><input type="checkbox" data-k="brand.${k}">${l}</label>`).join('')}
    <p style="font-size:13.5px;color:var(--bp-dark-grey)"><b data-o="brandScore"></b> complete. Repeat this audit every quarter.</p>`)}
  `},
@@ -946,8 +946,8 @@ const SECTIONS=[
   ${intro('Strategy isn’t just deciding what you’re going to do. It’s also deciding what you’re <b>not</b> going to do.')}
   <div class="row">${T('','pri.notFocus',{rows:3}).replace('<span></span>','')}</div>
  `},
- {id:'budget',t:'Your Budget',d:'Your non-negotiables — the bills that get paid whether you close 5 deals or 25 — set your minimum. Then add the growth and lifestyle spending you’d like your goal to fund.',html:()=>`
-  ${intro('Monthly amounts, except the annual fees, which you enter once for the year. Rough numbers are fine. Start with the <b>must-pays</b> — they set your minimum. Coaching, an assistant, dining and travel go in the second section below; marketing has its own step next. Your plan is private.')}
+ {id:'budget',t:'Your Budget',d:'Your non-negotiables — the bills that get paid whether you close 5 deals or 25 — set your minimum. Then plan the marketing, growth and lifestyle spending you’d like your goal to fund.',html:()=>`
+  ${intro('Monthly amounts, except the annual fees, which you enter once for the year. Rough numbers are fine. Start with the <b>must-pays</b> — they set your minimum. Marketing, coaching, an assistant, dining and travel go in the second section below. Your plan is private.')}
   <div class="row c2" style="align-items:start">
    <div><h3>Business must-pays (monthly)</h3><table><tbody>${BIZ.filter(([k])=>BIZ_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l.replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')})}</td></tr>`).join('')}
     <tr class="sub-h"><td colspan="2">Annual fees <small style="color:#888">— enter the yearly amount</small></td></tr>
@@ -958,9 +958,15 @@ const SECTIONS=[
   </div>
   <div class="res c3">${RC('Personal non-negotiables / yr','persNN')}${RC('Business non-negotiables / yr','bizNN')}${RC('Non-negotiables / month','costMonth')}</div>
   <div data-o-html="budFlag"></div>
-  <h3>After your goal — growth &amp; lifestyle</h3>
-  ${intro('Not must-pays. These come out of what your goal leaves you, after your non-negotiables, marketing and savings. <b>Your Numbers</b> shows whether there’s room.')}
-  <div class="row c2" style="align-items:start">
+  <h3>After your goal — marketing, growth &amp; lifestyle</h3>
+  ${intro('Not must-pays. These come out of what your goal leaves you, after your non-negotiables and savings. <b>Your Numbers</b> shows whether there’s room.')}
+  <h4 class="sp-h">Marketing <small>annual · <span data-o="mktgSug"></span></small></h4>
+  <p class="fine" style="margin:-2px 0 8px">Marketing is what brings in next year’s business. Leave it blank and the plan uses the 10% suggestion; once you enter amounts, the plan uses yours.</p>
+    <div class="tbl-wrap"><table><thead><tr><th>Channel</th><th style="width:180px">Annual $</th><th class="num">% of budget</th></tr></thead>
+  <tbody>${MKTG.map(([k,l])=>`<tr><td>${l}</td><td>${F('','mktg.'+k,{type:'money',aria:l})}</td><td class="num" data-o="mk_${k}"></td></tr>`).join('')}</tbody>
+  <tfoot><tr><td>Total marketing</td><td class="num" data-o="mktgTotal"></td><td class="num" data-o="mktgPctGci"></td></tr></tfoot></table></div>
+  <div id="mktg-flag"></div>
+  <div class="row c2" style="align-items:start;margin-top:14px">
    <div><h4 class="sp-h">Growth <small>monthly</small></h4><table><tbody>${BIZ_GROW.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table></div>
    <div><h4 class="sp-h">Lifestyle <small>monthly</small></h4><table><tbody>${PERS_LIFE.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table>
 </div>
@@ -997,14 +1003,6 @@ const SECTIONS=[
   <div class="res">${RC('RRSP / yr','rrspY2')}${RC('TFSA / yr','tfsaY2')}${RC('Debt reduction / yr','debtY')}${RC('Reserve top-up / yr','resTopY')}</div>
   <div id="sav-note"></div>
  `},
- {id:'money',t:'Your Marketing Budget',d:'Marketing is what brings in next year’s business. A common starting point is 10% of your GCI — plan it by channel.',html:()=>`
-  ${intro('Enter what you plan to spend this year on each channel. Leave it blank for now and the plan uses the 10% suggestion; once you enter amounts, the plan uses yours.')}
-  <h3 style="margin-top:0">Marketing by channel <small data-o="mktgSug" style="font-weight:500;text-transform:none;letter-spacing:0;color:#888"></small></h3>
-    <div class="tbl-wrap"><table><thead><tr><th>Channel</th><th style="width:180px">Annual $</th><th class="num">% of budget</th></tr></thead>
-  <tbody>${MKTG.map(([k,l])=>`<tr><td>${l}</td><td>${F('','mktg.'+k,{type:'money',aria:l})}</td><td class="num" data-o="mk_${k}"></td></tr>`).join('')}</tbody>
-  <tfoot><tr><td>Total marketing</td><td class="num" data-o="mktgTotal"></td><td class="num" data-o="mktgPctGci"></td></tr></tfoot></table></div>
-  <div id="mktg-flag"></div>
- `},
  {id:'numbers',t:'Your Goal',d:'What’s a typical deal worth, and how many do you need? Set your average sale, then a GCI goal — or start from the number of deals you want.',html:()=>`
   <h3>Your 1-year goals <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— from Vision &amp; Goals</small></h3>
   <div class="carry" data-o="oneGoals">–</div>
@@ -1029,7 +1027,7 @@ const SECTIONS=[
   <div class="row c4" style="margin-top:16px" id="m-units">${F('Listing sides goal','goals.listings',{type:'num'})}${F('Buyer sides goal','goals.buyers',{type:'num'})}</div>
   <div class="res">${RC('GCI goal','gci','dark')}${RC('Total closed sides','sides','dark')}${RC('Listings / buyers','lb','dark')}${RC('Sales volume','volume','dark')}</div>
   <div id="vs-last"></div>
-  <div class="tip"><b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side from your average sale above. Your net income uses your split, cap and fees from Your Commission Plan and your expenses from <b>Your Budget</b> and <b>Your Marketing Budget</b>.<span id="split-hint"> You haven’t entered a split, cap or fees yet, so none are taken off.</span></div>
+  <div class="tip"><b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side from your average sale above. Your net income uses your split, cap and fees from Your Commission Plan and your expenses from <b>Your Budget</b>.<span id="split-hint"> You haven’t entered a split, cap or fees yet, so none are taken off.</span></div>
 
  `},
  {id:'season',t:'Seasonality & Cash Flow',d:'Calgary real estate runs on a predictable yearly rhythm. Deals go firm on one curve and close — and pay you — on another. Plan for both so the slow months don’t catch you off guard.',html:()=>`
@@ -1067,7 +1065,7 @@ const SECTIONS=[
   ${intro('At your goal, here’s what your commission covers first — your non-negotiables and savings — and what’s left.')}
   <div class="tbl-wrap"><table class="wf" id="left-wf"></table></div>
   <h3>Your plan for what’s left</h3>
-  ${intro('Marketing from <b>Your Marketing Budget</b>, plus the growth and lifestyle spending from <b>Your Budget</b>.')}
+  ${intro('Your marketing, growth and lifestyle spending from <b>Your Budget</b>.')}
   <div class="tbl-wrap" style="margin-top:14px"><table class="wf" id="plan-wf"></table></div>
   <div data-o-html="budFlag"></div>
   <div class="res c3">${RC('Net income <small>after business expenses</small>','profitBox')}${RC('Take-home after tax & RRSP','takeHome')}${RC('Months of reserves <small>non-negotiables, after this year’s top-up</small>','reserveMonths')}</div>
@@ -1458,7 +1456,7 @@ function calc(){
  const solveG=(ok,okW)=>{ if(!(gciSide>0)||nnTotal<=0) return 0; let lo=0,hi=50000; while(hi<2e7&&!ok(hi)) hi*=2; for(let it=0;it<50;it++){ const mid=(lo+hi)/2; if(ok(mid)) hi=mid; else lo=mid; } let G=Math.ceil(hi/100)*100; for(let k=0;k<300&&okW&&!okW(G);k++) G+=100; return G; };
  const netAt=G=>engineG(G,gciSide,split,null).net, netAtW=G=>engineG(G,gciSide,split,Math.ceil(G/gciSide-1e-9)).net;
  const minGci=solveG(G=>netAt(G)*(1-t-pFirst)-nnTotal>=0, G=>netAtW(G)*(1-t-pFirst)-nnTotal>=-0.5);
- /* Marketing: what the agent planned on Your Marketing Budget; the 10% suggestion only while that's blank. */
+ /* Marketing: what the agent planned on Your Budget; the 10% suggestion only while that's blank. */
  const mktgPlanned=mktgTotal>0, mktgAt=G=>mktgPlanned?mktgTotal:MKTG_PCT*G;
  const recGci=solveG(G=>netAt(G)*(1-t-pFirst)-nnTotal-mktgAt(G)>=0, G=>netAtW(G)*(1-t-pFirst)-nnTotal-mktgAt(G)>=-0.5);
  /* Whole plan: non-negotiables, savings, growth, lifestyle and marketing (10% while marketing is blank) */
@@ -1470,7 +1468,7 @@ function calc(){
   if(g.method==='budget'){
    /* Work back from the budget: the GCI that covers your non-negotiables and pay-first savings
       after the commission plan and tax holdback, and still leaves room for marketing
-      (the amount planned on Your Marketing Budget, or 10% of GCI while that's blank). */
+      (the amount planned on Your Budget, or 10% of GCI while that's blank). */
    gciTot=recGci;
   } else gciTot=Math.max(n(g.gciGoal),0); sidesExact=gciSide>0?gciTot/gciSide:0;
   sides=Math.min(Math.ceil(sidesExact-1e-9),1000);
@@ -1496,7 +1494,7 @@ function calc(){
  const savFirst=fixFirst+pFirst*Math.max(netComm,0), savAll=rrsp+post+debtRed+resTop, savAfter=savAll-savFirst;
  const leftToPlan=netComm-taxAmt-bizNN-persNN-savFirst;
  const profitNeed=profit;
- /* One verdict for Your Goal, Your Marketing Budget and Your Numbers:
+ /* One verdict for Your Goal, Your Budget and Your Numbers:
     min = non-negotiables not covered; mktg = marketing blank and less than 10% of GCI is left;
     over = the spending plan (marketing, growth, lifestyle) spends more than is left; ok. */
  const mktgSug=MKTG_PCT*gci, mktgNeed=mktgPlanned?mktgTotal:mktgSug;
@@ -1820,7 +1818,7 @@ function recompute(){
  { const el=document.getElementById('q-gci-note'); if(el) el.innerHTML=c.sides&&c.gciSide?`Target GCI = closings × your GCI per side (${money(c.gciSide)}). The four quarters add up to <b>${money(c.sides*c.gciSide)}</b>${Math.abs(c.sides*c.gciSide-c.gci)>1?` — your ${money(c.gci)} goal rounded up to ${int(c.sides)} whole sides`:''}.`:''; }
  // "you need these first"
  { const have={budget:c.hasBudget,deal:S.goals.split!==''||S.goals.cap!==''||(S.meta.visited||[]).includes('deal'),numbers:c.gci>0&&c.gciSide>0}, lbl={budget:'Your Budget',deal:'Your Commission Plan',numbers:'Your Goal'};
-   const needs={numbers:S.goals.method==='budget'?['budget','deal']:['deal'],savings:['deal'],money:['numbers'],results:['budget','deal','numbers'],season:['deal','numbers'],sources:['numbers'],activity:['numbers'],week:['numbers'],score:['numbers']};
+   const needs={numbers:S.goals.method==='budget'?['budget','deal']:['deal'],savings:['deal'],results:['budget','deal','numbers'],season:['deal','numbers'],sources:['numbers'],activity:['numbers'],week:['numbers'],score:['numbers']};
    Object.entries(needs).forEach(([id,req])=>{ const el=document.getElementById('need-'+id); if(!el) return; const miss=req.filter(r=>!have[r]);
     el.hidden=!miss.length; el.innerHTML=miss.length?`<b>Finish these first</b> — this step uses their numbers: ${miss.map(r=>`<button type="button" data-go="${r}">${lbl[r]}</button>`).join('')}`:''; }); }
  // nav progress
