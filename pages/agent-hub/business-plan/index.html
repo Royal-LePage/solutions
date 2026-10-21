@@ -964,13 +964,8 @@ const SECTIONS=[
 </div>
   </div>
  `},
- {id:'deal',t:'Your Commission Plan',d:'What does one deal actually pay you? Enter your average sale, your commission, your plan with the brokerage and your holdbacks.',html:()=>`
-  <h3 style="margin-top:0">Your average sale</h3>
-  <div class="row c4">${F('Average sale price','goals.avgPrice',{type:'money',ph:'e.g. 650,000'})}
-   <label class="f"><span>Commission per side</span><select data-k="goals.commModel"><option value="tier">Tiered (first $100K / balance)</option><option value="flat">Flat % of price</option></select></label>
-   <div id="c-tier" style="display:contents">${F('On the first $100K','goals.t1',{type:'pct',ph:'e.g. 3.5'})}${F('On the balance','goals.t2',{type:'pct',ph:'e.g. 1.5'})}</div>
-   <div id="c-flat" style="display:contents">${F('Flat rate per side','goals.flat',{type:'pct',ph:'e.g. 2.5'})}</div></div>
-  <h3>Your commission plan &amp; deductions</h3>
+ {id:'deal',t:'Your Commission Plan',d:'Your plan with the brokerage — split, cap and fees — and your holdbacks. These match the deduction summary on your deal statement.',html:()=>`
+  <h3 style="margin-top:0">Your commission plan &amp; deductions</h3>
   <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Enter your plan with the brokerage — these match the deduction summary on your deal statement. Deductions are calculated over one cap year, starting at $0 on your cap anniversary (January if you leave it blank). Not sure of your numbers? Ask the office. Leave the cap blank if you don’t have one.</p>
   <div class="row c4" style="align-items:start"><div class="f"><span>Brokerage split <small>until you cap</small></span><select id="split-sel" aria-label="Brokerage split"><option value="">Choose…</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="custom">Custom…</option></select><div id="split-custom" style="margin-top:8px">${F('','goals.split',{type:'pct',aria:'Custom brokerage split',ph:'Enter your split, e.g. 25'})}</div></div>${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}${F('Cap anniversary','goals.capDate',{type:'date',hint:'when your cap resets'})}<div class="f"><span>Your cap year</span><div class="netbox" data-o="cyBox">–</div></div></div>
   <div class="tip cap-paid" id="cap-paid-wrap" style="display:none"><div class="row c4" style="margin:0;align-items:center">${F('Cap paid so far in the cap year you’re in on Jan 1','goals.capPaid',{type:'money',hint:'Blank = $0',ph:'e.g. 12,000'})}<p style="grid-column:span 3;margin:0;font-size:13.5px">Your cap year starts partway through the plan year, so January to <b data-o="capPrevName"></b> deals still count toward the cap year you’re in now. Enter what you’ll have paid toward your cap by January 1. <b>Blank = $0. If you’ve already capped this cap year, enter your full cap.</b></p></div></div>
@@ -981,9 +976,6 @@ const SECTIONS=[
   <h3>Holdbacks</h3>
   <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">The share of each commission cheque you have held back for CRA. This is your money set aside, not a cost — income tax comes off your take-home, and GST is collected on top of your commission and paid to CRA.</p>
   <div class="row c4">${F('Income tax holdback','goals.tax',{type:'pct',hint:'% of each cheque',ph:'e.g. 30'})}${F('GST holdback','goals.gstHold',{type:'pct',hint:'% of each cheque',ph:'e.g. 5'})}</div>
-  <h3>One deal, start to finish</h3>
-  ${intro('A typical side at your average price, before and after you cap.')}
-  <div class="tbl-wrap"><table class="wf" id="deal-wf"></table></div>
  `},
  {id:'savings',t:'Savings & Reserves',d:'Pay yourself first — long-term savings, debt paydown and a cash cushion for the slow months. These come off the top of every cheque, before your spending plan.',html:()=>`
   <h3 style="margin-top:0">Long-term savings</h3>
@@ -1011,10 +1003,19 @@ const SECTIONS=[
   <tfoot><tr><td>Total marketing</td><td class="num" data-o="mktgTotal"></td><td class="num" data-o="mktgPctGci"></td></tr></tfoot></table></div>
   <div id="mktg-flag"></div>
  `},
- {id:'numbers',t:'Your Goal',d:'How many deals do you need? Set a GCI goal, work back from your budget, or start from the number of deals you want — then see what it means for your money.',html:()=>`
+ {id:'numbers',t:'Your Goal',d:'What’s a typical deal worth, and how many do you need? Set your average sale, then a GCI goal — or start from the number of deals you want.',html:()=>`
   <h3>Your 1-year goals <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— from Vision &amp; Goals</small></h3>
   <div class="carry" data-o="oneGoals">–</div>
   <p id="goal-text-note" class="fine" style="margin:6px 0 0"></p>
+  <h3>Your average sale</h3>
+  ${intro('The typical deal you expect this year. Your GCI goal ÷ what one side pays = the number of deals you need.')}
+  <div class="row c4">${F('Average sale price','goals.avgPrice',{type:'money',ph:'e.g. 650,000'})}
+   <label class="f"><span>Commission per side</span><select data-k="goals.commModel"><option value="tier">Tiered (first $100K / balance)</option><option value="flat">Flat % of price</option></select></label>
+   <div id="c-tier" style="display:contents">${F('On the first $100K','goals.t1',{type:'pct',ph:'e.g. 3.5'})}${F('On the balance','goals.t2',{type:'pct',ph:'e.g. 1.5'})}</div>
+   <div id="c-flat" style="display:contents">${F('Flat rate per side','goals.flat',{type:'pct',ph:'e.g. 2.5'})}</div></div>
+  <h3>One deal, start to finish</h3>
+  ${intro('What a typical side at your average price pays you, before and after you cap — using your split, fees and holdbacks from <b>Your Commission Plan</b>.')}
+  <div class="tbl-wrap"><table class="wf" id="deal-wf"></table></div>
   <h3>How do you want to set your goal?</h3>
   <div class="seg" id="method-seg"><button data-m="gci" type="button">GCI goal</button><button data-m="budget" type="button">Work back from my budget</button><button data-m="units" type="button">Number of deals</button></div>
   <div id="m-bud" class="bud-calc"></div>
@@ -1026,7 +1027,7 @@ const SECTIONS=[
   <div class="row c4" style="margin-top:16px" id="m-units">${F('Listing sides goal','goals.listings',{type:'num'})}${F('Buyer sides goal','goals.buyers',{type:'num'})}</div>
   <div class="res">${RC('GCI goal','gci','dark')}${RC('Total closed sides','sides','dark')}${RC('Listings / buyers','lb','dark')}${RC('Sales volume','volume','dark')}</div>
   <div id="vs-last"></div>
-  <div class="tip"><b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side from <b>Your Commission Plan</b>. Your net income uses your split, cap and fees from Your Commission Plan and your expenses from <b>Your Budget</b> and <b>Your Marketing Budget</b>.<span id="split-hint"> You haven’t entered a split, cap or fees yet, so none are taken off.</span></div>
+  <div class="tip"><b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side from your average sale above. Your net income uses your split, cap and fees from Your Commission Plan and your expenses from <b>Your Budget</b> and <b>Your Marketing Budget</b>.<span id="split-hint"> You haven’t entered a split, cap or fees yet, so none are taken off.</span></div>
 
  `},
  {id:'season',t:'Seasonality & Cash Flow',d:'Calgary real estate runs on a predictable yearly rhythm. Deals go firm on one curve and close — and pay you — on another. Plan for both so the slow months don’t catch you off guard.',html:()=>`
@@ -1745,6 +1746,7 @@ function recompute(){
    rv.innerHTML=!c.gci?'':c.verdict==='none'?`<div class="tip">Your GCI goal is <b>${money(c.gci)}</b>. Add your non-negotiables on <b>Your Budget</b> to see whether it covers your year.</div>`
     :`<div class="tip"><b>Your GCI goal: ${money(c.gci)}.</b>${verdictHTML(c)}${fix?`<div style="margin-top:10px"><button type="button" class="btn btn-line btn-sm" data-setgoal="${c.fullGci}">Set my goal to ${money(c.fullGci)} — covers everything</button></div>`:''}</div>`; } }
  if(gn) gn.innerHTML=S.goals.method!=='budget'&&S.goals.method!=='units'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side = ${(Math.round(c.sidesExact*100)/100).toLocaleString('en-CA')} sides, so plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b>. After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${c.rrsp?' and RRSP':''}.${verdictHTML(c)}`:'';
+ if(gn&&!(c.gciSide>0)&&n(S.goals.gciGoal)>0&&S.goals.method==='gci') gn.innerHTML='Add your average sale and commission above to see how many sides that takes.';
 
  // positioning statement
  { const ps=psClean(S.pos.ps), b=(x,ph)=>x?`<b>${esc(x)}</b>`:`<span class="blank">${ph}</span>`;
@@ -1815,7 +1817,7 @@ function recompute(){
  { const cp=document.getElementById('cpc-p'); if(cp) cp.hidden=!c.sides; }
  { const el=document.getElementById('q-gci-note'); if(el) el.innerHTML=c.sides&&c.gciSide?`Target GCI = closings × your GCI per side (${money(c.gciSide)}). The four quarters add up to <b>${money(c.sides*c.gciSide)}</b>${Math.abs(c.sides*c.gciSide-c.gci)>1?` — your ${money(c.gci)} goal rounded up to ${int(c.sides)} whole sides`:''}.`:''; }
  // "you need these first"
- { const have={budget:c.hasBudget,deal:c.gciSide>0,numbers:c.gci>0}, lbl={budget:'Your Budget',deal:'Your Commission Plan',numbers:'Your Goal'};
+ { const have={budget:c.hasBudget,deal:S.goals.split!==''||S.goals.cap!==''||(S.meta.visited||[]).includes('deal'),numbers:c.gci>0&&c.gciSide>0}, lbl={budget:'Your Budget',deal:'Your Commission Plan',numbers:'Your Goal'};
    const needs={numbers:S.goals.method==='budget'?['budget','deal']:['deal'],savings:['deal'],money:['numbers'],results:['budget','deal','numbers'],season:['deal','numbers'],sources:['numbers'],activity:['numbers'],week:['numbers'],score:['numbers']};
    Object.entries(needs).forEach(([id,req])=>{ const el=document.getElementById('need-'+id); if(!el) return; const miss=req.filter(r=>!have[r]);
     el.hidden=!miss.length; el.innerHTML=miss.length?`<b>Finish these first</b> — this step uses their numbers: ${miss.map(r=>`<button type="button" data-go="${r}">${lbl[r]}</button>`).join('')}`:''; }); }
