@@ -224,6 +224,11 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .cf-cap{font-size:12.5px;color:var(--bp-dark-grey);margin:10px 0 0}
 .tip{background:var(--bp-light-grey);border-left:3px solid var(--bp-red);padding:12px 14px;border-radius:0 4px 4px 0;font-size:13.5px;color:var(--bp-dark-grey);margin:16px 0}
 .tip b{color:var(--bp-black)}
+.cap-bar{display:flex;gap:3px;margin:10px 0 8px;font-size:12px;font-weight:700}
+.cap-bar>div{padding:7px 10px;border-radius:4px;background:#E4E0D9;color:var(--bp-black);min-width:0}
+.cap-bar>div.cur{background:var(--bp-red);color:#fff}
+.cap-bar small{display:block;font-weight:500;opacity:.85}
+.cap-x ul{margin:6px 0 4px;padding-left:18px}.cap-x li{margin:3px 0}
 .seg{display:inline-flex;border:1px solid #D6D1CA;border-radius:4px;overflow:hidden}
 .seg button{background:#fff;border:0;padding:9px 14px;font:600 13px var(--bp-sans);cursor:pointer;color:var(--bp-dark-grey)}
 .seg button+button{border-left:1px solid #D6D1CA}
@@ -237,6 +242,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .rc{border:1px solid var(--bp-warm-grey);border-top:3px solid var(--bp-red);border-radius:4px;padding:14px}
 .rc .v{font-size:22px;font-weight:800}
 .rc .l{font-size:12px;color:var(--bp-dark-grey);font-weight:600}
+.rc .rc-sub{display:block;font-weight:500;margin-top:2px}.rc-sub:empty{display:none}
 .rc.dark{background:var(--bp-black);color:#fff;border-color:var(--bp-black);border-top-color:var(--bp-red)}
 .rc.dark .l{color:#bbb}
 
@@ -992,8 +998,9 @@ const SECTIONS=[
  `},
  {id:'money',t:'Your Money',d:'What your year looks like at goal: what the brokerage takes, what your non-negotiables cost, what’s left — and your plan for it, including marketing.',html:()=>`
   <h3 style="margin-top:0">Deductions over your cap year</h3>
-  <div class="res" id="ded-tiles"><div id="split-tile" style="display:contents">${RC('Split paid','splitPaid')}</div>${RC('<span data-o="capLbl">Cap paid</span>','capPaidOut')}${RC('Deal fees','feesPaid')}${RC('Donations','donPaid')}</div>
+  <div class="res" id="ded-tiles"><div id="split-tile" style="display:contents">${RC('Split paid','splitPaid')}</div>${RC('<span data-o="capLbl">Cap paid</span><span class="rc-sub" data-o="capSub"></span>','capPaidOut')}<div id="cap2-tile" style="display:none">${RC('<span data-o="capLbl2"></span><span class="rc-sub" data-o="capSub2"></span>','capPaid2')}</div>${RC('Deal fees','feesPaid')}${RC('Donations','donPaid')}</div>
   <div class="res c3">${RC('RLP franchise fee','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('Deduction period','cyCard')}</div>
+  <div id="cap-x"></div>
   <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
   <h3>What’s left after your non-negotiables</h3>
   <p class="fine" style="margin:-4px 0 10px">Your income tax holdback is money set aside, not your final tax bill. Business costs like marketing, an assistant and coaching are generally tax-deductible, so your actual tax may come in lower — check with your accountant before cutting marketing you can afford.</p>
@@ -1391,9 +1398,9 @@ function capInfo(){
 function runYear(monthG,monthS,gciSide,splitPct){
  const ci=capInfo(), ann=ci.hasDate?ci.annM:0;
  let paid=ann>0?Math.min(ci.paid0,ci.cap>0?ci.cap:ci.paid0):0, capped=ci.cap>0&&ann>0&&paid>=ci.cap-0.005;
- let split=0, fees=0, net=0, cumS=0, rlp=0, other=0, capTot=0; const caps=[], monthNet=new Array(12).fill(0);
+ const paid0=paid; let split=0, fees=0, net=0, cumS=0, rlp=0, other=0, capTot=0, capPrev=0, prevEnd=paid; const caps=[], monthNet=new Array(12).fill(0);
  for(let m=0;m<12;m++){
-  if(ann>0&&m===ann){ paid=0; capped=false; }
+  if(ann>0&&m===ann){ capPrev=capTot; prevEnd=paid; paid=0; capped=false; }
   const gm=monthG[m]||0, mSides=monthS[m]||0;
   let sp=gm*splitPct, fee=ci.fee*mSides, pre=1;
   if(ci.cap>0){
@@ -1406,7 +1413,7 @@ function runYear(monthG,monthS,gciSide,splitPct){
   const rf=Math.max(Math.min(gm*ci.rlpPct,ci.rlpMax-rlp),0), oth=ci.perDeal*mSides;
   split+=sp; fees+=fee; rlp+=rf; other+=oth; const nt=gm-sp-fee-rf-oth; net+=nt; monthNet[m]=nt; cumS+=mSides;
  }
- return {monthG,monthS,split,fees,rlp,other,capTot,net,caps,monthNet,start:ann,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:ann>0?ann:-1};
+ return {monthG,monthS,split,fees,rlp,other,capTot,net,caps,monthNet,start:ann,capRemaining:ci.cap>0?Math.max(ci.cap-paid,0):0,resetM:ann>0?ann:-1,capPrev,capCur:capTot-capPrev,paid0,prevEnd};
 }
 function engine(sides,gciSide,splitPct){
  const months=distribute(sides,closeW()); const E=runYear(months.map(u=>u*gciSide),months,gciSide,splitPct); E.months=months; return E;
@@ -1503,7 +1510,7 @@ function calc(){
  const fw=S.season.w.map(x=>Math.max(n(x),0)), actW=MONTHS.map((x,m)=>fw[(m+3)%12]), actQ=[0,1,2,3].map(q=>actW[q*3]+actW[q*3+1]+actW[q*3+2]);
  const reserveMonthly=(persAnnual+bizAnnual)/12;
  return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
-  sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,closeM,qRound,actQ,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persNN+bizNN>0,
+  sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capPrev:E.capPrev,capCur:E.capCur,capPaid0:E.paid0,capPrevEnd:E.prevEnd,closeM,qRound,actQ,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persNN+bizNN>0,
   lAp,bCo,lTk,conv,convAll,refShare,hasSrc,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed,rrspFix,postFix,pR,pT,costMonth,resTarget,resGap,resTop,bizNN,bizGrow,persNN,persLife,savFirst,savAfter,leftToPlan,minGci,recGci,fullGci,pFirst,extraSav,mktgPlanned,mktgSug,mktgNeed,verdict};
 }
 
@@ -1613,10 +1620,27 @@ function recompute(){
   const cyName=st>0?`${MONTHS[st]} ${y} – ${MONTHS[(st+11)%12]} ${y+1}`:`Jan – Dec ${y}`;
   out('cyBox',cyName); out('cyCard',st>0?`Jan – Dec ${y} · cap resets ${MONTHS[st]}`:`Jan – Dec ${y}`);
   { const w=document.getElementById('cap-paid-wrap'); if(w) w.style.display=st>0&&c.cap?'':'none'; out('capPrevName',st>0?`${MONTHS[(st+11)%12]} ${y}`:''); }
-  out('capPaidOut',c.cap?money(c.capTot):'No cap');
-  { const same=c.cap>0&&Math.round(c.splitPaid)===Math.round(c.capTot), st=document.getElementById('split-tile'), dt=document.getElementById('ded-tiles'); if(st) st.style.display=same?'none':'contents'; if(dt) dt.classList.toggle('c3',same); }
+  const twoCY=c.cap>0&&st>0&&!!c.gci, endM=MONTHS[(st+11)%12];
+  out('capPaidOut',!c.cap?'No cap':twoCY?money(c.capPrev):money(c.capTot));
+  { const t2=document.getElementById('cap2-tile'); if(t2) t2.style.display=twoCY?'contents':'none'; }
+  if(twoCY){ const pc=c.caps.find(x=>x.cy==='prev'), cc=c.caps.find(x=>x.cy==='cur');
+   out('capPaid2',money(c.capCur));
+   out('capLbl2',`Cap paid ${MONTHS[st]} – Dec ${y} · new cap year`);
+   out('capSub2',cc?`You cap in ${MONTHS_FULL[cc.m]} (${money(c.cap)})`:`${money(c.cap-c.capCur)} to go — you finish your cap in ${y+1}`);
+   out('capSub',pc?`Cap year ending ${endM} · you cap in ${MONTHS_FULL[pc.m]}${c.capPaid0?` (${money(c.capPaid0)} paid before Jan 1)`:''}`:`Cap year ending ${endM} · ${money(c.capPrevEnd)} of ${money(c.cap)}${c.capPaid0?` incl. ${money(c.capPaid0)} paid before Jan 1`:''}`); }
+  else out('capSub','');
+  { /* Explain the cap when the calendar year spans two cap years */
+   const el=document.getElementById('cap-x');
+   if(el){ if(!(c.cap>0)||!(st>0)||!c.gci) el.innerHTML=''; else {
+    const prevCap=c.caps.find(x=>x.cy==='prev'), curCap=c.caps.find(x=>x.cy==='cur'), endM=MONTHS[(st+11)%12], pm=st, cm=12-st;
+    const prevTxt=prevCap?`you cap in ${MONTHS_FULL[prevCap.m]}`:`you reach ${money(c.capPrevEnd)} of ${money(c.cap)} before it resets`;
+    const curTxt=curCap?`you cap in ${MONTHS_FULL[curCap.m]}`:`you’re ${money(c.capRemaining)} short of your cap when the year ends and finish it in ${y+1}`;
+    el.innerHTML=`<div class="tip cap-x"><b>Your cap resets in ${MONTHS_FULL[st]}</b>, so January–December ${y} covers parts of two cap years — that’s why there are two cap tiles. Each cap year tops out at <b>${money(c.cap)}</b>.
+     <div class="cap-bar"><div style="flex:${pm}">Jan – ${endM} ${y} · ${money(c.capPrev)}<small>cap year ending ${endM} ${y}</small></div><div class="cur" style="flex:${cm}">${MONTHS[st]} – Dec ${y} · ${money(c.capCur)}<small>new cap year ${MONTHS[st]} ${y} – ${endM} ${y+1}</small></div></div>
+     ${n(S.goals.capPaid)>0?'':`<span class="flag warn">Check Your Deal</span> “Cap paid so far” is blank, so this assumes you start January at $0. Enter what you’ll have paid by January 1 for an accurate number.`}</div>`; } } }
+  { const same=c.cap>0&&Math.round(c.splitPaid)===Math.round(c.capTot), sp=document.getElementById('split-tile'), dt=document.getElementById('ded-tiles'); if(sp) sp.style.display=same?'none':'contents'; if(dt) dt.classList.toggle('c3',same&&!twoCY); }
   const cur=c.caps.find(x=>x.cy==='cur'), prev=c.caps.find(x=>x.cy==='prev');
-  out('capLbl',!c.cap?'Cap paid':cur?`Cap paid in ${y} · you cap in ${MONTHS_FULL[cur.m]}`:prev?`Cap paid in ${y} · current cap year capped in ${MONTHS_FULL[prev.m]}`:`Cap paid in ${y} · ${money(c.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
+  out('capLbl',!c.cap?'Cap paid':twoCY?`Cap paid Jan – ${endM} ${y} · current cap year`:cur?`Cap paid in ${y} · you cap in ${MONTHS_FULL[cur.m]}`:prev?`Cap paid in ${y} · current cap year capped in ${MONTHS_FULL[prev.m]}`:`Cap paid in ${y} · ${money(c.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
  { const td=c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid; out('effSplit',money(td)); out('effPct',c.gci?pct(td/c.gci):'–'); }
   out('bizAnnual',money(c.bizAnnual)); out('profitNeed',money(c.profitNeed));
  out('buyShareBox',S.goals.listShare===''?'–':pct((100-Math.min(Math.max(n(S.goals.listShare),0),100))/100));
