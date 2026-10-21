@@ -301,7 +301,6 @@ tr.sub-h td{background:var(--bp-light-grey);font-weight:700;font-size:12.5px;let
 table.wf{max-width:720px}table.wf td,table.wf th{padding:8px 12px}
 table.wf tr.strong td{font-weight:700}table.wf tr.sub td{border-top:2px solid var(--bp-black);font-weight:700}
 table.wf tr.tot td{border-top:2px solid var(--bp-black);font-weight:800;font-size:15px;background:var(--bp-light-grey)}table.wf tr.tot.neg td{color:var(--bp-red)}
-#res-add-wrap{margin-top:12px;max-width:520px}
 h4.sp-h{margin:16px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:uppercase}h4.sp-h small{text-transform:none;letter-spacing:0;font-weight:500;color:var(--bp-dark-grey);margin-left:6px}
 .sess{display:block;margin:3px 0 0 0;color:var(--bp-dark-grey)}
 /* Activity funnel */
@@ -1004,10 +1003,9 @@ const SECTIONS=[
   <h3>Cash reserve</h3>
   ${intro('Commission income is lumpy — slow months, deals that collapse, a cap that resets. A cash reserve keeps your life running in between. A common guideline for commission earners is <b>3 to 6 months</b> of your non-negotiables.')}
   <div class="row c4">${F('Cash reserves today','save.reserves',{type:'money'})}<label class="f"><span>My reserve target</span><select data-k="save.resMonths"><option value="">Choose…</option><option value="3">3 months</option><option value="4">4 months</option><option value="6">6 months</option><option value="9">9 months</option><option value="12">12 months</option></select></label></div>
-  <div class="res">${RC('Reserve target','resTarget')}${RC('You have','resHave')}${RC('Still to save','resGap')}${RC('Per month to get there this year','resPerMo','dark')}</div>
-  <div class="row c4" id="res-add-wrap" style="align-items:end"><label class="chk" style="margin:0"><input type="checkbox" data-k="save.resAdd">Add my reserve top-up to this year’s plan</label></div>
+  <div class="res c3">${RC('You have now <small>months of non-negotiables</small>','resMonthsNow','dark')}${RC('<span data-o="resTargetLbl">Your target</span>','resTarget')}${RC('<span data-o="resGapLbl">Still to go</span>','resGap')}</div>
   <h3>Your savings this year</h3>
-  <div class="res">${RC('RRSP / yr','rrspY2')}${RC('TFSA / yr','tfsaY2')}${RC('Debt reduction / yr','debtY')}${RC('Reserve top-up / yr','resTopY')}</div>
+  <div class="res c3">${RC('RRSP / yr','rrspY2')}${RC('TFSA / yr','tfsaY2')}${RC('Debt reduction / yr','debtY')}</div>
   <div id="sav-note"></div>
  `},
  {id:'numbers',t:'Your Goal',d:'What’s a typical deal worth, and how many do you need? Set your average sale, then a GCI goal — or start from the number of deals you want.',html:()=>`
@@ -1075,7 +1073,7 @@ const SECTIONS=[
   ${intro('Your marketing, growth and lifestyle spending from <b>Your Budget</b>.')}
   <div class="tbl-wrap" style="margin-top:14px"><table class="wf" id="plan-wf"></table></div>
   <div data-o-html="budFlag"></div>
-  <div class="res c3">${RC('Net income <small>after business expenses</small>','profitBox')}${RC('Take-home after tax & RRSP','takeHome')}${RC('Months of reserves <small>non-negotiables, after this year’s top-up</small>','reserveMonths')}</div>
+  <div class="res c3">${RC('Net income <small>after business expenses</small>','profitBox')}${RC('Take-home after tax & RRSP','takeHome')}${RC('Cash reserves <small>months of non-negotiables</small>','reserveMonths')}</div>
   <p class="fine" style="margin:-6px 0 12px">Take-home is a safe estimate: your income tax holdback is figured on your commission <b>before</b> business expenses. Because business expenses are tax-deductible, your actual tax is usually lower — so your real take-home is likely a bit higher.</p>
   <h3>What to do with every cheque</h3>
   ${intro('Open separate accounts for business, tax and savings. Every time a cheque comes in, move the money right away — then pay yourself from what’s left.')}
@@ -1475,7 +1473,7 @@ function calc(){
  const pc=v=>Math.min(Math.max(n(v),0),100)/100, pR=pc(S.save.rrspP), pT=pc(S.save.postTaxP);
  const rrspFix=n(S.save.rrsp)+n(S.save.rrspM)*12, postFix=n(S.save.postTax)+n(S.save.postTaxM)*12, debtRed=n(S.save.debt);
  const first=k=>true; const extraSav=0;
- const costMonth=(persNN+bizNN)/12, resTarget=n(S.save.resMonths)*costMonth, resGap=Math.max(resTarget-n(S.save.reserves),0), resTop=S.save.resAdd?resGap:0;
+ const costMonth=(persNN+bizNN)/12, resTarget=n(S.save.resMonths)*costMonth, resGap=Math.max(resTarget-n(S.save.reserves),0), resTop=0; /* reserves are shown as months on hand; no top-up is added to the plan */
  const needsFix=persAnnual+postFix+debtRed+resTop;
  /* Pay-myself-first savings are non-negotiable; the rest come out of what's left at goal. */
  const fixFirst=(first('rrsp')?rrspFix:0)+(first('postTax')?postFix:0)+(first('debt')?debtRed:0)+(first('res')?resTop:0), pFirst=(first('rrsp')?pR:0)+(first('postTax')?pT:0);
@@ -1729,11 +1727,13 @@ function recompute(){
  // money
  out('persAnnual',money(c.persAnnual)); out('netComm',money(c.netComm)); out('taxAmt',money(c.taxAmt)); out('gstAmt',money(c.gstAmt)); out('gstColl',money(c.netComm*0.05)); out('afterHold',money(c.netComm*1.05-c.taxAmt-c.gstAmt)); out('takeHome',money(c.takeHome));
  out('needs',money(c.needs)); if(!c.hasBudget){ out('surplus','Add budget',''); } out('bizPct',c.gci?pct(c.bizAnnual/c.gci):'–');
- out('costMonth',c.costMonth?money(c.costMonth):'–'); out('resTarget',c.resTarget?money(c.resTarget):'–'); out('resHave',money(c.reserves)); out('resGap',c.resTarget?money(c.resGap):'–'); out('resPerMo',c.resTarget?money(c.resGap/12):'–');
- out('rrspY2',money(c.rrsp)); out('tfsaY2',money(c.post-c.extraSav)); out('debtY',money(c.debtRed)); out('resTopY',money(c.resTop));
- { const w=document.getElementById('res-add-wrap'); if(w) w.style.display=c.resGap>0?'':'none';
+ out('costMonth',c.costMonth?money(c.costMonth):'–'); const mo=c.costMonth>0?c.reserves/c.costMonth:0, tm=n(S.save.resMonths);
+ out('resMonthsNow',c.costMonth>0?dec(mo)+(Math.round(mo*10)===10?' month':' months'):'Add your budget'); out('resTarget',c.resTarget?money(c.resTarget):'–'); out('resTargetLbl',tm?`Your ${int(tm)}-month target`:'Your target');
+ out('resGap',!c.resTarget?'–':c.resGap>0?money(c.resGap):'Target met ✓'); out('resGapLbl',c.resTarget&&c.resGap>0?'Still to go':'Status');
+ out('rrspY2',money(c.rrsp)); out('tfsaY2',money(c.post-c.extraSav)); out('debtY',money(c.debtRed)); 
+ {
    const el=document.getElementById('sav-note'), tot=c.rrsp+c.post-c.extraSav+c.debtRed+c.resTop; if(el) el.innerHTML=(!tot&&!(c.pR+c.pT)?'':!c.gci?`<div class="tip">You’re setting aside <b>${money(tot)}</b> a year${c.pR+c.pT?` plus <b>${pct1(c.pR+c.pT)}</b> of each transaction`:''}. Next, <b>Your Goal</b> works these savings into the GCI you need.</div>`:`<div class="tip">You’re setting aside <b>${money(tot)}</b> this year${c.gci?` — ${pct(tot/c.gci)} of your GCI`:''}.${S.goals.method==='budget'?` Because you’re working back from your budget, <b>Your Goal</b> includes these savings: you need <b>${money(c.gci)}</b> GCI.`:c.hasBudget?(c.surplus<0?` <span class="flag bad">At your goal you’re ${money(-c.surplus)} short</span> once these savings are included — raise your goal on <b>Your Goal</b> or adjust here.`:` <span class="flag ok">Your goal covers it</span> with ${money(c.surplus)} to spare.`):''}</div>`); }
- out('reserveMonths',c.costMonth>0?dec((c.reserves+c.resTop)/c.costMonth)+' mo':'–');
+ out('reserveMonths',c.costMonth>0?dec(c.reserves/c.costMonth)+' mo':'–');
  out('mktgYr',money(c.mktgTotal)); out('bizNN',money(c.bizNN)); out('persNN',money(c.persNN)); out('savFirstY',money(c.savFirst)); out('savAfterY',money(c.savAfter));
  out('mktgSug',c.gci?`suggested 10% of GCI: ${money(MKTG_PCT*c.gci)} · planned ${money(c.mktgTotal)}`:'suggested: 10% of your GCI');
  { const el=document.getElementById('mktg-flag'), sug=c.mktgSug; if(el) el.innerHTML=!c.gci||c.verdict==='over'||c.verdict==='min'?''
@@ -1934,7 +1934,7 @@ function renderSummary(){
    <div class="sum-card"><h4>Money at a glance</h4><dl>
     <dt>Marketing budget</dt><dd>${c.mktgTotal?money(c.mktgTotal):'–'}${has&&c.mktgTotal?` <small class="muted">(${pct(c.mktgTotal/c.gci)} of GCI)</small>`:''}</dd>
     <dt>Savings this year</dt><dd>${c.rrsp+c.post+c.debtRed+c.resTop?money(c.rrsp+c.post+c.debtRed+c.resTop):'–'}</dd>
-    <dt>Cash reserve</dt><dd>${c.resTarget?`${money(c.reserves)} of ${money(c.resTarget)}`:money(c.reserves)}</dd></dl>
+    <dt>Cash reserve</dt><dd>${c.costMonth>0?`${money(c.reserves)} · ${dec(c.reserves/c.costMonth)} months${n(S.save.resMonths)?` (target ${int(n(S.save.resMonths))})`:''}`:money(c.reserves)}</dd></dl>
     <h4 class="mt">Every cheque</h4><p>${chq}</p></div>
   </div>
   <div class="sum-grid mt14">
