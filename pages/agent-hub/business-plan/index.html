@@ -1040,12 +1040,12 @@ const SECTIONS=[
  `},
  {id:'season',t:'Seasonality & Cash Flow',d:'Calgary real estate runs on a predictable yearly rhythm. Deals go firm on one curve and close — and pay you — on another. Plan for both so the slow months don’t catch you off guard.',html:()=>`
   <h3 style="margin-top:0">When Calgary homes sell — and the deals you need</h3>
-  ${intro('Ten years of City of Calgary sales follow the same rhythm every year: a spring rush, a steady fall and a quiet winter. The top chart is the market. The bottom chart is <b>your</b> year — the deals you need to go firm each month to hit your goal, and when they close and pay you.')}
+  ${intro('Ten years of City of Calgary sales follow the same rhythm every year: a spring rush, a steady fall and a quiet winter. The top chart is the market. The bottom chart is <b>your</b> year — the deals you need to go firm each month to hit your goal.')}
   <div class="mc" id="mkt-chart">
    <div class="mc-h"><div class="mc-t">Calgary sales by month · 10-year average</div><div class="mc-lg"><span><i class="k-bar"></i>Average sales that month</span><span><i class="k-avg"></i>Average month (1,832)</span></div></div>
    <svg id="mc-a" role="img" aria-label="City of Calgary 10-year average residential sales by month"></svg>
    <div class="gap"></div>
-   <div class="mc-h"><div class="mc-t">Your deals by month · <span data-o="mcGoal">–</span></div><div class="mc-lg"><span><i class="k-line"></i>Deals you need to go firm</span><span><i class="k-bar2"></i>Closings (paid)</span><span><i class="k-avg"></i>Your average month</span></div></div>
+   <div class="mc-h"><div class="mc-t">Your deals by month · <span data-o="mcGoal">–</span></div><div class="mc-lg"><span><i class="k-line"></i>Deals you need to go firm</span><span><i class="k-avg"></i>Your average month</span></div></div>
    <svg id="mc-b" role="img" aria-label="Deals you need to go firm and closings by month"></svg>
    <div class="mc-tt" id="mc-tt"></div>
   </div>
@@ -1533,7 +1533,7 @@ function drawMkt(c){
   <tr><th>Calgary 10-yr avg sales</th>${CAL_SALES.map(v=>`<td class="num">${int(v)}</td>`).join('')}<td class="num tot">21,986</td></tr>
   <tr><th>vs. an average month</th>${SEASON_W.map(v=>`<td class="num">${v}%</td>`).join('')}<td class="num tot">100%</td></tr>
   <tr><th>Your deals to go firm</th>${d.firm.map(v=>`<td class="num">${v?dec(v):'–'}</td>`).join('')}<td class="num tot">${dec(d.tot)}</td></tr>
-  <tr><th>Your closings (paid)</th>${d.close.map(v=>`<td class="num">${v?dec(v):'–'}</td>`).join('')}<td class="num tot">${dec(d.close.reduce((a,b)=>a+b,0))}</td></tr></tbody>`;
+  </tbody>`;
  out('mcGoal',d.tot?`${int(c.sides)} sides this year`:'set your goal first');
 
  const small=W<560, L=small?34:44, Rr=small?6:12, cw=(W-L-Rr)/12, X=i=>L+cw*(i+.5), fs=small?10.5:12;
@@ -1547,20 +1547,17 @@ function drawMkt(c){
    let g=cross(H)+grid(top,ph,max,v=>v?(v/1000)+'k':'0',[0,500,1000,1500,2000,2500]);
    g+=CAL_SALES.map((v,i)=>{const y=yA(v),x=X(i)-bw/2,r=Math.min(4,bw/2);return `<path d="M${x},${top+ph}V${y+r}Q${x},${y} ${x+r},${y}H${x+bw-r}Q${x+bw},${y} ${x+bw},${y+r}V${top+ph}Z" fill="${i===mcHover?'#4A4A4A':'#8A8178'}"/>`;}).join('');
    g+=`<line x1="${L}" x2="${W-Rr}" y1="${yA(avg)}" y2="${yA(avg)}" stroke="#4A4A4A" stroke-width="2" stroke-dasharray="6 4"/>`;
-   const pk=5, lo=11; g+=`<text x="${X(pk)}" y="${yA(CAL_SALES[pk])-6}" text-anchor="middle" font-size="${fs}" font-weight="800" style="fill:#000">${int(CAL_SALES[pk])}</text><text x="${X(lo)}" y="${yA(CAL_SALES[lo])-6}" text-anchor="middle" font-size="${fs}" font-weight="700">${int(CAL_SALES[lo])}</text>`;
    g+=months(H-4)+hit(H);
    const sv=document.getElementById('mc-a'); sv.setAttribute('viewBox',`0 0 ${W} ${H}`); sv.setAttribute('height',H); sv.innerHTML=g; }
  // panel B: agent
- { const H=small?150:170, ph=H-top-22, mxv=Math.max(...d.firm,...d.close,0.5), step=mxv<=1.2?0.5:mxv<=3?1:mxv<=6?2:mxv<=15?5:10, max=Math.ceil(mxv*1.12/step)*step;
+ { const H=small?150:170, ph=H-top-22, mxv=Math.max(...d.firm,0.5), step=mxv<=1.2?0.5:mxv<=3?1:mxv<=6?2:mxv<=15?5:10, max=Math.ceil(mxv*1.12/step)*step;
    const ticks=[]; for(let t=0;t<=max+1e-9;t+=step) ticks.push(+t.toFixed(2));
    const yB=v=>top+ph-(v/max)*ph, avg=d.tot/12;
    let g=cross(H)+grid(top,ph,max,v=>String(v),ticks);
-   g+=d.close.map((v,i)=>{ if(!v) return ''; const y=yB(v),x=X(i)-bw/2,r=Math.min(4,bw/2,(top+ph-y)); return `<path d="M${x},${top+ph}V${y+r}Q${x},${y} ${x+r},${y}H${x+bw-r}Q${x+bw},${y} ${x+bw},${y+r}V${top+ph}Z" fill="#D6D1C8"/>`;}).join('');
    if(d.tot){
     g+=`<line x1="${L}" x2="${W-Rr}" y1="${yB(avg)}" y2="${yB(avg)}" stroke="#4A4A4A" stroke-width="2" stroke-dasharray="6 4"/>`;
     g+=`<path d="${d.firm.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+yB(v).toFixed(1)).join('')}" fill="none" stroke="#EA002A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
     g+=d.firm.map((v,i)=>`<circle cx="${X(i)}" cy="${yB(v)}" r="${i===mcHover?5.5:4}" fill="#EA002A" stroke="#fff" stroke-width="2"/>`).join('');
-    const pk=d.firm.indexOf(Math.max(...d.firm)); g+=`<text x="${X(pk)}" y="${yB(d.firm[pk])-10}" text-anchor="middle" font-size="${fs}" font-weight="800" style="fill:#000">${dec(d.firm[pk])}</text>`;
     if(c.cap&&c.caps.length){ const m=c.caps[0].m; g+=`<text x="${X(m)}" y="${top+ph-4}" text-anchor="middle" font-size="${small?9:10.5}" font-weight="800" style="fill:#EA002A">CAP</text>`; }
    } else g+=`<text x="${(L+W)/2}" y="${top+ph/2}" text-anchor="middle" font-size="13">Set your GCI goal on Your Goal to see your deals</text>`;
    g+=months(H-4)+hit(H);
@@ -1570,8 +1567,7 @@ function drawMkt(c){
  if(mcHover>=0&&tt){ const i=mcHover, t=seasonTag(SEASON_W[i]);
   tt.innerHTML=`<div><b>${MONTHS_FULL[i]}</b> <span class="mkt-tag ${t}" style="margin-left:6px">${SEASON_TAGS[t]}</span></div>
    <div class="r">Calgary avg sales <b>${int(CAL_SALES[i])}</b></div><div class="r">vs. an average month <b>${SEASON_W[i]}%</b></div>
-   <div class="r">Your deals to go firm <b>${d.tot?dec(d.firm[i]):'–'}</b></div><div class="r">Your closings (paid) <b>${d.tot?dec(d.close[i]):'–'}</b></div>
-   <div class="r">Net commission <b>${c.monthNet[i]?money(c.monthNet[i]):'–'}</b></div>${c.cap&&c.caps.length&&c.caps[0].m===i?'<div class="r" style="color:#EA002A;font-weight:700">You reach your cap this month</div>':''}`;
+   <div class="r">Your deals to go firm <b>${d.tot?dec(d.firm[i]):'–'}</b></div>${c.cap&&c.caps.length&&c.caps[0].m===i?'<div class="r" style="color:#EA002A;font-weight:700">You reach your cap this month</div>':''}`;
   tt.style.display='block'; const x=14+L+cw*(i+1)+8, bw2=tt.offsetWidth; tt.style.left=(x+bw2>box.clientWidth?Math.max(14+L+cw*i-bw2-8,4):x)+'px'; tt.style.top='40px'; }
  else if(tt) tt.style.display='none';
 }
