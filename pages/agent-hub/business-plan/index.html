@@ -978,16 +978,18 @@ const SECTIONS=[
     <tr><td>Donation per deal</td><td>${F('','goals.don',{type:'money',aria:'Donation per deal'})}</td></tr>
     <tr><td>RLP royalty<small class="bud-hint">set by Royal LePage</small></td><td class="num">1% · max $1,525/yr</td></tr>
    </tbody></table>
-   <div><h4 class="sp-h" style="margin-top:18px">Growth <small>monthly · after your goal</small></h4><table><tbody>${BIZ_GROW.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table></div>
-  </div>
+   <h4 class="sp-h" style="margin-top:18px">Marketing &amp; growth <small>after your goal</small></h4>
+   <table class="brk"><tbody>
+    <tr class="sub-h"><td colspan="2">Marketing <small style="color:#888">— yearly amount · <span data-o="mktgSug"></span></small></td></tr>
+    ${MKTG.map(([k,l])=>`<tr><td>${l}</td><td>${F('','mktg.'+k,{type:'money',aria:l+' per year'})}</td></tr>`).join('')}
+    <tr class="sub-h"><td colspan="2">Growth <small style="color:#888">— monthly</small></td></tr>
+    ${BIZ_GROW.map(([k,l])=>`<tr><td>${l}</td><td>${F('','biz.'+k,{type:'money',aria:l+' per month'})}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><td>Total marketing / yr <small class="muted" data-o="mktgPctGci"></small></td><td class="num" data-o="mktgTotal"></td></tr></tfoot></table>
+   <div id="mktg-flag"></div>
+   <p class="fine" style="margin:6px 0 0">Marketing brings in next year’s business. Leave it blank and the plan uses the 10% suggestion; once you enter amounts, the plan uses yours.</p>
+   </div>
   </div>
   <p class="fine" style="margin:8px 0 6px">Your commission plan with the brokerage — these match the deduction summary on your deal statement. Deductions run over one cap year, starting at $0 on your cap anniversary. Not sure of your numbers? Ask the office.</p>
-  <h4 class="sp-h" style="margin-top:14px">Marketing <small>annual · after your goal · <span data-o="mktgSug"></span></small></h4>
-  <p class="fine" style="margin:-2px 0 8px">Marketing is what brings in next year’s business. Leave it blank and the plan uses the 10% suggestion; once you enter amounts, the plan uses yours.</p>
-    <div class="tbl-wrap"><table><thead><tr><th>Channel</th><th style="width:180px">Annual $</th><th class="num">% of budget</th></tr></thead>
-  <tbody>${MKTG.map(([k,l])=>`<tr><td>${l}</td><td>${F('','mktg.'+k,{type:'money',aria:l})}</td><td class="num" data-o="mk_${k}"></td></tr>`).join('')}</tbody>
-  <tfoot><tr><td>Total marketing</td><td class="num" data-o="mktgTotal"></td><td class="num" data-o="mktgPctGci"></td></tr></tfoot></table></div>
-  <div id="mktg-flag"></div>
   <h3 class="cat-h">Personal expenses</h3>
   <div class="row c2" style="align-items:start">
    <div><h4 class="sp-h">Personal costs <small>monthly · sets your minimum</small></h4><table><tbody>${PERS.filter(([k])=>PERS_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody>
@@ -995,7 +997,7 @@ const SECTIONS=[
    <div><h4 class="sp-h">Lifestyle <small>monthly · after your goal</small></h4><table><tbody>${PERS_LIFE.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table>
 </div>
   </div>
-  <div class="res c3">${RC('Personal non-negotiables / yr','persNN')}${RC('Business non-negotiables / yr','bizNN')}${RC('Non-negotiables / month','costMonth')}</div>
+  <div class="res c3">${RC('Business expenses / yr<span class="rc-sub" data-o="bizExpSub"></span>','bizExp')}${RC('Personal expenses / yr<span class="rc-sub" data-o="persExpSub"></span>','persExp')}${RC('Total expenses / yr<span class="rc-sub" data-o="totExpSub"></span>','totExp','dark')}</div>
   <div data-o-html="budFlag"></div>
  `},
  {id:'savings',t:'Savings & Reserves',d:'Money you set aside, not spend: your tax and GST holdbacks, then pay yourself first — long-term savings, debt paydown and a cash cushion for the slow months. These come off the top of every cheque, before your spending plan.',html:()=>`
@@ -1744,7 +1746,10 @@ function recompute(){
  {
    const el=document.getElementById('sav-note'), tot=c.rrsp+c.post-c.extraSav+c.debtRed+c.resTop; if(el) el.innerHTML=(!tot&&!(c.pR+c.pT)?'':!c.gci?`<div class="tip">You’re setting aside <b>${money(tot)}</b> a year${c.pR+c.pT?` plus <b>${pct1(c.pR+c.pT)}</b> of each transaction`:''}. Next, <b>Your Goal</b> works these savings into the GCI you need.</div>`:`<div class="tip">You’re setting aside <b>${money(tot)}</b> this year${c.gci?` — ${pct(tot/c.gci)} of your GCI`:''}.${S.goals.method==='budget'?` Because you’re working back from your budget, <b>Your Goal</b> includes these savings: you need <b>${money(c.gci)}</b> GCI.`:c.hasBudget?(c.surplus<0?` <span class="flag bad">At your goal you’re ${money(-c.surplus)} short</span> once these savings are included — raise your goal on <b>Your Goal</b> or adjust here.`:` <span class="flag ok">Your goal covers it</span> with ${money(c.surplus)} to spare.`):''}</div>`); }
  out('reserveMonths',c.costMonth>0?dec(c.reserves/c.costMonth)+' mo':'–');
- out('mktgYr',money(c.mktgTotal)); out('bizNN',money(c.bizNN)); out('persNN',money(c.persNN)); out('savFirstY',money(c.savFirst)); out('savAfterY',money(c.savAfter));
+ out('mktgYr',money(c.mktgTotal));
+ { const be=c.bizAnnual, pe=c.persAnnual, mn=v=>`${money(v)} sets your minimum`;
+   out('bizExp',money(be)); out('persExp',money(pe)); out('totExp',money(be+pe));
+   out('bizExpSub',mn(c.bizNN)); out('persExpSub',mn(c.persNN)); out('totExpSub',`${mn(c.bizNN+c.persNN)} · ${money((be+pe)/12)} a month`); } out('bizNN',money(c.bizNN)); out('persNN',money(c.persNN)); out('savFirstY',money(c.savFirst)); out('savAfterY',money(c.savAfter));
  out('mktgSug',c.gci?`suggested 10% of GCI: ${money(MKTG_PCT*c.gci)} · planned ${money(c.mktgTotal)}`:'suggested: 10% of your GCI');
  { const el=document.getElementById('mktg-flag'), sug=c.mktgSug; if(el) el.innerHTML=!c.gci||c.verdict==='over'||c.verdict==='min'?''
    :c.mktgTotal===0?(c.verdict==='mktg'?`<div class="tip"><span class="flag warn">Less than 10% left</span> Suggested 10% of GCI is <b>${money(sug)}</b>; you have <b>${money(Math.max(c.leftToPlan,0))}</b> available — raise your goal or start smaller.</div>`:`<div class="tip">Start with about <b>${money(sug)}</b> — 10% of your GCI — spread across the channels above.</div>`)
