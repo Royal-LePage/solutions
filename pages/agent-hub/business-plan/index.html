@@ -261,6 +261,7 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
 .tbl-wrap{overflow-x:auto}
 
 /* Fix-list additions */
+.bud-hint{display:block;font-size:11.5px;color:#888;font-weight:400;margin-top:2px}
 .sum-gnote{font-size:12px;color:var(--bp-dark-grey);margin:4px 0 0}
 .carry{white-space:pre-wrap;background:var(--bp-light-grey);border-left:3px solid var(--bp-stone);padding:10px 14px;border-radius:0 4px 4px 0;font-size:14px;color:var(--bp-black)}
 .fine{font-size:12.5px;color:var(--bp-dark-grey);margin:6px 0 0}
@@ -625,8 +626,8 @@ const VALUE_EX=[['Integrity','Tell the truth even when uncomfortable','Give clie
 const PRI_EX=[['25 transactions','Lead generation','Need more qualified opportunities','Referral + sphere strategy','Qualified leads'],['25 transactions','Conversion','Current conversion is too low','Improve consultation process','Lead → client %'],['15 listings','Listing pipeline','Need more seller opportunities','Geographic authority','Listing appointments'],['$250K GCI','Average transaction value','Current mix is too low','Target a higher-value market','Average sale price'],['','','','','']];
 const CAL_ROWS=[['call','Reason to call'],['text','Reason to text / email'],['popby','Pop-by idea'],['video','Video / social post'],['event','Event / client party']];
 const PILLARS=[['build','Build — goals & numbers'],['brand','Brand — reputation & presence'],['amplify','Amplify — content & marketing'],['connect','Connect — sphere & referrals'],['simplify','Simplify — systems & delegation']];
-const BIZ_Y=[['board','Board & association fees','CREB®, AREA, CREA'],['gli','General liability insurance','']];
-const BIZ=[['desk','Brokerage fees'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other must-pay business costs']];
+const BIZ_Y=[['board','Board, association & RECA fees','CREB®, AREA, CREA, RECA licence'],['gli','General liability insurance','']];
+const BIZ=[['desk','Monthly desk / admin fee<small class="bud-hint">Not your split, cap or deal fees — those are on Your Commission Plan.</small>'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other must-pay business costs']];
 const BIZ_NN=['desk','tech','vehicle','prof','other'], BIZ_GROW=[['coaching','Coaching & education'],['assistant','Assistant / admin support']];
 const PERS_NN=['housing','transport','groceries','utilities','insurance','family','debt','other'], PERS_LIFE=[['lifestyle','Dining, entertainment & travel'],['giving','Giving & charity']];
 const MKTG_PCT=0.10;
@@ -689,7 +690,7 @@ function DEFAULT(){
   week:{d:WEEK_DAYS.map(()=>({s:WEEK_SLOTS.map(()=>'')}))},
   acc:{partner:'',cadence:'',first:''},
   act:[0,1,2,3,4].map(()=>({what:'',pri:'',owner:'Me',due:'',done:false})),
-  goals:{method:'gci',gciGoal:'',netGoal:'',tax:'',split:'',avgPrice:'',commModel:'tier',t1:'',t2:'',flat:'',listShare:'',buyShare:'',listings:'',buyers:'',cap:'',dealFee:'',feeMode:'all',capDate:'',capPaid:'',rlpPct:1,rlpMax:1525,gstHold:'',don:'',otherFee:''},
+  goals:{method:'gci',gciGoal:'',netGoal:'',tax:'',split:'',avgPrice:'',commModel:'tier',t1:'',t2:'',flat:'',listShare:'',buyShare:'',listings:'',buyers:'',cap:'',dealFee:'',feeMode:'all',refShare:'',refFee:'',capDate:'',capPaid:'',rlpPct:1,rlpMax:1525,gstHold:'',don:'',otherFee:''},
   season:{w:SEASON_W.slice(),lag:30,curve:''},
   kpi:{lApptSign:'',lSignClose:'',bConsSign:'',bSignClose:'',convPerAppt:'',convPerHour:'',weeksOff:'',daysPerWeek:'',refPerClose:'',contactsPerRef:''},
   sources:SOURCES.map(nm=>({name:nm,pri:'',last:'',goal:'',why:'',who:'',strat:'',res:'',result:''})),
@@ -956,7 +957,7 @@ const SECTIONS=[
  {id:'budget',t:'Your Budget',d:'Your non-negotiables — the bills that get paid whether you close 5 deals or 25 — set your minimum. Then plan the marketing, growth and lifestyle spending you’d like your goal to fund.',html:()=>`
   ${intro('Monthly amounts, except the annual fees, which you enter once for the year. Rough numbers are fine. Start with the <b>must-pays</b> — they set your minimum. Marketing, coaching, an assistant, dining and travel go in the second section below. Your plan is private.')}
   <div class="row c2" style="align-items:start">
-   <div><h3>Business must-pays (monthly)</h3><table><tbody>${BIZ.filter(([k])=>BIZ_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l.replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')})}</td></tr>`).join('')}
+   <div><h3>Business must-pays (monthly)</h3><table><tbody>${BIZ.filter(([k])=>BIZ_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l.replace(/<small[^>]*>.*?<\/small>/g,'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')})}</td></tr>`).join('')}
     <tr class="sub-h"><td colspan="2">Annual fees <small style="color:#888">— enter the yearly amount</small></td></tr>
     ${BIZ_Y.map(([k,l,h])=>`<tr><td>${l}${h?` <small style="color:#888">(${h})</small>`:''}</td><td style="width:150px">${F('','bizY.'+k,{type:'money',aria:l+' per year'})}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Business non-negotiables / yr</td><td class="num" data-o="bizNN"></td></tr></tfoot></table></div>
@@ -988,6 +989,7 @@ const SECTIONS=[
    <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></label>
    ${F('Donation per deal','goals.don',{type:'money',hint:'DON'})}
    <div class="f"><span>RLP franchise fee <small>set by Royal LePage</small></span><div class="netbox locked">1% of GCI · max $1,525/yr</div></div></div>
+  <div class="row c4" style="align-items:start">${F('Deals from paid referrals','goals.refShare',{type:'pct',hint:'% of your deals · blank = 0',ph:'e.g. 20'})}${F('Typical referral fee','goals.refFee',{type:'pct',hint:'% of gross commission',ph:'25'})}<p class="fine" style="grid-column:span 2;align-self:center;margin:0">Deals where you pay a referral fee — relocation, agent-to-agent or referral companies. The fee comes off the gross commission <b>before</b> your split, cap and fees, so those deals pay you less and you need a few more of them.</p></div>
   <h3>Holdbacks</h3>
   <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">The share of each commission cheque you have held back for CRA. This is your money set aside, not a cost — income tax comes off your take-home, and GST is collected on top of your commission and paid to CRA.</p>
   <div class="row c4">${F('Income tax holdback','goals.tax',{type:'pct',hint:'% of each cheque',ph:'e.g. 30'})}${F('GST holdback','goals.gstHold',{type:'pct',hint:'% of each cheque',ph:'e.g. 5'})}</div>
@@ -1022,6 +1024,8 @@ const SECTIONS=[
   <h3>One deal, start to finish</h3>
   ${intro('What a typical side at your average price pays you, before and after you cap — using your split, fees and holdbacks from <b>Your Commission Plan</b>.')}
   <div class="tbl-wrap"><table class="wf" id="deal-wf"></table></div>
+  <div id="deal-wf-ref-wrap" style="display:none"><h4 class="sp-h" style="margin-top:16px" data-o="refDealLbl">Referred deal</h4>
+  <div class="tbl-wrap"><table class="wf" id="deal-wf-ref"></table></div><p class="fine" data-o="blendNote"></p></div>
   <h3>How do you want to set your goal?</h3>
   <div class="seg" id="method-seg"><button data-m="gci" type="button">GCI goal</button><button data-m="budget" type="button">Work back from my budget</button><button data-m="units" type="button">Number of deals</button></div>
   <div id="m-bud" class="bud-calc"></div>
@@ -1063,7 +1067,7 @@ const SECTIONS=[
   <div id="res-verdict"></div>
   <h3 style="margin-top:0">Deductions over your cap year</h3>
   <div class="res" id="ded-tiles"><div id="split-tile" style="display:contents">${RC('Split paid','splitPaid')}</div>${RC('<span data-o="capLbl">Cap paid</span><span class="rc-sub" data-o="capSub"></span>','capPaidOut')}<div id="cap2-tile" style="display:none">${RC('<span data-o="capLbl2"></span><span class="rc-sub" data-o="capSub2"></span>','capPaid2')}</div>${RC('Deal fees','feesPaid')}${RC('Donations','donPaid')}</div>
-  <div class="res c3">${RC('RLP franchise fee','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('Deduction period','cyCard')}</div>
+  <div class="res c3" id="ded-row2"><div id="ref-tile" style="display:none">${RC('Referral fees paid<span class="rc-sub" data-o="refSub"></span>','refPaid')}</div>${RC('RLP franchise fee','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('Deduction period','cyCard')}</div>
   <div id="cap-x"></div>
   <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
   <h3>What’s left after your non-negotiables</h3>
@@ -1462,7 +1466,11 @@ function engineG(gciTotal,gciSide,splitPct,sidesWhole){
 function calc(){
  const g=S.goals, k=KPI(), lsh=g.listShare===''?50:Math.min(Math.max(n(g.listShare),0),100);
  const price=n(g.avgPrice);
- const gciSide=g.commModel==='flat'?price*n(g.flat)/100:Math.min(price,100000)*n(g.t1)/100+Math.max(price-100000,0)*n(g.t2)/100;
+ const gciGross=g.commModel==='flat'?price*n(g.flat)/100:Math.min(price,100000)*n(g.t1)/100+Math.max(price-100000,0)*n(g.t2)/100;
+ /* Referral fees paid: a share of deals pays a referral fee off the gross commission, before the split, cap and fees.
+    Everything after that runs on the blended GCI per side; with both fields blank, rr = 0 and nothing changes. */
+ const refSh=Math.min(Math.max(n(g.refShare),0),100)/100, refFe=refSh>0?(g.refFee===''?0.25:Math.min(Math.max(n(g.refFee),0),100)/100):0, rr=Math.min(refSh*refFe,0.99);
+ const gciSide=gciGross*(1-rr);
  const split=Math.min(Math.max(n(g.split),0),100)/100, t=Math.min(Math.max(n(g.tax),0),95)/100;
  const ci=capInfo();
  const mktgTotal=sumObj(S.mktg);
@@ -1525,7 +1533,9 @@ function calc(){
     over = the spending plan (marketing, growth, lifestyle) spends more than is left; ok. */
  const mktgSug=MKTG_PCT*gci, mktgNeed=mktgPlanned?mktgTotal:mktgSug;
  const verdict=!(persNN+bizNN>0)||!(gci>0)?'none':leftToPlan<-0.5?'min':!mktgPlanned&&leftToPlan<mktgSug-0.5?'mktg':surplus<-0.5?'over':'ok';
- const rlpSide=Math.min(gciSide*ci.rlpPct,ci.rlpMax), chequeBefore=gciSide*(1-split)-(ci.feeAfter?0:ci.fee)-rlpSide-ci.perDeal, chequeAfter=gciSide-(ci.feeCap?0:ci.fee)-ci.perDeal;
+ /* a typical cheque is a deal with no referral fee */
+ const rlpSide=Math.min(gciGross*ci.rlpPct,ci.rlpMax), chequeBefore=gciGross*(1-split)-(ci.feeAfter?0:ci.fee)-rlpSide-ci.perDeal, chequeAfter=gciGross-(ci.feeCap?0:ci.fee)-ci.perDeal;
+ const refPaid=rr>0?gci*rr/(1-rr):0;
  // activity
  const lRate=(n(k.lApptSign)/100)*(n(k.lSignClose)/100), bRate=(n(k.bConsSign)/100)*(n(k.bSignClose)/100);
  const lAp=lRate>0?L/lRate:0, bCo=bRate>0?B/bRate:0, lTk=n(k.lSignClose)>0?L/(n(k.lSignClose)/100):0;
@@ -1545,7 +1555,7 @@ function calc(){
     follow the firm-date curve shifted earlier (heaviest in winter, ahead of the spring market). */
  const fw=S.season.w.map(x=>Math.max(n(x),0)), actW=MONTHS.map((x,m)=>fw[(m+3)%12]), actQ=[0,1,2,3].map(q=>actW[q*3]+actW[q*3+1]+actW[q*3+2]);
  const reserveMonthly=(persAnnual+bizAnnual)/12;
- return {price,gciSide,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
+ return {price,gciSide,gciGross,refSh,refFe,rr,refPaid,netSide,split,t,mktgTotal,bizAnnual,persAnnual,rrsp,needs,L,B,sides,gci,volume,netComm,profit,profitNeed,taxAmt,takeHome,surplus,
   sidesExact,gstAmt,monthG:E.monthG,rlpPaid:E.rlp,otherPaid:E.other,capTot:E.capTot,capStart:E.start,splitPaid:E.split,feesPaid:E.fees,caps:E.caps,resetM:E.resetM,capPrev:E.capPrev,capCur:E.capCur,capPaid0:E.paid0,capPrevEnd:E.prevEnd,closeM,qRound,actQ,capRemaining:E.capRemaining,monthNet:E.monthNet,cap:ci.cap,chequeBefore,chequeAfter,hasBudget:persNN+bizNN>0,
   lAp,bCo,lTk,conv,convAll,refShare,hasSrc,weeks,days,hrs,refY,conY,months,qs,reserveMonthly,reserves:n(S.save.reserves),post,debtRed,rrspFix,postFix,pR,pT,costMonth,resTarget,resGap,resTop,bizNN,bizGrow,persNN,persLife,savFirst,savAfter,leftToPlan,minGci,recGci,fullGci,pFirst,extraSav,mktgPlanned,mktgSug,mktgNeed,verdict};
 }
@@ -1683,7 +1693,9 @@ function recompute(){
   { const same=c.cap>0&&Math.round(c.splitPaid)===Math.round(c.capTot), sp=document.getElementById('split-tile'), dt=document.getElementById('ded-tiles'); if(sp) sp.style.display=same?'none':'contents'; if(dt) dt.classList.toggle('c3',same&&!twoCY); }
   const cur=c.caps.find(x=>x.cy==='cur'), prev=c.caps.find(x=>x.cy==='prev');
   out('capLbl',!c.cap?'Cap paid':twoCY?`Cap paid Jan – ${endM} ${y} · current cap year`:cur?`Cap paid in ${y} · you cap in ${MONTHS_FULL[cur.m]}`:prev?`Cap paid in ${y} · current cap year capped in ${MONTHS_FULL[prev.m]}`:`Cap paid in ${y} · ${money(c.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
- { const td=c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid; out('effSplit',money(td)); out('effPct',c.gci?pct(td/c.gci):'–'); }
+ { const td=c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid+c.refPaid; out('effSplit',money(td)); out('effPct',c.gci?pct(td/c.gci):'–');
+   const rt=document.getElementById('ref-tile'), r2=document.getElementById('ded-row2'); if(rt) rt.style.display=c.refPaid>0?'contents':'none'; if(r2) r2.classList.toggle('c3',!(c.refPaid>0));
+   out('refPaid',money(c.refPaid)); out('refSub',c.refPaid>0?`${pct1(c.refSh)} of deals at ${pct1(c.refFe)}, off the top before your split`:''); }
   out('bizAnnual',money(c.bizAnnual)); out('profitNeed',money(c.profitNeed));
  out('buyShareBox',S.goals.listShare===''?'–':pct((100-Math.min(Math.max(n(S.goals.listShare),0),100))/100));
  out('gciLbl',S.goals.method==='budget'?'GCI needed':'GCI goal'); out('gciNeedBox',c.gci?money(c.gci):'Add your budget first'); out('profitBox',money(c.profit)); out('rrspY',c.rrsp?money(c.rrsp):'–'); out('tfsaY',c.post-c.extraSav?money(c.post-c.extraSav):'–');
@@ -1748,18 +1760,26 @@ function recompute(){
    else { const r=(l,v,cls)=>`<tr class="${cls||''}"><td>${l}</td><td class="num">${v}</td></tr>`, left=c.surplus;
     el.innerHTML='<tbody>'+r('Left to plan with',money(c.leftToPlan),'strong')+r('− Marketing','−'+money(c.mktgTotal))+r('− Growth (coaching, assistant)','−'+money(c.bizGrow))+r('− Lifestyle (dining, travel, giving)','−'+money(c.persLife))
      +r(left<0?'Over your plan by':'Still unplanned',money(Math.abs(left)),'tot'+(left<0?' neg':''))+'</tbody>'+(left<0&&c.fullGci?`<tfoot><tr><td colspan="2" style="font-weight:500;color:var(--bp-dark-grey);border:0">To fund this whole plan you’d need about <b>${money(c.fullGci)}</b> GCI — raise your goal on <b>Your Goal</b>, or trim the plan.</td></tr></tfoot>`:''); } } }
- { // One deal, start to finish (Your Commission Plan)
-  const el=document.getElementById('deal-wf'), g=S.goals, ci=capInfo(), sp=c.split, gs=c.gciSide, rlp=Math.min(gs*ci.rlpPct,ci.rlpMax), gh=n(g.gstHold)/100;
-  if(el){ if(!(gs>0)) el.innerHTML='<tbody><tr><td class="muted">Enter your average sale price and commission above to see what one deal pays you.</td></tr></tbody>';
-   else { const feeB=ci.feeAfter?0:ci.fee, feeA=ci.feeCap?0:ci.fee, b=gs*(1-sp)-feeB-rlp-ci.perDeal, a=gs-feeA-rlp-ci.perDeal, cap=ci.cap>0;
-    const col=(v)=>`<td class="num">${v}</td>`, row=(l,x,y,cls)=>`<tr class="${cls||''}"><td>${l}</td>${col(x)}${cap?col(y):''}</tr>`, m=v=>v?'−'+money(v):'–';
-    el.innerHTML=`<thead><tr><th></th><th class="num">${cap?'Before you cap':'Each side'}</th>${cap?'<th class="num">After you cap</th>':''}</tr></thead><tbody>
-     ${row('Gross commission (GCI) per side',money(gs),money(gs),'strong')}
+ { // One deal, start to finish (Your Goal) — plus a referred-deal example when referral fees are entered
+  const el=document.getElementById('deal-wf'), el2=document.getElementById('deal-wf-ref'), g=S.goals, ci=capInfo(), sp=c.split, gh=n(g.gstHold)/100;
+  const wf=(gross,refFee)=>{ const rf=gross*refFee, gs=gross-rf, rlp=Math.min(gs*ci.rlpPct,ci.rlpMax);
+   const feeB=ci.feeAfter?0:ci.fee, feeA=ci.feeCap?0:ci.fee, b=gs*(1-sp)-feeB-rlp-ci.perDeal, a=gs-feeA-rlp-ci.perDeal, cap=ci.cap>0;
+   const col=(v)=>`<td class="num">${v}</td>`, row=(l,x,y,cls)=>`<tr class="${cls||''}"><td>${l}</td>${col(x)}${cap?col(y):''}</tr>`, m=v=>v?'−'+money(v):'–';
+   return `<thead><tr><th></th><th class="num">${cap?'Before you cap':'Each side'}</th>${cap?'<th class="num">After you cap</th>':''}</tr></thead><tbody>
+     ${row('Gross commission (GCI) per side',money(gross),money(gross),'strong')}
+     ${refFee>0?row(`Referral fee (${pct1(refFee)})`,m(rf),m(rf))+row('Commission after referral fee',money(gs),money(gs),'sub'):''}
      ${row(`Brokerage split (${pct(sp)})`,m(gs*sp),'–')}${row('Deal fee',m(feeB),m(feeA))}${row('RLP franchise fee (1%, max $1,525/yr)',m(rlp),m(rlp))}${ci.perDeal?row('Donation',m(ci.perDeal),m(ci.perDeal)):''}
      ${row('Your commission cheque',money(b),money(a),'sub')}
      ${row('+ GST collected (5%)','+'+money(b*0.05),'+'+money(a*0.05))}
      ${row(`Income tax holdback (${pct(c.t)})`,m(b*c.t),m(a*c.t))}${row(`GST holdback (${pct(gh)})`,m(b*gh),m(a*gh))}
-     ${row('Yours after holdbacks',money(b*(1.05-c.t-gh)),money(a*(1.05-c.t-gh)),'tot')}</tbody>`; } } }
+     ${row('Yours after holdbacks',money(b*(1.05-c.t-gh)),money(a*(1.05-c.t-gh)),'tot')}</tbody>`; };
+  if(el){ if(!(c.gciGross>0)) el.innerHTML='<tbody><tr><td class="muted">Enter your average sale price and commission above to see what one deal pays you.</td></tr></tbody>';
+   else el.innerHTML=wf(c.gciGross,0); }
+  const rw=document.getElementById('deal-wf-ref-wrap');
+  if(rw) rw.style.display=c.rr>0&&c.gciGross>0?'':'none';
+  if(el2) el2.innerHTML=c.rr>0&&c.gciGross>0?wf(c.gciGross,c.refFe):'';
+  out('refDealLbl',c.rr>0?`Referred deal — ${pct1(c.refFe)} referral fee (${pct1(c.refSh)} of your deals)`:'');
+  out('blendNote',c.rr>0?`Across all your deals, that averages ${money(c.gciSide)} GCI per side after referral fees (${money(c.gciGross)} × (1 − ${pct1(c.refSh)} × ${pct1(c.refFe)})). Your Goal uses this blended amount to work out the deals you need.`:''); }
  { // What to do with every cheque (Your Goal)
   const el=document.getElementById('chq-wf'); if(el){
    const chq0=c.chequeBefore>0?c.chequeBefore:c.chequeAfter, gh=n(S.goals.gstHold)/100, xt=n(S.alloc.tax)/100, bizSh=c.netComm>0?Math.min(c.bizAnnual/c.netComm,1):0;
@@ -1775,7 +1795,7 @@ function recompute(){
  { const rv=document.getElementById('res-verdict'); if(rv){ const fix=(c.verdict==='min'||c.verdict==='mktg'||c.verdict==='over')&&c.fullGci>0;
    rv.innerHTML=!c.gci?'':c.verdict==='none'?`<div class="tip">Your GCI goal is <b>${money(c.gci)}</b>. Add your non-negotiables on <b>Your Budget</b> to see whether it covers your year.</div>`
     :`<div class="tip"><b>Your GCI goal: ${money(c.gci)}.</b>${verdictHTML(c)}${fix?`<div style="margin-top:10px"><button type="button" class="btn btn-line btn-sm" data-setgoal="${c.fullGci}">Set my goal to ${money(c.fullGci)} — covers everything</button></div>`:''}</div>`; } }
- if(gn) gn.innerHTML=S.goals.method!=='budget'&&S.goals.method!=='units'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side — plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b> (rounded up). After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${c.rrsp?' and RRSP':''}.${verdictHTML(c)}`:'';
+ if(gn) gn.innerHTML=S.goals.method!=='budget'&&S.goals.method!=='units'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side${c.rr>0?` (blended — ${money(c.gciGross)} less referral fees on ${pct1(c.refSh)} of deals)`:''} — plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b> (rounded up). After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${c.rrsp?' and RRSP':''}.${verdictHTML(c)}`:'';
  if(gn&&!(c.gciSide>0)&&n(S.goals.gciGoal)>0&&S.goals.method==='gci') gn.innerHTML='Add your average sale and commission above to see how many sides that takes.';
 
  // positioning statement
@@ -1845,7 +1865,7 @@ function recompute(){
  });
  if(!c.gci){ ['netGoalBox','profitBox','takeHome','netComm','splitPaid','capPaidOut','feesPaid','donPaid','rlpPaid','effSplit','taxAmt','gstAmt','afterHold','lb','volume','bizPct','sides','gci'].forEach(k=>out(k,'–')); out('effPct','–'); }
  { const cp=document.getElementById('cpc-p'); if(cp) cp.hidden=!c.sides; }
- { const el=document.getElementById('q-gci-note'); if(el) el.innerHTML=c.sides&&c.gciSide?`Target GCI = closings × your GCI per side (${money(c.gciSide)}). The four quarters add up to <b>${money(c.sides*c.gciSide)}</b>${Math.abs(c.sides*c.gciSide-c.gci)>1?` — your ${money(c.gci)} goal rounded up to ${int(c.sides)} whole sides`:''}.`:''; }
+ { const el=document.getElementById('q-gci-note'); if(el) el.innerHTML=c.sides&&c.gciSide?`Target GCI = closings × your GCI per side (${money(c.gciSide)}${c.rr>0?', blended after referral fees':''}). The four quarters add up to <b>${money(c.sides*c.gciSide)}</b>${Math.abs(c.sides*c.gciSide-c.gci)>1?` — your ${money(c.gci)} goal rounded up to ${int(c.sides)} whole sides`:''}.`:''; }
  // "you need these first"
  { const have={budget:c.hasBudget,deal:S.goals.split!==''||S.goals.cap!==''||(S.meta.visited||[]).includes('deal'),numbers:c.gci>0&&c.gciSide>0}, lbl={budget:'Your Budget',deal:'Your Commission Plan',numbers:'Your Goal'};
    const needs={numbers:S.goals.method==='budget'?['budget','deal']:['deal'],savings:['deal'],results:['budget','deal','numbers'],season:['deal','numbers'],sources:['numbers'],activity:['numbers'],week:['numbers'],score:['numbers']};
@@ -1887,7 +1907,7 @@ function renderYearPage(c){
   <h3 class="no-print" style="margin-top:28px">Page 2 · My year at a glance <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— optional when printing</small></h3>
   <div class="sum-card"><h4>Month by month</h4>
    <table class="sum-q yr-m"><thead><tr><th>Month</th><th class="num">Firm deals needed</th><th class="num">Commission (GCI)</th></tr></thead><tbody>${rows}</tbody></table>
-   <p class="fine" style="margin-top:6px">The deals you need to go firm each month to reach your ${has?money(c.gci):''} GCI goal, following Calgary’s seasonal rhythm. Commission = firm deals × ${has?money(gs):'your GCI'} per side${has&&Math.round(c.sides*gs)>Math.round(c.gci)?` (a little over your goal because deals are rounded up to whole sides)`:''}. Slow months are shaded.</p></div>
+   <p class="fine" style="margin-top:6px">The deals you need to go firm each month to reach your ${has?money(c.gci):''} GCI goal, following Calgary’s seasonal rhythm. Commission = firm deals × ${has?money(gs):'your GCI'} per side${has&&c.rr>0?' (blended, after referral fees)':''}${has&&Math.round(c.sides*gs)>Math.round(c.gci)?` (a little over your goal because deals are rounded up to whole sides)`:''}. Slow months are shaded.</p></div>
   <div class="sum-grid mt14">
    <div class="sum-card"><h4>My ideal week</h4>${anyWk?wk:'<p class="muted">Not filled in yet — set it up on Ideal Week.</p>'}</div>
    <div class="sum-card"><h4>Touch calendar</h4>${cal?`<table class="yr-cal"><tbody>${cal}</tbody></table>`:'<p class="muted">Not filled in yet — plan it on Touch Calendar.</p>'}</div>
@@ -1922,7 +1942,7 @@ function renderSummary(){
    <div class="sum-card"><h4>The numbers</h4><dl>
     <dt>GCI goal</dt><dd>${m(c.gci)}</dd>${c.minGci?`<dt>Minimum GCI <small class="muted">non-negotiables</small></dt><dd>${money(c.minGci)}</dd>`:''}
     <dt>Closed sides</dt><dd>${has?`${int(c.sides)} <small class="muted">(${int(c.L)} listings / ${int(c.B)} buyers)</small>`:'–'}</dd>
-    <dt>Net income <small class="muted">after expenses</small></dt><dd>${m(c.profit)}</dd><dt>Take-home after tax &amp; RRSP</dt><dd>${m(c.takeHome)}</dd>
+    ${c.refPaid>0&&has?`<dt>Referral fees paid</dt><dd>${money(c.refPaid)}</dd>`:''}<dt>Net income <small class="muted">after expenses</small></dt><dd>${m(c.profit)}</dd><dt>Take-home after tax &amp; RRSP</dt><dd>${m(c.takeHome)}</dd>
     ${c.cap&&has?`<dt>Cap reached</dt><dd>${capText(c,true)}</dd>`:''}${c.hasBudget&&has?`<dt>${c.surplus<0?'Over your plan':'Unplanned surplus'}</dt><dd style="color:${c.surplus<0?'var(--bp-red)':'var(--green)'}">${money(Math.abs(c.surplus))}</dd>`:''}</dl></div>
   </div>
   <div class="sum-card mt14"><h4>Quarterly targets</h4>
