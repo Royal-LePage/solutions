@@ -332,6 +332,7 @@ h4.sp-h{margin:16px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:upp
 .mc-lg .k-bar{width:11px;height:11px;border-radius:2px;background:#8A8178}
 .mc-lg .k-bar2{width:11px;height:11px;border-radius:2px;background:var(--bp-stone)}
 .mc-lg .k-line{width:16px;height:2px;background:var(--bp-red);vertical-align:3px}
+.mc-lg .k-mline{width:16px;height:2px;background:#8A8178;vertical-align:3px}
 .mc-lg .k-avg{width:16px;height:0;border-top:2px dashed var(--bp-dark-grey);vertical-align:3px}
 .mc svg{display:block;width:100%;overflow:visible}
 .mc svg text{font-family:var(--bp-sans);fill:var(--bp-dark-grey)}
@@ -649,15 +650,28 @@ const SWOT_Q={s:['What do clients compliment you on?','Which communities, price 
 const DB_GRADES=[['ap','A+','Have sent you referrals',1],['a','A','Would refer you',1],['b','B','Would refer you if trained and shown how',1/2],['c','C','Could refer you in the future',1/3],['o','O','Online leads — move up to C or down to D',0],['d','D','To be deleted from your database',0]];
 const VALUE_BANK=['Integrity','Honesty','Trust','Respect','Service','Generosity','Kindness','Gratitude','Family','Community','Relationships','Loyalty','Communication','Transparency','Accountability','Reliability','Responsiveness','Excellence','Professionalism','Growth','Learning','Curiosity','Hard work','Discipline','Consistency','Courage','Resilience','Fun','Humour','Balance','Health','Faith','Freedom','Independence','Creativity','Innovation','Leadership','Teamwork','Advocacy','Patience','Empathy','Fairness'];
 const DEFAULT_TASKS=['CRM','Database management','Lead follow-up','Transaction management','Marketing','Client communication','Accounting','Administrative support','Technology','Automation'];
-/* Calgary seasonal index: each month's share of the year's City of Calgary residential sales (CREB®),
-   averaged over 2016–2025, scaled so 100 = an average month. CREB counts a sale when it goes firm. */
-const SEASON_W=[64,88,114,115,127,130,112,105,97,100,85,64];
+/* Market seasonality: each month's share of the year's residential sales, averaged over 2016–2025.
+   Source: RLP Solutions "Calgary & Area 10-Year Sales Report" (Pillar 9 Matrix Stats, Oct 2026).
+   w = the same pattern scaled so 100 = an average month; it is the default deal pattern for that market. */
+const MARKETS={
+ calgary:{name:'Calgary & area',short:'Calgary',pct:[5.4,7.5,9.8,9.9,10.7,10.7,9.1,8.6,8.0,8.1,6.9,5.2],
+  src:'Pillar 9 Matrix Stats, City of Calgary residential sold by month, 2016–2025 (220,224 sales); RLP Solutions “Calgary & Area 10-Year Sales Report”. Airdrie, Chestermere, Cochrane, Okotoks, Strathmore, High River and Langdon follow the same pattern within half a point each month.'},
+ canmore:{name:'Canmore & Bow Valley',short:'Canmore',pct:[6.2,7.5,9.0,9.2,9.6,8.8,9.1,8.6,8.1,9.5,8.0,6.3],
+  src:'Pillar 9 Matrix Stats, Canmore residential sold by month, 2016–2025 (4,885 sales); RLP Solutions “Calgary & Area 10-Year Sales Report”. Canmore is 87% of Bow Valley sales; Banff and the rest of the valley aren’t in the monthly split yet, so they use the Canmore pattern.'}};
+Object.values(MARKETS).forEach(m=>{ const avg=m.pct.reduce((a,b)=>a+b,0)/12; m.w=m.pct.map(x=>Math.round(x/avg*100)); });
+const mkt=()=>MARKETS[(typeof S!=='undefined'&&S&&S.season&&MARKETS[S.season.market])?S.season.market:'calgary'];
+const mktW=()=>mkt().w;
+const SEASON_W_CREB=[64,88,114,115,127,130,112,105,97,100,85,64]; /* CREB-based Calgary default (Oct 2026), used only to migrate saved plans */
 const SEASON_W_OLD=[20,25,50,60,90,100,90,70,55,45,25,20]; /* pre-Oct 2026 default, used only to migrate saved plans */
-/* CREB® City of Calgary total residential sales, 10-year average by month (2016–2025). From the RLP Solutions
-   "Calgary Monthly Sales – 10-Year Average" report (Oct 2026). 21,986 sales in an average year. */
-const CAL_SALES=[1184,1643,2158,2170,2357,2351,2008,1898,1748,1789,1527,1153];
 const seasonTag=v=>v>=110?'busy':v>=90?'neutral':'slow';
 const SEASON_TAGS={busy:'Busy',neutral:'Neutral',slow:'Slow'};
+/* The months in a season as readable ranges, e.g. "March – June" or "November – January" (wraps over New Year) */
+function seasonMonths(tag){
+ const on=mktW().map(v=>seasonTag(v)===tag); if(!on.some(Boolean)) return '—';
+ let start=on.findIndex((x,i)=>x&&!on[(i+11)%12]); if(start<0) start=0;
+ const runs=[]; for(let k=0;k<12;k++){ const i=(start+k)%12; if(!on[i]) continue; const last=runs[runs.length-1]; if(last&&(last[1]+1)%12===i) last[1]=i; else runs.push([i,i]); }
+ return runs.map(([a,b])=>a===b?MONTHS_FULL[a]:`${MONTHS_FULL[a]} – ${MONTHS_FULL[b]}`).join(', ');
+}
 
 const IDEAS={
  call:['New-year market outlook','Spring plans check-in','Spring market is here: home value update','Tax season wrap-up: any plans this year?','Yard season check-in','Summer plans and a home value update','Stampede invite','Back-to-school check-in','Fall market update','Thanksgiving thank-you calls','Year-end review: any moves next year?','Holiday greetings and referral thank-yous'],
@@ -693,7 +707,7 @@ function DEFAULT(){
   acc:{partner:'',cadence:'',first:''},
   act:[0,1,2,3,4].map(()=>({what:'',pri:'',owner:'Me',due:'',done:false})),
   goals:{method:'gci',gciGoal:'',netGoal:'',tax:'',split:'',avgPrice:'',commModel:'tier',t1:'',t2:'',flat:'',listShare:'',buyShare:'',listings:'',buyers:'',cap:'',dealFee:'',feeMode:'all',refShare:'',refFee:'',capDate:'',capPaid:'',rlpPct:1,rlpMax:1525,gstHold:'',don:'',otherFee:''},
-  season:{w:SEASON_W.slice(),lag:30,curve:''},
+  season:{w:MARKETS.calgary.w.slice(),lag:30,curve:'',market:'calgary'},
   kpi:{lApptSign:'',lSignClose:'',bConsSign:'',bSignClose:'',convPerAppt:'',convPerHour:'',weeksOff:'',daysPerWeek:'',refPerClose:'',contactsPerRef:''},
   sources:SOURCES.map(nm=>({name:nm,pri:'',last:'',goal:'',why:'',who:'',strat:'',res:'',result:''})),
   content:{personal:'',professional:'',and:'',andTopic:'',platforms:'',themes:'',process:''},
@@ -739,12 +753,13 @@ function normalize(){
  /* Licence & E&O is now part of desk fees: fold any saved amount into desk so the total doesn't change. */
  if(S.biz&&S.biz.license!==''&&S.biz.license!=null&&n(S.biz.license)){ S.biz.desk=String(n(S.biz.desk)+n(S.biz.license)); S.biz.license=''; }
  if(!S.sources||S.sources.length!==SOURCES.length||S.sources.some((x,i)=>x.name!==SOURCES[i])) S.sources=DEFAULT().sources;
- if(S.season.curve!=='creb10'){
-  /* Move plans onto the Calgary 10-year curve unless the agent had set their own weights. */
+ if(S.season.curve!=='p9'){
+  /* Move plans onto the Pillar 9 market pattern unless the agent had set their own weights. */
   const w=(S.season.w||[]).map(Number);
-  if(S.season.curve!=='firm'||w.length!==12||w.join()===SEASON_W_OLD.join()) S.season.w=SEASON_W.slice();
-  S.season.curve='creb10';
+  if(w.length!==12||w.join()===SEASON_W_OLD.join()||w.join()===SEASON_W_CREB.join()||(S.season.curve!=='firm'&&S.season.curve!=='creb10')) S.season.w=mktW().slice();
+  S.season.curve='p9';
  }
+ if(!MARKETS[S.season.market]) S.season.market='calgary';
  (S.tasks||[]).forEach(t=>{ if(t.action==='Do') t.action='Only I do'; });
  if(!S.vision.five&&S.vision.ten) S.vision.five=S.vision.ten;
  if(S.obj&&(S.obj.primary||S.obj.sec1||S.obj.sec2)){ const o=[S.obj.primary,S.obj.sec1,S.obj.sec2].filter(Boolean).join('\n'); if(!(S.vision.one||'').includes(o)) S.vision.one=(S.vision.one?S.vision.one+'\n':'')+o; S.obj={primary:'',sec1:'',sec2:''}; }
@@ -1044,24 +1059,25 @@ const SECTIONS=[
   <div class="tip"><b>How this is calculated:</b> the number of deals is your GCI goal ÷ GCI per side from your average sale above. Your net income uses your brokerage costs and expenses from <b>Your Budget</b>.<span id="split-hint"> You haven’t entered a split, cap or fees yet, so none are taken off.</span></div>
 
  `},
- {id:'season',t:'Seasonality & Cash Flow',d:'Calgary real estate runs on a predictable yearly rhythm. Deals go firm on one curve and close — and pay you — on another. Plan for both so the slow months don’t catch you off guard.',html:()=>`
-  <h3 style="margin-top:0">When Calgary homes sell — and the deals you need</h3>
-  ${intro('Ten years of City of Calgary sales follow the same rhythm every year: a spring rush, a steady fall and a quiet winter. The top chart is the market. The bottom chart is <b>your</b> year — the deals you need to go firm each month to hit your goal.')}
+ {id:'season',t:'Seasonality & Cash Flow',d:'Real estate in your market runs on a predictable yearly rhythm. Deals go firm on one curve and close — and pay you — on another. Plan for both so the slow months don’t catch you off guard.',html:()=>`
+  <h3 style="margin-top:0">When homes sell — and the deals you need</h3>
+  ${intro('Ten years of sales follow the same rhythm every year. The top chart is your market: each month’s share of the year’s sales. The bottom chart is <b>your</b> year — the deals you need to go firm each month to hit your goal.')}
+  <div class="row c3"><label class="f"><span>Your market <small>sets your monthly pattern</small></span><select data-k="season.market">${Object.entries(MARKETS).map(([k,m])=>`<option value="${k}">${m.name}</option>`).join('')}</select></label></div>
   <div class="mc" id="mkt-chart">
-   <div class="mc-h"><div class="mc-t">Calgary sales by month · 10-year average</div><div class="mc-lg"><span><i class="k-bar"></i>Average sales that month</span><span><i class="k-avg"></i>Average month (1,832)</span></div></div>
-   <svg id="mc-a" role="img" aria-label="City of Calgary 10-year average residential sales by month"></svg>
+   <div class="mc-h"><div class="mc-t"><span data-o="mcTitle">Calgary &amp; area</span> · share of the year’s sales by month, 2016–2025</div><div class="mc-lg"><span><i class="k-mline"></i>Share of the year that month</span></div></div>
+   <svg id="mc-a" role="img" aria-label="Share of the year's residential sales by month, 10-year average"></svg>
    <div class="gap"></div>
-   <div class="mc-h"><div class="mc-t">Your deals by month · <span data-o="mcGoal">–</span></div><div class="mc-lg"><span><i class="k-line"></i>Deals you need to go firm</span><span><i class="k-avg"></i>Your average month</span></div></div>
+   <div class="mc-h"><div class="mc-t">Your deals by month · <span data-o="mcGoal">–</span></div><div class="mc-lg"><span><i class="k-line"></i>Deals you need to go firm</span></div></div>
    <svg id="mc-b" role="img" aria-label="Deals you need to go firm and closings by month"></svg>
    <div class="mc-tt" id="mc-tt"></div>
   </div>
   <details class="mc-tbl"><summary>Show as a table</summary><div class="tbl-wrap"><table class="cf" id="mc-table"></table></div></details>
-  <div class="mkt-sum" style="margin-top:14px">${['busy','neutral','slow'].map(k=>`<div class="mkt-card ${k}"><div class="mkt-k"><span class="mkt-tag ${k}">${SEASON_TAGS[k]}</span> ${MONTHS.filter((m,i)=>seasonTag(SEASON_W[i])===k).length} months</div><div class="mkt-m">${{busy:'March – July',neutral:'August – October',slow:'November – February'}[k]}</div><div class="mkt-v" data-o="sd-${k}">–</div><div class="mkt-l" data-o="sh-${k}">–</div></div>`).join('')}</div>
+  <div class="mkt-sum" style="margin-top:14px">${['busy','neutral','slow'].map(k=>`<div class="mkt-card ${k}"><div class="mkt-k"><span class="mkt-tag ${k}">${SEASON_TAGS[k]}</span> <span data-o="sn-${k}"></span></div><div class="mkt-m" data-o="sm-${k}"></div><div class="mkt-v" data-o="sd-${k}">–</div><div class="mkt-l" data-o="sh-${k}">–</div></div>`).join('')}</div>
   ${tip('<b>Use the slow months to fill the busy ones.</b> Listings taken and buyers met in January and February are what go firm in the spring peak. Plan your heaviest prospecting, listing presentations and client events for November through February.')}
   <div class="row c3"><label class="f"><span>Firm to possession <small>typical time to close</small></span><select data-k="season.lag"><option value="30">About 30 days</option><option value="45">About 45 days</option><option value="60">About 60 days</option><option value="90">About 90 days</option></select></label></div>
   <div class="qs">${RC('Q1 closings','q1')}${RC('Q2 closings','q2')}${RC('Q3 closings','q3')}${RC('Q4 closings','q4')}</div>
-  ${deeper('Change your monthly pattern',`<p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">Your deals start on the Calgary pattern (100 = an average month). If your business runs differently — say you work mostly with condo investors, or take July off — change any month. The red line updates as you type.</p><div class="sw-grid" id="season"></div><div class="no-print" style="margin-top:12px"><button class="btn btn-line btn-sm" id="season-reset" type="button">Reset to the Calgary 10-year pattern</button></div>`)}
-  <p class="mkt-src">Source: CREB®, City of Calgary total residential sales (detached, semi-detached, row and apartment), 2016–2025; RLP Solutions “Calgary Monthly Sales – 10-Year Average” report. CREB® counts a sale in the month it goes firm. Busy = 110%+ of an average month, Neutral = 90–110%, Slow = under 90%.</p>
+  ${deeper('Change your monthly pattern',`<p style="margin-top:0;color:var(--bp-dark-grey);font-size:13.5px">Your deals start on your market’s pattern (100 = an average month). If your business runs differently — say you work mostly with condo investors, or take July off — change any month. The red line updates as you type.</p><div class="sw-grid" id="season"></div><div class="no-print" style="margin-top:12px"><button class="btn btn-line btn-sm" id="season-reset" type="button">Reset to my market’s 10-year pattern</button></div>`)}
+  <p class="mkt-src"><span>Source: </span><span data-o="mktSrc"></span> Busy = 110%+ of an average month, Neutral = 90–110%, Slow = under 90%.</p>
   <h3>Cash flow projection</h3>
   ${intro('What actually lands in your account each month, after holdbacks, against what goes out. The running balance starts from your <b>cash reserves today</b> (Savings &amp; Reserves).')}
   <div class="tbl-wrap"><table class="cf" id="cf-table"></table></div>
@@ -1334,6 +1350,8 @@ document.addEventListener('focusout',e=>{
  else if(el.type==='number'&&el.min==='0'&&el.value!==''&&parseFloat(el.value)<0){ el.value=0; onField(el); }
 });
 document.addEventListener('change',e=>{ const t=e.target; if(t.tagName==='SELECT'||t.type==='checkbox'||t.type==='date') onField(t); });
+document.addEventListener('change',e=>{ const t=e.target; if(!t.dataset||t.dataset.k!=='season.market') return;
+ S.season.w=mktW().slice(); fillAll(document.getElementById('s-season')); recompute(); queueSave(); toast(`Your monthly pattern now follows ${mkt().name}`); });
 
 document.addEventListener('click',e=>{ const mo=document.getElementById('more'); if(mo&&mo.open&&!e.target.closest('#more')) mo.open=false; if(e.target.closest('.more-menu button')&&mo) mo.open=false;
  const t=e.target.closest('button'); if(!t) return;
@@ -1360,7 +1378,7 @@ document.addEventListener('click',e=>{ const mo=document.getElementById('more');
    S.week.d.forEach((row,i)=>row.s.forEach((v,j)=>{ if(!v){ row.s[j]=plan(i,j); k++; } })); renderWeek(); recompute(); queueSave(); toast(k?'Starting week added — change any block':'Every block is already set'); break; }
   case 'week-clear': S.week.d=WEEK_DAYS.map(()=>({s:WEEK_SLOTS.map(()=>'')})); renderWeek(); recompute(); queueSave(); break;
   case 'init-add': S.inits.push({what:'',date:'',priority:'Medium'}); renderInits(); fillAll(document.getElementById('init-body')); queueSave(); break;
-  case 'season-reset': S.season.w=SEASON_W.slice(); S.season.lag=30; fillAll(document.getElementById('s-season')); recompute(); queueSave(); break;
+  case 'season-reset': S.season.w=mktW().slice(); S.season.lag=30; fillAll(document.getElementById('s-season')); recompute(); queueSave(); break;
   case 'use-budget': { const c=calc(); if(c.needs<=0){ toast('Add your personal budget on the Budget & Finances page first'); break; } S.goals.netGoal=Math.round(c.needs); fillAll(); recompute(); queueSave(); toast('Take-home goal set to '+money(c.needs)); break; }
   case 'cal-fill': { let k=0; S.cal.forEach((m,i)=>CAL_ROWS.forEach(([r])=>{ if(!m[r]&&IDEAS[r][i]){ m[r]=IDEAS[r][i]; k++; } })); renderCal(); recompute(); queueSave(); toast(k?`Added ${k} suggestions — edit any of them`:'Every cell already has something in it'); break; }
   case 'b-print-sum': case 'b-print-sum2': renderSummary(); document.body.classList.remove('print-two'); document.body.classList.add('print-summary'); window.print(); break;
@@ -1584,8 +1602,8 @@ function drawMkt(c){
  // table view (always kept current)
  const tb=document.getElementById('mc-table');
  if(tb) tb.innerHTML=`<thead><tr><th></th>${MONTHS.map(m=>`<th class="num">${m}</th>`).join('')}<th class="num">Year</th></tr></thead><tbody>
-  <tr><th>Calgary 10-yr avg sales</th>${CAL_SALES.map(v=>`<td class="num">${int(v)}</td>`).join('')}<td class="num tot">21,986</td></tr>
-  <tr><th>vs. an average month</th>${SEASON_W.map(v=>`<td class="num">${v}%</td>`).join('')}<td class="num tot">100%</td></tr>
+  <tr><th>${mkt().short} share of the year</th>${mkt().pct.map(v=>`<td class="num">${v.toFixed(1)}%</td>`).join('')}<td class="num tot">100%</td></tr>
+  <tr><th>vs. an average month</th>${mktW().map(v=>`<td class="num">${v}%</td>`).join('')}<td class="num tot">100%</td></tr>
   <tr><th>Your deals to go firm</th>${d.firmW.map(v=>`<td class="num">${v?int(v):'–'}</td>`).join('')}<td class="num tot">${int(Math.round(d.tot))}</td></tr>
   </tbody>`;
  out('mcGoal',d.tot?`${int(c.sides)} sides this year`:'set your goal first');
@@ -1597,10 +1615,11 @@ function drawMkt(c){
  const hit=h=>MONTHS.map((m,i)=>`<rect x="${L+cw*i}" y="0" width="${cw}" height="${h}" fill="transparent" data-mi="${i}"/>`).join('');
  const cross=h=>mcHover>=0?`<rect x="${L+cw*mcHover}" y="0" width="${cw}" height="${h}" fill="#F5F3F0"/>`:'';
  // panel A: Calgary
- { const H=small?150:170, ph=H-top-22, max=2500, avg=21986/12, yA=v=>top+ph-(v/max)*ph;
-   let g=cross(H)+grid(top,ph,max,v=>v?(v/1000)+'k':'0',[0,500,1000,1500,2000,2500]);
-   g+=CAL_SALES.map((v,i)=>{const y=yA(v),x=X(i)-bw/2,r=Math.min(4,bw/2);return `<path d="M${x},${top+ph}V${y+r}Q${x},${y} ${x+r},${y}H${x+bw-r}Q${x+bw},${y} ${x+bw},${y+r}V${top+ph}Z" fill="${i===mcHover?'#4A4A4A':'#8A8178'}"/>`;}).join('');
-   g+=`<line x1="${L}" x2="${W-Rr}" y1="${yA(avg)}" y2="${yA(avg)}" stroke="#4A4A4A" stroke-width="2" stroke-dasharray="6 4"/>`;
+ { const H=small?150:170, ph=H-top-22, max=12, avg=100/12, yA=v=>top+ph-(v/max)*ph, P=mkt().pct;
+   let g=cross(H)+grid(top,ph,max,v=>v+'%',[0,4,8,12]);
+   /* market line: each month's share of the year */
+   g+=`<path d="${P.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+yA(v).toFixed(1)).join('')}" fill="none" stroke="#8A8178" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+   g+=P.map((v,i)=>`<circle cx="${X(i)}" cy="${yA(v)}" r="${i===mcHover?5.5:4}" fill="${i===mcHover?'#4A4A4A':'#8A8178'}" stroke="#fff" stroke-width="2"/>`).join('');
    g+=months(H-4)+hit(H);
    const sv=document.getElementById('mc-a'); sv.setAttribute('viewBox',`0 0 ${W} ${H}`); sv.setAttribute('height',H); sv.innerHTML=g; }
  // panel B: agent
@@ -1609,7 +1628,6 @@ function drawMkt(c){
    const yB=v=>top+ph-(v/max)*ph, avg=d.tot/12;
    let g=cross(H)+grid(top,ph,max,v=>String(v),ticks);
    if(d.tot){
-    g+=`<line x1="${L}" x2="${W-Rr}" y1="${yB(avg)}" y2="${yB(avg)}" stroke="#4A4A4A" stroke-width="2" stroke-dasharray="6 4"/>`;
     g+=`<path d="${d.firm.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+yB(v).toFixed(1)).join('')}" fill="none" stroke="#EA002A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
     g+=d.firm.map((v,i)=>`<circle cx="${X(i)}" cy="${yB(v)}" r="${i===mcHover?5.5:4}" fill="#EA002A" stroke="#fff" stroke-width="2"/>`).join('');
     if(c.cap&&c.caps.length){ const m=c.caps[0].m; g+=`<text x="${X(m)}" y="${top+ph-4}" text-anchor="middle" font-size="${small?9:10.5}" font-weight="800" style="fill:#EA002A">CAP</text>`; }
@@ -1618,9 +1636,9 @@ function drawMkt(c){
    const sv=document.getElementById('mc-b'); sv.setAttribute('viewBox',`0 0 ${W} ${H}`); sv.setAttribute('height',H); sv.innerHTML=g; }
  // tooltip
  const tt=document.getElementById('mc-tt');
- if(mcHover>=0&&tt){ const i=mcHover, t=seasonTag(SEASON_W[i]);
+ if(mcHover>=0&&tt){ const i=mcHover, t=seasonTag(mktW()[i]);
   tt.innerHTML=`<div><b>${MONTHS_FULL[i]}</b> <span class="mkt-tag ${t}" style="margin-left:6px">${SEASON_TAGS[t]}</span></div>
-   <div class="r">Calgary avg sales <b>${int(CAL_SALES[i])}</b></div><div class="r">vs. an average month <b>${SEASON_W[i]}%</b></div>
+   <div class="r">${mkt().short} share of the year <b>${mkt().pct[i].toFixed(1)}%</b></div><div class="r">vs. an average month <b>${mktW()[i]}%</b></div>
    <div class="r">Your deals to go firm <b>${d.tot?int(d.firmW[i]):'–'}</b></div>${c.cap&&c.caps.length&&c.caps[0].m===i?'<div class="r" style="color:#EA002A;font-weight:700">You reach your cap this month</div>':''}`;
   tt.style.display='block'; const x=14+L+cw*(i+1)+8, bw2=tt.offsetWidth; tt.style.left=(x+bw2>box.clientWidth?Math.max(14+L+cw*i-bw2-8,4):x)+'px'; tt.style.top='40px'; }
  else if(tt) tt.style.display='none';
@@ -1712,9 +1730,11 @@ function recompute(){
  // season
  drawMkt(c);
  c.qs.forEach((q,i)=>out('q'+(i+1),int(q)+(q===1?' side':' sides')));
+ out('mcTitle',mkt().name); out('mktSrc',mkt().src);
+ ['busy','neutral','slow'].forEach(k=>{ const nm=mktW().filter(v=>seasonTag(v)===k).length; out('sn-'+k,nm+(nm===1?' month':' months')); out('sm-'+k,seasonMonths(k)); });
  { /* Firm deals by month and by busy / neutral / slow season, from the agent's firm-date weights */
   const w=S.season.w.map(x=>Math.max(n(x),0)), tw=w.reduce((a,b)=>a+b,0), g={busy:0,neutral:0,slow:0};
-  w.forEach((x,i)=>{ const sh=tw?x/tw:0; g[seasonTag(SEASON_W[i])]+=sh;  });
+  w.forEach((x,i)=>{ const sh=tw?x/tw:0; g[seasonTag(mktW()[i])]+=sh;  });
   Object.keys(g).forEach(k=>{ const d=c.sides*g[k]; out('sd-'+k,c.sides&&tw?'≈ '+nWhole(d)+(nWhole(d)==='1'?' deal':' deals'):'–'); out('sh-'+k,tw?Math.round(g[k]*100)+'% of your year':'–'); });
  }
  // activity
@@ -1867,7 +1887,7 @@ function cashBal(c){ const hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual
 function renderYearPage(c){
  /* Month by month: the firm deals needed each month and the commission (GCI) they bring in */
  const has=c.gci>0&&c.gciSide>0, d=mcData(c), gs=c.gciSide;
- const rows=MONTHS.map((mo,i)=>{ const tag=seasonTag(SEASON_W[i]);
+ const rows=MONTHS.map((mo,i)=>{ const tag=seasonTag(mktW()[i]);
   return `<tr class="${tag==='slow'?'slow':''}"><td><b>${MONTHS_FULL[i]}</b> <span class="mkt-tag ${tag}">${SEASON_TAGS[tag]}</span></td><td class="num">${has?int(d.firmW[i]):'–'}</td><td class="num">${has?money(d.firmW[i]*gs):'–'}</td></tr>`; }).join('')
   +(has?`<tr class="tot"><td><b>Year</b></td><td class="num"><b>${int(c.sides)}</b></td><td class="num"><b>${money(c.sides*gs)}</b></td></tr>`:'');
  const ab={prospect:'Prosp',appt:'Appt',client:'Client',admin:'Admin',mktg:'Mktg',learn:'Learn',personal:'Family',off:'Off'};
@@ -1879,7 +1899,7 @@ function renderYearPage(c){
   <h3 class="no-print" style="margin-top:28px">Page 2 · My year at a glance <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— optional when printing</small></h3>
   <div class="sum-card"><h4>Month by month</h4>
    <table class="sum-q yr-m"><thead><tr><th>Month</th><th class="num">Firm deals needed</th><th class="num">Commission (GCI)</th></tr></thead><tbody>${rows}</tbody></table>
-   <p class="fine" style="margin-top:6px">The deals you need to go firm each month to reach your ${has?money(c.gci):''} GCI goal, following Calgary’s seasonal rhythm. Commission = firm deals × ${has?money(gs):'your GCI'} per side${has&&c.rr>0?' (blended, after referral fees)':''}${has&&Math.round(c.sides*gs)>Math.round(c.gci)?` (a little over your goal because deals are rounded up to whole sides)`:''}. Slow months are shaded.</p></div>
+   <p class="fine" style="margin-top:6px">The deals you need to go firm each month to reach your ${has?money(c.gci):''} GCI goal, following the ${mkt().name} seasonal pattern. Commission = firm deals × ${has?money(gs):'your GCI'} per side${has&&c.rr>0?' (blended, after referral fees)':''}${has&&Math.round(c.sides*gs)>Math.round(c.gci)?` (a little over your goal because deals are rounded up to whole sides)`:''}. Slow months are shaded.</p></div>
   <div class="sum-grid mt14">
    <div class="sum-card"><h4>My ideal week</h4>${anyWk?wk:'<p class="muted">Not filled in yet — set it up on Ideal Week.</p>'}</div>
    <div class="sum-card"><h4>Touch calendar</h4>${cal?`<table class="yr-cal"><tbody>${cal}</tbody></table>`:'<p class="muted">Not filled in yet — plan it on Touch Calendar.</p>'}</div>
