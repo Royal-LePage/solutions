@@ -384,6 +384,7 @@ h4.sp-h{margin:16px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:upp
 /* Summary */
 .sum-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .sum-card{border:1px solid var(--bp-warm-grey);border-radius:4px;padding:16px}
+.yr-m tr.tot td{border-top:2px solid var(--bp-black)}
 .yr-m tr.slow td{background:#F7F5F2}.yr-m tr.capm td:first-child{box-shadow:inset 3px 0 0 var(--bp-red)}.yr-m td.neg{color:var(--bp-red);font-weight:700}.yr-m small{color:var(--bp-dark-grey);font-weight:600}
 .yr-badge{display:inline-block;background:var(--bp-red);color:#fff;font:800 9.5px var(--bp-sans);border-radius:3px;padding:1px 5px;vertical-align:1px}
 .yr-wk{width:100%;border-collapse:collapse;font-size:10px;table-layout:fixed}.yr-wk th{font-size:10px;color:var(--bp-dark-grey);font-weight:700;padding:3px 2px;text-align:center}.yr-wk tbody th{text-align:left;white-space:nowrap;font-size:9px}.yr-wk thead th:first-child{width:56px}
@@ -1872,9 +1873,11 @@ function agentName(){ return (S.vision&&S.vision.name)||''; }
 function cashBal(c){ const hold=c.t+n(S.goals.gstHold)/100-0.05, biz=c.bizAnnual/12, pers0=(c.persAnnual+c.postFix+c.extraSav+c.debtRed+c.rrspFix)/12, pp=c.pR+c.pT;
  let bal=c.reserves; return MONTHS.map((x,m)=>{ const nt=c.monthNet[m]||0; bal+=nt-nt*hold-biz-pers0-pp*Math.max(nt,0); return bal; }); }
 function renderYearPage(c){
- const has=c.gci>0, d=mcData(c), bal=cashBal(c), low=Math.min(...bal), lowM=bal.indexOf(low), capM=c.cap&&c.caps.length?(c.caps.find(x=>x.cy==='cur')||c.caps[0]).m:-1;
- const rows=MONTHS.map((mo,i)=>{ const tag=seasonTag(SEASON_W[i]), cls=[tag==='slow'?'slow':'',i===capM?'capm':'',i===lowM&&has?'lowm':''].join(' ');
-  return `<tr class="${cls}"><td><b>${MONTHS_FULL[i]}</b> <span class="mkt-tag ${tag}">${SEASON_TAGS[tag]}</span>${i===capM?' <span class="yr-badge">CAP</span>':''}</td><td class="num">${has?int(d.firmW[i]):'–'}</td><td class="num">${has?int(d.closeW[i]):'–'}</td><td class="num">${has?money(c.monthNet[i]):'–'}</td><td class="num${bal[i]<0?' neg':''}">${has?money(bal[i]):'–'}${i===lowM&&has?' <small>lowest</small>':''}</td></tr>`; }).join('');
+ /* Month by month: the firm deals needed each month and the commission (GCI) they bring in */
+ const has=c.gci>0&&c.gciSide>0, d=mcData(c), gs=c.gciSide;
+ const rows=MONTHS.map((mo,i)=>{ const tag=seasonTag(SEASON_W[i]);
+  return `<tr class="${tag==='slow'?'slow':''}"><td><b>${MONTHS_FULL[i]}</b> <span class="mkt-tag ${tag}">${SEASON_TAGS[tag]}</span></td><td class="num">${has?int(d.firmW[i]):'–'}</td><td class="num">${has?money(d.firmW[i]*gs):'–'}</td></tr>`; }).join('')
+  +(has?`<tr class="tot"><td><b>Year</b></td><td class="num"><b>${int(c.sides)}</b></td><td class="num"><b>${money(c.sides*gs)}</b></td></tr>`:'');
  const ab={prospect:'Prosp',appt:'Appt',client:'Client',admin:'Admin',mktg:'Mktg',learn:'Learn',personal:'Family',off:'Off'};
  const wk=`<table class="yr-wk"><thead><tr><th></th>${WEEK_DAYS.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${WEEK_SLOTS.map((sl,j)=>`<tr><th>${sl}</th>${WEEK_DAYS.map((x,i)=>{const v=(S.week.d[i]||{s:[]}).s[j]||'';return `<td class="wk-${v}">${ab[v]||''}</td>`;}).join('')}</tr>`).join('')}</tbody></table>`;
  const anyWk=S.week.d.some(r=>r.s.some(Boolean));
@@ -1883,8 +1886,8 @@ function renderYearPage(c){
   <div class="print-only" style="border-bottom:3px solid var(--bp-red);padding-bottom:6px;margin-bottom:10px"><div style="font-size:18px;font-weight:800">${esc(agentName())}${agentName()?' — ':''}${S.meta.year} · My year at a glance</div></div>
   <h3 class="no-print" style="margin-top:28px">Page 2 · My year at a glance <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— optional when printing</small></h3>
   <div class="sum-card"><h4>Month by month</h4>
-   <table class="sum-q yr-m"><thead><tr><th>Month</th><th class="num">Deals to go firm</th><th class="num">Closings (paid)</th><th class="num">Net commission</th><th class="num">Cash balance</th></tr></thead><tbody>${rows}</tbody></table>
-   <p class="fine" style="margin-top:6px">Slow months are shaded; the red bar marks the month you cap. Cash balance starts from your reserves today and follows your full spending plan.${has&&low<0?` <b style="color:var(--bp-red)">Your balance dips below zero in ${MONTHS_FULL[lowM]}.</b>`:''}</p></div>
+   <table class="sum-q yr-m"><thead><tr><th>Month</th><th class="num">Firm deals needed</th><th class="num">Commission (GCI)</th></tr></thead><tbody>${rows}</tbody></table>
+   <p class="fine" style="margin-top:6px">The deals you need to go firm each month to reach your ${has?money(c.gci):''} GCI goal, following Calgary’s seasonal rhythm. Commission = firm deals × ${has?money(gs):'your GCI'} per side${has&&Math.round(c.sides*gs)>Math.round(c.gci)?` (a little over your goal because deals are rounded up to whole sides)`:''}. Slow months are shaded.</p></div>
   <div class="sum-grid mt14">
    <div class="sum-card"><h4>My ideal week</h4>${anyWk?wk:'<p class="muted">Not filled in yet — set it up on Ideal Week.</p>'}</div>
    <div class="sum-card"><h4>Touch calendar</h4>${cal?`<table class="yr-cal"><tbody>${cal}</tbody></table>`:'<p class="muted">Not filled in yet — plan it on Touch Calendar.</p>'}</div>
