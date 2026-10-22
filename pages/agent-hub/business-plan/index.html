@@ -620,7 +620,7 @@ const REF_SOURCES=['Sphere / referrals','Past clients','Professional partners'];
 const CX_STAGES=['Lead','Consultation','Search / preparation','Offer','Contract','Closing','Post-close'];
 const CANVA_URL='https://www.canva.com/s/templates?query=vision+board';
 const PHASES=[['Start',['start']],['Look back',['lookback','swot']],['Foundation',['vision','values']],['Positioning',['position','model']],['Numbers',['deal','numbers','budget','savings','season','results']],['Strategy',['priorities','sources']],['The plan',['activity','week','calendar','cx','marketing','ops']],['Execution',['action90','score','summary']]];
-const ESSENTIAL=['lookback','vision','values','position','budget','deal','numbers','results','priorities','sources','activity'];
+const ESSENTIAL=['lookback','vision','values','position','budget','deal','numbers','savings','results','week','priorities','sources','activity'];
 const TASK_ACTIONS=['Only I do','Systemize','Delegate','Automate','Delete'];
 const VALUE_EX=[['Integrity','Tell the truth even when uncomfortable','Give clients honest opinions about pricing'],['Service','Put the client’s interests first','Respond promptly and anticipate needs'],['Excellence','Continually improve','Invest in education and review every transaction'],['Relationships','Build long-term trust','Stay connected after closing'],['','','']];
 const PRI_EX=[['25 transactions','Lead generation','Need more qualified opportunities','Referral + sphere strategy','Qualified leads'],['25 transactions','Conversion','Current conversion is too low','Improve consultation process','Lead → client %'],['15 listings','Listing pipeline','Need more seller opportunities','Geographic authority','Listing appointments'],['$250K GCI','Average transaction value','Current mix is too low','Target a higher-value market','Average sale price'],['','','','','']];
@@ -987,12 +987,12 @@ const SECTIONS=[
   <div class="tip cap-paid" id="cap-paid-wrap" style="display:none"><div class="row c4" style="margin:0;align-items:center">${F('Cap paid so far in the cap year you’re in on Jan 1','goals.capPaid',{type:'money',hint:'Blank = $0',ph:'e.g. 12,000'})}<p style="grid-column:span 3;margin:0;font-size:13.5px">Your cap year starts partway through the plan year, so January to <b data-o="capPrevName"></b> deals still count toward the cap year you’re in now. Enter what you’ll have paid toward your cap by January 1. <b>Blank = $0. If you’ve already capped this cap year, enter your full cap.</b></p></div></div>
   <div class="row c4">${F('Deal fee per side','goals.dealFee',{type:'money',hint:'blank = none'})}
    <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></label>
-   ${F('Donation per deal','goals.don',{type:'money',hint:'DON'})}
+   ${F('Donation per deal','goals.don',{type:'money'})}
    <div class="f"><span>RLP franchise fee <small>set by Royal LePage</small></span><div class="netbox locked">1% of GCI · max $1,525/yr</div></div></div>
   <div class="row c4" style="align-items:start">${F('Deals from paid referrals','goals.refShare',{type:'pct',hint:'% of your deals · blank = 0',ph:'e.g. 20'})}${F('Typical referral fee','goals.refFee',{type:'pct',hint:'% of gross commission',ph:'25'})}<p class="fine" style="grid-column:span 2;align-self:center;margin:0">Deals where you pay a referral fee — relocation, agent-to-agent or referral companies. The fee comes off the gross commission <b>before</b> your split, cap and fees, so those deals pay you less and you need a few more of them.</p></div>
   <h3>Holdbacks</h3>
   <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">The share of each commission cheque you have held back for CRA. This is your money set aside, not a cost — income tax comes off your take-home, and GST is collected on top of your commission and paid to CRA.</p>
-  <div class="row c4">${F('Income tax holdback','goals.tax',{type:'pct',hint:'% of each cheque',ph:'e.g. 30'})}${F('GST holdback','goals.gstHold',{type:'pct',hint:'% of each cheque',ph:'e.g. 5'})}</div>
+  <div class="row c4">${F('Income tax holdback','goals.tax',{type:'pct',hint:'% of each cheque',ph:'e.g. 30'})}${F('GST collected','goals.gstHold',{type:'pct',hint:'% of commission',ph:'e.g. 5'})}</div>
  `},
  {id:'savings',t:'Savings & Reserves',d:'Pay yourself first — long-term savings, debt paydown and a cash cushion for the slow months. These come off the top of every cheque, before your spending plan.',html:()=>`
   <h3 style="margin-top:0">Long-term savings</h3>
@@ -1946,7 +1946,7 @@ function renderSummary(){
     ${c.cap&&has?`<dt>Cap reached</dt><dd>${capText(c,true)}</dd>`:''}${c.hasBudget&&has?`<dt>${c.surplus<0?'Over your plan':'Unplanned surplus'}</dt><dd style="color:${c.surplus<0?'var(--bp-red)':'var(--green)'}">${money(Math.abs(c.surplus))}</dd>`:''}</dl></div>
   </div>
   <div class="sum-card mt14"><h4>Quarterly targets</h4>
-   <table class="sum-q"><thead><tr><th></th><th class="num">Closings</th><th class="num">GCI <small style="text-transform:none;letter-spacing:0;font-weight:500">closings × per side</small></th><th class="num">Conversations</th><th class="num">Appointments</th></tr></thead><tbody>${qRows}</tbody></table>${has&&Math.abs(c.sides*c.gciSide-c.gci)>1?`<p class="fine" style="margin-top:4px">${int(c.sides)} sides × ${money(c.gciSide)} = ${money(c.sides*c.gciSide)} — your ${money(c.gci)} goal rounded up to whole sides.</p>`:''}</div>
+   <table class="sum-q"><thead><tr><th></th><th class="num">Closings</th><th class="num">GCI</th><th class="num">Conversations</th><th class="num">Appointments</th></tr></thead><tbody>${qRows}</tbody></table>${has&&c.gciSide>0?`<p class="fine" style="margin-top:4px">GCI = closings × ${money(c.gciSide)} per side.${Math.abs(c.sides*c.gciSide-c.gci)>1?` ${int(c.sides)} sides × ${money(c.gciSide)} = ${money(c.sides*c.gciSide)} — your ${money(c.gci)} goal rounded up to whole sides.`:''}</p>`:''}</div>
   <div class="sum-grid mt14">
    <div class="sum-card"><h4>Activity</h4><dl>
     <dt>Conversations per day</dt><dd>${has?`${nWhole((c.conv+c.conY)/c.days)} <small class="muted">(${nWhole(c.conv/c.days)} prospecting · ${nWhole(c.conY/c.days)} referral)</small>`:'–'}</dd>
