@@ -261,6 +261,8 @@ tfoot td{font-weight:800;border-top:2px solid var(--bp-black);border-bottom:0}
 .tbl-wrap{overflow-x:auto}
 
 /* Fix-list additions */
+.brk td:last-child{width:190px}.brk td.num{font-weight:700}
+.cat-h{font-size:17px;text-transform:none;letter-spacing:0;border-bottom:2px solid var(--bp-red);padding-bottom:6px;margin:26px 0 12px}
 .bud-hint{display:block;font-size:11.5px;color:#888;font-weight:400;margin-top:2px}
 .sum-gnote{font-size:12px;color:var(--bp-dark-grey);margin:4px 0 0}
 .carry{white-space:pre-wrap;background:var(--bp-light-grey);border-left:3px solid var(--bp-stone);padding:10px 14px;border-radius:0 4px 4px 0;font-size:14px;color:var(--bp-black)}
@@ -627,11 +629,11 @@ const PRI_EX=[['25 transactions','Lead generation','Need more qualified opportun
 const CAL_ROWS=[['call','Reason to call'],['text','Reason to text / email'],['popby','Pop-by idea'],['video','Video / social post'],['event','Event / client party']];
 const PILLARS=[['build','Build — goals & numbers'],['brand','Brand — reputation & presence'],['amplify','Amplify — content & marketing'],['connect','Connect — sphere & referrals'],['simplify','Simplify — systems & delegation']];
 const BIZ_Y=[['board','Board, association & RECA fees','CREB®, AREA, CREA, RECA licence'],['gli','General liability insurance','']];
-const BIZ=[['desk','Monthly desk / admin fee<small class="bud-hint">Not your split, cap or deal fees — those are in Brokerage non-negotiables above.</small>'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other must-pay business costs']];
+const BIZ=[['desk','Monthly desk / admin fee<small class="bud-hint">Not your split, cap or deal fees — those have their own lines.</small>'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other business costs']];
 const BIZ_NN=['desk','tech','vehicle','prof','other'], BIZ_GROW=[['coaching','Coaching & education'],['assistant','Assistant / admin support']];
 const PERS_NN=['housing','transport','groceries','utilities','insurance','family','debt','other'], PERS_LIFE=[['lifestyle','Dining, entertainment & travel'],['giving','Giving & charity']];
 const MKTG_PCT=0.10;
-const PERS=[['housing','Housing (mortgage/rent, tax, insurance)'],['transport','Personal transportation'],['groceries','Groceries & household'],['utilities','Utilities & internet'],['insurance','Life, health & other insurance'],['family','Childcare & family'],['debt','Personal debt payments'],['lifestyle','Lifestyle, dining & travel'],['giving','Giving & charity'],['other','Other must-pays']];
+const PERS=[['housing','Housing (mortgage/rent, tax, insurance)'],['transport','Personal transportation'],['groceries','Groceries & household'],['utilities','Utilities & internet'],['insurance','Life, health & other insurance'],['family','Childcare & family'],['debt','Personal debt payments'],['lifestyle','Lifestyle, dining & travel'],['giving','Giving & charity'],['other','Other personal costs']];
 const MKTG=[['paid','Paid social & online ads'],['print','Print & mailers'],['events','Client events & appreciation'],['popby','Pop-bys & client gifts'],['email','Email, newsletter & CRM add-ons'],['signage','Signage, photos & listing marketing'],['other','Other marketing']];
 const BRAND=[['google','My first three Google results are professional and accurate'],['gbp','Google Business Profile is claimed and has reviews from the last 90 days'],['photo','The same current headshot is used on every platform'],['bio','My Royal LePage bio page and website are current'],['linkedin','LinkedIn headline and profile are up to date'],['social','Every social profile links back to my website or bio page']];
 const WEEK_TYPES=[['prospect','Prospecting'],['appt','Appointments'],['client','Client service'],['admin','Admin'],['mktg','Marketing'],['learn','Learning'],['personal','Family / personal'],['off','Off']];
@@ -955,40 +957,46 @@ const SECTIONS=[
   <div class="row">${T('','pri.notFocus',{rows:3,aria:'What I will not focus on this year'}).replace('<span></span>','')}</div>
  `},
  {id:'budget',t:'Your Budget',d:'Your non-negotiables — your brokerage costs and the bills that get paid whether you close 5 deals or 25 — set your minimum. Then plan the marketing, growth and lifestyle spending you’d like your goal to fund.',html:()=>`
-  <h3 style="margin-top:0">Brokerage non-negotiables</h3>
-  <p style="margin:-4px 0 14px;color:var(--bp-dark-grey);font-size:13.5px">Your commission plan with the brokerage — these match the deduction summary on your deal statement. Deductions are calculated over one cap year, starting at $0 on your cap anniversary (January if you leave it blank). Not sure of your numbers? Ask the office. Leave the cap blank if you don’t have one.</p>
-  <div class="row c4" style="align-items:start"><div class="f"><span>Brokerage split <small>until you cap</small></span><select id="split-sel" name="brokerage-split" aria-label="Brokerage split"><option value="">Choose…</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="custom">Custom…</option></select><div id="split-custom" style="margin-top:8px">${F('','goals.split',{type:'pct',aria:'Custom brokerage split',ph:'Enter your split, e.g. 25'})}</div></div>${F('Annual cap','goals.cap',{type:'money',hint:'blank = no cap'})}<label class="f"><span>Cap anniversary <small>the month your cap resets</small></span><select id="capm-sel" name="cap-anniversary-month"><option value="">Choose… (blank = January)</option>${MONTHS_FULL.map((m,i)=>`<option value="${i}">${m}</option>`).join('')}</select></label><div class="f"><span>Your cap year</span><div class="netbox" data-o="cyBox">–</div></div></div>
-  <div class="tip cap-paid" id="cap-paid-wrap" style="display:none"><div class="row c4" style="margin:0;align-items:center">${F('Cap paid so far in the cap year you’re in on Jan 1','goals.capPaid',{type:'money',hint:'Blank = $0',ph:'e.g. 12,000'})}<p style="grid-column:span 3;margin:0;font-size:13.5px">Your cap year starts partway through the plan year, so January to <b data-o="capPrevName"></b> deals still count toward the cap year you’re in now. Enter what you’ll have paid toward your cap by January 1. <b>Blank = $0. If you’ve already capped this cap year, enter your full cap.</b></p></div></div>
-  <div class="row c4">${F('Deal fee per side','goals.dealFee',{type:'money',hint:'blank = none'})}
-   <label class="f"><span>Deal fee is charged</span><select data-k="goals.feeMode"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></label>
-   ${F('Donation per deal','goals.don',{type:'money'})}
-   <div class="f"><span>RLP franchise fee <small>set by Royal LePage</small></span><div class="netbox locked">1% of GCI · max $1,525/yr</div></div></div>
-  <div class="row c4" style="align-items:start">${F('Deals from paid referrals','goals.refShare',{type:'pct',hint:'% of your deals · blank = 0',ph:'e.g. 20'})}${F('Typical referral fee','goals.refFee',{type:'pct',hint:'% of gross commission',ph:'25'})}<p class="fine" style="grid-column:span 2;align-self:center;margin:0">Deals where you pay a referral fee — relocation, agent-to-agent or referral companies. The fee comes off the gross commission <b>before</b> your split, cap and fees, so those deals pay you less and you need a few more of them.</p></div>
-  <h3>Business &amp; personal non-negotiables</h3>
-  ${intro('Monthly amounts, except the annual fees, which you enter once for the year. Rough numbers are fine. Start with the <b>must-pays</b> — they set your minimum. Marketing, coaching, an assistant, dining and travel go in the second section below. Your plan is private.')}
+  ${intro('Two categories, business and personal. In each, the first table is what you pay no matter how many deals you close — it <b>sets your minimum</b> GCI. The <b>after your goal</b> spending comes out of what your goal leaves you. Monthly amounts unless noted; rough numbers are fine, and your plan is private.')}
+  <h3 class="cat-h">Business expenses</h3>
   <div class="row c2" style="align-items:start">
-   <div><h3>Business must-pays (monthly)</h3><table><tbody>${BIZ.filter(([k])=>BIZ_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l.replace(/<small[^>]*>.*?<\/small>/g,'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')})}</td></tr>`).join('')}
+   <div><h4 class="sp-h">Business costs <small>sets your minimum</small></h4><table class="brk"><tbody>
+    <tr class="sub-h"><td colspan="2">Brokerage split &amp; cap</td></tr>
+    <tr><td>Brokerage split<small class="bud-hint">until you cap</small></td><td><select id="split-sel" name="brokerage-split" aria-label="Brokerage split"><option value="">Choose…</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="custom">Custom…</option></select><div id="split-custom" style="margin-top:6px">${F('','goals.split',{type:'pct',aria:'Custom brokerage split',ph:'e.g. 25'})}</div></td></tr>
+    <tr><td>Annual cap<small class="bud-hint">blank = no cap</small></td><td>${F('','goals.cap',{type:'money',aria:'Annual cap'})}</td></tr>
+    <tr><td>Cap anniversary<small class="bud-hint">the month your cap resets</small></td><td><select id="capm-sel" name="cap-anniversary-month" aria-label="Cap anniversary month"><option value="">Choose… (blank = January)</option>${MONTHS_FULL.map((m,i)=>`<option value="${i}">${m}</option>`).join('')}</select></td></tr>
+    <tr><td>Your cap year</td><td class="num" data-o="cyBox">–</td></tr>
+    <tr id="cap-paid-wrap" style="display:none"><td>Cap paid so far<small class="bud-hint">in the cap year you’re in on Jan 1 — January to <b data-o="capPrevName"></b> deals still count toward it. Blank = $0; if you’ve already capped, enter your full cap.</small></td><td>${F('','goals.capPaid',{type:'money',aria:'Cap paid so far in the cap year you are in on January 1',ph:'e.g. 12,000'})}</td></tr>
+    <tr class="sub-h"><td colspan="2">Monthly costs</td></tr>
+    ${BIZ.filter(([k])=>BIZ_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l.replace(/<small[^>]*>.*?<\/small>/g,'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')})}</td></tr>`).join('')}
     <tr class="sub-h"><td colspan="2">Annual fees <small style="color:#888">— enter the yearly amount</small></td></tr>
     ${BIZ_Y.map(([k,l,h])=>`<tr><td>${l}${h?` <small style="color:#888">(${h})</small>`:''}</td><td style="width:150px">${F('','bizY.'+k,{type:'money',aria:l+' per year'})}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Business non-negotiables / yr</td><td class="num" data-o="bizNN"></td></tr></tfoot></table></div>
-   <div><h3>Personal must-pays (monthly)</h3><table><tbody>${PERS.filter(([k])=>PERS_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody>
-    <tfoot><tr><td>Personal non-negotiables / yr</td><td class="num" data-o="persNN"></td></tr></tfoot></table></div>
+   <div><h4 class="sp-h">Brokerage fees per deal <small>sets your minimum</small></h4><table class="brk"><tbody>
+    <tr><td>Deal fee per side<small class="bud-hint">blank = none</small></td><td>${F('','goals.dealFee',{type:'money',aria:'Deal fee per side'})}</td></tr>
+    <tr><td>Deal fee is charged</td><td><select data-k="goals.feeMode" aria-label="Deal fee is charged"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></td></tr>
+    <tr><td>Donation per deal</td><td>${F('','goals.don',{type:'money',aria:'Donation per deal'})}</td></tr>
+    <tr><td>RLP royalty<small class="bud-hint">set by Royal LePage</small></td><td class="num">1% · max $1,525/yr</td></tr>
+   </tbody></table>
+   <div><h4 class="sp-h" style="margin-top:18px">Growth <small>monthly · after your goal</small></h4><table><tbody>${BIZ_GROW.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table></div>
   </div>
-  <div class="res c3">${RC('Personal non-negotiables / yr','persNN')}${RC('Business non-negotiables / yr','bizNN')}${RC('Non-negotiables / month','costMonth')}</div>
-  <div data-o-html="budFlag"></div>
-  <h3>After your goal — marketing, growth &amp; lifestyle</h3>
-  ${intro('Not must-pays. These come out of what your goal leaves you, after your non-negotiables and savings. <b>Your Numbers</b> shows whether there’s room.')}
-  <h4 class="sp-h">Marketing <small>annual · <span data-o="mktgSug"></span></small></h4>
+  </div>
+  <p class="fine" style="margin:8px 0 6px">Your commission plan with the brokerage — these match the deduction summary on your deal statement. Deductions run over one cap year, starting at $0 on your cap anniversary. Not sure of your numbers? Ask the office.</p>
+  <h4 class="sp-h" style="margin-top:14px">Marketing <small>annual · after your goal · <span data-o="mktgSug"></span></small></h4>
   <p class="fine" style="margin:-2px 0 8px">Marketing is what brings in next year’s business. Leave it blank and the plan uses the 10% suggestion; once you enter amounts, the plan uses yours.</p>
     <div class="tbl-wrap"><table><thead><tr><th>Channel</th><th style="width:180px">Annual $</th><th class="num">% of budget</th></tr></thead>
   <tbody>${MKTG.map(([k,l])=>`<tr><td>${l}</td><td>${F('','mktg.'+k,{type:'money',aria:l})}</td><td class="num" data-o="mk_${k}"></td></tr>`).join('')}</tbody>
   <tfoot><tr><td>Total marketing</td><td class="num" data-o="mktgTotal"></td><td class="num" data-o="mktgPctGci"></td></tr></tfoot></table></div>
   <div id="mktg-flag"></div>
-  <div class="row c2" style="align-items:start;margin-top:14px">
-   <div><h4 class="sp-h">Growth <small>monthly</small></h4><table><tbody>${BIZ_GROW.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table></div>
-   <div><h4 class="sp-h">Lifestyle <small>monthly</small></h4><table><tbody>${PERS_LIFE.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table>
+  <h3 class="cat-h">Personal expenses</h3>
+  <div class="row c2" style="align-items:start">
+   <div><h4 class="sp-h">Personal costs <small>monthly · sets your minimum</small></h4><table><tbody>${PERS.filter(([k])=>PERS_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><td>Personal non-negotiables / yr</td><td class="num" data-o="persNN"></td></tr></tfoot></table></div>
+   <div><h4 class="sp-h">Lifestyle <small>monthly · after your goal</small></h4><table><tbody>${PERS_LIFE.map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','pers.'+k,{type:'money',aria:l})}</td></tr>`).join('')}</tbody></table>
 </div>
   </div>
+  <div class="res c3">${RC('Personal non-negotiables / yr','persNN')}${RC('Business non-negotiables / yr','bizNN')}${RC('Non-negotiables / month','costMonth')}</div>
+  <div data-o-html="budFlag"></div>
  `},
  {id:'savings',t:'Savings & Reserves',d:'Money you set aside, not spend: your tax and GST holdbacks, then pay yourself first — long-term savings, debt paydown and a cash cushion for the slow months. These come off the top of every cheque, before your spending plan.',html:()=>`
   <h3 style="margin-top:0">Holdbacks</h3>
@@ -1057,11 +1065,11 @@ const SECTIONS=[
   <div class="tbl-wrap"><table class="cf" id="cf-table"></table></div>
   <div id="cf-note"></div>
  `},
- {id:'results',t:'Your Numbers',d:'Does it all work? What the brokerage takes, what your must-pays and savings cost, how the rest of your plan adds up — and what to do with every cheque.',html:()=>`
+ {id:'results',t:'Your Numbers',d:'Does it all work? What the brokerage takes, what your non-negotiables and savings cost, and how the rest of your plan adds up.',html:()=>`
   <div id="res-verdict"></div>
   <h3 style="margin-top:0">Deductions over your cap year</h3>
   <div class="res" id="ded-tiles"><div id="split-tile" style="display:contents">${RC('Split paid','splitPaid')}</div>${RC('<span data-o="capLbl">Cap paid</span><span class="rc-sub" data-o="capSub"></span>','capPaidOut')}<div id="cap2-tile" style="display:none">${RC('<span data-o="capLbl2"></span><span class="rc-sub" data-o="capSub2"></span>','capPaid2')}</div>${RC('Deal fees','feesPaid')}${RC('Donations','donPaid')}</div>
-  <div class="res c3" id="ded-row2"><div id="ref-tile" style="display:none">${RC('Referral fees paid<span class="rc-sub" data-o="refSub"></span>','refPaid')}</div>${RC('RLP franchise fee','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('Deduction period','cyCard')}</div>
+  <div class="res c3" id="ded-row2"><div id="ref-tile" style="display:none">${RC('Referral fees paid<span class="rc-sub" data-o="refSub"></span>','refPaid')}</div>${RC('RLP royalty','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('Deduction period','cyCard')}</div>
   <div id="cap-x"></div>
   <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
   <h3>What’s left after your non-negotiables</h3>
@@ -1421,7 +1429,7 @@ function capInfo(){
    cap year: months before the anniversary belong to the cap year already in progress
    (starting from "cap paid so far"); at the anniversary the cap resets to $0.
    Deal fees and donations are charged per side, spread so the year adds up to the whole
-   number of sides in the plan. The RLP franchise fee maximum is per plan year. */
+   number of sides in the plan. The RLP royalty maximum is per plan year. */
 function runYear(monthG,monthS,gciSide,splitPct){
  const ci=capInfo(), ann=ci.hasDate?ci.annM:0;
  let paid=ann>0?Math.min(ci.paid0,ci.cap>0?ci.cap:ci.paid0):0, capped=ci.cap>0&&ann>0&&paid>=ci.cap-0.005;
@@ -1458,7 +1466,7 @@ function calc(){
  const gciGross=g.commModel==='flat'?price*n(g.flat)/100:Math.min(price,100000)*n(g.t1)/100+Math.max(price-100000,0)*n(g.t2)/100;
  /* Referral fees paid: a share of deals pays a referral fee off the gross commission, before the split, cap and fees.
     Everything after that runs on the blended GCI per side; with both fields blank, rr = 0 and nothing changes. */
- const refSh=Math.min(Math.max(n(g.refShare),0),100)/100, refFe=refSh>0?(g.refFee===''?0.25:Math.min(Math.max(n(g.refFee),0),100)/100):0, rr=Math.min(refSh*refFe,0.99);
+ const refSh=Math.min(Math.max(n(g.refShare),0),100)/100, refFe=refSh>0?(g.refFee===''?0.25:Math.min(Math.max(n(g.refFee),0),100)/100):0, rr=0; /* referral fields removed from the page: saved values are kept but not applied */
  const gciSide=gciGross*(1-rr);
  const split=Math.min(Math.max(n(g.split),0),100)/100, t=Math.min(Math.max(n(g.tax),0),95)/100;
  const ci=capInfo();
@@ -1693,7 +1701,7 @@ function recompute(){
  { const sh=document.getElementById('split-hint'), g=S.goals; if(sh) sh.style.display=(g.cap!==''||g.dealFee!==''||g.capDate!==''||(S.meta.visited||[]).includes('budget'))?'none':''; }
  { const mb=document.getElementById('m-bud'); if(mb) mb.innerHTML=!c.hasBudget?'<div class="tip">Add your non-negotiables on <b>Your Budget</b> first — this option works out the GCI you need to cover them.</div>'
     :`<div class="res c3" style="margin:0 0 12px">${RC('Your minimum <small>non-negotiables only</small>','minGciBox')}${RC(`Your recommended goal <small>${c.mktgPlanned?'+ your marketing plan':'+ 10% marketing'}</small>`,'recGciBox','dark')}${RC('Your whole plan <small>+ coaching, assistant &amp; lifestyle</small>','fullGciBox')}</div>
-     <div class="bud-row"><span>Personal non-negotiables</span><b>${money(c.persNN)}</b></div><div class="bud-row"><span>+ Business non-negotiables</span><b>${money(c.bizNN)}</b></div><div class="bud-row"><span>+ Your savings</span><b>${money(c.savFirst)}</b></div><div class="bud-row"><span>+ Income tax holdback (${pct(c.t)})</span><b>${money(c.taxAmt)}</b></div><div class="bud-row"><span>+ Brokerage split, cap, fees &amp; RLP fee</span><b>${money(c.gci-c.netComm)}</b></div><div class="bud-row"><span>+ ${c.mktgPlanned?'Room for your marketing plan':'Room for marketing (10% of GCI)'}</span><b>${money(c.leftToPlan)}</b></div><div class="bud-row tot"><span>Your GCI goal</span><b>${money(c.gci)}</b></div>${c.fullGci>c.gci+500?`<p class="tip" style="margin-top:10px">This goal covers your non-negotiables, savings and ${c.mktgPlanned?'the marketing you planned':'10% marketing'}. It doesn’t cover the coaching, assistant or lifestyle spending on Your Budget — to fund all of that too, aim for <b>${money(c.fullGci)}</b>.</p>`:''}`; }
+     <div class="bud-row"><span>Personal non-negotiables</span><b>${money(c.persNN)}</b></div><div class="bud-row"><span>+ Business non-negotiables</span><b>${money(c.bizNN)}</b></div><div class="bud-row"><span>+ Your savings</span><b>${money(c.savFirst)}</b></div><div class="bud-row"><span>+ Income tax holdback (${pct(c.t)})</span><b>${money(c.taxAmt)}</b></div><div class="bud-row"><span>+ Brokerage split, cap, fees &amp; RLP royalty</span><b>${money(c.gci-c.netComm)}</b></div><div class="bud-row"><span>+ ${c.mktgPlanned?'Room for your marketing plan':'Room for marketing (10% of GCI)'}</span><b>${money(c.leftToPlan)}</b></div><div class="bud-row tot"><span>Your GCI goal</span><b>${money(c.gci)}</b></div>${c.fullGci>c.gci+500?`<p class="tip" style="margin-top:10px">This goal covers your non-negotiables, savings and ${c.mktgPlanned?'the marketing you planned':'10% marketing'}. It doesn’t cover the coaching, assistant or lifestyle spending on Your Budget — to fund all of that too, aim for <b>${money(c.fullGci)}</b>.</p>`:''}`; }
  { const fl=c.hasBudget&&c.persNN<36000&&c.surplus>Math.max(c.takeHome*0.4,25000)&&S.goals.method!=='budget';
    document.querySelectorAll('[data-o-html="budFlag"]').forEach(el=>el.innerHTML=fl?`<div class="tip"><span class="flag warn">Is your budget complete?</span> Your personal non-negotiables are ${money(c.persNN)} a year and this plan leaves a ${money(c.surplus)} surplus. Check that housing, transportation, insurance and family costs are all in — or try <b>Work back from my budget</b> on Your Goal.</div>`:''); }
  out('minGciBox',c.minGci?money(c.minGci):'–'); out('recGciBox',c.recGci?money(c.recGci):'–'); out('fullGciBox',c.fullGci?money(c.fullGci):'–');
@@ -1753,7 +1761,7 @@ function recompute(){
  { const rv=document.getElementById('res-verdict'); if(rv){ const fix=(c.verdict==='min'||c.verdict==='mktg'||c.verdict==='over')&&c.fullGci>0;
    rv.innerHTML=!c.gci?'':c.verdict==='none'?`<div class="tip">Your GCI goal is <b>${money(c.gci)}</b>. Add your non-negotiables on <b>Your Budget</b> to see whether it covers your year.</div>`
     :`<div class="tip"><b>Your GCI goal: ${money(c.gci)}.</b>${verdictHTML(c)}${fix?`<div style="margin-top:10px"><button type="button" class="btn btn-line btn-sm" data-setgoal="${c.fullGci}">Set my goal to ${money(c.fullGci)} — covers everything</button></div>`:''}</div>`; } }
- if(gn) gn.innerHTML=S.goals.method!=='budget'&&S.goals.method!=='units'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side${c.rr>0?` (blended — ${money(c.gciGross)} less referral fees on ${pct1(c.refSh)} of deals)`:''} — plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b> (rounded up). After your split, cap, RLP fee, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${c.rrsp?' and RRSP':''}.${verdictHTML(c)}`:'';
+ if(gn) gn.innerHTML=S.goals.method!=='budget'&&S.goals.method!=='units'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side${c.rr>0?` (blended — ${money(c.gciGross)} less referral fees on ${pct1(c.refSh)} of deals)`:''} — plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b> (rounded up). After your split, cap, RLP royalty, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${c.rrsp?' and RRSP':''}.${verdictHTML(c)}`:'';
  if(gn&&!(c.gciSide>0)&&n(S.goals.gciGoal)>0&&S.goals.method==='gci') gn.innerHTML='Add your average sale and commission above to see how many sides that takes.';
 
 
