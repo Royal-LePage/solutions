@@ -706,7 +706,7 @@ function DEFAULT(){
   week:{d:WEEK_DAYS.map(()=>({s:WEEK_SLOTS.map(()=>'')}))},
   acc:{partner:'',cadence:'',first:''},
   act:[0,1,2,3,4].map(()=>({what:'',pri:'',owner:'Me',due:'',done:false})),
-  goals:{method:'gci',gciGoal:'',netGoal:'',tax:'',split:'',avgPrice:'',commModel:'tier',t1:'',t2:'',flat:'',listShare:'',buyShare:'',listings:'',buyers:'',cap:'',dealFee:'',feeMode:'all',refShare:'',refFee:'',capDate:'',capPaid:'',rlpPct:1,rlpMax:1525,gstHold:'',don:'',otherFee:''},
+  goals:{method:'gci',gciGoal:'',netGoal:'',tax:'',split:'',avgPrice:'',commModel:'tier',t1:'',t2:'',flat:'',flatFee:'',listShare:'',buyShare:'',listings:'',buyers:'',cap:'',dealFee:'',feeMode:'all',refShare:'',refFee:'',capDate:'',capPaid:'',rlpPct:1,rlpMax:1525,gstHold:'',don:'',otherFee:''},
   season:{w:MARKETS.calgary.w.slice(),lag:30,curve:'',market:'calgary'},
   kpi:{lApptSign:'',lSignClose:'',bConsSign:'',bSignClose:'',convPerAppt:'',convPerHour:'',weeksOff:'',daysPerWeek:'',refPerClose:'',contactsPerRef:''},
   sources:SOURCES.map(nm=>({name:nm,pri:'',last:'',goal:'',why:'',who:'',strat:'',res:'',result:''})),
@@ -1042,9 +1042,10 @@ const SECTIONS=[
   <h3>Your average sale</h3>
   ${intro('The typical deal you expect this year. Your GCI goal ÷ what one side pays = the number of deals you need.')}
   <div class="row c4">${F('Average sale price','goals.avgPrice',{type:'money',ph:'e.g. 650,000'})}
-   <label class="f"><span>Commission per side</span><select data-k="goals.commModel"><option value="tier">Tiered (first $100K / balance)</option><option value="flat">Flat % of price</option></select></label>
+   <label class="f" style="grid-column:span 2"><span>Commission per side</span><select id="comm-sel" name="commission-per-side" aria-label="Commission per side"><option value="">Choose…</option><option value="t35">3.5% on the first $100K, 1.5% on the balance</option><option value="t30">3.0% on the first $100K, 1.5% on the balance</option><option value="other">Other tiered rates…</option><option value="flat">Flat % of price…</option><option value="fee">Flat fee ($ per side)…</option></select></label>
    <div id="c-tier" style="display:contents">${F('On the first $100K','goals.t1',{type:'pct',ph:'e.g. 3.5'})}${F('On the balance','goals.t2',{type:'pct',ph:'e.g. 1.5'})}</div>
-   <div id="c-flat" style="display:contents">${F('Flat rate per side','goals.flat',{type:'pct',ph:'e.g. 2.5'})}</div></div>
+   <div id="c-flat" style="display:contents">${F('Flat rate per side','goals.flat',{type:'pct',ph:'e.g. 2.5'})}</div>
+   <div id="c-fee" style="display:contents">${F('Flat fee per side','goals.flatFee',{type:'money',ph:'e.g. 10,000'})}</div></div>
   <h3>How do you want to set your goal?</h3>
   <div class="seg" id="method-seg"><button data-m="gci" type="button">GCI goal</button><button data-m="budget" type="button">Work back from my budget</button><button data-m="units" type="button">Number of deals</button></div>
   <div id="m-bud" class="bud-calc"></div>
@@ -1399,6 +1400,22 @@ window.addEventListener('afterprint',()=>document.body.classList.remove('print-s
 window.addEventListener('beforeprint',()=>{ if(C) drawMkt(C); document.querySelectorAll('details.deeper').forEach(d=>{ d.dataset.wasOpen=d.open?'1':''; d.open=true; }); renderSummary(); document.querySelectorAll('textarea').forEach(t=>{t.style.height='auto';t.style.height=(t.scrollHeight+2)+'px';}); });
 window.addEventListener('afterprint',()=>{ document.querySelectorAll('textarea').forEach(t=>t.style.height=''); document.querySelectorAll('details.deeper').forEach(d=>{ d.open=!!d.dataset.wasOpen; }); });
 
+/* Commission per side: two common Calgary tiers as one-click presets, or the agent's own tiers / flat % / flat fee.
+   Stored in the same fields as before (commModel, t1, t2, flat) plus flatFee, so saved plans keep working. */
+let commOther=false;
+function commChoice(){ const g=S.goals;
+ if(g.commModel==='fee') return 'fee'; if(g.commModel==='flat') return 'flat';
+ if(!commOther&&+g.t2===1.5&&g.t2!==''){ if(+g.t1===3.5&&g.t1!=='') return 't35'; if(+g.t1===3&&g.t1!=='') return 't30'; }
+ return commOther||g.t1!==''||g.t2!==''?'other':''; }
+function syncComm(){ const sel=document.getElementById('comm-sel'); if(sel) sel.value=commChoice(); }
+document.addEventListener('change',e=>{ if(e.target.id!=='comm-sel') return; const v=e.target.value, g=S.goals;
+ commOther=v==='other';
+ if(v==='t35'||v==='t30'){ g.commModel='tier'; g.t1=v==='t35'?3.5:3; g.t2=1.5; }
+ else if(v==='other'){ g.commModel='tier'; }
+ else if(v==='flat'||v==='fee'){ g.commModel=v; }
+ else { g.commModel='tier'; g.t1=''; g.t2=''; }
+ fillAll(document.getElementById('s-numbers')); toggleVis(); recompute(); queueSave();
+ const f=v==='other'?'goals.t1':v==='flat'?'goals.flat':v==='fee'?'goals.flatFee':''; if(f){ const inp=document.querySelector(`[data-k="${f}"]`); if(inp) inp.focus(); } });
 let splitCustom=false;
 function syncSplit(){
  const sel=document.getElementById('split-sel'), box=document.getElementById('split-custom'); if(!sel) return;
@@ -1417,9 +1434,8 @@ function toggleVis(){
  syncSplit(); syncCapM();
  const m=S.goals.method, show=(id,on,d)=>{ const el=document.getElementById(id); if(el) el.style.display=on?(d||''):'none'; };
  show('m-set',m!=='units'); show('m-gci',m==='gci','contents'); show('m-gcin',m==='budget'); show('m-bud',m==='budget'); show('gci-note',m!=='units'); show('m-units',m==='units');
- const tier=S.goals.commModel!=='flat';
- const ct=document.getElementById('c-tier'), cf=document.getElementById('c-flat');
- if(ct) ct.style.display=tier?'contents':'none'; if(cf) cf.style.display=tier?'none':'contents';
+ syncComm(); const cm=commChoice();
+ show('c-tier',cm==='other','contents'); show('c-flat',cm==='flat','contents'); show('c-fee',cm==='fee','contents');
 }
 
 /* ---------------------------------------------------------------
@@ -1483,7 +1499,7 @@ function engineG(gciTotal,gciSide,splitPct,sidesWhole){
 function calc(){
  const g=S.goals, k=KPI(), lsh=g.listShare===''?50:Math.min(Math.max(n(g.listShare),0),100);
  const price=n(g.avgPrice);
- const gciGross=g.commModel==='flat'?price*n(g.flat)/100:Math.min(price,100000)*n(g.t1)/100+Math.max(price-100000,0)*n(g.t2)/100;
+ const gciGross=g.commModel==='fee'?n(g.flatFee):g.commModel==='flat'?price*n(g.flat)/100:Math.min(price,100000)*n(g.t1)/100+Math.max(price-100000,0)*n(g.t2)/100;
  /* Referral fees paid: a share of deals pays a referral fee off the gross commission, before the split, cap and fees.
     Everything after that runs on the blended GCI per side; with both fields blank, rr = 0 and nothing changes. */
  const refSh=Math.min(Math.max(n(g.refShare),0),100)/100, refFe=refSh>0?(g.refFee===''?0.25:Math.min(Math.max(n(g.refFee),0),100)/100):0, rr=0; /* referral fields removed from the page: saved values are kept but not applied */
