@@ -629,9 +629,11 @@ const VALUE_EX=[['Integrity','Tell the truth even when uncomfortable','Give clie
 const PRI_EX=[['25 transactions','Lead generation','Need more qualified opportunities','Referral + sphere strategy','Qualified leads'],['25 transactions','Conversion','Current conversion is too low','Improve consultation process','Lead → client %'],['15 listings','Listing pipeline','Need more seller opportunities','Geographic authority','Listing appointments'],['$250K GCI','Average transaction value','Current mix is too low','Target a higher-value market','Average sale price'],['','','','','']];
 const CAL_ROWS=[['call','Reason to call'],['text','Reason to text / email'],['popby','Pop-by idea'],['video','Video / social post'],['event','Event / client party']];
 const PILLARS=[['build','Build — goals & numbers'],['brand','Brand — reputation & presence'],['amplify','Amplify — content & marketing'],['connect','Connect — sphere & referrals'],['simplify','Simplify — systems & delegation']];
-const BIZ_Y=[['board','Board, association & RECA fees','CREB®, AREA, CREA, RECA licence'],['gli','General liability insurance','']];
-const BIZ=[['desk','Monthly desk / admin fee<small class="bud-hint">Not your split, cap or deal fees — those have their own lines.</small>'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other business costs']];
-const BIZ_NN=['desk','tech','vehicle','prof','other'], BIZ_GROW=[['coaching','Coaching & education'],['assistant','Assistant / admin support']];
+/* 2026 board, association and licence costs for a CREB® member (from CREB®, AREA and RECA statements, Oct 2026) */
+const BOARD_2026={year:1953.95,month:91.88};
+const BIZ_Y=[['board','Board, association & RECA fees','CREB®, AREA, CREA, RECA licence — $1,953.95 in 2026'],['gli','General liability insurance','']];
+const BIZ=[['desk','Monthly desk / admin fee<small class="bud-hint">Not your split, cap or deal fees — those have their own lines.</small>'],['mls','Board &amp; MLS® system fees<small class="bud-hint">Pillar 9, CREB® system fee, SentriLock — $91.88 a month in 2026</small>'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other business costs']];
+const BIZ_NN=['desk','mls','tech','vehicle','prof','other'], BIZ_GROW=[['coaching','Coaching & education'],['assistant','Assistant / admin support']];
 const PERS_NN=['housing','transport','groceries','utilities','insurance','family','debt','other'], PERS_LIFE=[['lifestyle','Dining, entertainment & travel'],['giving','Giving & charity']];
 const MKTG_PCT=0.10;
 const PERS=[['housing','Housing (mortgage/rent, tax, insurance)'],['transport','Personal transportation'],['groceries','Groceries & household'],['utilities','Utilities & internet'],['insurance','Life, health & other insurance'],['family','Childcare & family'],['debt','Personal debt payments'],['lifestyle','Lifestyle, dining & travel'],['giving','Giving & charity'],['other','Other personal costs']];
@@ -718,7 +720,7 @@ function DEFAULT(){
   tasks:DEFAULT_TASKS.map(t=>({task:t,owner:'Me',action:'',tool:''})),
   inits:[{what:'',date:'',priority:'High'},{what:'',date:'',priority:'Medium'},{what:'',date:'',priority:'Medium'}],
   bizY:{board:'',gli:''},
-  biz:{desk:'',board:'',license:'',tech:'',vehicle:'',coaching:'',assistant:'',prof:'',other:''},
+  biz:{desk:'',mls:'',board:'',license:'',tech:'',vehicle:'',coaching:'',assistant:'',prof:'',other:''},
   pers:{housing:'',transport:'',groceries:'',utilities:'',insurance:'',family:'',debt:'',lifestyle:'',giving:'',other:''},
   save:{extraM:'',rrsp:'',postTax:'',rrspM:'',postTaxM:'',rrspP:'',postTaxP:'',resMonths:'',resAdd:false,rrspWhen:'first',postTaxWhen:'first',debtWhen:'first',resWhen:'first',debt:'',reserves:''},
   alloc:{biz:'',tax:'',pers:''},
@@ -986,7 +988,21 @@ const SECTIONS=[
     ${BIZ.filter(([k])=>BIZ_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l.replace(/<small[^>]*>.*?<\/small>/g,'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')})}</td></tr>`).join('')}
     <tr class="sub-h"><td colspan="2">Annual fees <small style="color:#888">— enter the yearly amount</small></td></tr>
     ${BIZ_Y.map(([k,l,h])=>`<tr><td>${l}${h?` <small style="color:#888">(${h})</small>`:''}</td><td style="width:150px">${F('','bizY.'+k,{type:'money',aria:l+' per year'})}</td></tr>`).join('')}</tbody>
-    <tfoot><tr><td>Business non-negotiables / yr</td><td class="num" data-o="bizNN"></td></tr></tfoot></table></div>
+    <tfoot><tr><td>Business non-negotiables / yr</td><td class="num" data-o="bizNN"></td></tr></tfoot></table>
+    <div class="no-print" style="margin-top:10px"><button class="btn btn-line btn-sm" id="board-fill" type="button">Fill in 2026 CREB® fees</button></div>
+    ${deeper('What’s in the 2026 CREB® fees',`<table class="brk"><tbody>
+     <tr class="sub-h"><td colspan="2">Once a year</td></tr>
+     <tr><td>CREB® dues<small class="bud-hint">dues, training fee, charitable foundation, CIBS + GST</small></td><td class="num">$603.45</td></tr>
+     <tr><td>CREA fees<small class="bud-hint">+ GST</small></td><td class="num">$325.50</td></tr>
+     <tr><td>AREA dues</td><td class="num">$275.00</td></tr>
+     <tr><td>RECA registration renewal<small class="bud-hint">associate</small></td><td class="num">$750.00</td></tr>
+     <tr class="sub-h"><td>Total per year</td><td class="num">$1,953.95</td></tr>
+     <tr class="sub-h"><td colspan="2">Every month</td></tr>
+     <tr><td>Pillar 9 system fee<small class="bud-hint">+ GST</small></td><td class="num">$28.88</td></tr>
+     <tr><td>CREB® monthly system management fee<small class="bud-hint">+ GST</small></td><td class="num">$36.75</td></tr>
+     <tr><td>SentriLock monthly access<small class="bud-hint">+ GST</small></td><td class="num">$26.25</td></tr>
+     <tr class="sub-h"><td>Total per month</td><td class="num">$91.88</td></tr></tbody></table>
+     <p class="fine" style="margin:8px 0 0">About $3,057 a year in all. Amounts include GST; if you’re GST-registered you can usually claim the GST back. Check your own statements — fees change each year.</p>`)}</div>
    <div><h4 class="sp-h">Brokerage fees per deal <small>sets your minimum</small></h4><table class="brk"><tbody>
     <tr><td>Deal fee per side<small class="bud-hint">blank = none</small></td><td>${F('','goals.dealFee',{type:'money',aria:'Deal fee per side'})}</td></tr>
     <tr><td>Deal fee is charged</td><td><select data-k="goals.feeMode" aria-label="Deal fee is charged"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></td></tr>
@@ -1379,6 +1395,8 @@ document.addEventListener('click',e=>{ const mo=document.getElementById('more');
    S.week.d.forEach((row,i)=>row.s.forEach((v,j)=>{ if(!v){ row.s[j]=plan(i,j); k++; } })); renderWeek(); recompute(); queueSave(); toast(k?'Starting week added — change any block':'Every block is already set'); break; }
   case 'week-clear': S.week.d=WEEK_DAYS.map(()=>({s:WEEK_SLOTS.map(()=>'')})); renderWeek(); recompute(); queueSave(); break;
   case 'init-add': S.inits.push({what:'',date:'',priority:'Medium'}); renderInits(); fillAll(document.getElementById('init-body')); queueSave(); break;
+  case 'board-fill': { const f=[]; if(S.biz.mls===''||S.biz.mls==null){ S.biz.mls=BOARD_2026.month; f.push('monthly system fees'); } if(S.bizY.board===''||S.bizY.board==null){ S.bizY.board=BOARD_2026.year; f.push('annual dues & licence'); }
+   fillAll(document.getElementById('s-budget')); recompute(); queueSave(); toast(f.length?`Filled in 2026 CREB® ${f.join(' and ')} — change them if yours are different`:'Those lines already have amounts — clear them first to use the 2026 CREB® fees'); break; }
   case 'season-reset': S.season.w=mktW().slice(); S.season.lag=30; fillAll(document.getElementById('s-season')); recompute(); queueSave(); break;
   case 'use-budget': { const c=calc(); if(c.needs<=0){ toast('Add your personal budget on the Budget & Finances page first'); break; } S.goals.netGoal=Math.round(c.needs); fillAll(); recompute(); queueSave(); toast('Take-home goal set to '+money(c.needs)); break; }
   case 'cal-fill': { let k=0; S.cal.forEach((m,i)=>CAL_ROWS.forEach(([r])=>{ if(!m[r]&&IDEAS[r][i]){ m[r]=IDEAS[r][i]; k++; } })); renderCal(); recompute(); queueSave(); toast(k?`Added ${k} suggestions — edit any of them`:'Every cell already has something in it'); break; }
