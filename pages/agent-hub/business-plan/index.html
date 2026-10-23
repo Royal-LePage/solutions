@@ -632,8 +632,8 @@ const PILLARS=[['build','Build — goals & numbers'],['brand','Brand — reputat
 /* 2026 board, association and licence costs for a CREB® member (from CREB®, AREA and RECA statements, Oct 2026) */
 const BOARD_2026={year:1953.95,month:91.88};
 const BIZ_Y=[['board','Board, association & RECA fees','CREB®, AREA, CREA, RECA licence — $1,953.95 in 2026'],['gli','General liability insurance','']];
-const BIZ=[['desk','Monthly desk / admin fee<small class="bud-hint">Not your split, cap or deal fees — those have their own lines.</small>'],['mls','Board &amp; MLS® system fees<small class="bud-hint">Pillar 9, CREB® system fee, SentriLock — $91.88 a month in 2026</small>'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other business costs']];
-const BIZ_NN=['desk','mls','tech','vehicle','prof','other'], BIZ_GROW=[['coaching','Coaching & education'],['assistant','Assistant / admin support']];
+const BIZ=[['desk','Brokerage and RLP fees<small class="bud-hint">Monthly fee — $264.00. Not your split, cap or deal fees; those have their own lines.</small>'],['office','Office rent'],['mls','Board &amp; MLS® system fees<small class="bud-hint">Pillar 9, CREB® system fee, SentriLock — $91.88 a month in 2026</small>'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other business costs']];
+const BIZ_NN=['desk','office','mls','tech','vehicle','prof','other'], BIZ_GROW=[['coaching','Coaching & education'],['assistant','Assistant / admin support']];
 const PERS_NN=['housing','transport','groceries','utilities','insurance','family','debt','other'], PERS_LIFE=[['lifestyle','Dining, entertainment & travel'],['giving','Giving & charity']];
 const MKTG_PCT=0.10;
 const PERS=[['housing','Housing (mortgage/rent, tax, insurance)'],['transport','Personal transportation'],['groceries','Groceries & household'],['utilities','Utilities & internet'],['insurance','Life, health & other insurance'],['family','Childcare & family'],['debt','Personal debt payments'],['lifestyle','Lifestyle, dining & travel'],['giving','Giving & charity'],['other','Other personal costs']];
@@ -720,7 +720,7 @@ function DEFAULT(){
   tasks:DEFAULT_TASKS.map(t=>({task:t,owner:'Me',action:'',tool:''})),
   inits:[{what:'',date:'',priority:'High'},{what:'',date:'',priority:'Medium'},{what:'',date:'',priority:'Medium'}],
   bizY:{board:'',gli:''},
-  biz:{desk:'',mls:'',board:'',license:'',tech:'',vehicle:'',coaching:'',assistant:'',prof:'',other:''},
+  biz:{desk:264,office:'',mls:'',board:'',license:'',tech:'',vehicle:'',coaching:'',assistant:'',prof:'',other:''},
   pers:{housing:'',transport:'',groceries:'',utilities:'',insurance:'',family:'',debt:'',lifestyle:'',giving:'',other:''},
   save:{extraM:'',rrsp:'',postTax:'',rrspM:'',postTaxM:'',rrspP:'',postTaxP:'',resMonths:'',resAdd:false,rrspWhen:'first',postTaxWhen:'first',debtWhen:'first',resWhen:'first',debt:'',reserves:''},
   alloc:{biz:'',tax:'',pers:''},
@@ -754,6 +754,8 @@ const BLANK=DEFAULT();
 function normalize(){
  /* Licence & E&O is now part of desk fees: fold any saved amount into desk so the total doesn't change. */
  if(S.biz&&S.biz.license!==''&&S.biz.license!=null&&n(S.biz.license)){ S.biz.desk=String(n(S.biz.desk)+n(S.biz.license)); S.biz.license=''; }
+ /* Brokerage and RLP fees are prefilled at $264/month; a blank saved value picks up the prefill (enter 0 for none). */
+ if(S.biz&&(S.biz.desk===''||S.biz.desk==null)) S.biz.desk=264;
  if(!S.sources||S.sources.length!==SOURCES.length||S.sources.some((x,i)=>x.name!==SOURCES[i])) S.sources=DEFAULT().sources;
  if(S.season.curve!=='p9'){
   /* Move plans onto the Pillar 9 market pattern unless the agent had set their own weights. */
@@ -1006,7 +1008,7 @@ const SECTIONS=[
    <div><h4 class="sp-h">Brokerage fees per deal <small>sets your minimum</small></h4><table class="brk"><tbody>
     <tr><td>Deal fee per side<small class="bud-hint">blank = none</small></td><td>${F('','goals.dealFee',{type:'money',aria:'Deal fee per side'})}</td></tr>
     <tr><td>Deal fee is charged</td><td><select data-k="goals.feeMode" aria-label="Deal fee is charged"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></td></tr>
-    <tr><td>Donation per deal</td><td>${F('','goals.don',{type:'money',aria:'Donation per deal'})}</td></tr>
+    <tr><td>Donation to the Royal LePage Shelter Foundation<small class="bud-hint">per deal</small></td><td>${F('','goals.don',{type:'money',aria:'Donation to the Royal LePage Shelter Foundation per deal'})}</td></tr>
     <tr><td>RLP royalty<small class="bud-hint">set by Royal LePage</small></td><td class="num">1% · max $1,525/yr</td></tr>
    </tbody></table>
    <h4 class="sp-h" style="margin-top:18px">Marketing &amp; growth <small>after your goal</small></h4>
@@ -1103,7 +1105,7 @@ const SECTIONS=[
  {id:'results',t:'Your Numbers',d:'Does it all work? What the brokerage takes, what your non-negotiables and savings cost, and how the rest of your plan adds up.',html:()=>`
   <div id="res-verdict"></div>
   <h3 style="margin-top:0">Deductions over your cap year</h3>
-  <div class="res" id="ded-tiles"><div id="split-tile" style="display:contents">${RC('Split paid','splitPaid')}</div>${RC('<span data-o="capLbl">Cap paid</span><span class="rc-sub" data-o="capSub"></span>','capPaidOut')}<div id="cap2-tile" style="display:none">${RC('<span data-o="capLbl2"></span><span class="rc-sub" data-o="capSub2"></span>','capPaid2')}</div>${RC('Deal fees','feesPaid')}${RC('Donations','donPaid')}</div>
+  <div class="res" id="ded-tiles"><div id="split-tile" style="display:contents">${RC('Split paid','splitPaid')}</div>${RC('<span data-o="capLbl">Cap paid</span><span class="rc-sub" data-o="capSub"></span>','capPaidOut')}<div id="cap2-tile" style="display:none">${RC('<span data-o="capLbl2"></span><span class="rc-sub" data-o="capSub2"></span>','capPaid2')}</div>${RC('Deal fees','feesPaid')}${RC('Shelter Foundation donations','donPaid')}</div>
   <div class="res c3" id="ded-row2"><div id="ref-tile" style="display:none">${RC('Referral fees paid<span class="rc-sub" data-o="refSub"></span>','refPaid')}</div>${RC('RLP royalty','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('Deduction period','cyCard')}</div>
   <div id="cap-x"></div>
   <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
