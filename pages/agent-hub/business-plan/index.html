@@ -630,9 +630,12 @@ const PRI_EX=[['25 transactions','Lead generation','Need more qualified opportun
 const CAL_ROWS=[['call','Reason to call'],['text','Reason to text / email'],['popby','Pop-by idea'],['video','Video / social post'],['event','Event / client party']];
 const PILLARS=[['build','Build — goals & numbers'],['brand','Brand — reputation & presence'],['amplify','Amplify — content & marketing'],['connect','Connect — sphere & referrals'],['simplify','Simplify — systems & delegation']];
 /* 2026 board, association and licence costs for a CREB® member (from CREB®, AREA and RECA statements, Oct 2026) */
-const BOARD_2026={year:1953.95,month:91.88};
-const BIZ_Y=[['board','Board, association & RECA fees','CREB®, AREA, CREA, RECA licence — $1,953.95 in 2026'],['gli','General liability insurance','']];
-const BIZ=[['desk','Brokerage and RLP fees<small class="bud-hint">Monthly fee — $264.00. Not your split, cap or deal fees; those have their own lines.</small>'],['office','Office rent'],['mls','Board &amp; MLS® system fees<small class="bud-hint">Pillar 9, CREB® system fee, SentriLock — $91.88 a month in 2026</small>'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other business costs']];
+const BOARD_2026={year:1953.95,month:91.88}; /* CREB® */
+/* 2026 board costs by real estate board. Amounts include GST, like the CREB statement.
+   Alberta West (AWRA): from the "Annual REALTOR Expenses in Alberta — AWRA 2026" planning estimate (Oct 26, 2026). */
+const BOARDS={creb:{name:'CREB®',year:1953.95,month:91.88},awra:{name:'Alberta West',year:1440.50,month:105.53}};
+const BIZ_Y=[['board','Board, association & RECA fees',''],['gli','General liability insurance','']];
+const BIZ=[['desk','Brokerage and RLP fees'],['office','Office rent'],['mls','Board &amp; MLS® system fees'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other business costs']];
 const BIZ_NN=['desk','office','mls','tech','vehicle','prof','other'], BIZ_GROW=[['coaching','Coaching & education'],['assistant','Assistant / admin support']];
 const PERS_NN=['housing','transport','groceries','utilities','insurance','family','debt','other'], PERS_LIFE=[['lifestyle','Dining, entertainment & travel'],['giving','Giving & charity']];
 const MKTG_PCT=0.10;
@@ -719,7 +722,7 @@ function DEFAULT(){
   tech:{crm:'',tm:'',forms:'',acct:'',social:'',other:''},
   tasks:DEFAULT_TASKS.map(t=>({task:t,owner:'Me',action:'',tool:''})),
   inits:[{what:'',date:'',priority:'High'},{what:'',date:'',priority:'Medium'},{what:'',date:'',priority:'Medium'}],
-  bizY:{board:'',gli:''},
+  bizY:{board:'',gli:200},
   biz:{desk:264,office:'',mls:'',board:'',license:'',tech:'',vehicle:'',coaching:'',assistant:'',prof:'',other:''},
   pers:{housing:'',transport:'',groceries:'',utilities:'',insurance:'',family:'',debt:'',lifestyle:'',giving:'',other:''},
   save:{extraM:'',rrsp:'',postTax:'',rrspM:'',postTaxM:'',rrspP:'',postTaxP:'',resMonths:'',resAdd:false,rrspWhen:'first',postTaxWhen:'first',debtWhen:'first',resWhen:'first',debt:'',reserves:''},
@@ -756,6 +759,7 @@ function normalize(){
  if(S.biz&&S.biz.license!==''&&S.biz.license!=null&&n(S.biz.license)){ S.biz.desk=String(n(S.biz.desk)+n(S.biz.license)); S.biz.license=''; }
  /* Brokerage and RLP fees are prefilled at $264/month; a blank saved value picks up the prefill (enter 0 for none). */
  if(S.biz&&(S.biz.desk===''||S.biz.desk==null)) S.biz.desk=264;
+ if(S.bizY&&(S.bizY.gli===''||S.bizY.gli==null)) S.bizY.gli=200; /* general liability insurance prefilled at $200/yr */
  if(!S.sources||S.sources.length!==SOURCES.length||S.sources.some((x,i)=>x.name!==SOURCES[i])) S.sources=DEFAULT().sources;
  if(S.season.curve!=='p9'){
   /* Move plans onto the Pillar 9 market pattern unless the agent had set their own weights. */
@@ -987,12 +991,12 @@ const SECTIONS=[
     <tr><td>Your cap year</td><td class="num" data-o="cyBox">–</td></tr>
     <tr id="cap-paid-wrap" style="display:none"><td>Cap paid so far<small class="bud-hint">in the cap year you’re in on Jan 1 — January to <b data-o="capPrevName"></b> deals still count toward it. Blank = $0; if you’ve already capped, enter your full cap.</small></td><td>${F('','goals.capPaid',{type:'money',aria:'Cap paid so far in the cap year you are in on January 1',ph:'e.g. 12,000'})}</td></tr>
     <tr class="sub-h"><td colspan="2">Monthly costs</td></tr>
+    <tr class="no-print"><td colspan="2"><span style="font-size:13px;color:var(--bp-dark-grey)">Auto-fill your 2026 board expenses:</span><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><button class="btn btn-line btn-sm" id="board-fill" type="button">I am a CREB® agent</button><button class="btn btn-line btn-sm" id="board-fill-aw" type="button">I am an Alberta West agent</button></div></td></tr>
     ${BIZ.filter(([k])=>BIZ_NN.includes(k)).map(([k,l])=>`<tr><td>${l}</td><td style="width:150px">${F('','biz.'+k,{type:'money',aria:l.replace(/<small[^>]*>.*?<\/small>/g,'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&')})}</td></tr>`).join('')}
     <tr class="sub-h"><td colspan="2">Annual fees <small style="color:#888">— enter the yearly amount</small></td></tr>
     ${BIZ_Y.map(([k,l,h])=>`<tr><td>${l}${h?` <small style="color:#888">(${h})</small>`:''}</td><td style="width:150px">${F('','bizY.'+k,{type:'money',aria:l+' per year'})}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Business non-negotiables / yr</td><td class="num" data-o="bizNN"></td></tr></tfoot></table>
-    <div class="no-print" style="margin-top:10px"><button class="btn btn-line btn-sm" id="board-fill" type="button">Fill in 2026 CREB® fees</button></div>
-    ${deeper('What’s in the 2026 CREB® fees',`<table class="brk"><tbody>
+    ${deeper('What’s in the 2026 board fees',`<h4 class="sp-h" style="margin-top:0">CREB®</h4><table class="brk"><tbody>
      <tr class="sub-h"><td colspan="2">Once a year</td></tr>
      <tr><td>CREB® dues<small class="bud-hint">dues, training fee, charitable foundation, CIBS + GST</small></td><td class="num">$603.45</td></tr>
      <tr><td>CREA fees<small class="bud-hint">+ GST</small></td><td class="num">$325.50</td></tr>
@@ -1004,7 +1008,20 @@ const SECTIONS=[
      <tr><td>CREB® monthly system management fee<small class="bud-hint">+ GST</small></td><td class="num">$36.75</td></tr>
      <tr><td>SentriLock monthly access<small class="bud-hint">+ GST</small></td><td class="num">$26.25</td></tr>
      <tr class="sub-h"><td>Total per month</td><td class="num">$91.88</td></tr></tbody></table>
-     <p class="fine" style="margin:8px 0 0">About $3,057 a year in all. Amounts include GST; if you’re GST-registered you can usually claim the GST back. Check your own statements — fees change each year.</p>`)}</div>
+     <p class="fine" style="margin:8px 0 0">About $3,057 a year in all.</p>
+     <h4 class="sp-h" style="margin-top:16px">Alberta West (AWRA)</h4><table class="brk"><tbody>
+     <tr class="sub-h"><td colspan="2">Once a year</td></tr>
+     <tr><td>RECA licence renewal<small class="bud-hint">includes REIX and Assurance Fund</small></td><td class="num">$750.00</td></tr>
+     <tr><td>AREA annual membership</td><td class="num">$275.00</td></tr>
+     <tr><td>CREA annual membership<small class="bud-hint">$310 + GST</small></td><td class="num">$325.50</td></tr>
+     <tr><td>Critical Illness Benefit Society<small class="bud-hint">not yet confirmed for AWRA</small></td><td class="num">$45.00</td></tr>
+     <tr><td>Charitable Foundation<small class="bud-hint">not yet confirmed for AWRA</small></td><td class="num">$45.00</td></tr>
+     <tr class="sub-h"><td>Total per year</td><td class="num">$1,440.50</td></tr>
+     <tr class="sub-h"><td colspan="2">Every month</td></tr>
+     <tr><td>Alberta West monthly fee<small class="bud-hint">$100.50 + GST</small></td><td class="num">$105.53</td></tr>
+     <tr class="sub-h"><td>Total per month</td><td class="num">$105.53</td></tr></tbody></table>
+     <p class="fine" style="margin:8px 0 0">About $2,707 a year in all ($2,631 before GST). Not yet confirmed: whether the monthly fee includes Pillar 9 / Matrix, system management and SentriLock, and any other AWRA association charges.</p>
+     <p class="fine" style="margin:8px 0 0">Amounts include GST; if you’re GST-registered you can usually claim the GST back. Check your own statements — fees change each year.</p>`)}</div>
    <div><h4 class="sp-h">Brokerage fees per deal <small>sets your minimum</small></h4><table class="brk"><tbody>
     <tr><td>Deal fee per side<small class="bud-hint">blank = none</small></td><td>${F('','goals.dealFee',{type:'money',aria:'Deal fee per side'})}</td></tr>
     <tr><td>Deal fee is charged</td><td><select data-k="goals.feeMode" aria-label="Deal fee is charged"><option value="all">On every deal (separate from cap)</option><option value="cap">Counts toward my cap (stops when I cap)</option><option value="after">Only after I cap</option></select></td></tr>
@@ -1341,7 +1358,7 @@ function fillAll(root){
  document.querySelectorAll('#method-seg button').forEach(b=>b.classList.toggle('on',b.dataset.m===S.goals.method));
 }
 
-function fmtMoney(v){ if(v===''||v===undefined||v===null||!isFinite(parseFloat(v))) return ''; return (Math.round(parseFloat(v)*100)/100).toLocaleString('en-CA',{maximumFractionDigits:2}); }
+function fmtMoney(v){ if(v===''||v===undefined||v===null||!isFinite(parseFloat(v))) return ''; const r=Math.round(parseFloat(v)*100)/100; return r.toLocaleString('en-CA',Number.isInteger(r)?{maximumFractionDigits:0}:{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function parseMoney(str){ const t=String(str).replace(/[^0-9.\-]/g,''); if(t===''||t==='-'||t==='.') return ''; const x=parseFloat(t); return isFinite(x)?x:''; }
 function onField(el){
  if(!el.dataset||!el.dataset.k) return;
@@ -1397,8 +1414,11 @@ document.addEventListener('click',e=>{ const mo=document.getElementById('more');
    S.week.d.forEach((row,i)=>row.s.forEach((v,j)=>{ if(!v){ row.s[j]=plan(i,j); k++; } })); renderWeek(); recompute(); queueSave(); toast(k?'Starting week added — change any block':'Every block is already set'); break; }
   case 'week-clear': S.week.d=WEEK_DAYS.map(()=>({s:WEEK_SLOTS.map(()=>'')})); renderWeek(); recompute(); queueSave(); break;
   case 'init-add': S.inits.push({what:'',date:'',priority:'Medium'}); renderInits(); fillAll(document.getElementById('init-body')); queueSave(); break;
-  case 'board-fill': { const f=[]; if(S.biz.mls===''||S.biz.mls==null){ S.biz.mls=BOARD_2026.month; f.push('monthly system fees'); } if(S.bizY.board===''||S.bizY.board==null){ S.bizY.board=BOARD_2026.year; f.push('annual dues & licence'); }
-   fillAll(document.getElementById('s-budget')); recompute(); queueSave(); toast(f.length?`Filled in 2026 CREB® ${f.join(' and ')} — change them if yours are different`:'Those lines already have amounts — clear them first to use the 2026 CREB® fees'); break; }
+  case 'board-fill': case 'board-fill-aw': { const B=BOARDS[t.id==='board-fill'?'creb':'awra'], f=[];
+   /* fill a line if it's blank or still holds another board's 2026 amount (so agents can switch boards); never overwrite their own numbers */
+   const free=(v,key)=>v===''||v==null||Object.values(BOARDS).some(x=>Math.abs(n(v)-x[key])<0.005);
+   if(free(S.biz.mls,'month')){ S.biz.mls=B.month; f.push('monthly fees'); } if(free(S.bizY.board,'year')){ S.bizY.board=B.year; f.push('annual dues & licence'); }
+   fillAll(document.getElementById('s-budget')); recompute(); queueSave(); toast(f.length?`Filled in 2026 ${B.name} ${f.join(' and ')} — change them if yours are different`:`Those lines already have your own amounts — clear them first to use the 2026 ${B.name} fees`); break; }
   case 'season-reset': S.season.w=mktW().slice(); S.season.lag=30; fillAll(document.getElementById('s-season')); recompute(); queueSave(); break;
   case 'use-budget': { const c=calc(); if(c.needs<=0){ toast('Add your personal budget on the Budget & Finances page first'); break; } S.goals.netGoal=Math.round(c.needs); fillAll(); recompute(); queueSave(); toast('Take-home goal set to '+money(c.needs)); break; }
   case 'cal-fill': { let k=0; S.cal.forEach((m,i)=>CAL_ROWS.forEach(([r])=>{ if(!m[r]&&IDEAS[r][i]){ m[r]=IDEAS[r][i]; k++; } })); renderCal(); recompute(); queueSave(); toast(k?`Added ${k} suggestions — edit any of them`:'Every cell already has something in it'); break; }
@@ -2067,7 +2087,7 @@ const SAMPLE={meta:{year:0},vision:{name:'Sample Agent (Jordan Lee)',one:'Close 
  values:{words:['Integrity','Family','Growth','Service','Communication'].concat(Array(10).fill('')),core:[{v:'Integrity',means:'Tell the truth',practice:'Honest pricing advice'},{v:'Service',means:'Client first',practice:'Same-day replies'},{v:'Growth',means:'Keep learning',practice:'Monthly coaching'},{v:'',means:'',practice:''},{v:'',means:'',practice:''}]},
  last:{listings:7,buyers:8,avgPrice:620000,gci:168000},reflect:{worked:'Sphere calls and open houses',didnt:'Paid online leads',stop:'Buying cold leads',start:'Monthly client events',cont:'Pop-bys'},
  pos:{ideal:'Move-up families in Mahogany, Auburn Bay and Seton',ps:{client:'move-up families in the SE lake communities',value:'knows every lake community street by street',proof:'I live here and have sold 100+ homes nearby',outcome:'buy the right home and sell for top dollar'}},
- pers:{housing:2800,transport:600,groceries:1100,utilities:350,insurance:300,family:400,debt:250,lifestyle:700,giving:100},biz:{desk:420,tech:180,vehicle:450,prof:100,coaching:250},bizY:{board:1400,gli:600},
+ pers:{housing:2800,transport:600,groceries:1100,utilities:350,insurance:300,family:400,debt:250,lifestyle:700,giving:100},biz:{desk:420,tech:180,vehicle:450,prof:100,coaching:250},bizY:{board:1400,gli:200},
  goals:{method:'gci',gciGoal:210000,avgPrice:650000,commModel:'tier',t1:3.5,t2:1.5,split:20,cap:12000,capDate:'2027-06-01',dealFee:250,feeMode:'cap',tax:30,gstHold:5,listShare:50,buyShare:50},
  save:{rrspM:300,postTaxP:5,reserves:8000,resMonths:'3'},mktg:{paid:3000,print:4000,events:3500,popby:2000,email:1000,signage:1500},
  sources:[{goal:9,last:7,pri:'Primary'},{goal:4,last:3,pri:'Primary'},{goal:0,last:0},{goal:2,last:2,pri:'Primary'},{goal:2,last:2,pri:'Secondary'},{goal:0,last:1},{goal:1,last:0}],
