@@ -138,6 +138,7 @@ body{margin:0;background:var(--bp-light-grey);color:var(--bp-black);font-family:
 .kpi .v.neg{color:#ff6b81}.kpi .v.pos{color:#7fd6a0}
 .need-goal{color:var(--bp-dark-grey);font-size:13.5px;font-style:italic;margin:-4px 0 10px}.need-goal:empty{display:none}
 .sum-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}@media print{.sum-scroll{overflow:visible}}
+.act-h{display:block;font-size:10.5px;font-weight:500;color:var(--bp-dark-grey);white-space:nowrap;line-height:1.2}
 .tot-day{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--bp-black);color:#fff;border-left:4px solid var(--bp-red);border-radius:4px;padding:12px 16px;margin:14px 0}.tot-day span{display:block;font-size:12.5px;color:#bbb;margin-top:2px}.tot-day .v{font-size:26px;font-weight:800}
 .kpi .ks{font-size:11px;color:#bbb;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.kpi .ks:empty{display:none}
 .kpi .v.txt{font-size:15px;white-space:normal;line-height:1.25}
@@ -805,6 +806,16 @@ const int=v=>{ const r=Math.round(v)||0; return (r===0?0:r).toLocaleString('en-C
 /* Activity targets round UP to whole numbers, so hitting every target hits the goal. Blank → '–'. */
 const up=v=>!(v>0)?'–':Math.ceil(v-1e-9).toLocaleString('en-CA');
 const upN=v=>v>0?Math.ceil(v-1e-9):0;
+/* Activity target for a period, worked out from the rounded-up yearly target so the columns agree.
+   ≥ 1 → whole number rounded up; between 0 and 1 → one decimal plus a hint ("about 1 every 2–3 weeks"); 0 → '–'. */
+function tgt(yearly,per,unit){
+ const Y=upN(yearly); if(!(Y>0)||!(per>0)) return {v:0,txt:'–',hint:''};
+ const x=Y/per; if(x>=0.95) { const r=Math.ceil(x-1e-9); return {v:r,txt:r.toLocaleString('en-CA'),hint:''}; }
+ const d=Math.max(Math.round(x*10)/10,0.1), N=1/x, near=Math.round(N), rng=Math.abs(N-near)<0.2?String(near):`${Math.floor(N)}–${Math.ceil(N)}`;
+ return {v:d,txt:d.toFixed(1),hint:`about 1 every ${rng} ${unit}s`};
+}
+const tgtHTML=t=>t.hint?`${t.txt}<small class="act-h">${t.hint}</small>`:t.txt;
+function outT(key,t){ document.querySelectorAll(`[data-o="${key}"]`).forEach(el=>{ el.innerHTML=tgtHTML(t); el.title=t.hint||''; }); }
 const nWhole=v=>!(v>0)?'0':v>=0.95?Math.round(v).toLocaleString('en-CA'):(Math.round(v*10)/10).toLocaleString('en-CA');
 const dec=v=>{ const r=Math.round(v*10)/10||0; return (r===0?0:r).toLocaleString('en-CA'); };
 const pct=v=>Math.round(v*100)+'%';
@@ -962,9 +973,9 @@ const SECTIONS=[
   <div class="row c3">${F('Platforms','content.platforms',{ph:'e.g. Instagram, Facebook, email newsletter'})}${F('Content themes','content.themes',{ph:'e.g. lake living, market updates, client stories'})}${F('Production process','content.process',{ph:'e.g. batch film monthly, schedule weekly'})}</div>
   <h3>Frequency — weekly content mix</h3>
   <div class="row c4">${F('Personal posts / week','content.personal',{type:'num',hint:'family, hobbies'})}${F('Professional posts / week','content.professional',{type:'num',hint:'listings, market, wins'})}${F('“AND” posts / week','content.and',{type:'num',hint:'your niche'})}${F('My AND topic','content.andTopic',{ph:'e.g. lake living'})}</div>
-  <p style="font-size:13.5px;color:var(--bp-dark-grey)">Total: <b data-o="postsW"></b> posts a week · <b data-o="postsY"></b> this year. Aim for at least 3 a week with a mix of all three.</p>
+  <p data-show="posts" style="font-size:13.5px;color:var(--bp-dark-grey)">Total: <b data-o="postsW"></b> posts a week · <b data-o="postsY"></b> this year. Aim for at least 3 a week with a mix of all three.</p>
   <h3>Marketing budget</h3>
-  <p style="font-size:13.5px;color:var(--bp-dark-grey)">You set your marketing budget on <b>Your Budget</b>: <b data-o="mktgTotal"></b> this year (<span data-o="mktgPctGci"></span>). Make sure the platforms and themes above match where that money goes.</p>
+  <p style="font-size:13.5px;color:var(--bp-dark-grey)">You set your marketing budget on <b>Your Budget</b><span data-show="mktg">: <b data-o="mktgTotal"></b> this year<span data-show="mktgPct"> (<span data-o="mktgPctGci"></span>)</span></span>. Make sure the platforms and themes above match where that money goes.</p>
   ${deeper('Brand audit — Google yourself',`${BRAND.map(([k,l])=>`<label class="chk"><input type="checkbox" data-k="brand.${k}">${l}</label>`).join('')}
    <p style="font-size:13.5px;color:var(--bp-dark-grey)"><b data-o="brandScore"></b> complete. Repeat this audit every quarter.</p>`)}
  `},
@@ -1002,7 +1013,7 @@ const SECTIONS=[
     <tr><td colspan="2"><span class="bud-hint" style="margin:0;font-size:12.5px">Example: an 80/20 split to a $20,000 cap, plus a $250 deal fee on every deal.</span></td></tr>
     <tr><td>Brokerage split<small class="bud-hint">until you cap</small></td><td><select id="split-sel" name="brokerage-split" aria-label="Brokerage split"><option value="">Choose…</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="custom">Custom…</option></select><div id="split-custom" style="margin-top:6px">${F('','goals.split',{type:'pct',aria:'Custom brokerage split',ph:'e.g. 25'})}</div></td></tr>
     <tr><td>Annual cap<small class="bud-hint">blank = no cap</small></td><td>${F('','goals.cap',{type:'money',aria:'Annual cap'})}</td></tr>
-    <tr><td>Cap anniversary<small class="bud-hint">the month your cap resets</small></td><td><select id="capm-sel" name="cap-anniversary-month" aria-label="Cap anniversary month"><option value="">Choose… (blank = January)</option>${MONTHS_FULL.map((m,i)=>`<option value="${i}">${m}</option>`).join('')}</select></td></tr>
+    <tr id="cap-anniv-row"><td>Cap anniversary<small class="bud-hint">the month your cap resets</small></td><td><select id="capm-sel" name="cap-anniversary-month" aria-label="Cap anniversary month"><option value="">Choose… (blank = January)</option>${MONTHS_FULL.map((m,i)=>`<option value="${i}">${m}</option>`).join('')}</select></td></tr>
     <tr><td>Your cap year</td><td class="num" data-o="cyBox">–</td></tr>
     <tr id="cap-paid-wrap" style="display:none"><td>Cap you’ll have paid by Dec 31<small class="bud-hint">your best estimate — include deals closing before year-end. January to <b data-o="capPrevName"></b> deals still count toward this cap year. Blank = $0; if you’ll have capped by then, enter your full cap.</small></td><td>${F('','goals.capPaid',{type:'money',aria:'Cap you will have paid by December 31',ph:'e.g. 12,000'})}</td></tr>
     <tr class="sub-h"><td colspan="2">Monthly costs</td></tr>
@@ -1139,7 +1150,7 @@ const SECTIONS=[
   <div id="res-verdict"></div>
   <h3 style="margin-top:0">Deductions over your cap year</h3>
   <div class="res" id="ded-tiles"><div id="split-tile" style="display:contents">${RC('Split paid','splitPaid')}</div>${RC('<span data-o="capLbl">Cap paid</span><span class="rc-sub" data-o="capSub"></span>','capPaidOut')}<div id="cap2-tile" style="display:none">${RC('<span data-o="capLbl2"></span><span class="rc-sub" data-o="capSub2"></span>','capPaid2')}</div>${RC('Deal fees','feesPaid')}${RC('Shelter Foundation donations','donPaid')}</div>
-  <div class="res c3" id="ded-row2"><div id="ref-tile" style="display:none">${RC('Referral fees paid<span class="rc-sub" data-o="refSub"></span>','refPaid')}</div>${RC('RLP royalty','rlpPaid')}${RC('Total deductions · <span data-o="effPct">–</span> of GCI','effSplit')}${RC('Deduction period','cyCard','sm')}</div>
+  <div class="res c3" id="ded-row2"><div id="ref-tile" style="display:none">${RC('Referral fees paid<span class="rc-sub" data-o="refSub"></span>','refPaid')}</div>${RC('RLP royalty','rlpPaid')}${RC('Total deductions<span data-show="gci"> · <span data-o="effPct">–</span> of GCI</span>','effSplit')}${RC('Deduction period','cyCard','sm')}</div>
   <div id="cap-x"></div>
   <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
   <h3>What’s left after your non-negotiables</h3>
@@ -1167,7 +1178,7 @@ const SECTIONS=[
    ${[['Prospecting conversations <small style="font-weight:400;color:var(--bp-dark-grey)">non-referral share</small>','conv'],['Prospecting hours','hrs'],['Listing appointments','lAp'],['Buyer consultations','bCo'],['Listings taken','lTk']].map(([l,k])=>`<div class="k">${l}</div><div class="x" data-o="${k}Y"></div><div class="x" data-o="${k}M"></div><div class="x" data-o="${k}W"></div><div class="x today" data-o="${k}D"></div>`).join('')}
   </div>
   <p style="color:var(--bp-dark-grey);font-size:12.5px;margin:6px 0 0">Conversations and hours cover only your prospecting share (the sides that don’t come from referrals). Appointments, consultations and listings cover <b>all</b> your sides, referrals included.</p>
-  <p id="cpc-p" style="color:var(--bp-dark-grey);font-size:13.5px">That works out to about <b data-o="convPerClose"></b> conversations for every closed side, over <b data-o="workDays"></b> prospecting days.</p>
+  <p id="cpc-p" data-show="sides" style="color:var(--bp-dark-grey);font-size:13.5px">That works out to about <b data-o="convPerClose"></b> conversations for every closed side, over <b data-o="workDays"></b> prospecting days.</p>
   <h3>Referral targets <small style="font-weight:400;color:var(--bp-dark-grey)">sphere, past clients &amp; partners</small></h3>
   <div class="row c4">${F('Referrals needed per close<small class="typ" data-o="typ_refPerClose"></small>','kpi.refPerClose',{type:'num',ph:'typical 3'})}${F('Contacts needed per referral<small class="typ" data-o="typ_contactsPerRef"></small>','kpi.contactsPerRef',{type:'num',ph:'typical 20'})}</div>
   <div class="res">${RC('Referrals needed (year)','refY')}${RC('Referrals per month','refM')}${RC('Contacts per month','conM')}${RC('Contacts per day','contactsDay','dark')}</div>
@@ -1177,7 +1188,7 @@ const SECTIONS=[
   <div class="dbg">${DB_GRADES.map(([k,g,l])=>`<label class="f"><span><b class="grade">${g}</b> ${l}</span><input data-k="db.${k}" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></label>`).join('')}</div>
   <div class="row c4">${F('New contacts you’ll add per month','db.add',{type:'num'})}</div>
   <div id="db-check"></div>
-  ${tip('<b>What counts as a contact:</b> a real voice-to-voice or face-to-face conversation where you ask for a referral. Likes, emails and mailers don’t count. Your plan needs about <b data-o="refDayTip">–</b> referral conversations a working day — calls, DMs and in person all count.')}
+  ${tip('<b>What counts as a contact:</b> a real voice-to-voice or face-to-face conversation where you ask for a referral. Likes, emails and mailers don’t count.<span data-show="sides"> Your plan needs about <b data-o="refDayTip">–</b> referral conversations a working day — calls, DMs and in person all count.</span>')}
  `},
  {id:'score',t:'Quarterly Scorecard',d:'Annual → quarterly → monthly. Sit down once a quarter, enter your actuals, and grade each part of your business.',html:()=>`
   <h3>Quarterly results</h3>
@@ -1759,8 +1770,10 @@ function capText(c,long){
 /* Any calculated output that comes out as zero (a blank input, or no goal yet) shows '–'.
    Counts of things the agent ticks or picks (e.g. "0 of 6") are left alone. */
 const KEEP_ZERO=new Set(['brandScore','wkDays','wkWork','wkPros','wkPers','srcLast','srcGoal']);
-function blankZeros(){
- document.querySelectorAll('#bp-app [data-o]').forEach(el=>{ if(KEEP_ZERO.has(el.dataset.o)||el.children.length) return;
+const MONEY_LIST=new Set(['splitPaid','capPaidOut','capPaid2','feesPaid','donPaid','rlpPaid','refPaid','effSplit','effPct','taxAmt','gstAmt','afterHold','profitBox','takeHome','rrspY2','tfsaY2','debtY','netComm','netGoalBox']);
+function blankZeros(c){
+ const live=!!(c&&c.gci>0);
+ document.querySelectorAll('#bp-app [data-o]').forEach(el=>{ if(KEEP_ZERO.has(el.dataset.o)||el.children.length||(live&&MONEY_LIST.has(el.dataset.o))) return;
   const t=el.textContent.trim(); if(/^[−-]?\$?0(\.0+)?(%|\s?(h|mo|sides?|deals?|months?)|K)?(\s.*)?$/i.test(t)&&!/^0\.[1-9]/.test(t)) el.textContent='–'; });
 }
 function recompute(){
@@ -1794,6 +1807,7 @@ function recompute(){
   const cur=c.caps.find(x=>x.cy==='cur'), prev=c.caps.find(x=>x.cy==='prev');
   { /* no cap: the fee-mode choice doesn't apply, so hide it — unless an older plan is set to "only after I cap", which makes deal fees $0 */
    const fr=document.getElementById('fee-mode-row'), after=S.goals.feeMode==='after'; if(fr) fr.style.display=c.cap>0||after?'':'none';
+   { const ar=document.getElementById('cap-anniv-row'); if(ar) ar.style.display=c.cap>0?'':'none'; }
    out('feeModeNote',!(c.cap>0)&&after&&n(S.goals.dealFee)>0?'Your deal fees show as $0: this is set to “Only after I cap” and you have no cap. Choose “On every deal” if you pay a fee on each deal.':''); }
   out('capLbl',!c.cap?'Cap paid':twoCY?`Cap paid Jan – ${endM} ${y} · current cap year`:cur?`Cap paid in ${y} · you cap in ${MONTHS_FULL[cur.m]}`:prev?`Cap paid in ${y} · current cap year capped in ${MONTHS_FULL[prev.m]}`:`Cap paid in ${y} · ${money(c.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
  { const td=c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid+c.refPaid; out('effSplit',money(td)); out('effPct',c.gci?pct(td/c.gci):'–');
@@ -1832,15 +1846,15 @@ function recompute(){
   Object.keys(g).forEach(k=>{ const d=c.sides*g[k]; out('sd-'+k,c.sides&&tw?'≈ '+nWhole(d)+(nWhole(d)==='1'?' deal':' deals'):'–'); out('sh-'+k,tw?Math.round(g[k]*100)+'% of your year':'–'); });
  }
  // activity
- { const row=(k,v,isInt)=>{ const w=perW(v), d=perD(v); out(k+'Y',up(v)); out(k+'M',up(v/12)); out(k+'W',up(w)); out(k+'D',d>=0.5?up(d):'–'); };
-   row('conv',c.conv,true); row('hrs',c.hrs,true); row('lAp',c.lAp); row('bCo',c.bCo); row('lTk',c.lTk);
-   out('convDay',up(perD(c.conv))); }
+ { const row=(k,v)=>{ outT(k+'Y',tgt(v,1,'year')); outT(k+'M',tgt(v,12,'month')); outT(k+'W',tgt(v,c.weeks,'week')); outT(k+'D',tgt(v,c.days,'day')); };
+   row('conv',c.conv); row('hrs',c.hrs); row('lAp',c.lAp); row('bCo',c.bCo); row('lTk',c.lTk);
+   out('convDay',tgt(c.conv,c.days,'day').txt); }
  out('convPerClose',c.sides?int(c.convAll/c.sides):'0'); out('workDays',int(c.days));
-  const dP=upN(perD(c.conv)), dR=upN(perD(c.conY)), dT=dP+dR;
- out('refDayTip',c.sides?up(c.conY/c.days):'–'); out('refY',up(c.refY)); out('refM',up(c.refY/12)); out('conM',up(c.conY/12)); out('contactsDay',up(perD(c.conY)));
- out('talkDay',c.sides&&dT?dT.toLocaleString('en-CA'):'–'); out('talkSub',c.sides&&dT?`${dP} prospecting · ${dR} referral`:'');
- out('totDay',c.sides&&dT?dT.toLocaleString('en-CA'):'–'); out('totDaySub',c.sides&&dT?`${dP} prospecting conversations + ${dR} referral contacts`:'Set your goal on Your Goal to see your targets');
- { const el=document.getElementById('mix-note'); if(el) el.innerHTML=c.hasSrc?`<div class="tip">Your lead-source goals put <b>${pct(c.refShare)}</b> of your sides from referrals (sphere, past clients, partners) and <b>${pct(1-c.refShare)}</b> from prospecting and marketing. Prospecting targets cover the ${pct(1-c.refShare)}; referral targets cover the ${pct(c.refShare)}. Together that’s about <b>${(upN(perD(c.conv))+upN(perD(c.conY))).toLocaleString('en-CA')}</b> conversations a day.</div>`:`<div class="tip">Set your <b>goal by source</b> on Lead Generation to split these accurately. Until then the plan assumes half your sides come from referrals and half from prospecting.</div>`; }
+  const tP=tgt(c.conv,c.days,'day'), tR=tgt(c.conY,c.days,'day'), dP=tP.v, dR=tR.v, dT=Math.round((dP+dR)*10)/10;
+ out('refDayTip',c.sides?tR.txt:'–'); outT('refY',tgt(c.refY,1,'year')); outT('refM',tgt(c.refY,12,'month')); outT('conM',tgt(c.conY,12,'month')); outT('contactsDay',tR);
+ out('talkDay',c.sides&&dT?dT.toLocaleString('en-CA'):'–'); out('talkSub',c.sides&&dT?`${tP.txt} prospecting · ${tR.txt} referral`:'');
+ out('totDay',c.sides&&dT?dT.toLocaleString('en-CA'):'–'); out('totDaySub',c.sides&&dT?`${tP.txt} prospecting conversations + ${tR.txt} referral contacts`:'Set your goal on Your Goal to see your targets');
+ { const el=document.getElementById('mix-note'); if(el) el.innerHTML=c.hasSrc?`<div class="tip">Your lead-source goals put <b>${pct(c.refShare)}</b> of your sides from referrals (sphere, past clients, partners) and <b>${pct(1-c.refShare)}</b> from prospecting and marketing. Prospecting targets cover the ${pct(1-c.refShare)}; referral targets cover the ${pct(c.refShare)}. ${c.sides?` Together that’s about <b>${(Math.round((tgt(c.conv,c.days,'day').v+tgt(c.conY,c.days,'day').v)*10)/10).toLocaleString('en-CA')}</b> conversations and contacts a day.`:''}</div>`:`<div class="tip">Set your <b>goal by source</b> on Lead Generation to split these accurately. Until then the plan assumes half your sides come from referrals and half from prospecting.</div>`; }
  // sources
  const sl=S.sources.reduce((a,s)=>a+n(s.last),0), sg=S.sources.reduce((a,s)=>a+n(s.goal),0);
  S.sources.forEach((s,i)=>{out('srcL'+i,sl&&s.last!==''?pct(n(s.last)/sl):'–');out('srcG'+i,sg&&s.goal!==''?pct(n(s.goal)/sg):'–');});
@@ -1902,13 +1916,13 @@ function recompute(){
  // database check
  { const el=document.getElementById('db-check'), add=n(S.db.add), cnt=Object.fromEntries(DB_GRADES.map(([k])=>[k,n(S.db[k])]));
    if(el){ const need=c.conY/12, cap=DB_GRADES.reduce((a,[k,,,r])=>a+cnt[k]*r,0), tot=DB_GRADES.filter(([k])=>k!=='d').reduce((a,[k])=>a+cnt[k],0), core=cnt.ap+cnt.a;
-    el.innerHTML=!tot?'':`<div class="tip">${cap>=need?`<span class="flag ok">Your database can support this plan</span>`:`<span class="flag bad">Your database is too small for this plan</span>`} Calling your A+ and A contacts monthly, B every other month and C quarterly gives you the <b>capacity</b> for about <b>${int(cap)}</b> referral conversations a month. Your plan needs <b>${int(need)}</b> — that’s your target.${cap<need?` Move more people up to A and B${add?` — at ${int(add)} new contacts a month you’ll add ${int(add*12)} this year`:', add new contacts every month'}, or plan more of your business from prospecting.`:''} Usable database: ${int(tot)} people · ${DB_GRADES.filter(([k])=>k!=='d').map(([k,g])=>`${int(cnt[k])} ${g}`).join(' · ')}${cnt.d?` (plus ${int(cnt.d)} D to delete)`:''}.${cnt.d?` Remove your ${int(cnt.d)} D contacts.`:''}${cnt.o?` Follow up with your ${int(cnt.o)} online leads and move each one up to C or down to D.`:''}</div>`; } }
+    el.innerHTML=!tot?'':!(need>0)?`<div class="tip">Calling your A+ and A contacts monthly, B every other month and C quarterly gives you the <b>capacity</b> for about <b>${int(cap)}</b> referral conversations a month. Set your goal on <b>Your Goal</b> to see whether that’s enough.</div>`:`<div class="tip">${cap>=need?`<span class="flag ok">Your database can support this plan</span>`:`<span class="flag bad">Your database is too small for this plan</span>`} Calling your A+ and A contacts monthly, B every other month and C quarterly gives you the <b>capacity</b> for about <b>${int(cap)}</b> referral conversations a month. Your plan needs <b>${tgt(c.conY,12,'month').txt}</b> — that’s your target.${cap<need?` Move more people up to A and B${add?` — at ${int(add)} new contacts a month you’ll add ${int(add*12)} this year`:', add new contacts every month'}, or plan more of your business from prospecting.`:''} Usable database: ${int(tot)} people · ${DB_GRADES.filter(([k])=>k!=='d').map(([k,g])=>`${int(cnt[k])} ${g}`).join(' · ')}${cnt.d?` (plus ${int(cnt.d)} D to delete)`:''}.${cnt.d?` Remove your ${int(cnt.d)} D contacts.`:''}${cnt.o?` Follow up with your ${int(cnt.o)} online leads and move each one up to C or down to D.`:''}</div>`; } }
  // ideal week
  { const cnt={}; let days=0; S.week.d.forEach(row=>{ let pd=false; row.s.forEach(v=>{ if(v){ cnt[v]=(cnt[v]||0)+2; if(v==='prospect') pd=true; } }); if(pd) days++; });
    const work=WORK_TYPES.reduce((a,k)=>a+(cnt[k]||0),0), pros=cnt.prospect||0, pers=(cnt.personal||0), needP=(c.conv+c.conY)/Math.max(n(KPI().convPerHour),1)/c.weeks, want=n(S.model.hours);
    out('wkWork',work+' h'); out('wkPros',pros+' h'); out('wkDays',days+' of '+(n(KPI().daysPerWeek)||5)); out('wkPers',pers+' h'); out('wkOffTxt',S.kpi.weeksOff===''?'You haven’t set your weeks off yet on the Activity Plan — the plan assumes 4.':`You planned ${int(n(S.kpi.weeksOff))} weeks off this year (Activity Plan).`);
    const fl=document.getElementById('week-flag'), msgs=[];
-   if(work){ if(pros<needP-0.01) msgs.push(`<span class="flag bad">Not enough prospecting time</span> Your Activity Plan needs about <b>${up(needP)} hours</b> a week for prospecting and referral calls; this week has ${pros}.`);
+   if(work&&needP>0){ if(pros<needP-0.01) msgs.push(`<span class="flag bad">Not enough prospecting time</span> Your Activity Plan needs about <b>${up(needP)} hours</b> a week for prospecting and referral calls; this week has ${pros}.`);
     else msgs.push(`<span class="flag ok">Prospecting time covers your plan</span> Your Activity Plan needs about <b>${up(needP)} hours</b> a week for prospecting and referral calls; this week has ${pros}.`);
     if(want) msgs.push(work>want?`<span class="flag warn">More work than you want</span> This week has ${work} working hours; on Business Model you said ${int(want)}.`:`<span class="flag ok">Fits your hours</span> ${work} working hours against the ${int(want)} you set on Business Model.`); }
    if(fl) fl.innerHTML=msgs.map(m=>`<div class="tip">${m}</div>`).join(''); }
@@ -1968,7 +1982,10 @@ function recompute(){
    Object.keys(KPI_DEF).forEach(k=>out('typ_'+k,blank.includes(k)?'using typical':''));
    out('typNote',c.gci>0&&blank.length?`These targets use typical ratios for ${blank.length} of ${Object.keys(KPI_DEF).length} measures (marked “using typical” above). Enter your own numbers to make them yours.`:''); }
  out('actNeed',c.gci>0&&c.sides>0?'':'Set your goal on Your Goal to see your targets.');
- blankZeros();
+ blankZeros(c);
+ { /* show a sentence only when its number exists */
+   const pw=n(S.content.personal)+n(S.content.professional)+n(S.content.and), on={gci:c.gci>0, sides:c.sides>0, posts:pw>0, mktg:c.mktgTotal>0, mktgPct:c.mktgTotal>0&&c.gci>0};
+   document.querySelectorAll('[data-show]').forEach(el=>{ el.style.display=on[el.dataset.show]?'':'none'; }); }
  // nav progress
  /* ✓ Started = the agent typed or chose something in this step. Default values, prefilled amounts and
     template rows don't count; Your Numbers and the One-Page Summary follow the steps they're built from. */
@@ -2048,9 +2065,9 @@ function renderSummary(){
    <div class="sum-scroll"><table class="sum-q"><thead><tr><th></th><th class="num">Closings</th><th class="num">GCI</th><th class="num">Conversations</th><th class="num">Appointments</th></tr></thead><tbody>${qRows}</tbody></table></div>${has&&c.gciSide>0?`<p class="fine" style="margin-top:4px">GCI = closings × ${money(c.gciSide)} per side.${Math.abs(c.sides*c.gciSide-c.gci)>1?` ${int(c.sides)} sides × ${money(c.gciSide)} = ${money(c.sides*c.gciSide)} — your ${money(c.gci)} goal rounded up to whole sides.`:''}</p>`:''}</div>
   <div class="sum-grid mt14">
    <div class="sum-card"><h4>Activity</h4><dl>
-    <dt>Conversations + contacts per day</dt><dd>${has?`${(upN(c.conv/c.days)+upN(c.conY/c.days)).toLocaleString('en-CA')} <small class="muted">(${up(c.conv/c.days)} prospecting · ${up(c.conY/c.days)} referral)</small>`:'–'}</dd>
-    <dt>Referral contacts per month</dt><dd>${has?up(c.conY/12):'–'}</dd>
-    <dt>Appointments per month</dt><dd>${has?`${up(c.lAp/12)} listing · ${up(c.bCo/12)} buyer`:'–'}</dd>
+    <dt>Conversations + contacts per day</dt><dd>${has?(()=>{ const a=tgt(c.conv,c.days,'day'), r=tgt(c.conY,c.days,'day'); return `${(Math.round((a.v+r.v)*10)/10).toLocaleString('en-CA')} <small class="muted">(${a.txt} prospecting · ${r.txt} referral)</small>`; })():'–'}</dd>
+    <dt>Referral contacts per month</dt><dd>${has?tgt(c.conY,12,'month').txt:'–'}</dd>
+    <dt>Appointments per month</dt><dd>${has?(()=>{ const l=tgt(c.lAp,12,'month'), b=tgt(c.bCo,12,'month'); return `${l.txt} listing · ${b.txt} buyer${l.hint||b.hint?` <small class="muted">(${[l.hint&&'listing '+l.hint,b.hint&&'buyer '+b.hint].filter(Boolean).join('; ')})</small>`:''}`; })():'–'}</dd>
     <dt>Database</dt><dd>${dbt?`${int(dbt)} <small class="muted">(${dbStr})</small>`:'<span class="muted">–</span>'}</dd>
     <dt>Primary lead channels</dt><dd>${prim.length?prim.map(x=>esc(x.name)).join(' · '):'<span class="muted">–</span>'}</dd></dl></div>
    <div class="sum-card"><h4>Money at a glance</h4><dl>
