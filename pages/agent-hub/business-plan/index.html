@@ -811,13 +811,15 @@ const upN=v=>v>0?Math.ceil(v-1e-9):0;
 function tgt(yearly,per,unit){
  const Y=upN(yearly); if(!(Y>0)||!(per>0)) return {v:0,txt:'–',hint:''};
  const x=Y/per; if(x>=0.95) { const r=Math.ceil(x-1e-9); return {v:r,txt:r.toLocaleString('en-CA'),hint:''}; }
- const d=Math.max(Math.round(x*10)/10,0.1), N=1/x, near=Math.round(N), rng=Math.abs(N-near)<0.2?String(near):`${Math.floor(N)}–${Math.ceil(N)}`;
- return {v:d,txt:d.toFixed(1),hint:`about 1 every ${rng} ${unit}s`};
+ const N=1/x, near=Math.round(N), rng=Math.abs(N-near)<0.2?String(near):`${Math.floor(N)}–${Math.ceil(N)}`, hint=`about 1 every ${rng} ${unit}s`;
+ if(x<0.1) return {v:Math.round(x*100)/100,txt:hint,hint:''};   /* under 0.1 would round to a doubled 0.1 — say it in words instead */
+ const d=Math.round(x*10)/10; return {v:d,txt:d.toFixed(1),hint};
 }
 const tgtHTML=t=>t.hint?`${t.txt}<small class="act-h">${t.hint}</small>`:t.txt;
 function outT(key,t){ document.querySelectorAll(`[data-o="${key}"]`).forEach(el=>{ el.innerHTML=tgtHTML(t); el.title=t.hint||''; }); }
 const nWhole=v=>!(v>0)?'0':v>=0.95?Math.round(v).toLocaleString('en-CA'):(Math.round(v*10)/10).toLocaleString('en-CA');
 const dec=v=>{ const r=Math.round(v*10)/10||0; return (r===0?0:r).toLocaleString('en-CA'); };
+const decS=(v,under)=>v>0&&v<0.1?under:dec(v); /* one decimal, but words instead of a doubled 0.1 for tiny values */
 const pct=v=>Math.round(v*100)+'%';
 const pct1=v=>{ const r=Math.round(v*1000)/10; return (Number.isInteger(r)?r:r.toFixed(1))+'%'; };
 const small=(v,yr)=>v>0&&v<0.1?(yr?dec(yr/12)+'/mo':'<0.1'):dec(v);
@@ -1843,11 +1845,16 @@ function recompute(){
  { /* Firm deals by month and by busy / neutral / slow season, from the agent's firm-date weights */
   const w=S.season.w.map(x=>Math.max(n(x),0)), tw=w.reduce((a,b)=>a+b,0), g={busy:0,neutral:0,slow:0};
   w.forEach((x,i)=>{ const sh=tw?x/tw:0; g[seasonTag(mktW()[i])]+=sh;  });
-  Object.keys(g).forEach(k=>{ const d=c.sides*g[k]; out('sd-'+k,c.sides&&tw?'≈ '+nWhole(d)+(nWhole(d)==='1'?' deal':' deals'):'–'); out('sh-'+k,tw?Math.round(g[k]*100)+'% of your year':'–'); });
+  Object.keys(g).forEach(k=>{ const d=c.sides*g[k]; out('sd-'+k,c.sides&&tw&&d>=0.1?'≈ '+nWhole(d)+(nWhole(d)==='1'?' deal':' deals'):c.sides&&tw?'under 1 deal':'–'); out('sh-'+k,tw?Math.round(g[k]*100)+'% of your year':'–'); });
  }
  // activity
- { const row=(k,v)=>{ outT(k+'Y',tgt(v,1,'year')); outT(k+'M',tgt(v,12,'month')); outT(k+'W',tgt(v,c.weeks,'week')); outT(k+'D',tgt(v,c.days,'day')); };
-   row('conv',c.conv); row('hrs',c.hrs); row('lAp',c.lAp); row('bCo',c.bCo); row('lTk',c.lTk);
+ { const row=(k,v,day)=>{ outT(k+'Y',tgt(v,1,'year')); outT(k+'M',tgt(v,12,'month')); outT(k+'W',tgt(v,c.weeks,'week')); outT(k+'D',day?tgt(v,c.days,'day'):{txt:'–',hint:''}); };
+   row('conv',c.conv,true); row('lAp',c.lAp,false); row('bCo',c.bCo,false); row('lTk',c.lTk,false);   /* appointments and listings aren't planned per day */
+   { /* prospecting hours: hours a week (one decimal under 10, never rounded down to 0) and minutes a day under an hour */
+     const Y=upN(c.hrs), w=Y/c.weeks, d=Y/c.days, up1=x=>Math.ceil(x*10-1e-9)/10;
+     outT('hrsY',tgt(c.hrs,1,'year')); outT('hrsM',tgt(c.hrs,12,'month'));
+     outT('hrsW',{txt:!(Y>0)?'–':w<10?`${up1(w).toFixed(1)} hrs`:`${Math.ceil(w-1e-9)} hrs`,hint:''});
+     outT('hrsD',{txt:!(Y>0)?'–':d<1?`${Math.max(5,Math.round(d*60/5)*5)} min`:`${up1(d).toFixed(1)} hrs`,hint:''}); }
    out('convDay',tgt(c.conv,c.days,'day').txt); }
  out('convPerClose',c.sides?int(c.convAll/c.sides):'0'); out('workDays',int(c.days));
   const tP=tgt(c.conv,c.days,'day'), tR=tgt(c.conY,c.days,'day'), dP=tP.v, dR=tR.v, dT=Math.round((dP+dR)*10)/10;
@@ -1871,12 +1878,12 @@ function recompute(){
  out('persAnnual',money(c.persAnnual)); out('netComm',money(c.netComm)); out('taxAmt',money(c.taxAmt)); out('gstAmt',money(c.gstAmt)); out('gstColl',money(c.netComm*0.05)); out('afterHold',money(c.netComm*1.05-c.taxAmt-c.gstAmt)); out('takeHome',money(c.takeHome));
  out('needs',money(c.needs)); out('bizPct',c.gci?pct(c.bizAnnual/c.gci):'–');
  out('costMonth',c.costMonth?money(c.costMonth):'–'); const mo=c.costMonth>0?c.reserves/c.costMonth:0, tm=n(S.save.resMonths);
- out('resMonthsNow',c.costMonth>0?dec(mo)+(Math.round(mo*10)===10?' month':' months'):'Add your budget'); out('resTarget',c.resTarget?money(c.resTarget):'–'); out('resTargetLbl',tm?`Your ${int(tm)}-month target`:'Your target');
+ out('resMonthsNow',c.costMonth>0?(mo>0&&mo<0.1?'Under 3 days':dec(mo)+(Math.round(mo*10)===10?' month':' months')):'Add your budget'); out('resTarget',c.resTarget?money(c.resTarget):'–'); out('resTargetLbl',tm?`Your ${int(tm)}-month target`:'Your target');
  out('resGap',!c.resTarget?'–':c.resGap>0?money(c.resGap):'Target met ✓'); out('resGapLbl',c.resTarget&&c.resGap>0?'Still to go':'Status');
  out('rrspY2',money(c.rrsp)); out('tfsaY2',money(c.post-c.extraSav)); out('debtY',money(c.debtRed)); 
  {
    const el=document.getElementById('sav-note'), tot=c.rrsp+c.post-c.extraSav+c.debtRed+c.resTop; if(el) el.innerHTML=(!tot&&!(c.pR+c.pT)?'':!c.gci?`<div class="tip">You’re setting aside <b>${money(tot)}</b> a year${c.pR+c.pT?` plus <b>${pct1(c.pR+c.pT)}</b> of each transaction`:''}. Next, <b>Your Goal</b> works these savings into the GCI you need.</div>`:`<div class="tip">You’re setting aside <b>${money(tot)}</b> this year${c.gci?` — ${pct(tot/c.gci)} of your GCI`:''}.${S.goals.method==='budget'?` Because you’re working back from your budget, <b>Your Goal</b> includes these savings: you need <b>${money(c.gci)}</b> GCI.`:c.hasBudget?(c.surplus<0?` <span class="flag bad">At your goal you’re ${money(-c.surplus)} short</span> once these savings are included — raise your goal on <b>Your Goal</b> or adjust here.`:` <span class="flag ok">Your goal covers it</span> with ${money(c.surplus)} to spare.`):''}</div>`); }
- out('reserveMonths',c.costMonth>0?dec(c.reserves/c.costMonth)+' mo':'–');
+ out('reserveMonths',c.costMonth>0?decS(c.reserves/c.costMonth,'under 3 days')+(c.reserves/c.costMonth>=0.1?' mo':''):'–');
  out('mktgYr',money(c.mktgTotal));
  { const be=c.bizAnnual, pe=c.persAnnual, mn=v=>`${money(v)} sets your minimum`;
    out('bizExp',money(be)); out('persExp',money(pe)); out('totExp',money(be+pe));
@@ -1936,7 +1943,7 @@ function recompute(){
   if(!filled.length){ el.textContent='–'; return; }
   const flag=(ok,good,bad)=>` <span class="flag ${ok?'ok':'warn'}">${ok?good:bad}</span>`;
   if(x.unit==='week'||x.unit==='month'){ const lbl=x.unit==='week'?'/wk':'/mo', avg=tot/filled.length;
-   el.innerHTML=`${dec(avg)}${lbl} avg${T>0?flag(down?avg<=T:avg>=T,down?'within limit':'on track',down?'over limit':'below target'):''}`; }
+   el.innerHTML=`${decS(avg,'under 0.1')}${lbl} avg${T>0?flag(down?avg<=T:avg>=T,down?'within limit':'on track',down?'over limit':'below target'):''}`; }
   else { /* share of the year passed = quarters up to the last one with an actual */
    const q=x.q.reduce((a,v,j)=>v!==''?j+1:a,0), onPace=T*q/4, r=onPace>0?tot/onPace:0;
    const pace=r>=1.1?['ok','ahead of pace']:r>=0.95?['ok','on pace']:['warn','behind pace'];
@@ -2073,7 +2080,7 @@ function renderSummary(){
    <div class="sum-card"><h4>Money at a glance</h4><dl>
     <dt>Marketing budget</dt><dd>${c.mktgTotal?money(c.mktgTotal):'–'}${has&&c.mktgTotal?` <small class="muted">(${pct(c.mktgTotal/c.gci)} of GCI)</small>`:''}</dd>
     <dt>Savings this year</dt><dd>${c.rrsp+c.post+c.debtRed+c.resTop?money(c.rrsp+c.post+c.debtRed+c.resTop):'–'}</dd>
-    <dt>Cash reserve</dt><dd>${c.reserves>0?(c.costMonth>0?`${money(c.reserves)} · ${dec(c.reserves/c.costMonth)} months`:money(c.reserves)):'–'}${n(S.save.resMonths)?` <small class="muted">(target ${int(n(S.save.resMonths))} months)</small>`:''}</dd></dl></div>
+    <dt>Cash reserve</dt><dd>${c.reserves>0?(c.costMonth>0?`${money(c.reserves)} · ${decS(c.reserves/c.costMonth,'under 3 days')}${c.reserves/c.costMonth>=0.1?' months':''}`:money(c.reserves)):'–'}${n(S.save.resMonths)?` <small class="muted">(target ${int(n(S.save.resMonths))} months)</small>`:''}</dd></dl></div>
   </div>
   <div class="sum-grid mt14">
    <div class="sum-card"><h4>Next 90 days</h4>${acts.length?`<ol>${acts.map(a=>`<li><span class="cl1">${esc(a.what)}${a.due?` <small class="muted">· ${esc(a.due)}</small>`:''}${a.owner?` <small class="muted">· ${esc(a.owner)}</small>`:''}</span></li>`).join('')}</ol>`:t('')}</div>
