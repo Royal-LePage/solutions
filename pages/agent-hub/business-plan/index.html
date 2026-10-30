@@ -820,6 +820,9 @@ function tgt(yearly,per,unit){
  if(x<0.1) return {v:Math.round(x*100)/100,txt:hint,hint:''};   /* under 0.1 would round to a doubled 0.1 — say it in words instead */
  const d=Math.round(x*10)/10; return {v:d,txt:d.toFixed(1),hint};
 }
+/* Daily total of two per-day targets: a range ("4–6") when either part is a range, so the parts and the total agree. */
+const dayLo=t=>/^\d[\d,]*–/.test(t.txt)?parseInt(t.txt.replace(/,/g,''),10):t.v;
+const dayTot=(a,b)=>{ const hi=Math.round((a.v+b.v)*10)/10, lo=Math.round((dayLo(a)+dayLo(b))*10)/10; return !(hi>0)?'':lo<hi?`${lo.toLocaleString('en-CA')}–${hi.toLocaleString('en-CA')}`:hi.toLocaleString('en-CA'); };
 const tgtHTML=t=>t.hint?`${t.txt}<small class="act-h">${t.hint}</small>`:t.txt;
 function outT(key,t){ document.querySelectorAll(`[data-o="${key}"]`).forEach(el=>{ el.innerHTML=tgtHTML(t); el.title=t.hint||''; }); }
 const nWhole=v=>!(v>0)?'0':v>=0.95?Math.round(v).toLocaleString('en-CA'):(Math.round(v*10)/10).toLocaleString('en-CA');
@@ -1866,9 +1869,9 @@ function recompute(){
  out('convPerClose',c.sides?int(c.convAll/c.sides):'0'); out('workDays',int(c.days));
   const tP=tgt(c.conv,c.days,'day'), tR=tgt(c.conY,c.days,'day'), dP=tP.v, dR=tR.v, dT=Math.round((dP+dR)*10)/10;
  out('refDayTip',c.sides?tR.txt:'–'); outT('refY',tgt(c.refY,1,'year')); outT('refM',tgt(c.refY,12,'month')); outT('conM',tgt(c.conY,12,'month')); outT('contactsDay',tR);
- out('talkDay',c.sides&&dT?dT.toLocaleString('en-CA'):'–'); out('talkSub',c.sides&&dT?`${tP.txt} prospecting · ${tR.txt} referral`:'');
- out('totDay',c.sides&&dT?dT.toLocaleString('en-CA'):'–'); out('totDaySub',c.sides&&dT?`${tP.txt} prospecting conversations + ${tR.txt} referral contacts`:'Set your goal on Your Goal to see your targets');
- { const el=document.getElementById('mix-note'); if(el) el.innerHTML=c.hasSrc?`<div class="tip">Your lead-source goals put <b>${pct(c.refShare)}</b> of your sides from referrals (sphere, past clients, partners) and <b>${pct(1-c.refShare)}</b> from prospecting and marketing. Prospecting targets cover the ${pct(1-c.refShare)}; referral targets cover the ${pct(c.refShare)}. ${c.sides?` Together that’s about <b>${(Math.round((tgt(c.conv,c.days,'day').v+tgt(c.conY,c.days,'day').v)*10)/10).toLocaleString('en-CA')}</b> conversations and contacts a day.`:''}</div>`:`<div class="tip">Set your <b>goal by source</b> on Lead Generation to split these accurately. Until then the plan assumes half your sides come from referrals and half from prospecting.</div>`; }
+ out('talkDay',c.sides&&dT?dayTot(tP,tR):'–'); out('talkSub',c.sides&&dT?`${tP.txt} prospecting · ${tR.txt} referral`:'');
+ out('totDay',c.sides&&dT?dayTot(tP,tR):'–'); out('totDaySub',c.sides&&dT?`${tP.txt} prospecting conversations + ${tR.txt} referral contacts`:'Set your goal on Your Goal to see your targets');
+ { const el=document.getElementById('mix-note'); if(el) el.innerHTML=c.hasSrc?`<div class="tip">Your lead-source goals put <b>${pct(c.refShare)}</b> of your sides from referrals (sphere, past clients, partners) and <b>${pct(1-c.refShare)}</b> from prospecting and marketing. Prospecting targets cover the ${pct(1-c.refShare)}; referral targets cover the ${pct(c.refShare)}. ${c.sides?` Together that’s about <b>${dayTot(tgt(c.conv,c.days,'day'),tgt(c.conY,c.days,'day'))}</b> conversations and contacts a day.`:''}</div>`:`<div class="tip">Set your <b>goal by source</b> on Lead Generation to split these accurately. Until then the plan assumes half your sides come from referrals and half from prospecting.</div>`; }
  // sources
  const sl=S.sources.reduce((a,s)=>a+n(s.last),0), sg=S.sources.reduce((a,s)=>a+n(s.goal),0);
  S.sources.forEach((s,i)=>{out('srcL'+i,sl&&s.last!==''?pct(n(s.last)/sl):'–');out('srcG'+i,sg&&s.goal!==''?pct(n(s.goal)/sg):'–');});
@@ -2081,7 +2084,7 @@ function renderSummary(){
    <div class="sum-scroll"><table class="sum-q"><thead><tr><th></th><th class="num">Closings</th><th class="num">GCI</th><th class="num">Conversations</th><th class="num">Appointments</th></tr></thead><tbody>${qRows}</tbody></table></div>${has&&c.gciSide>0?`<p class="fine" style="margin-top:4px">GCI = closings × ${money(c.gciSide)} per side.${Math.abs(c.sides*c.gciSide-c.gci)>1?` ${int(c.sides)} sides × ${money(c.gciSide)} = ${money(c.sides*c.gciSide)} — your ${money(c.gci)} goal rounded up to whole sides.`:''}</p>`:''}</div>
   <div class="sum-grid mt14">
    <div class="sum-card"><h4>Activity</h4><dl>
-    <dt>Conversations + contacts per day</dt><dd>${has?(()=>{ const a=tgt(c.conv,c.days,'day'), r=tgt(c.conY,c.days,'day'); return `${(Math.round((a.v+r.v)*10)/10).toLocaleString('en-CA')} <small class="muted">(${a.txt} prospecting · ${r.txt} referral)</small>`; })():'–'}</dd>
+    <dt>Conversations + contacts per day</dt><dd>${has?(()=>{ const a=tgt(c.conv,c.days,'day'), r=tgt(c.conY,c.days,'day'); return `${dayTot(a,r)} <small class="muted">(${a.txt} prospecting · ${r.txt} referral)</small>`; })():'–'}</dd>
     <dt>Referral contacts per month</dt><dd>${has?tgt(c.conY,12,'month').txt:'–'}</dd>
     <dt>Appointments per month</dt><dd>${has?(()=>{ const l=tgt(c.lAp,12,'month'), b=tgt(c.bCo,12,'month'); return `${l.txt} listing · ${b.txt} buyer${l.hint||b.hint?` <small class="muted">(${[l.hint&&'listing '+l.hint,b.hint&&'buyer '+b.hint].filter(Boolean).join('; ')})</small>`:''}`; })():'–'}</dd>
     <dt>Database</dt><dd>${dbt?`${int(dbt)} <small class="muted">(${dbStr})</small>`:'<span class="muted">–</span>'}</dd>
