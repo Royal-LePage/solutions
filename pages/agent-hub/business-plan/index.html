@@ -140,6 +140,7 @@ body{margin:0;background:var(--bp-light-grey);color:var(--bp-black);font-family:
 .sum-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}@media print{.sum-scroll{overflow:visible}}
 .act-h{display:block;font-size:10.5px;font-weight:500;color:var(--bp-dark-grey);white-space:nowrap;line-height:1.2}
 .tot-day{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--bp-black);color:#fff;border-left:4px solid var(--bp-red);border-radius:4px;padding:12px 16px;margin:14px 0}.tot-day span{display:block;font-size:12.5px;color:#bbb;margin-top:2px}.tot-day .v{font-size:26px;font-weight:800}
+.kpi-hint{font-size:12.5px;color:#bbb;margin:8px 0 0}.kpi-hint:empty{display:none}
 .kpi .ks{font-size:11px;color:#bbb;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.kpi .ks:empty{display:none}
 .kpi .v.txt{font-size:15px;white-space:normal;line-height:1.25}
 
@@ -603,6 +604,7 @@ h4.sp-h{margin:16px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:upp
       <div class="kpi"><div class="v" data-o="talkDay">–</div><div class="l">Conversations + contacts / day</div><div class="ks" data-o="talkSub"></div></div>
       <div class="kpi"><div class="v" data-o="surplus" data-sign="1">–</div><div class="l" data-o="surLbl">Budget surplus</div><div class="ks" data-o="surSub"></div></div>
     </div>
+    <p class="kpi-hint" data-o="kpiHint"></p>
   </div>
 
   <div class="demo-bar" id="demo-bar" hidden><span><b>You’re looking at a sample plan</b> for a made-up agent. Nothing you change here is saved — use it to walk through the steps.</span><button class="btn btn-red btn-sm" id="demo-exit" type="button">Back to my plan</button></div>
@@ -1151,8 +1153,9 @@ const SECTIONS=[
  {id:'results',t:'Your Numbers',d:'Does it all work? What the brokerage takes, what your non-negotiables and savings cost, and how the rest of your plan adds up.',html:()=>`
   <div id="res-verdict"></div>
   <h3 style="margin-top:0">Deductions over your cap year</h3>
-  <div class="res" id="ded-tiles"><div id="split-tile" style="display:contents">${RC('Split paid','splitPaid')}</div>${RC('<span data-o="capLbl">Cap paid</span><span class="rc-sub" data-o="capSub"></span>','capPaidOut')}<div id="cap2-tile" style="display:none">${RC('<span data-o="capLbl2"></span><span class="rc-sub" data-o="capSub2"></span>','capPaid2')}</div>${RC('Deal fees','feesPaid')}${RC('Shelter Foundation donations','donPaid')}</div>
-  <div class="res c3" id="ded-row2"><div id="ref-tile" style="display:none">${RC('Referral fees paid<span class="rc-sub" data-o="refSub"></span>','refPaid')}</div>${RC('RLP royalty','rlpPaid')}${RC('Total deductions<span data-show="gci"> · <span data-o="effPct">–</span> of GCI</span>','effSplit')}${RC('Deduction period','cyCard','sm')}</div>
+  <div class="res" id="ded-tiles">${RC('Split paid','splitPaid')}${RC('Deal fees','feesPaid')}${RC('Shelter Foundation donations','donPaid')}${RC('RLP royalty','rlpPaid')}</div>
+  <div class="res c3" id="ded-row2"><div id="ref-tile" style="display:none">${RC('Referral fees paid<span class="rc-sub" data-o="refSub"></span>','refPaid')}</div>${RC('Total deductions<span data-show="gci"> · <span data-o="effPct">–</span> of GCI</span>','effSplit')}${RC('Deduction period','cyCard','sm')}</div>
+  <p class="fine" style="margin:-4px 0 10px" data-show="gci">The cards above add up to your total deductions.</p>
   <div id="cap-x"></div>
   <div class="res c3">${RC('Income tax held back','taxAmt')}${RC('GST held back for CRA','gstAmt')}${RC('Your cheques after holdbacks','afterHold')}</div>
   <h3>What’s left after your non-negotiables</h3>
@@ -1441,10 +1444,7 @@ document.addEventListener('click',e=>{ const mo=document.getElementById('more');
   case 'pri-add': if(S.pri.items.length<5){ S.pri.items.push({goal:'',priority:'',why:'',strategy:'',measure:'',target:'',q:['','','','']}); renderPri(); queueSave(); } break;
   case 'task-add': S.tasks.push({task:'',owner:'',action:'',tool:''}); renderTasks(); fillAll(document.getElementById('task-body')); queueSave(); break;
   case 'act-add': S.act.push({what:'',pri:'',owner:'Me',due:'',done:false}); renderAct(); queueSave(); break;
-  case 'week-fill': { const dp=Math.min(Math.max(Math.round(n(KPI().daysPerWeek))||5,1),6); let k=0;
-   const plan=(i,j)=>{ if(i===6) return 'off'; if(i===5) return j===1||j===2?'appt':'personal';
-    if(j===4) return 'personal'; if(j===0) return i<dp?'prospect':'admin'; if(j===1) return i===4?'mktg':'client'; if(j===2) return 'appt'; return i===2?'learn':'admin'; };
-   S.week.d.forEach((row,i)=>row.s.forEach((v,j)=>{ if(!v){ row.s[j]=plan(i,j); k++; } })); renderWeek(); recompute(); queueSave(); toast(k?'Starting week added — change any block':'Every block is already set'); break; }
+  case 'week-fill': { const k=fillWeekTemplate(); renderWeek(); recompute(); queueSave(); toast(k?'Starting week added — change any block':'Every block is already set'); break; }
   case 'week-clear': S.week.d=WEEK_DAYS.map(()=>({s:WEEK_SLOTS.map(()=>'')})); renderWeek(); recompute(); queueSave(); break;
   case 'init-add': S.inits.push({what:'',date:'',priority:'Medium'}); renderInits(); fillAll(document.getElementById('init-body')); queueSave(); break;
   case 'board-fill': case 'board-fill-aw': { const B=BOARDS[t.id==='board-fill'?'creb':'awra'], f=[];
@@ -1454,7 +1454,7 @@ document.addEventListener('click',e=>{ const mo=document.getElementById('more');
    fillAll(document.getElementById('s-budget')); recompute(); queueSave(); toast(f.length?`Filled in 2026 ${B.name} ${f.join(' and ')} — change them if yours are different`:`Those lines already have your own amounts — clear them first to use the 2026 ${B.name} fees`); break; }
   case 'season-reset': S.season.w=mktW().slice(); S.season.lag=30; fillAll(document.getElementById('s-season')); recompute(); queueSave(); break;
   case 'use-budget': { const c=calc(); if(c.needs<=0){ toast('Add your personal budget on the Budget & Finances page first'); break; } S.goals.netGoal=Math.round(c.needs); fillAll(); recompute(); queueSave(); toast('Take-home goal set to '+money(c.needs)); break; }
-  case 'cal-fill': { let k=0; S.cal.forEach((m,i)=>CAL_ROWS.forEach(([r])=>{ if(!m[r]&&IDEAS[r][i]){ m[r]=IDEAS[r][i]; k++; } })); renderCal(); recompute(); queueSave(); toast(k?`Added ${k} suggestions — edit any of them`:'Every cell already has something in it'); break; }
+  case 'cal-fill': { const k=fillCalTemplate(); renderCal(); recompute(); queueSave(); toast(k?`Added ${k} suggestions — edit any of them`:'Every cell already has something in it'); break; }
   case 'b-print-sum': case 'b-print-sum2': renderSummary(); document.body.classList.remove('print-two'); document.body.classList.add('print-summary'); window.print(); break;
   case 'b-print-two': renderSummary(); document.body.classList.add('print-summary','print-two'); window.print(); break;
   case 'b-print-full': renderSummary(); document.body.classList.remove('print-summary'); window.print(); break;
@@ -1625,7 +1625,7 @@ function calc(){
  }
  if(gciTot===null){ gciTot=sides*gciSide; sidesExact=sides; }
  const netSide=sides>0?E.net/sides:gciSide*(1-split)-(ci.feeAfter?0:ci.fee)-Math.min(gciSide*ci.rlpPct,ci.rlpMax)-ci.perDeal;
- const gci=gciTot, volume=sidesExact*price, netComm=E.net;
+ const gci=gciTot, volume=sides*price, netComm=E.net; /* volume uses the whole sides shown everywhere else */
  const rrsp=rrspFix+pR*Math.max(netComm,0), post=postFix+pT*Math.max(netComm,0)+extraSav, needs=persAnnual+post+debtRed+resTop;
  const profit=netComm-bizAnnual;
  const taxAmt=Math.max(netComm,0)*t, gstHoldPct=Math.min(Math.max(n(g.gstHold),0),100)/100, gstAmt=Math.max(netComm,0)*gstHoldPct;
@@ -1719,7 +1719,7 @@ function drawMkt(c){
    if(d.tot){
     g+=`<path d="${d.firm.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+yB(v).toFixed(1)).join('')}" fill="none" stroke="#EA002A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
     g+=d.firm.map((v,i)=>`<circle cx="${X(i)}" cy="${yB(v)}" r="${i===mcHover?5.5:4}" fill="#EA002A" stroke="#fff" stroke-width="2"/>`).join('');
-    if(c.cap&&c.caps.length){ const m=c.caps[0].m; g+=`<text x="${X(m)}" y="${top+ph-4}" text-anchor="middle" font-size="${small?9:10.5}" font-weight="800" style="fill:#EA002A">CAP</text>`; }
+    if(c.cap&&c.caps.length) c.caps.forEach(cp=>{ g+=`<text x="${X(cp.m)}" y="${top+ph-4}" text-anchor="middle" font-size="${small?9:10.5}" font-weight="800" style="fill:#EA002A">CAP</text>`; });
    } else g+=`<text x="${(L+W)/2}" y="${top+ph/2}" text-anchor="middle" font-size="13">Set your GCI goal on Your Goal to see your deals</text>`;
    g+=months(H-4)+hit(H);
    const sv=document.getElementById('mc-b'); sv.setAttribute('viewBox',`0 0 ${W} ${H}`); sv.setAttribute('height',H); sv.innerHTML=g; }
@@ -1728,7 +1728,7 @@ function drawMkt(c){
  if(mcHover>=0&&tt){ const i=mcHover, t=seasonTag(mktW()[i]);
   tt.innerHTML=`<div><b>${MONTHS_FULL[i]}</b> <span class="mkt-tag ${t}" style="margin-left:6px">${SEASON_TAGS[t]}</span></div>
    <div class="r">${mkt().short} share of the year <b>${mkt().pct[i].toFixed(1)}%</b></div><div class="r">vs. an average month <b>${mktW()[i]}%</b></div>
-   <div class="r">Your deals to go firm <b>${d.tot?int(d.firmW[i]):'–'}</b></div>${c.cap&&c.caps.length&&c.caps[0].m===i?'<div class="r" style="color:#EA002A;font-weight:700">You reach your cap this month</div>':''}`;
+   <div class="r">Your deals to go firm <b>${d.tot?int(d.firmW[i]):'–'}</b></div>${c.cap&&c.caps.some(cp=>cp.m===i)?`<div class="r" style="color:#EA002A;font-weight:700">You reach your cap this month${c.caps.find(cp=>cp.m===i).cy==='prev'?' (cap year ending '+MONTHS[(c.capStart+11)%12]+')':''}</div>`:''}`;
   tt.style.display='block'; const x=14+L+cw*(i+1)+8, bw2=tt.offsetWidth; tt.style.left=(x+bw2>box.clientWidth?Math.max(14+L+cw*i-bw2-8,4):x)+'px'; tt.style.top='40px'; }
  else if(tt) tt.style.display='none';
 }
@@ -1796,16 +1796,20 @@ function recompute(){
    out('capSub2',cc?`You cap in ${MONTHS_FULL[cc.m]} (${money(c.cap)})`:`${money(c.cap-c.capCur)} to go — you finish your cap in ${y+1}`);
    out('capSub',c.capPaid0>=c.cap-0.5?`Cap year ending ${endM} · already capped before Jan 1`:pc?`Cap year ending ${endM} · you cap in ${MONTHS_FULL[pc.m]}${c.capPaid0?` (${money(c.capPaid0)} paid before Jan 1)`:''}`:`Cap year ending ${endM} · ${money(c.capPrevEnd)} of ${money(c.cap)}${c.capPaid0?` incl. ${money(c.capPaid0)} paid before Jan 1`:''}`); }
   else out('capSub','');
-  { /* Explain the cap when the calendar year spans two cap years */
+  { /* How the cap works: what counts toward it and when each cap is reached — in one place */
    const el=document.getElementById('cap-x');
-   if(el){ if(!(c.cap>0)||!(st>0)||!c.gci) el.innerHTML=''; else {
-    const prevCap=c.caps.find(x=>x.cy==='prev'), curCap=c.caps.find(x=>x.cy==='cur'), endM=MONTHS[(st+11)%12], pm=st, cm=12-st;
-    const prevTxt=prevCap?`you cap in ${MONTHS_FULL[prevCap.m]}`:`you reach ${money(c.capPrevEnd)} of ${money(c.cap)} before it resets`;
-    const curTxt=curCap?`you cap in ${MONTHS_FULL[curCap.m]}`:`you’re ${money(c.capRemaining)} short of your cap when the year ends and finish it in ${y+1}`;
-    el.innerHTML=`<div class="tip cap-x"><b>Your cap resets in ${MONTHS_FULL[st]}</b>, so January–December ${y} covers parts of two cap years — that’s why there are two cap tiles. Each cap year tops out at <b>${money(c.cap)}</b>.
-     <div class="cap-bar"><div style="flex:${pm}">Jan – ${endM} ${y} · ${money(c.capPrev)}<small>cap year ending ${endM} ${y}</small></div><div class="cur" style="flex:${cm}">${MONTHS[st]} – Dec ${y} · ${money(c.capCur)}<small>new cap year ${MONTHS[st]} ${y} – ${endM} ${y+1}</small></div></div>
-     ${n(S.goals.capPaid)>0?'':`<span class="flag warn">Check Your Budget</span> “Cap you’ll have paid by Dec 31” is blank, so this assumes you start January at $0. Enter your best estimate for an accurate number.`}</div>`; } } }
-  { const same=c.cap>0&&Math.round(c.splitPaid)===Math.round(c.capTot), sp=document.getElementById('split-tile'), dt=document.getElementById('ded-tiles'); if(sp) sp.style.display=same?'none':'contents'; if(dt) dt.classList.toggle('c3',same&&!twoCY); }
+   if(el){ if(!(c.cap>0)||!c.gci) el.innerHTML=''; else {
+    const what=S.goals.feeMode==='cap'?'Your split and deal fees count':'Your split counts', prevCap=c.caps.find(x=>x.cy==='prev'), curCap=c.caps.find(x=>x.cy==='cur');
+    let body;
+    if(st>0){ const endM=MONTHS[(st+11)%12], pm=st, cm=12-st;
+     const prevTxt=c.capPaid0>=c.cap-0.5?'already capped before Jan 1':prevCap?`you cap in <b>${MONTHS_FULL[prevCap.m]}</b>`:`you reach ${money(c.capPrevEnd)} of ${money(c.cap)} before it resets`;
+     const curTxt=curCap?`you cap in <b>${MONTHS_FULL[curCap.m]}</b>`:`you’re ${money(c.capRemaining)} short when the year ends and finish it in ${y+1}`;
+     body=`Your cap resets in ${MONTHS_FULL[st]}, so January–December ${y} covers parts of two cap years:
+      <div class="cap-bar"><div style="flex:${pm}">Jan – ${endM} ${y} · ${money(c.capPrev)}<small>cap year ending ${endM} ${y}</small></div><div class="cur" style="flex:${cm}">${MONTHS[st]} – Dec ${y} · ${money(c.capCur)}<small>new cap year ${MONTHS[st]} ${y} – ${endM} ${y+1}</small></div></div>
+      <ul style="margin:6px 0 4px;padding-left:18px"><li>Cap year ending ${endM} ${y}: <b>${money(c.capPrev)}</b>${c.capPaid0?` (plus ${money(c.capPaid0)} paid by Dec 31)`:''} — ${prevTxt}.</li><li>New cap year: <b>${money(c.capCur)}</b> — ${curTxt}.</li></ul>
+      ${n(S.goals.capPaid)>0?'':`<span class="flag warn">Check Your Budget</span> “Cap you’ll have paid by Dec 31” is blank, so this assumes you start January at $0. Enter your best estimate for an accurate number.`}`;
+    } else body=curCap?`You pay <b>${money(c.capTot)}</b> toward your cap this year — you cap in <b>${MONTHS_FULL[curCap.m]}</b>.`:`You pay <b>${money(c.capTot)}</b> toward your cap this year — ${money(c.capRemaining)} short of capping.`;
+    el.innerHTML=`<div class="tip cap-x"><b>How your cap works.</b> ${what} toward your cap (already included in the cards above). Each cap year tops out at <b>${money(c.cap)}</b>. ${body}</div>`; } } }
   const cur=c.caps.find(x=>x.cy==='cur'), prev=c.caps.find(x=>x.cy==='prev');
   { /* no cap: the fee-mode choice doesn't apply, so hide it — unless an older plan is set to "only after I cap", which makes deal fees $0 */
    const fr=document.getElementById('fee-mode-row'), after=S.goals.feeMode==='after'; if(fr) fr.style.display=c.cap>0||after?'':'none';
@@ -1813,7 +1817,7 @@ function recompute(){
    out('feeModeNote',!(c.cap>0)&&after&&n(S.goals.dealFee)>0?'Your deal fees show as $0: this is set to “Only after I cap” and you have no cap. Choose “On every deal” if you pay a fee on each deal.':''); }
   out('capLbl',!c.cap?'Cap paid':twoCY?`Cap paid Jan – ${endM} ${y} · current cap year`:cur?`Cap paid in ${y} · you cap in ${MONTHS_FULL[cur.m]}`:prev?`Cap paid in ${y} · current cap year capped in ${MONTHS_FULL[prev.m]}`:`Cap paid in ${y} · ${money(c.capRemaining)} short of your ${moneyK(c.cap)} cap`); }
  { const td=c.splitPaid+c.feesPaid+c.rlpPaid+c.otherPaid+c.refPaid; out('effSplit',money(td)); out('effPct',c.gci?pct(td/c.gci):'–');
-   const rt=document.getElementById('ref-tile'), r2=document.getElementById('ded-row2'); if(rt) rt.style.display=c.refPaid>0?'contents':'none'; if(r2) r2.classList.toggle('c3',!(c.refPaid>0));
+   const rt=document.getElementById('ref-tile'), r2=document.getElementById('ded-row2'); if(rt) rt.style.display=c.refPaid>0?'contents':'none'; if(r2){ r2.classList.toggle('c3',c.refPaid>0); r2.classList.toggle('c2',!(c.refPaid>0)); }
    out('refPaid',money(c.refPaid)); out('refSub',c.refPaid>0?`${pct1(c.refSh)} of deals at ${pct1(c.refFe)}, off the top before your split`:''); }
   out('bizAnnual',money(c.bizAnnual)); out('profitNeed',money(c.profitNeed));
  out('buyShareBox',S.goals.listShare===''?'–':pct((100-Math.min(Math.max(n(S.goals.listShare),0),100))/100));
@@ -1962,8 +1966,9 @@ function recompute(){
      ${row('Net cash flow',rows.flow,'flow')}${row('Running balance',rows.bal,'bal')}</tbody>`;
     const cn=document.getElementById('cf-note'), st=c.capStart||0;
     const capNote=st>0&&c.cap>0?`<p class="cf-cap">This table runs January to December ${y}. January–${MONTHS_FULL[(st+11)%12]} deals count toward the cap year you’re already in${n(S.goals.capPaid)?` (${money(n(S.goals.capPaid))} paid by Dec 31)`:''}; your cap resets to $0 in ${MONTHS_FULL[st]}.</p>`:'';
-    const capM=(c.caps.find(x=>x.cy==='cur')||c.caps[0]||{}).m;
-    const afterCap=c.cap>0&&capM!=null&&capM<11?`<p class="cf-cap">After you cap in ${MONTHS_FULL[capM]}, you keep your full commission, so months after cap pay more per closing. Closings are rounded (≈) so the months add up to your yearly total.</p>`:'';
+    const pC=c.caps.find(x=>x.cy==='prev'), cC=c.caps.find(x=>x.cy==='cur'), endM=MONTHS[(st+11)%12];
+    const capWhen=pC&&cC?`You cap in ${MONTHS_FULL[pC.m]} (cap year ending ${endM}) and again in ${MONTHS_FULL[cC.m]} (new cap year)`:pC?`You cap in ${MONTHS_FULL[pC.m]} (cap year ending ${endM})`:cC?`You cap in ${MONTHS_FULL[cC.m]}`:'';
+    const afterCap=c.cap>0&&capWhen?`<p class="cf-cap">${capWhen}. After each cap you keep your full commission until it resets, so those months pay more per closing. Closings are rounded (≈) so the months add up to your yearly total.</p>`:'';
     if(cn) cn.innerHTML=capNote+afterCap+(!c.hasBudget&&!c.bizAnnual?'<div class="tip">Add your expenses on <b>Your Budget</b> to see your real cash flow.</div>'
       :low<0?`<div class="tip"><span class="flag bad">Your balance dips to ${fm(low)} in ${MONTHS_FULL[lowM]}</span> You’d need about <b>${money(-low)}</b> more in reserves, or more closings before then, to cover the slow months.</div>`
       :`<div class="tip"><span class="flag ok">You stay positive all year</span> Your lowest balance is <b>${fm(low)}</b> in ${MONTHS_FULL[lowM]}.</div>`);
@@ -1988,6 +1993,7 @@ function recompute(){
  { const blank=Object.keys(KPI_DEF).filter(k=>S.kpi[k]===''||S.kpi[k]==null);
    Object.keys(KPI_DEF).forEach(k=>out('typ_'+k,blank.includes(k)?'using typical':''));
    out('typNote',c.gci>0&&blank.length?`These targets use typical ratios for ${blank.length} of ${Object.keys(KPI_DEF).length} measures (marked “using typical” above). Enter your own numbers to make them yours.`:''); }
+ out('kpiHint',c.gci>0?'':S.goals.method==='budget'?'Fill in Your Budget and your average sale on Your Goal to see these.':'Fill in Your Goal and Your Budget to see these.');
  out('actNeed',c.gci>0&&c.sides>0?'':'Set your goal on Your Goal to see your targets.');
  blankZeros(c);
  { /* show a sentence only when its number exists */
@@ -2174,6 +2180,7 @@ async function loadPlan(){
 }
 
 let demo=false;
+const SAMPLE_ACT=[{what:'Rank my whole database A+ to D and delete the Ds',pri:'Referral growth'},{what:'Call every A+ and A contact with a spring market update',pri:'Referral growth'},{what:'Book two listing presentations a week',pri:'Listing pipeline'},{what:'Host the spring client appreciation event',pri:'Referral growth'},{what:'Review this plan with my accountability partner',pri:''}];
 const SAMPLE={meta:{year:0},vision:{name:'Sample Agent (Jordan Lee)',one:'Close 18 sides\nGrow my sphere to 250 A and B contacts\nTake 4 full weeks off',five:'A referral-based business in the SE lake communities that funds a paid-off home by 50.',ninety:'Rebuild my database and book 10 listing appointments.',why:'Freedom and time with my family.',mission:'I help move-up families buy and sell with confidence.',commitment:'Five real conversations every working day.'},
  values:{words:['Integrity','Family','Growth','Service','Communication'].concat(Array(10).fill('')),core:[{v:'Integrity',means:'Tell the truth',practice:'Honest pricing advice'},{v:'Service',means:'Client first',practice:'Same-day replies'},{v:'Growth',means:'Keep learning',practice:'Monthly coaching'},{v:'',means:'',practice:''},{v:'',means:'',practice:''}]},
  last:{listings:7,buyers:8,avgPrice:620000,gci:168000},reflect:{worked:'Sphere calls and open houses',didnt:'Paid online leads',stop:'Buying cold leads',start:'Monthly client events',cont:'Pop-bys'},
@@ -2181,16 +2188,25 @@ const SAMPLE={meta:{year:0},vision:{name:'Sample Agent (Jordan Lee)',one:'Close 
  pers:{housing:2800,transport:600,groceries:1100,utilities:350,insurance:300,family:400,debt:250,lifestyle:700,giving:100},biz:{desk:420,tech:180,vehicle:450,prof:100,coaching:250},bizY:{board:1400,gli:200},
  goals:{method:'gci',gciGoal:210000,avgPrice:650000,commModel:'tier',t1:3.5,t2:1.5,split:20,cap:12000,capDate:'2027-06-01',dealFee:250,feeMode:'cap',tax:30,gstHold:5,listShare:50,buyShare:50},
  save:{rrspM:300,postTaxP:5,reserves:8000,resMonths:'3'},mktg:{paid:3000,print:4000,events:3500,popby:2000,email:1000,signage:1500},
- sources:[{goal:9,last:7,pri:'Primary'},{goal:4,last:3,pri:'Primary'},{goal:0,last:0},{goal:2,last:2,pri:'Primary'},{goal:2,last:2,pri:'Secondary'},{goal:0,last:1},{goal:1,last:0}],
+ sources:[{goal:9,last:7,pri:'Primary',why:'Most of my business already comes from people who know me',who:'250 A and B contacts in my database',strat:'Monthly call or text to every A and B, a pop-by each quarter and two client events a year',res:'1 hour a day, about $4,000 a year for gifts and events',result:'9 sides, about half my year'},{goal:4,last:3,pri:'Primary',why:'Past clients refer and come back when they move again',who:'The 60 families I’ve helped buy or sell',strat:'Home-anniversary call, annual equity update and an invite to every client event',res:'2 hours a week, newsletter in rlpSPHERE',result:'4 sides from repeat and referred past clients'},{goal:0,last:0},{goal:2,last:2,pri:'Primary',why:'Meets buyers and neighbours in my farm area face to face',who:'Move-up buyers and future sellers in Mahogany, Auburn Bay and Seton',strat:'Two open houses a month on my own or other agents’ listings, with door-knocking the day before',res:'6 hours a month, signs and a sign-in tablet',result:'2 sides plus new A and B contacts'},{goal:2,last:2,pri:'Secondary'},{goal:0,last:1},{goal:1,last:0}],
  db:{ap:20,a:45,b:110,c:180,o:40,d:25,add:8},pri:{items:[{goal:'18 sides',priority:'Referral growth',why:'Most of my business comes from my sphere',strategy:'Monthly touch + quarterly events',measure:'Referrals',target:39,q:['','','','']},{goal:'9 listings',priority:'Listing pipeline',why:'Listings drive buyer leads',strategy:'Geographic authority',measure:'Listing appointments',target:18,q:['','','','']}]}};
+/* Starting templates: fill only blank blocks/cells, return how many were filled */
+function fillWeekTemplate(){ const dp=Math.min(Math.max(Math.round(n(KPI().daysPerWeek))||5,1),6); let k=0;
+ const plan=(i,j)=>{ if(i===6) return 'off'; if(i===5) return j===1||j===2?'appt':'personal';
+  if(j===4) return 'personal'; if(j===0) return i<dp?'prospect':'admin'; if(j===1) return i===4?'mktg':'client'; if(j===2) return 'appt'; return i===2?'learn':'admin'; };
+ S.week.d.forEach((row,i)=>row.s.forEach((v,j)=>{ if(!v){ row.s[j]=plan(i,j); k++; } })); return k; }
+function fillCalTemplate(){ let k=0; S.cal.forEach((m,i)=>CAL_ROWS.forEach(([r])=>{ if(!m[r]&&IDEAS[r][i]){ m[r]=IDEAS[r][i]; k++; } })); return k; }
 async function loadSample(){
  if(unsub){ unsub(); unsub=null; } ready=false; demo=true; clearTimeout(saveTimer);
  const d=JSON.parse(JSON.stringify(SAMPLE)); d.meta.year=year; d.sources=DEFAULT().sources.map((x,i)=>Object.assign(x,(SAMPLE.sources[i]||{})));
- S=merge(DEFAULT(),d); normalize(); current='start'; renderShell(); fillAll(); toggleVis(); recompute(); updateName();
+ S=merge(DEFAULT(),d); normalize();
+ fillWeekTemplate(); fillCalTemplate();
+ S.act=SAMPLE_ACT.map((a,i)=>Object.assign({pri:'',owner:'Me',done:false},a,{due:`${year}-${['01-15','01-31','02-15','03-01','03-31'][i]}`}));
+ current='start'; renderShell(); fillAll(); toggleVis(); recompute(); updateName();
  setStatus('<b style="color:#ffd27a">Sample plan</b> · nothing you change here is saved');
  const bar=document.getElementById('demo-bar'); if(bar) bar.hidden=false;
 }
-async function exitSample(){ demo=false; const bar=document.getElementById('demo-bar'); if(bar) bar.hidden=true; current='start'; await loadPlan(); }
+async function exitSample(){ demo=false; $('h-name').textContent='Your plan'; const bar=document.getElementById('demo-bar'); if(bar) bar.hidden=true; current='start'; await loadPlan(); }
 async function clearPlan(){
  if(!confirm(`Erase your ${year} plan? This can’t be undone. Use Export first if you want a copy.`)) return;
  clearTimeout(saveTimer); dirty=false;
