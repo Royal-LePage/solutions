@@ -812,8 +812,11 @@ const upN=v=>v>0?Math.ceil(v-1e-9):0;
    ≥ 1 → whole number rounded up; between 0 and 1 → one decimal plus a hint ("about 1 every 2–3 weeks"); 0 → '–'. */
 function tgt(yearly,per,unit){
  const Y=upN(yearly); if(!(Y>0)||!(per>0)) return {v:0,txt:'–',hint:''};
- const x=Y/per; if(x>=0.95) { const r=Math.ceil(x-1e-9); return {v:r,txt:r.toLocaleString('en-CA'),hint:''}; }
- const N=1/x, near=Math.round(N), rng=Math.abs(N-near)<0.2?String(near):`${Math.floor(N)}–${Math.ceil(N)}`, hint=`about 1 every ${rng} ${unit}s`;
+ const x=Y/per; if(x>=0.95) { const r=Math.ceil(x-1e-9), f=Math.floor(x+1e-9);
+   /* Per day: show a range ("1–2") when the math lands between whole numbers, so 1.1 doesn't read as 2. v stays rounded up. */
+   const txt=unit==='day'&&f>=1&&r>f?`${f.toLocaleString('en-CA')}–${r.toLocaleString('en-CA')}`:r.toLocaleString('en-CA');
+   return {v:r,txt,hint:''}; }
+ const N=1/x, near=Math.round(N), rng=Math.abs(N-near)<0.2?String(near):`${Math.floor(N)}–${Math.ceil(N)}`, hint=rng==='1'?`about 1 a ${unit}`:`about 1 every ${rng} ${unit}s`;
  if(x<0.1) return {v:Math.round(x*100)/100,txt:hint,hint:''};   /* under 0.1 would round to a doubled 0.1 — say it in words instead */
  const d=Math.round(x*10)/10; return {v:d,txt:d.toFixed(1),hint};
 }
