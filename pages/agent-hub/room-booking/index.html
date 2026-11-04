@@ -61,6 +61,12 @@
     .rb-notice.show { display:block; }
     .rb-notice--err { border-left-color:var(--rls-red); }
 
+    /* ── Office tabs ── */
+    .rb-tabs { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.5rem; }
+    .rb-tab { font-family:'Raleway',sans-serif; font-weight:600; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.7rem 1.1rem; border:1px solid var(--rls-black); background:var(--rls-white); color:var(--rls-black); cursor:pointer; transition:background 0.2s, color 0.2s; }
+    .rb-tab:hover { background:var(--rls-light-grey); }
+    .rb-tab[aria-selected="true"] { background:var(--rls-red); border-color:var(--rls-red); color:var(--rls-white); }
+
     /* ── Day bar ── */
     .rb-daybar { display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-bottom:1rem; }
     .rb-daybar__label { font-family:'Raleway',sans-serif; font-weight:700; font-size:1.25rem; letter-spacing:-0.01em; flex:1 1 220px; }
@@ -170,7 +176,7 @@
     <p class="rb-hero__eyebrow">Royal LePage Solutions®</p>
     <h1 class="rb-hero__title">Room <span class="rb-accent">Booking</span></h1>
     <div class="rb-hero__rule"><span></span><span></span></div>
-    <p class="rb-hero__sub">Reserve a boardroom or the classroom. Pick a day, click an open time, and you're booked.</p>
+    <p class="rb-hero__sub">Reserve a boardroom, classroom or closing room at any of our offices. Pick an office and a day, click an open time, and you're booked.</p>
   </section>
 
   <div class="rb-main">
@@ -178,6 +184,8 @@
     <div class="rb-notice" id="rbNotice" role="status" aria-live="polite"></div>
 
     <h2 class="rb-section-title">Availability</h2>
+
+    <div class="rb-tabs" id="rbTabs" role="tablist" aria-label="Office"></div>
 
     <div class="rb-daybar">
       <div class="rb-daybar__label" id="rbDayLabel">&nbsp;</div>
@@ -253,7 +261,7 @@
   function recall(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
   function configured() { return /^https:\/\/script\.google\.com\//.test(API_URL); }
 
-  var state = { date: ymd(new Date()), data: null, fetchedAt: 0 };
+  var state = { date: ymd(new Date()), data: null, fetchedAt: 0, office: recall('rb_office') };
 
   // ── API ────────────────────────────────────────────────────────────────
   function apiGet(params) {
@@ -319,14 +327,28 @@
     return { s: 'open' };
   }
 
-  function renderGrid() {
-    var d = state.data, st = d.settings;
-    var openMin = toMin(st.open), closeMin = toMin(st.close), step = st.slotMin;
-    if (!d.rooms.length) { $('rbGrid').innerHTML = '<p class="rb-msg">No rooms are set up yet.</p>'; return; }
+  function officeRooms() {
+    return state.data.rooms.filter(function (r) { return r.office === state.office; });
+  }
 
-    var h = '<div class="rb-grid" style="grid-template-columns:76px repeat(' + d.rooms.length + ',minmax(132px,1fr))">';
+  function renderTabs() {
+    var offices = state.data.offices || [];
+    if (offices.indexOf(state.office) === -1) state.office = offices[0] || '';
+    var box = $('rbTabs');
+    box.style.display = offices.length > 1 ? 'flex' : 'none';
+    box.innerHTML = offices.map(function (o) {
+      return '<button type="button" class="rb-tab" role="tab" data-office="' + esc(o) + '" aria-selected="' + (o === state.office) + '">' + esc(o) + '</button>';
+    }).join('');
+  }
+
+  function renderGrid() {
+    var d = state.data, st = d.settings, rooms = officeRooms();
+    var openMin = toMin(st.open), closeMin = toMin(st.close), step = st.slotMin;
+    if (!rooms.length) { $('rbGrid').innerHTML = '<p class="rb-msg">No rooms are set up for this office yet.</p>'; return; }
+
+    var h = '<div class="rb-grid" style="grid-template-columns:76px repeat(' + rooms.length + ',minmax(132px,1fr))">';
     h += '<div class="rb-hcell rb-corner"></div>';
-    d.rooms.forEach(function (r) {
+    rooms.forEach(function (r) {
       var meta = [];
       if (r.capacity) meta.push('Seats ' + r.capacity);
       if (r.needsApproval) meta.push('<b>Approval needed</b>');
@@ -338,7 +360,7 @@
       var hour = min % 60 === 0;
       h += '<div class="rb-time' + (hour ? ' rb-time--hour' : '') + '">' + fmt12(min) + '</div>';
       var slotMs = slotMsFor(min);
-      d.rooms.forEach(function (r) {
+      rooms.forEach(function (r) {
         var c = cellState(r, slotMs, step);
         var cls = 'rb-cell' + (hour ? ' rb-cell--hour' : '');
         if (c.s === 'open') {
@@ -380,6 +402,7 @@
       if (!res.ok) throw new Error(res.error || 'Could not load availability.');
       state.data = res; state.fetchedAt = Date.now();
       updateDayBar();
+      renderTabs();
       if (!modalOpen() || !quiet) renderGrid();
     }).catch(function (err) {
       if (!quiet) $('rbGrid').innerHTML = '<p class="rb-msg rb-msg--err">Unable to load availability. ' + esc(err.message) + ' <button class="rb-link" data-retry="1">Try again</button></p>';
@@ -423,7 +446,7 @@
     var action = room.needsApproval ? 'Request room' : 'Book room';
 
     openModal(
-      head(longDate(state.date), room.name) +
+      head(room.office + ' · ' + longDate(state.date), room.name) +
       '<div class="rb-modal__body"><form id="rbForm" novalidate>' +
         (room.needsApproval ? '<p class="rb-note">This room needs approval. Your time is held while the request is reviewed, and you will be emailed once it is confirmed.</p>' : '') +
         '<div class="rb-row2">' +
@@ -485,7 +508,7 @@
   function showSuccess(room, res) {
     var b = res.booking;
     $('rbModalInner').innerHTML =
-      head(res.pending ? 'Request received' : 'You are booked', room.name) +
+      head(res.pending ? 'Request received' : 'You are booked', room.office + ' · ' + room.name) +
       '<div class="rb-modal__body">' +
         '<p class="rb-detail"><b>' + esc(longDate(b.date)) + '</b><br>' + fmtStr(b.start) + ' – ' + fmtStr(b.end) + '<br>Reference ' + esc(b.id) + '</p>' +
         '<p class="rb-note">' + (res.pending
@@ -545,6 +568,13 @@
     if (retry) { loadDay(false); return; }
     var cell = e.target.closest('[data-room]');
     if (cell && state.data) openBooking(cell.getAttribute('data-room'), parseInt(cell.getAttribute('data-min'), 10));
+  });
+  $('rbTabs').addEventListener('click', function (e) {
+    var tab = e.target.closest('[data-office]');
+    if (!tab || !state.data) return;
+    state.office = tab.getAttribute('data-office');
+    store('rb_office', state.office);
+    renderTabs(); renderGrid();
   });
   $('rbMineList').addEventListener('click', function (e) {
     var btn = e.target.closest('[data-cancel]');
