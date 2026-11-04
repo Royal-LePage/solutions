@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+  (function () {
+    var PASS_KEY = 'rls_hub_auth';
+    function simpleHash(str) {
+      var hash = 5381;
+      for (var i = 0; i < str.length; i++) {
+        hash = ((hash << 5) + hash) + str.charCodeAt(i);
+        hash = hash & hash;
+      }
+      return Math.abs(hash).toString(16);
+    }
+    var CORRECT = simpleHash('Solutions');
+    if (sessionStorage.getItem(PASS_KEY) !== CORRECT) {
+      window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/';
+    }
+  })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Room Booking — Agent Hub — Royal LePage Solutions</title>
+  <meta name="description" content="Book a boardroom or the classroom at Royal LePage Solutions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../assets/css/header.css?v=1016">
+  <link rel="stylesheet" href="../../../../assets/css/styles.css?v=1001">
+  <script defer src="../../../../assets/js/header.js?v=1016"></script>
+  <style>
+    :root {
+      --rls-red:#EA002A; --rls-red-dk:#C20023; --rls-black:#000000; --rls-white:#FFFFFF;
+      --rls-taupe:#A89E92; --rls-stone:#D6D1C8; --rls-light-grey:#EFEFEF; --rls-warm-grey:#6B6660;
+      --rb-max:1100px;
+    }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    html { overflow-x:hidden; }
+    body { font-family:'Roboto',sans-serif; background:var(--rls-white); color:var(--rls-black); overflow-x:hidden; }
+
+    /* ── Logout ── */
+    .rls-logout { position:absolute; top:1.25rem; right:1.5rem; display:inline-flex; align-items:center; gap:0.4rem; font-family:'Roboto',sans-serif; font-size:0.72rem; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.5); background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); padding:0.4rem 0.9rem; cursor:pointer; text-decoration:none; transition:color 0.2s, background 0.2s, border-color 0.2s; }
+    .rls-logout:hover { color:var(--rls-white); background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.25); }
+
+    /* ── Hero ── */
+    .rb-hero { position:relative !important; background:var(--rls-black); color:var(--rls-white); padding:5rem 2rem 3.5rem; text-align:center; }
+    .rb-hero__back { display:inline-flex; align-items:center; gap:0.4rem; font-family:'Roboto',sans-serif; font-size:0.75rem; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:var(--rls-taupe); text-decoration:none; margin-bottom:1.5rem; transition:color 0.2s; }
+    .rb-hero__back:hover { color:var(--rls-white); }
+    .rb-hero__eyebrow { font-family:'Roboto',sans-serif; font-weight:300; font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--rls-taupe); margin-bottom:0.75rem; }
+    .rb-hero__title { font-family:'Raleway',sans-serif !important; font-weight:700 !important; font-size:clamp(2rem,4vw,3rem) !important; color:var(--rls-white) !important; letter-spacing:-0.01em !important; line-height:1.1 !important; margin-bottom:0 !important; }
+    .rb-hero__title .rb-accent { color:var(--rls-red) !important; display:inline !important; }
+    .rb-hero__rule { display:flex; align-items:center; gap:0.75rem; justify-content:center; margin:1.25rem auto; width:fit-content; }
+    .rb-hero__rule span { width:36px; height:2px; background:var(--rls-red); display:block; }
+    .rb-hero__sub { font-family:'Roboto',sans-serif; font-weight:300; font-size:0.95rem; color:var(--rls-stone); max-width:520px; margin:0 auto; line-height:1.65; }
+
+    /* ── Layout ── */
+    .rb-main { max-width:var(--rb-max); margin:0 auto; padding:2.5rem 2rem 4rem; }
+    .rb-section-title { font-family:'Raleway',sans-serif; font-weight:700; font-size:1.1rem; letter-spacing:0.04em; text-transform:uppercase; padding-bottom:0.75rem; border-bottom:2px solid var(--rls-black); margin-bottom:1.25rem; }
+
+    .rb-notice { display:none; padding:0.9rem 1.1rem; margin-bottom:1.5rem; font-size:0.9rem; line-height:1.5; background:var(--rls-light-grey); border-left:4px solid var(--rls-black); }
+    .rb-notice.show { display:block; }
+    .rb-notice--err { border-left-color:var(--rls-red); }
+
+    /* ── Day bar ── */
+    .rb-daybar { display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-bottom:1rem; }
+    .rb-daybar__label { font-family:'Raleway',sans-serif; font-weight:700; font-size:1.25rem; letter-spacing:-0.01em; flex:1 1 220px; }
+    .rb-btn { font-family:'Raleway',sans-serif; font-weight:600; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.65rem 1rem; border:1px solid var(--rls-black); background:var(--rls-white); color:var(--rls-black); cursor:pointer; transition:background 0.2s, color 0.2s, border-color 0.2s; }
+    .rb-btn:hover { background:var(--rls-black); color:var(--rls-white); }
+    .rb-btn--icon { padding:0.65rem 0.8rem; line-height:1; }
+    .rb-btn--primary { background:var(--rls-red); border-color:var(--rls-red); color:var(--rls-white); }
+    .rb-btn--primary:hover { background:var(--rls-red-dk); border-color:var(--rls-red-dk); }
+    .rb-btn--dark { background:var(--rls-black); color:var(--rls-white); }
+    .rb-btn--dark:hover { background:var(--rls-red); border-color:var(--rls-red); }
+    .rb-btn[disabled] { opacity:0.45; cursor:not-allowed; }
+    .rb-date { font-family:'Roboto',sans-serif; font-size:0.9rem; padding:0.6rem 0.7rem; border:1px solid var(--rls-stone); background:var(--rls-white); color:var(--rls-black); }
+
+    .rb-legend { display:flex; flex-wrap:wrap; gap:1.25rem; font-size:0.78rem; font-weight:300; color:var(--rls-warm-grey); margin-bottom:1rem; }
+    .rb-legend span { display:inline-flex; align-items:center; gap:0.45rem; }
+    .rb-swatch { width:14px; height:14px; border:1px solid var(--rls-stone); display:inline-block; }
+    .rb-swatch--busy { background:var(--rls-stone); }
+    .rb-swatch--pending { background:repeating-linear-gradient(135deg,var(--rls-stone) 0 4px,var(--rls-white) 4px 8px); }
+    .rb-swatch--off { background:var(--rls-light-grey); }
+
+    /* ── Grid ── */
+    .rb-gridwrap { overflow-x:auto; border:1px solid var(--rls-stone); -webkit-overflow-scrolling:touch; }
+    .rb-grid { display:grid; min-width:max-content; width:100%; }
+    .rb-hcell { position:sticky; top:0; background:var(--rls-black); color:var(--rls-white); padding:0.75rem 0.6rem; display:flex; flex-direction:column; gap:0.15rem; border-left:1px solid #222; z-index:2; }
+    .rb-corner { left:0; z-index:4; border-left:0; }
+    .rb-room-name { font-family:'Raleway',sans-serif; font-weight:700; font-size:0.9rem; line-height:1.2; }
+    .rb-room-meta { font-size:0.7rem; font-weight:300; color:var(--rls-stone); line-height:1.35; }
+    .rb-room-meta b { color:var(--rls-red); font-weight:500; }
+    .rb-time { position:sticky; left:0; z-index:1; background:var(--rls-white); font-size:0.7rem; font-weight:400; color:var(--rls-warm-grey); padding:0 0.5rem; height:36px; display:flex; align-items:center; border-top:1px solid var(--rls-light-grey); white-space:nowrap; }
+    .rb-time--hour { border-top-color:var(--rls-stone); color:var(--rls-black); font-weight:500; }
+    .rb-cell { height:36px; border-top:1px solid var(--rls-light-grey); border-left:1px solid var(--rls-light-grey); background:var(--rls-white); font-size:0.72rem; padding:0 0.5rem; display:flex; align-items:center; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-family:'Roboto',sans-serif; color:var(--rls-black); width:100%; text-align:left; }
+    .rb-cell--hour { border-top-color:var(--rls-stone); }
+    button.rb-cell { cursor:pointer; border-right:0; border-bottom:0; appearance:none; -webkit-appearance:none; }
+    button.rb-cell--open:hover, button.rb-cell--open:focus-visible { background:rgba(234,0,42,0.07); box-shadow:inset 0 0 0 2px var(--rls-red); outline:none; }
+    button.rb-cell--open::after { content:'+'; color:var(--rls-red); font-weight:500; opacity:0; margin-left:auto; }
+    button.rb-cell--open:hover::after, button.rb-cell--open:focus-visible::after { opacity:1; }
+    .rb-cell--busy { background:var(--rls-stone); font-weight:500; }
+    .rb-cell--pending { background:repeating-linear-gradient(135deg,var(--rls-stone) 0 6px,var(--rls-white) 6px 12px); }
+    .rb-cell--block { background:var(--rls-warm-grey); color:var(--rls-white); }
+    .rb-cell--off, .rb-cell--buffer { background:var(--rls-light-grey); }
+
+    .rb-msg { padding:2.5rem 1rem; text-align:center; font-size:0.9rem; font-weight:300; color:var(--rls-warm-grey); }
+    .rb-msg--err { color:var(--rls-red); }
+    .rb-link { background:none; border:0; color:var(--rls-red); text-decoration:underline; cursor:pointer; font:inherit; }
+    .rb-hint { font-size:0.8rem; font-weight:300; color:var(--rls-warm-grey); margin-top:0.75rem; line-height:1.55; }
+
+    /* ── My bookings ── */
+    .rb-mine { margin-top:3.5rem; }
+    .rb-mine__form { display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:1.25rem; }
+    .rb-input { font-family:'Roboto',sans-serif; font-size:0.95rem; padding:0.7rem 0.8rem; border:1px solid var(--rls-stone); background:var(--rls-white); color:var(--rls-black); width:100%; }
+    .rb-input:focus { outline:none; border-color:var(--rls-red); }
+    .rb-mine__form .rb-input { flex:1 1 260px; width:auto; }
+    .rb-mine__item { display:flex; align-items:center; gap:1rem; justify-content:space-between; flex-wrap:wrap; padding:1rem 1.1rem; border:1px solid var(--rls-stone); margin-bottom:0.6rem; }
+    .rb-mine__when { font-family:'Raleway',sans-serif; font-weight:700; font-size:0.98rem; }
+    .rb-mine__what { font-size:0.82rem; font-weight:300; color:var(--rls-warm-grey); margin-top:0.2rem; }
+    .rb-badge { display:inline-block; font-size:0.62rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; padding:0.15rem 0.45rem; background:var(--rls-light-grey); color:var(--rls-warm-grey); margin-left:0.5rem; vertical-align:middle; }
+
+    /* ── Modal ── */
+    .rb-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; padding:1rem; z-index:99999; }
+    .rb-overlay.show { display:flex; }
+    .rb-modal { background:var(--rls-white); width:100%; max-width:520px; max-height:92vh; overflow-y:auto; position:relative; }
+    .rb-modal__head { background:var(--rls-black); color:var(--rls-white); padding:1.4rem 3.5rem 1.4rem 1.6rem; }
+    .rb-modal__eyebrow { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--rls-taupe); margin-bottom:0.35rem; }
+    .rb-modal__title { font-family:'Raleway',sans-serif; font-weight:700; font-size:1.3rem; line-height:1.2; }
+    .rb-modal__close { position:absolute; top:1rem; right:1rem; width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.08); color:var(--rls-white); font-size:1.1rem; cursor:pointer; line-height:1; }
+    .rb-modal__close:hover { background:rgba(255,255,255,0.2); }
+    .rb-modal__body { padding:1.5rem 1.6rem 1.7rem; }
+    .rb-field { margin-bottom:1rem; }
+    .rb-field label, .rb-label { display:block; font-size:0.66rem; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:var(--rls-taupe); margin-bottom:0.35rem; }
+    .rb-row2 { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; }
+    .rb-fixed { font-size:0.98rem; padding:0.7rem 0; font-weight:500; }
+    .rb-check { display:flex; gap:0.6rem; align-items:flex-start; font-size:0.88rem; line-height:1.45; margin-bottom:1.1rem; cursor:pointer; }
+    .rb-check input { margin-top:0.2rem; accent-color:var(--rls-red); }
+    .rb-form-err { color:var(--rls-red); font-size:0.85rem; margin-bottom:0.9rem; display:none; line-height:1.45; }
+    .rb-form-err.show { display:block; }
+    .rb-actions { display:flex; gap:0.6rem; flex-wrap:wrap; }
+    .rb-actions .rb-btn { flex:1 1 140px; padding:0.9rem 1rem; }
+    .rb-detail { font-size:0.95rem; line-height:1.7; margin-bottom:1.2rem; }
+    .rb-detail b { font-family:'Raleway',sans-serif; font-weight:700; }
+    .rb-note { font-size:0.84rem; font-weight:300; color:var(--rls-warm-grey); line-height:1.6; margin-bottom:1.2rem; }
+
+    .rb-footer { text-align:center; padding:0 2rem 3rem; font-size:0.78rem; font-weight:300; color:var(--rls-taupe); }
+    .rb-footer a { color:var(--rls-taupe); text-decoration:underline; }
+
+    @media (max-width:768px) {
+      .rb-hero { padding:4.5rem 1.25rem 3rem; }
+      .rb-main { padding:2rem 1rem 3rem; }
+      .rb-row2 { grid-template-columns:1fr; }
+      .rb-overlay { align-items:flex-end; padding:0; }
+      .rb-modal { max-width:none; max-height:94vh; }
+      .rb-daybar__label { flex-basis:100%; }
+    }
+  </style>
+</head>
+<body>
+<main>
+
+  <section class="rb-hero">
+    <button class="rls-logout" onclick="rlsLogout()">
+      <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M5 2H2v10h3M9 10l3-3-3-3M6 7h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Logout
+    </button>
+    <a class="rb-hero__back" href="https://info.royallepagesolutions.com/pages/agent-hub/">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Agent Hub
+    </a>
+    <p class="rb-hero__eyebrow">Royal LePage Solutions®</p>
+    <h1 class="rb-hero__title">Room <span class="rb-accent">Booking</span></h1>
+    <div class="rb-hero__rule"><span></span><span></span></div>
+    <p class="rb-hero__sub">Reserve a boardroom or the classroom. Pick a day, click an open time, and you're booked.</p>
+  </section>
+
+  <div class="rb-main">
+
+    <div class="rb-notice" id="rbNotice" role="status" aria-live="polite"></div>
+
+    <h2 class="rb-section-title">Availability</h2>
+
+    <div class="rb-daybar">
+      <div class="rb-daybar__label" id="rbDayLabel">&nbsp;</div>
+      <button class="rb-btn rb-btn--icon" id="rbPrev" aria-label="Previous day">&larr;</button>
+      <button class="rb-btn" id="rbToday">Today</button>
+      <input class="rb-date" type="date" id="rbDate" aria-label="Choose a date">
+      <button class="rb-btn rb-btn--icon" id="rbNext" aria-label="Next day">&rarr;</button>
+    </div>
+
+    <div class="rb-legend" aria-hidden="true">
+      <span><i class="rb-swatch"></i> Available</span>
+      <span><i class="rb-swatch rb-swatch--busy"></i> Booked</span>
+      <span><i class="rb-swatch rb-swatch--pending"></i> Awaiting approval</span>
+      <span><i class="rb-swatch rb-swatch--off"></i> Not bookable</span>
+    </div>
+
+    <div class="rb-gridwrap"><div id="rbGrid"><p class="rb-msg">Loading availability…</p></div></div>
+    <p class="rb-hint">Back-to-back bookings are fine where a room has no turnaround buffer. Times are Calgary time. The grid refreshes automatically.</p>
+
+    <section class="rb-mine">
+      <h2 class="rb-section-title">My Bookings</h2>
+      <form class="rb-mine__form" id="rbMineForm">
+        <input class="rb-input" type="email" id="rbMineEmail" placeholder="Your email address" autocomplete="email" required>
+        <button class="rb-btn rb-btn--dark" type="submit">Find my bookings</button>
+      </form>
+      <div id="rbMineList"></div>
+    </section>
+
+  </div>
+
+  <p class="rb-footer">
+    Royal LePage® Solutions is independently owned and operated. Not intended to solicit buyers or sellers currently under contract with a brokerage.
+    View important notices at <a href="https://rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.
+  </p>
+
+</main>
+
+<div class="rb-overlay" id="rbOverlay" aria-hidden="true">
+  <div class="rb-modal" role="dialog" aria-modal="true" aria-labelledby="rbModalTitle">
+    <button class="rb-modal__close" id="rbModalClose" aria-label="Close">&times;</button>
+    <div id="rbModalInner"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── PASTE your deployed Apps Script Web App URL here ──────────────────
+  var API_URL = 'https://script.google.com/macros/s/AKfycby48ff-dcsJxo2lhDSMXaPDJt8lN2lYft24yaP5SF5dAo8hcpF0ZFF6qcbuNOSRMMh7yg/exec';
+  // ──────────────────────────────────────────────────────────────────────
+
+  var REFRESH_MS = 60000;
+  var PURPOSES = ['Client meeting', 'Listing presentation', 'Signing', 'Team meeting', 'Training', 'Interview', 'Other'];
+
+  function $(id) { return document.getElementById(id); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function ymd(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function parseYmd(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function addDays(s, n) { var d = parseYmd(s); d.setDate(d.getDate() + n); return ymd(d); }
+  function longDate(s) { return parseYmd(s).toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }); }
+  function toMin(hhmm) { var p = hhmm.split(':'); return (+p[0]) * 60 + (+p[1]); }
+  function hhmm(min) { return pad(Math.floor(min / 60)) + ':' + pad(min % 60); }
+  function fmt12(min) { var h = Math.floor(min / 60), m = min % 60, ap = h >= 12 ? 'pm' : 'am'; h = h % 12 || 12; return h + ':' + pad(m) + ' ' + ap; }
+  function fmtStr(t) { return fmt12(toMin(t)); }
+  function duration(mins) { var h = Math.floor(mins / 60), m = mins % 60; return (h ? h + ' h' : '') + (h && m ? ' ' : '') + (m ? m + ' min' : ''); }
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function recall(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
+  function configured() { return /^https:\/\/script\.google\.com\//.test(API_URL); }
+
+  var state = { date: ymd(new Date()), data: null, fetchedAt: 0 };
+
+  // ── API ────────────────────────────────────────────────────────────────
+  function apiGet(params) {
+    var qs = Object.keys(params).map(function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]); }).join('&');
+    return fetch(API_URL + '?' + qs).then(function (r) { return r.json(); });
+  }
+  function apiPost(body) {
+    return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json(); });
+  }
+
+  // ── Notice banner ──────────────────────────────────────────────────────
+  var noticeTimer;
+  function notice(msg, kind) {
+    var el = $('rbNotice');
+    el.textContent = msg;
+    el.className = 'rb-notice show' + (kind === 'err' ? ' rb-notice--err' : '');
+    clearTimeout(noticeTimer);
+    if (kind !== 'err') noticeTimer = setTimeout(function () { el.className = 'rb-notice'; }, 9000);
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // ── Modal ──────────────────────────────────────────────────────────────
+  var lastFocus = null;
+  function openModal(html) {
+    lastFocus = document.activeElement;
+    $('rbModalInner').innerHTML = html;
+    $('rbOverlay').classList.add('show');
+    $('rbOverlay').setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    var first = $('rbModalInner').querySelector('input:not([readonly]), select, button.rb-btn');
+    if (first) setTimeout(function () { first.focus(); }, 30);
+  }
+  function closeModal() {
+    $('rbOverlay').classList.remove('show');
+    $('rbOverlay').setAttribute('aria-hidden', 'true');
+    $('rbModalInner').innerHTML = '';
+    document.body.style.overflow = '';
+    if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch (e) {} }
+    if (state.data) renderGrid();
+  }
+  function modalOpen() { return $('rbOverlay').classList.contains('show'); }
+  function head(eyebrow, title) {
+    return '<div class="rb-modal__head"><p class="rb-modal__eyebrow">' + esc(eyebrow) + '</p><h3 class="rb-modal__title" id="rbModalTitle">' + esc(title) + '</h3></div>';
+  }
+
+  // ── Grid ───────────────────────────────────────────────────────────────
+  function nowMs() { return state.data.nowMs + (Date.now() - state.fetchedAt); }
+  function slotMsFor(min) { return state.data.openMs + (min - toMin(state.data.settings.open)) * 60000; }
+
+  function cellState(room, slotMs, step) {
+    var d = state.data, end = slotMs + step * 60000, buf = (room.bufferMin || 0) * 60000, nearBuf = false;
+    for (var i = 0; i < d.busy.length; i++) {
+      var b = d.busy[i];
+      if (b.roomId !== room.id) continue;
+      if (b.startMs < end && b.endMs > slotMs) return { s: 'busy', b: b };
+      if (buf && b.kind === 'booking' && b.startMs < end + buf && b.endMs + buf > slotMs) nearBuf = true;
+    }
+    var now = nowMs();
+    if (slotMs < now + room.minNoticeHours * 3600000) return { s: 'off', why: room.minNoticeHours > 0 ? 'Needs ' + room.minNoticeHours + ' hours notice' : 'Past' };
+    if (slotMs > now + room.maxAdvanceDays * 86400000) return { s: 'off', why: 'Too far ahead (max ' + room.maxAdvanceDays + ' days)' };
+    if (nearBuf) return { s: 'buffer', why: 'Turnaround buffer' };
+    return { s: 'open' };
+  }
+
+  function renderGrid() {
+    var d = state.data, st = d.settings;
+    var openMin = toMin(st.open), closeMin = toMin(st.close), step = st.slotMin;
+    if (!d.rooms.length) { $('rbGrid').innerHTML = '<p class="rb-msg">No rooms are set up yet.</p>'; return; }
+
+    var h = '<div class="rb-grid" style="grid-template-columns:76px repeat(' + d.rooms.length + ',minmax(132px,1fr))">';
+    h += '<div class="rb-hcell rb-corner"></div>';
+    d.rooms.forEach(function (r) {
+      var meta = [];
+      if (r.capacity) meta.push('Seats ' + r.capacity);
+      if (r.needsApproval) meta.push('<b>Approval needed</b>');
+      h += '<div class="rb-hcell" title="' + esc(r.equipment) + '"><span class="rb-room-name">' + esc(r.name) + '</span>' +
+           '<span class="rb-room-meta">' + meta.join(' · ') + (r.equipment ? '<br>' + esc(r.equipment) : '') + '</span></div>';
+    });
+
+    for (var min = openMin; min < closeMin; min += step) {
+      var hour = min % 60 === 0;
+      h += '<div class="rb-time' + (hour ? ' rb-time--hour' : '') + '">' + fmt12(min) + '</div>';
+      var slotMs = slotMsFor(min);
+      d.rooms.forEach(function (r) {
+        var c = cellState(r, slotMs, step);
+        var cls = 'rb-cell' + (hour ? ' rb-cell--hour' : '');
+        if (c.s === 'open') {
+          h += '<button type="button" class="' + cls + ' rb-cell--open" data-room="' + esc(r.id) + '" data-min="' + min + '" aria-label="Book ' + esc(r.name) + ' at ' + fmt12(min) + '"></button>';
+        } else if (c.s === 'busy') {
+          var b = c.b, first = (b.startMs >= slotMs && b.startMs < slotMs + step * 60000) || min === openMin;
+          var kindCls = b.kind === 'block' ? ' rb-cell--block' : (b.status === 'Pending' ? ' rb-cell--pending' : '');
+          var label = b.label + (b.status === 'Pending' ? ' (pending)' : '');
+          h += '<div class="' + cls + ' rb-cell--busy' + kindCls + '" title="' + esc(label) + '">' + (first ? esc(label) : '') + '</div>';
+        } else {
+          h += '<div class="' + cls + ' rb-cell--off" title="' + esc(c.why || '') + '"></div>';
+        }
+      });
+    }
+    h += '</div>';
+    $('rbGrid').innerHTML = h;
+  }
+
+  function updateDayBar() {
+    $('rbDayLabel').textContent = longDate(state.date);
+    $('rbDate').value = state.date;
+    var today = ymd(new Date());
+    $('rbDate').min = today;
+    $('rbPrev').disabled = state.date <= today;
+    var maxAdv = state.data ? Math.max.apply(null, state.data.rooms.map(function (r) { return r.maxAdvanceDays; }).concat([1])) : 60;
+    $('rbDate').max = addDays(today, maxAdv);
+    $('rbNext').disabled = state.date >= addDays(today, maxAdv);
+  }
+
+  function loadDay(quiet) {
+    if (!configured()) {
+      $('rbGrid').innerHTML = '<p class="rb-msg rb-msg--err">Room booking is not connected yet. Paste the Apps Script Web App URL into the API_URL setting at the top of this page\'s script.</p>';
+      return;
+    }
+    var date = state.date;
+    if (!quiet) $('rbGrid').innerHTML = '<p class="rb-msg">Loading availability…</p>';
+    apiGet({ action: 'day', date: date }).then(function (res) {
+      if (date !== state.date) return;
+      if (!res.ok) throw new Error(res.error || 'Could not load availability.');
+      state.data = res; state.fetchedAt = Date.now();
+      updateDayBar();
+      if (!modalOpen() || !quiet) renderGrid();
+    }).catch(function (err) {
+      if (!quiet) $('rbGrid').innerHTML = '<p class="rb-msg rb-msg--err">Unable to load availability. ' + esc(err.message) + ' <button class="rb-link" data-retry="1">Try again</button></p>';
+    });
+  }
+
+  function setDate(s) {
+    var today = ymd(new Date());
+    if (s < today) s = today;
+    state.date = s;
+    updateDayBar();
+    loadDay(false);
+  }
+
+  // ── Booking form ───────────────────────────────────────────────────────
+  function endLimit(room, startMin) {
+    var d = state.data, st = d.settings, step = st.slotMin;
+    var openMin = toMin(st.open), closeMin = toMin(st.close);
+    var startMs = slotMsFor(startMin), buf = (room.bufferMin || 0) * 60000;
+    var limit = Math.min(closeMin, startMin + room.maxHours * 60);
+    d.busy.forEach(function (b) {
+      if (b.roomId === room.id && b.startMs >= startMs) {
+        var lim = (b.startMs - (b.kind === 'booking' ? buf : 0) - d.openMs) / 60000 + openMin;
+        if (lim < limit) limit = lim;
+      }
+    });
+    return Math.floor(limit / step) * step;
+  }
+
+  function openBooking(roomId, startMin) {
+    var room = state.data.rooms.filter(function (r) { return r.id === roomId; })[0];
+    if (!room) return;
+    var step = state.data.settings.slotMin, limit = endLimit(room, startMin);
+    var ends = '';
+    var preferred = (startMin + 60 <= limit) ? startMin + 60 : startMin + step;
+    for (var e = startMin + step; e <= limit; e += step) {
+      ends += '<option value="' + hhmm(e) + '"' + (e === preferred ? ' selected' : '') + '>' + fmt12(e) + ' (' + duration(e - startMin) + ')</option>';
+    }
+    if (!ends) { notice('That slot can no longer be booked. Please pick another.', 'err'); loadDay(true); return; }
+    var purposes = PURPOSES.map(function (p) { return '<option>' + esc(p) + '</option>'; }).join('');
+    var action = room.needsApproval ? 'Request room' : 'Book room';
+
+    openModal(
+      head(longDate(state.date), room.name) +
+      '<div class="rb-modal__body"><form id="rbForm" novalidate>' +
+        (room.needsApproval ? '<p class="rb-note">This room needs approval. Your time is held while the request is reviewed, and you will be emailed once it is confirmed.</p>' : '') +
+        '<div class="rb-row2">' +
+          '<div class="rb-field"><span class="rb-label">Start</span><div class="rb-fixed">' + fmt12(startMin) + '</div></div>' +
+          '<div class="rb-field"><label for="rbEnd">End</label><select class="rb-input" id="rbEnd">' + ends + '</select></div>' +
+        '</div>' +
+        '<div class="rb-field"><label for="rbName">Your name</label><input class="rb-input" id="rbName" autocomplete="name" maxlength="80" value="' + esc(recall('rb_name')) + '"></div>' +
+        '<div class="rb-field"><label for="rbEmail">Email</label><input class="rb-input" id="rbEmail" type="email" autocomplete="email" maxlength="120" value="' + esc(recall('rb_email')) + '"></div>' +
+        '<div class="rb-row2">' +
+          '<div class="rb-field"><label for="rbPurpose">Purpose</label><select class="rb-input" id="rbPurpose">' + purposes + '</select></div>' +
+          '<div class="rb-field"><label for="rbAttendees">People' + (room.capacity ? ' (max ' + room.capacity + ')' : '') + '</label><input class="rb-input" id="rbAttendees" type="number" min="1"' + (room.capacity ? ' max="' + room.capacity + '"' : '') + ' value="2"></div>' +
+        '</div>' +
+        '<div class="rb-field"><label for="rbNotes">Notes (optional)</label><input class="rb-input" id="rbNotes" maxlength="300" placeholder="Anything we should know?"></div>' +
+        '<label class="rb-check"><input type="checkbox" id="rbHelp"> I would like help with room setup or AV</label>' +
+        '<p class="rb-form-err" id="rbFormErr" role="alert"></p>' +
+        '<div class="rb-actions"><button class="rb-btn" type="button" id="rbCancelForm">Never mind</button><button class="rb-btn rb-btn--primary" type="submit" id="rbSubmit">' + action + '</button></div>' +
+      '</form></div>'
+    );
+
+    $('rbCancelForm').addEventListener('click', closeModal);
+    $('rbForm').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var name = $('rbName').value.trim(), email = $('rbEmail').value.trim();
+      var attendees = parseInt($('rbAttendees').value, 10) || 0;
+      var err = '';
+      if (!name) err = 'Please enter your name.';
+      else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) err = 'Please enter a valid email address.';
+      else if (attendees < 1) err = 'Please enter how many people are attending.';
+      else if (room.capacity && attendees > room.capacity) err = room.name + ' holds up to ' + room.capacity + ' people.';
+      if (err) return showErr(err);
+
+      var btn = $('rbSubmit'); btn.disabled = true; btn.textContent = 'Booking…'; showErr('');
+      apiPost({
+        action: 'book', roomId: room.id, date: state.date, start: hhmm(startMin), end: $('rbEnd').value,
+        name: name, email: email, attendees: attendees, purpose: $('rbPurpose').value,
+        notes: $('rbNotes').value.trim(), help: $('rbHelp').checked
+      }).then(function (res) {
+        if (res.ok) {
+          store('rb_name', name); store('rb_email', email);
+          showSuccess(room, res);
+          loadDay(true);
+          $('rbMineEmail').value = email; loadMine(email);
+        } else if (res.conflict) {
+          closeModal(); notice(res.error, 'err'); loadDay(false);
+        } else {
+          btn.disabled = false; btn.textContent = action; showErr(res.error || 'Something went wrong. Please try again.');
+        }
+      }).catch(function () {
+        btn.disabled = false; btn.textContent = action; showErr('Could not reach the booking system. Please try again.');
+      });
+    });
+  }
+
+  function showErr(msg) {
+    var el = $('rbFormErr'); if (!el) return;
+    el.textContent = msg; el.className = 'rb-form-err' + (msg ? ' show' : '');
+  }
+
+  function showSuccess(room, res) {
+    var b = res.booking;
+    $('rbModalInner').innerHTML =
+      head(res.pending ? 'Request received' : 'You are booked', room.name) +
+      '<div class="rb-modal__body">' +
+        '<p class="rb-detail"><b>' + esc(longDate(b.date)) + '</b><br>' + fmtStr(b.start) + ' – ' + fmtStr(b.end) + '<br>Reference ' + esc(b.id) + '</p>' +
+        '<p class="rb-note">' + (res.pending
+          ? 'We are holding this time while the request is reviewed. A confirmation will be emailed to you.'
+          : 'A confirmation email with a cancel link is on its way, and a calendar invite if enabled.') + '</p>' +
+        '<div class="rb-actions"><button class="rb-btn rb-btn--dark" type="button" id="rbDone">Done</button></div>' +
+      '</div>';
+    $('rbDone').addEventListener('click', closeModal);
+  }
+
+  // ── My bookings + cancel ───────────────────────────────────────────────
+  function loadMine(email) {
+    if (!configured()) return;
+    var box = $('rbMineList');
+    box.innerHTML = '<p class="rb-msg">Looking…</p>';
+    apiGet({ action: 'mine', email: email }).then(function (res) {
+      if (!res.ok) { box.innerHTML = '<p class="rb-msg rb-msg--err">' + esc(res.error) + '</p>'; return; }
+      if (!res.bookings.length) { box.innerHTML = '<p class="rb-msg">No upcoming bookings for ' + esc(email) + '.</p>'; return; }
+      box.innerHTML = res.bookings.map(function (b) {
+        return '<div class="rb-mine__item"><div><div class="rb-mine__when">' + esc(longDate(b.date)) + ' · ' + fmtStr(b.start) + ' – ' + fmtStr(b.end) +
+          (b.status === 'Pending' ? '<span class="rb-badge">Pending</span>' : '') + '</div>' +
+          '<div class="rb-mine__what">' + esc(b.roomName) + (b.purpose ? ' · ' + esc(b.purpose) : '') + '</div></div>' +
+          '<button class="rb-btn" type="button" data-cancel="' + esc(b.token) + '" data-label="' + esc(b.roomName + ', ' + longDate(b.date) + ' ' + fmtStr(b.start)) + '">Cancel</button></div>';
+      }).join('');
+    }).catch(function () { box.innerHTML = '<p class="rb-msg rb-msg--err">Could not load your bookings. Please try again.</p>'; });
+  }
+
+  function doCancel(token, done) {
+    apiPost({ action: 'cancel', token: token }).then(function (res) {
+      if (res.ok) { notice('Your booking has been cancelled and the time is free again.'); }
+      else { notice(res.error || 'Could not cancel that booking.', 'err'); }
+      done && done(res.ok);
+      loadDay(true);
+      var em = $('rbMineEmail').value.trim(); if (em) loadMine(em);
+    }).catch(function () { notice('Could not reach the booking system. Please try again.', 'err'); done && done(false); });
+  }
+
+  function cancelFromLink(token) {
+    apiGet({ action: 'booking', token: token }).then(function (res) {
+      try { history.replaceState(null, '', location.pathname); } catch (e) {}
+      if (!res.ok) { notice(res.error || 'That booking link is not valid.', 'err'); return; }
+      var b = res.booking;
+      openModal(head('Cancel booking?', b.roomName) +
+        '<div class="rb-modal__body"><p class="rb-detail"><b>' + esc(longDate(b.date)) + '</b><br>' + fmtStr(b.start) + ' – ' + fmtStr(b.end) + '</p>' +
+        '<div class="rb-actions"><button class="rb-btn" type="button" id="rbKeep">Keep it</button><button class="rb-btn rb-btn--primary" type="button" id="rbDoCancel">Cancel booking</button></div></div>');
+      $('rbKeep').addEventListener('click', closeModal);
+      $('rbDoCancel').addEventListener('click', function () {
+        this.disabled = true; this.textContent = 'Cancelling…';
+        doCancel(b.token, function () { closeModal(); });
+      });
+    }).catch(function () { notice('Could not load that booking.', 'err'); });
+  }
+
+  // ── Wire up ────────────────────────────────────────────────────────────
+  $('rbGrid').addEventListener('click', function (e) {
+    var retry = e.target.closest('[data-retry]');
+    if (retry) { loadDay(false); return; }
+    var cell = e.target.closest('[data-room]');
+    if (cell && state.data) openBooking(cell.getAttribute('data-room'), parseInt(cell.getAttribute('data-min'), 10));
+  });
+  $('rbMineList').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-cancel]');
+    if (!btn) return;
+    if (!window.confirm('Cancel ' + btn.getAttribute('data-label') + '?')) return;
+    btn.disabled = true; btn.textContent = 'Cancelling…';
+    doCancel(btn.getAttribute('data-cancel'));
+  });
+  $('rbMineForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var em = $('rbMineEmail').value.trim();
+    if (em) { store('rb_email', em); loadMine(em); }
+  });
+  $('rbPrev').addEventListener('click', function () { setDate(addDays(state.date, -1)); });
+  $('rbNext').addEventListener('click', function () { setDate(addDays(state.date, 1)); });
+  $('rbToday').addEventListener('click', function () { setDate(ymd(new Date())); });
+  $('rbDate').addEventListener('change', function () { if (this.value) setDate(this.value); });
+  $('rbModalClose').addEventListener('click', closeModal);
+  $('rbOverlay').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modalOpen()) closeModal(); });
+  setInterval(function () { if (!document.hidden && !modalOpen()) loadDay(true); }, REFRESH_MS);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && !modalOpen()) loadDay(true); });
+
+  // Start
+  var savedEmail = recall('rb_email');
+  if (savedEmail) { $('rbMineEmail').value = savedEmail; loadMine(savedEmail); }
+  updateDayBar();
+  loadDay(false);
+  var tok = '';
+  try { tok = new URLSearchParams(location.search).get('cancel') || ''; } catch (e) {}
+  if (tok && configured()) cancelFromLink(tok);
+})();
+</script>
+
+<script>
+  function rlsLogout() {
+    sessionStorage.removeItem('rls_hub_auth');
+    window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/';
+  }
+</script>
+</body>
+</html>
