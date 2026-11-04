@@ -111,6 +111,9 @@
     .rb-msg { padding:2.5rem 1rem; text-align:center; font-size:0.9rem; font-weight:300; color:var(--rls-warm-grey); }
     .rb-msg--err { color:var(--rls-red); }
     .rb-link { background:none; border:0; color:var(--rls-red); text-decoration:underline; cursor:pointer; font:inherit; }
+    .rb-joincal { display:flex; align-items:center; gap:0.9rem; flex-wrap:wrap; margin-top:1rem; font-size:0.85rem; font-weight:300; color:var(--rls-warm-grey); }
+    .rb-joincal[hidden] { display:none; }
+    .rb-joincal .rb-btn { text-decoration:none; display:inline-block; }
     .rb-hint { font-size:0.8rem; font-weight:300; color:var(--rls-warm-grey); margin-top:0.75rem; line-height:1.55; }
 
     /* ── My bookings ── */
@@ -203,6 +206,11 @@
     </div>
 
     <div class="rb-gridwrap"><div id="rbGrid"><p class="rb-msg">Loading availability…</p></div></div>
+    <p class="rb-joincal" id="rbJoinWrap" hidden>
+      <a class="rb-btn" id="rbJoinCal" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="vertical-align:-2px;margin-right:0.4rem"><rect x="2" y="3" width="12" height="11" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Add to Google Calendar</a>
+      <span>See every room booking in your own calendar.</span>
+    </p>
     <p class="rb-hint">Back-to-back bookings are fine where a room has no turnaround buffer. Times are Calgary time. The grid refreshes automatically.</p>
 
     <section class="rb-mine">
@@ -349,11 +357,8 @@
     var h = '<div class="rb-grid" style="grid-template-columns:76px repeat(' + rooms.length + ',minmax(132px,1fr))">';
     h += '<div class="rb-hcell rb-corner"></div>';
     rooms.forEach(function (r) {
-      var meta = [];
-      if (r.capacity) meta.push('Seats ' + r.capacity);
-      if (r.needsApproval) meta.push('<b>Approval needed</b>');
-      h += '<div class="rb-hcell" title="' + esc(r.equipment) + '"><span class="rb-room-name">' + esc(r.name) + '</span>' +
-           '<span class="rb-room-meta">' + meta.join(' · ') + (r.equipment ? '<br>' + esc(r.equipment) : '') + '</span></div>';
+      h += '<div class="rb-hcell"><span class="rb-room-name">' + esc(r.name) + '</span>' +
+           (r.needsApproval ? '<span class="rb-room-meta"><b>Approval needed</b></span>' : '') + '</div>';
     });
 
     for (var min = openMin; min < closeMin; min += step) {
@@ -403,6 +408,8 @@
       state.data = res; state.fetchedAt = Date.now();
       updateDayBar();
       renderTabs();
+      var jw = $('rbJoinWrap');
+      if (res.calendarUrl) { $('rbJoinCal').href = res.calendarUrl; jw.hidden = false; } else { jw.hidden = true; }
       if (!modalOpen() || !quiet) renderGrid();
     }).catch(function (err) {
       if (!quiet) $('rbGrid').innerHTML = '<p class="rb-msg rb-msg--err">Unable to load availability. ' + esc(err.message) + ' <button class="rb-link" data-retry="1">Try again</button></p>';
