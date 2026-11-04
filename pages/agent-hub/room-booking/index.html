@@ -88,7 +88,7 @@
     .rb-swatch--off { background:var(--rls-light-grey); }
 
     /* ── Grid ── */
-    .rb-gridwrap { overflow-x:auto; border:1px solid var(--rls-stone); -webkit-overflow-scrolling:touch; }
+    .rb-gridwrap { overflow:auto; max-height:min(70vh, 640px); overscroll-behavior:contain; border:1px solid var(--rls-stone); -webkit-overflow-scrolling:touch; }
     .rb-grid { display:grid; min-width:max-content; width:100%; }
     .rb-hcell { position:sticky; top:0; background:var(--rls-black); color:var(--rls-white); padding:0.75rem 0.6rem; display:flex; flex-direction:column; gap:0.15rem; border-left:1px solid #222; z-index:2; }
     .rb-corner { left:0; z-index:4; border-left:0; }
