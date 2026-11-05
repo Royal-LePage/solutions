@@ -108,7 +108,7 @@
       --rls-stone:      #D6D1C8;
       --rls-light-grey: #EFEFEF;
 
-      --hub-max:        1100px;
+      --hub-max:        1400px;
       --hub-gap:        2rem;
     }
 
@@ -221,6 +221,15 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: var(--hub-gap);
+    }
+
+    @media (min-width: 1100px) {
+      .hub-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+      }
+      .hub-card__icon { padding: 1.75rem 1.5rem 0; }
+      .hub-card__body { padding: 1.1rem 1.5rem 1.75rem; }
     }
 
     @media (max-width: 640px) {
@@ -493,6 +502,28 @@
             <p class="hub-card__desc">Turn your income goal into daily activity targets, a marketing budget, a 12-month touch calendar and a quarterly scorecard. Print a one-page summary when you're done.</p>
             <span class="hub-card__cta">
               Build My Plan
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- Room Booking -->
+        <a class="hub-card" href="https://info.royallepagesolutions.com/pages/agent-hub/room-booking/">
+          <div class="hub-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="6" width="24" height="22" rx="1" stroke="#EA002A" stroke-width="2"/>
+              <path d="M4 12h24" stroke="#EA002A" stroke-width="2"/>
+              <path d="M10 3v6M22 3v6" stroke="#EA002A" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="16" cy="20" r="4.5" stroke="#EA002A" stroke-width="1.5"/>
+              <path d="M16 17.5V20l1.8 1.2" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="hub-card__body">
+            <p class="hub-card__label">Section 07</p>
+            <h2 class="hub-card__title">Room Booking</h2>
+            <p class="hub-card__desc">Reserve a boardroom, classroom or closing room at Calgary South, Calgary North, Okotoks or Canmore. Pick a date, choose an open time, and you're booked.</p>
+            <span class="hub-card__cta">
+              Book a Room
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
           </div>
