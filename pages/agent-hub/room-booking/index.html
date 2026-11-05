@@ -128,13 +128,13 @@
     .rb-dow { border-top:1px solid var(--rls-stone); border-left:1px solid var(--rls-stone); }
     .rb-days { border-left:1px solid var(--rls-stone); }
     .rb-dow span { font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--rls-warm-grey); font-weight:500; padding:0.55rem 0; background:var(--rls-light-grey); border-right:1px solid var(--rls-stone); border-bottom:1px solid var(--rls-stone); }
-    .rb-dcell { border-right:1px solid var(--rls-stone); border-bottom:1px solid var(--rls-stone); display:flex; align-items:center; justify-content:center; padding:8px 4px; min-height:72px; }
+    .rb-dcell { border-right:1px solid var(--rls-stone); border-bottom:1px solid var(--rls-stone); display:flex; min-height:84px; }
     .rb-dcell--empty { background:var(--rls-light-grey); }
-    .rb-day { aspect-ratio:1; max-width:58px; width:100%; margin:0 auto; border:0; background:transparent; color:var(--rls-taupe); font-family:'Roboto',sans-serif; font-size:0.9rem; cursor:default; padding-top:16%; }
-    .rb-day:not([disabled]) { background:#4A4A4A; color:var(--rls-white); font-weight:500; cursor:pointer; clip-path:polygon(50% 0, 100% 30%, 100% 100%, 0 100%, 0 30%); transition:background 0.15s; }
-    .rb-day:not([disabled]):hover, .rb-day:not([disabled]):focus-visible { background:var(--rls-black); outline:none; }
-    .rb-day--today { text-decoration:underline; text-underline-offset:3px; }
-    .rb-day[aria-pressed="true"] { background:var(--rls-red) !important; color:var(--rls-white) !important; }
+    .rb-day { flex:1; width:100%; display:flex; justify-content:flex-end; align-items:flex-start; padding:8px 10px; border:0; border-radius:0; background:var(--rls-light-grey); color:var(--rls-taupe); font-family:'Roboto',sans-serif; font-size:0.9rem; cursor:default; }
+    .rb-day:not([disabled]) { background:var(--rls-white); color:var(--rls-black); font-weight:500; cursor:pointer; transition:background 0.15s; }
+    .rb-day:not([disabled]):hover, .rb-day:not([disabled]):focus-visible { background:rgba(234,0,42,0.08); outline:none; box-shadow:inset 0 0 0 2px var(--rls-red); }
+    .rb-day--today { font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+    .rb-day[aria-pressed="true"] { background:var(--rls-red) !important; color:var(--rls-white) !important; box-shadow:none !important; }
     .rb-tz { margin-top:1.25rem; font-size:0.78rem; font-weight:300; color:var(--rls-warm-grey); }
     .rb-times { max-height:min(70vh,620px); overflow-y:auto; overscroll-behavior:contain; padding-right:2px; }
     .rb-time-booked { display:flex; flex-direction:column; gap:0.1rem; width:100%; padding:0.55rem 0.6rem; margin-bottom:0.5rem; border:1px solid var(--rls-stone); background:var(--rls-stone); color:var(--rls-black); text-align:center; }
