@@ -14,6 +14,8 @@
     }
     var CORRECT = simpleHash('Solutions');
     if (sessionStorage.getItem(PASS_KEY) !== CORRECT) {
+      // Remember where they were going (e.g. a cancel link from an email) so they land back here after logging in.
+      try { localStorage.setItem('rls_return', location.pathname + location.search); localStorage.setItem('rls_return_at', String(Date.now())); } catch (e) {}
       window.location.href = 'https://info.royallepagesolutions.com/pages/agent-hub/';
     }
   })();
@@ -124,13 +126,19 @@
     .rb-joincal .rb-btn { text-decoration:none; display:inline-block; }
     .rb-hint { font-size:0.8rem; font-weight:300; color:var(--rls-warm-grey); margin-top:0.75rem; line-height:1.55; }
 
+    /* ── Form fields ── */
+    .rb-input { font-family:'Roboto',sans-serif; font-size:0.95rem; padding:0.7rem 0.8rem; border:1px solid var(--rls-stone); background:var(--rls-white); color:var(--rls-black); width:100%; border-radius:0; }
+    .rb-input:focus { outline:none; border-color:var(--rls-red); }
+    select.rb-input { appearance:auto; }
+    textarea.rb-input { resize:vertical; min-height:96px; line-height:1.5; display:block; }
+
     /* ── Modal ── */
     .rb-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; padding:1rem; z-index:99999; }
     .rb-overlay.show { display:flex; }
     .rb-modal { background:var(--rls-white); width:100%; max-width:520px; max-height:92vh; overflow-y:auto; position:relative; }
     .rb-modal__head { background:var(--rls-black); color:var(--rls-white); padding:1.4rem 3.5rem 1.4rem 1.6rem; }
     .rb-modal__eyebrow { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--rls-taupe); margin-bottom:0.35rem; }
-    .rb-modal__title { font-family:'Raleway',sans-serif; font-weight:700; font-size:1.3rem; line-height:1.2; }
+    .rb-modal__title { font-family:'Raleway',sans-serif; font-weight:700; font-size:1.3rem; line-height:1.2; color:var(--rls-white) !important; margin:0; }
     .rb-modal__close { position:absolute; top:1rem; right:1rem; width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.08); color:var(--rls-white); font-size:1.1rem; cursor:pointer; line-height:1; }
     .rb-modal__close:hover { background:rgba(255,255,255,0.2); }
     .rb-modal__body { padding:1.5rem 1.6rem 1.7rem; }
@@ -489,7 +497,7 @@
           '<div class="rb-field"><label for="rbPurpose">Purpose</label><select class="rb-input" id="rbPurpose">' + purposes + '</select></div>' +
           '<div class="rb-field"><label for="rbAttendees">People' + (room.capacity ? ' (max ' + room.capacity + ')' : '') + '</label><input class="rb-input" id="rbAttendees" type="number" min="1"' + (room.capacity ? ' max="' + room.capacity + '"' : '') + ' value="2"></div>' +
         '</div>' +
-        '<div class="rb-field"><label for="rbNotes">Notes (optional)</label><input class="rb-input" id="rbNotes" maxlength="300" placeholder="Anything we should know?"></div>' +
+        '<div class="rb-field"><label for="rbNotes">Notes (optional)</label><textarea class="rb-input" id="rbNotes" rows="4" maxlength="400" placeholder="Anything we should know? Setup needs, catering, number of tables, special requests…"></textarea></div>' +
         '<label class="rb-check"><input type="checkbox" id="rbHelp"> I would like help with room setup or AV</label>' +
         '<p class="rb-form-err" id="rbFormErr" role="alert"></p>' +
         '<div class="rb-actions"><button class="rb-btn" type="button" id="rbCancelForm">Never mind</button><button class="rb-btn rb-btn--primary" type="submit" id="rbSubmit">' + action + '</button></div>' +
@@ -615,6 +623,14 @@
   loadDay(false);
   var tok = '';
   try { tok = new URLSearchParams(location.search).get('cancel') || ''; } catch (e) {}
+  // Came here via the hub after logging in? Pick up a cancel link they clicked before the login.
+  try {
+    if (sessionStorage.getItem('rls_hub_auth') !== (function (x) { var h = 5381; for (var i = 0; i < x.length; i++) { h = ((h << 5) + h) + x.charCodeAt(i); h = h & h; } return Math.abs(h).toString(16); })('Solutions')) throw 0;
+    var ret = localStorage.getItem('rls_return') || '';
+    var retAt = +(localStorage.getItem('rls_return_at') || 0);
+    localStorage.removeItem('rls_return'); localStorage.removeItem('rls_return_at');
+    if (!tok && ret.indexOf('?') > -1 && Date.now() - retAt < 3600000) tok = new URLSearchParams(ret.slice(ret.indexOf('?'))).get('cancel') || '';
+  } catch (e) {}
   if (tok && configured()) cancelFromLink(tok);
 })();
 </script>
