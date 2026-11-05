@@ -109,6 +109,10 @@
     .rb-day[aria-pressed="true"] { background:var(--rls-red) !important; color:var(--rls-white) !important; }
     .rb-tz { margin-top:1.25rem; font-size:0.78rem; font-weight:300; color:var(--rls-warm-grey); }
     .rb-times { max-height:min(70vh,620px); overflow-y:auto; overscroll-behavior:contain; padding-right:2px; }
+    .rb-time-booked { display:flex; flex-direction:column; gap:0.1rem; width:100%; padding:0.55rem 0.6rem; margin-bottom:0.5rem; border:1px solid var(--rls-stone); background:var(--rls-stone); color:var(--rls-black); text-align:center; }
+    .rb-time-booked--pending { background:repeating-linear-gradient(135deg,var(--rls-stone) 0 6px,var(--rls-light-grey) 6px 12px); }
+    .rb-time-booked__t { font-family:'Raleway',sans-serif; font-weight:600; font-size:0.82rem; color:var(--rls-warm-grey); }
+    .rb-time-booked__n { font-size:0.8rem; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .rb-time-btn { display:block; width:100%; text-align:center; font-family:'Raleway',sans-serif; font-weight:600; font-size:0.88rem; padding:0.7rem 0.5rem; margin-bottom:0.5rem; border:1px solid var(--rls-red); background:var(--rls-white); color:var(--rls-red); cursor:pointer; transition:background 0.15s, color 0.15s; }
     .rb-time-btn:hover, .rb-time-btn:focus-visible { background:var(--rls-red); color:var(--rls-white); outline:none; }
 
@@ -119,17 +123,6 @@
     .rb-joincal[hidden] { display:none; }
     .rb-joincal .rb-btn { text-decoration:none; display:inline-block; }
     .rb-hint { font-size:0.8rem; font-weight:300; color:var(--rls-warm-grey); margin-top:0.75rem; line-height:1.55; }
-
-    /* ── My bookings ── */
-    .rb-mine { margin-top:3.5rem; }
-    .rb-mine__form { display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:1.25rem; }
-    .rb-input { font-family:'Roboto',sans-serif; font-size:0.95rem; padding:0.7rem 0.8rem; border:1px solid var(--rls-stone); background:var(--rls-white); color:var(--rls-black); width:100%; }
-    .rb-input:focus { outline:none; border-color:var(--rls-red); }
-    .rb-mine__form .rb-input { flex:1 1 260px; width:auto; }
-    .rb-mine__item { display:flex; align-items:center; gap:1rem; justify-content:space-between; flex-wrap:wrap; padding:1rem 1.1rem; border:1px solid var(--rls-stone); margin-bottom:0.6rem; }
-    .rb-mine__when { font-family:'Raleway',sans-serif; font-weight:700; font-size:0.98rem; }
-    .rb-mine__what { font-size:0.82rem; font-weight:300; color:var(--rls-warm-grey); margin-top:0.2rem; }
-    .rb-badge { display:inline-block; font-size:0.62rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; padding:0.15rem 0.45rem; background:var(--rls-light-grey); color:var(--rls-warm-grey); margin-left:0.5rem; vertical-align:middle; }
 
     /* ── Modal ── */
     .rb-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; padding:1rem; z-index:99999; }
@@ -227,14 +220,6 @@
     </p>
     <p class="rb-hint">Only open times are listed. Where a room has a turnaround buffer, the time after another booking is held. Open times refresh automatically.</p>
 
-    <section class="rb-mine">
-      <h2 class="rb-section-title">My Bookings</h2>
-      <form class="rb-mine__form" id="rbMineForm">
-        <input class="rb-input" type="email" id="rbMineEmail" placeholder="Your email address" autocomplete="email" required>
-        <button class="rb-btn rb-btn--dark" type="submit">Find my bookings</button>
-      </form>
-      <div id="rbMineList"></div>
-    </section>
 
   </div>
 
@@ -416,6 +401,10 @@
       if (c.s === 'open' && endLimit(room, min) >= min + step) {
         h += '<button type="button" class="rb-time-btn" data-room="' + esc(room.id) + '" data-min="' + min + '">' + fmt12(min) + '</button>';
         count++;
+      } else if (c.s === 'busy') {
+        var label = c.b.label + (c.b.status === 'Pending' ? ' (pending)' : '');
+        h += '<div class="rb-time-booked' + (c.b.status === 'Pending' ? ' rb-time-booked--pending' : '') + '" title="' + esc(label) + '"><span class="rb-time-booked__t">' + fmt12(min) + '</span><span class="rb-time-booked__n">' + esc(label) + '</span></div>';
+        count++;
       }
     }
     $('rbGrid').innerHTML = count ? '<div class="rb-times">' + h + '</div>' : '<p class="rb-msg">No open times on this day.</p>';
@@ -529,7 +518,6 @@
           store('rb_name', name); store('rb_email', email);
           showSuccess(room, res);
           loadDay(true);
-          $('rbMineEmail').value = email; loadMine(email);
         } else if (res.conflict) {
           closeModal(); notice(res.error, 'err'); loadDay(false);
         } else {
@@ -561,29 +549,12 @@
   }
 
   // ── My bookings + cancel ───────────────────────────────────────────────
-  function loadMine(email) {
-    if (!configured()) return;
-    var box = $('rbMineList');
-    box.innerHTML = '<p class="rb-msg">Looking…</p>';
-    apiGet({ action: 'mine', email: email }).then(function (res) {
-      if (!res.ok) { box.innerHTML = '<p class="rb-msg rb-msg--err">' + esc(res.error) + '</p>'; return; }
-      if (!res.bookings.length) { box.innerHTML = '<p class="rb-msg">No upcoming bookings for ' + esc(email) + '.</p>'; return; }
-      box.innerHTML = res.bookings.map(function (b) {
-        return '<div class="rb-mine__item"><div><div class="rb-mine__when">' + esc(longDate(b.date)) + ' · ' + fmtStr(b.start) + ' – ' + fmtStr(b.end) +
-          (b.status === 'Pending' ? '<span class="rb-badge">Pending</span>' : '') + '</div>' +
-          '<div class="rb-mine__what">' + esc(b.roomName) + (b.purpose ? ' · ' + esc(b.purpose) : '') + '</div></div>' +
-          '<button class="rb-btn" type="button" data-cancel="' + esc(b.token) + '" data-label="' + esc(b.roomName + ', ' + longDate(b.date) + ' ' + fmtStr(b.start)) + '">Cancel</button></div>';
-      }).join('');
-    }).catch(function () { box.innerHTML = '<p class="rb-msg rb-msg--err">Could not load your bookings. Please try again.</p>'; });
-  }
-
   function doCancel(token, done) {
     apiPost({ action: 'cancel', token: token }).then(function (res) {
       if (res.ok) { notice('Your booking has been cancelled and the time is free again.'); }
       else { notice(res.error || 'Could not cancel that booking.', 'err'); }
       done && done(res.ok);
       loadDay(true);
-      var em = $('rbMineEmail').value.trim(); if (em) loadMine(em);
     }).catch(function () { notice('Could not reach the booking system. Please try again.', 'err'); done && done(false); });
   }
 
@@ -633,18 +604,6 @@
   function shiftMonth(n) { var m = parseYmd(state.month); state.month = ymd(new Date(m.getFullYear(), m.getMonth() + n, 1)); renderMonth(); }
   $('rbMPrev').addEventListener('click', function () { shiftMonth(-1); });
   $('rbMNext').addEventListener('click', function () { shiftMonth(1); });
-  $('rbMineList').addEventListener('click', function (e) {
-    var btn = e.target.closest('[data-cancel]');
-    if (!btn) return;
-    if (!window.confirm('Cancel ' + btn.getAttribute('data-label') + '?')) return;
-    btn.disabled = true; btn.textContent = 'Cancelling…';
-    doCancel(btn.getAttribute('data-cancel'));
-  });
-  $('rbMineForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var em = $('rbMineEmail').value.trim();
-    if (em) { store('rb_email', em); loadMine(em); }
-  });
   $('rbModalClose').addEventListener('click', closeModal);
   $('rbOverlay').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modalOpen()) closeModal(); });
@@ -652,8 +611,6 @@
   document.addEventListener('visibilitychange', function () { if (!document.hidden && !modalOpen()) loadDay(true); });
 
   // Start
-  var savedEmail = recall('rb_email');
-  if (savedEmail) { $('rbMineEmail').value = savedEmail; loadMine(savedEmail); }
   updateDayBar();
   loadDay(false);
   var tok = '';
