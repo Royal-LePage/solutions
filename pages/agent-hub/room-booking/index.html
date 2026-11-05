@@ -32,7 +32,7 @@
     :root {
       --rls-red:#EA002A; --rls-red-dk:#C20023; --rls-black:#000000; --rls-white:#FFFFFF;
       --rls-taupe:#A89E92; --rls-stone:#D6D1C8; --rls-light-grey:#EFEFEF; --rls-warm-grey:#6B6660;
-      --rb-max:1100px;
+      --rb-max:none;
     }
     *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
     html { overflow-x:hidden; }
@@ -43,7 +43,7 @@
     .rls-logout:hover { color:var(--rls-white); background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.25); }
 
     /* ── Hero ── */
-    .rb-hero { position:relative !important; background:#141414; color:var(--rls-white); border-radius:6px; padding:22px 28px; max-width:calc(var(--rb-max) - 4rem); width:calc(100% - 2rem); margin:1.5rem auto 0; text-align:left; overflow:hidden; }
+    .rb-hero { position:relative !important; background:#141414; color:var(--rls-white); border-radius:6px; padding:22px 28px; max-width:none; width:calc(100% - 4rem); margin:1.5rem auto 0; text-align:left; overflow:hidden; }
     .rb-hero::before { content:""; position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--rls-red); }
     .rb-hero__back { display:inline-flex; align-items:center; gap:0.4rem; font-family:'Roboto',sans-serif; font-size:0.72rem; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:var(--rls-taupe); text-decoration:none; margin-bottom:0.9rem; transition:color 0.2s; }
     .rb-hero__back:hover { color:var(--rls-white); }
@@ -77,7 +77,7 @@
     .rb-btn[disabled] { opacity:0.45; cursor:not-allowed; }
 
     /* ── Calendly-style picker ── */
-    .rb-cal { display:grid; grid-template-columns:260px minmax(0,1fr) 230px; border:1px solid var(--rls-stone); background:var(--rls-white); min-height:420px; }
+    .rb-cal { display:grid; grid-template-columns:300px minmax(0,1fr) 300px; border:1px solid var(--rls-stone); background:var(--rls-white); min-height:420px; }
     .rb-cal > * { padding:1.5rem; min-width:0; }
     .rb-cal__info { border-right:1px solid var(--rls-stone); }
     .rb-cal__times { border-left:1px solid var(--rls-stone); }
@@ -98,13 +98,13 @@
     .rb-mnav[disabled] { opacity:0.35; cursor:not-allowed; }
     .rb-dow, .rb-days { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; text-align:center; }
     .rb-dow span { font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--rls-taupe); padding-bottom:0.4rem; }
-    .rb-day { aspect-ratio:1; max-width:46px; width:100%; margin:0 auto; border-radius:50%; border:0; background:transparent; color:var(--rls-taupe); font-family:'Roboto',sans-serif; font-size:0.9rem; cursor:default; }
+    .rb-day { aspect-ratio:1; max-width:68px; width:100%; margin:0 auto; border-radius:50%; border:0; background:transparent; color:var(--rls-taupe); font-family:'Roboto',sans-serif; font-size:0.9rem; cursor:default; }
     .rb-day:not([disabled]) { background:rgba(234,0,42,0.08); color:var(--rls-red); font-weight:500; cursor:pointer; }
     .rb-day:not([disabled]):hover { background:rgba(234,0,42,0.18); }
     .rb-day--today { box-shadow:inset 0 0 0 1px var(--rls-taupe); }
     .rb-day[aria-pressed="true"] { background:var(--rls-red) !important; color:var(--rls-white) !important; }
     .rb-tz { margin-top:1.25rem; font-size:0.78rem; font-weight:300; color:var(--rls-warm-grey); }
-    .rb-times { max-height:min(60vh,440px); overflow-y:auto; overscroll-behavior:contain; padding-right:2px; }
+    .rb-times { max-height:min(70vh,620px); overflow-y:auto; overscroll-behavior:contain; padding-right:2px; }
     .rb-time-btn { display:block; width:100%; text-align:center; font-family:'Raleway',sans-serif; font-weight:600; font-size:0.88rem; padding:0.7rem 0.5rem; margin-bottom:0.5rem; border:1px solid var(--rls-red); background:var(--rls-white); color:var(--rls-red); cursor:pointer; transition:background 0.15s, color 0.15s; }
     .rb-time-btn:hover, .rb-time-btn:focus-visible { background:var(--rls-red); color:var(--rls-white); outline:none; }
 
@@ -154,6 +154,10 @@
     .rb-footer { text-align:center; padding:0 2rem 3rem; font-size:0.78rem; font-weight:300; color:var(--rls-taupe); }
     .rb-footer a { color:var(--rls-taupe); text-decoration:underline; }
 
+    @media (max-width:1024px) {
+      .rb-cal { grid-template-columns:230px minmax(0,1fr) 210px; }
+      .rb-cal > * { padding:1.25rem; }
+    }
     @media (max-width:768px) {
       .rb-hero { padding:18px; width:calc(100% - 2rem); margin-top:1rem; }
       .rb-hero__title { font-size:20px !important; }
