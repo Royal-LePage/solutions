@@ -43,7 +43,7 @@
     .rls-logout:hover { color:var(--rls-white); background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.25); }
 
     /* ── Hero ── */
-    .rb-hero { position:relative !important; background:#141414; color:var(--rls-white); border-radius:6px; padding:22px 28px; max-width:var(--rb-max); width:calc(100% - 4rem); margin:1.5rem auto 0; text-align:left; overflow:hidden; }
+    .rb-hero { position:relative !important; background:#141414; color:var(--rls-white); border-radius:6px; padding:22px 28px; max-width:calc(var(--rb-max) - 4rem); width:calc(100% - 2rem); margin:1.5rem auto 0; text-align:left; overflow:hidden; }
     .rb-hero::before { content:""; position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--rls-red); }
     .rb-hero__back { display:inline-flex; align-items:center; gap:0.4rem; font-family:'Roboto',sans-serif; font-size:0.72rem; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:var(--rls-taupe); text-decoration:none; margin-bottom:0.9rem; transition:color 0.2s; }
     .rb-hero__back:hover { color:var(--rls-white); }
@@ -67,46 +67,46 @@
     .rb-tab:hover { background:var(--rls-light-grey); }
     .rb-tab[aria-selected="true"] { background:var(--rls-red); border-color:var(--rls-red); color:var(--rls-white); }
 
-    /* ── Day bar ── */
-    .rb-daybar { display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-bottom:1rem; }
-    .rb-daybar__label { font-family:'Raleway',sans-serif; font-weight:700; font-size:1.25rem; letter-spacing:-0.01em; flex:1 1 220px; }
+    /* ── Buttons ── */
     .rb-btn { font-family:'Raleway',sans-serif; font-weight:600; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.65rem 1rem; border:1px solid var(--rls-black); background:var(--rls-white); color:var(--rls-black); cursor:pointer; transition:background 0.2s, color 0.2s, border-color 0.2s; }
     .rb-btn:hover { background:var(--rls-black); color:var(--rls-white); }
-    .rb-btn--icon { padding:0.65rem 0.8rem; line-height:1; }
     .rb-btn--primary { background:var(--rls-red); border-color:var(--rls-red); color:var(--rls-white); }
     .rb-btn--primary:hover { background:var(--rls-red-dk); border-color:var(--rls-red-dk); }
     .rb-btn--dark { background:var(--rls-black); color:var(--rls-white); }
     .rb-btn--dark:hover { background:var(--rls-red); border-color:var(--rls-red); }
     .rb-btn[disabled] { opacity:0.45; cursor:not-allowed; }
-    .rb-date { font-family:'Roboto',sans-serif; font-size:0.9rem; padding:0.6rem 0.7rem; border:1px solid var(--rls-stone); background:var(--rls-white); color:var(--rls-black); }
 
-    .rb-legend { display:flex; flex-wrap:wrap; gap:1.25rem; font-size:0.78rem; font-weight:300; color:var(--rls-warm-grey); margin-bottom:1rem; }
-    .rb-legend span { display:inline-flex; align-items:center; gap:0.45rem; }
-    .rb-swatch { width:14px; height:14px; border:1px solid var(--rls-stone); display:inline-block; }
-    .rb-swatch--busy { background:var(--rls-stone); }
-    .rb-swatch--pending { background:repeating-linear-gradient(135deg,var(--rls-stone) 0 4px,var(--rls-white) 4px 8px); }
-    .rb-swatch--off { background:var(--rls-light-grey); }
-
-    /* ── Grid ── */
-    .rb-gridwrap { overflow:auto; max-height:min(70vh, 640px); overscroll-behavior:contain; border:1px solid var(--rls-stone); -webkit-overflow-scrolling:touch; }
-    .rb-grid { display:grid; min-width:max-content; width:100%; }
-    .rb-hcell { position:sticky; top:0; background:var(--rls-black); color:var(--rls-white); padding:0.75rem 0.6rem; display:flex; flex-direction:column; gap:0.15rem; border-left:1px solid #222; z-index:2; }
-    .rb-corner { left:0; z-index:4; border-left:0; }
-    .rb-room-name { font-family:'Raleway',sans-serif; font-weight:700; font-size:0.9rem; line-height:1.2; }
-    .rb-room-meta { font-size:0.7rem; font-weight:300; color:var(--rls-stone); line-height:1.35; }
-    .rb-room-meta b { color:var(--rls-red); font-weight:500; }
-    .rb-time { position:sticky; left:0; z-index:1; background:var(--rls-white); font-size:0.7rem; font-weight:400; color:var(--rls-warm-grey); padding:0 0.5rem; height:36px; display:flex; align-items:center; border-top:1px solid var(--rls-light-grey); white-space:nowrap; }
-    .rb-time--hour { border-top-color:var(--rls-stone); color:var(--rls-black); font-weight:500; }
-    .rb-cell { height:36px; border-top:1px solid var(--rls-light-grey); border-left:1px solid var(--rls-light-grey); background:var(--rls-white); font-size:0.72rem; padding:0 0.5rem; display:flex; align-items:center; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-family:'Roboto',sans-serif; color:var(--rls-black); width:100%; text-align:left; }
-    .rb-cell--hour { border-top-color:var(--rls-stone); }
-    button.rb-cell { cursor:pointer; border-right:0; border-bottom:0; appearance:none; -webkit-appearance:none; }
-    button.rb-cell--open:hover, button.rb-cell--open:focus-visible { background:rgba(234,0,42,0.07); box-shadow:inset 0 0 0 2px var(--rls-red); outline:none; }
-    button.rb-cell--open::after { content:'+'; color:var(--rls-red); font-weight:500; opacity:0; margin-left:auto; }
-    button.rb-cell--open:hover::after, button.rb-cell--open:focus-visible::after { opacity:1; }
-    .rb-cell--busy { background:var(--rls-stone); font-weight:500; }
-    .rb-cell--pending { background:repeating-linear-gradient(135deg,var(--rls-stone) 0 6px,var(--rls-white) 6px 12px); }
-    .rb-cell--block { background:var(--rls-warm-grey); color:var(--rls-white); }
-    .rb-cell--off, .rb-cell--buffer { background:var(--rls-light-grey); }
+    /* ── Calendly-style picker ── */
+    .rb-cal { display:grid; grid-template-columns:260px minmax(0,1fr) 230px; border:1px solid var(--rls-stone); background:var(--rls-white); min-height:420px; }
+    .rb-cal > * { padding:1.5rem; min-width:0; }
+    .rb-cal__info { border-right:1px solid var(--rls-stone); }
+    .rb-cal__times { border-left:1px solid var(--rls-stone); }
+    .rb-cal__eyebrow { font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--rls-taupe); margin-bottom:0.4rem; }
+    .rb-cal__room { font-family:'Raleway',sans-serif; font-weight:800; font-size:1.5rem; line-height:1.15; margin-bottom:1rem; }
+    .rb-cal__meta { list-style:none; font-size:0.85rem; font-weight:300; color:var(--rls-dark-grey); line-height:1.5; }
+    .rb-cal__meta li { padding:0.3rem 0 0.3rem 1.4rem; position:relative; }
+    .rb-cal__meta li::before { content:''; position:absolute; left:0; top:0.62rem; width:7px; height:7px; background:var(--rls-red); }
+    .rb-cal__pick { margin-top:1.25rem; }
+    .rb-roombtn { display:block; width:100%; text-align:left; font-family:'Raleway',sans-serif; font-weight:600; font-size:0.85rem; padding:0.65rem 0.8rem; margin-bottom:0.4rem; border:1px solid var(--rls-stone); border-left:4px solid var(--rls-stone); background:var(--rls-white); cursor:pointer; }
+    .rb-roombtn:hover { background:var(--rls-light-grey); }
+    .rb-roombtn[aria-selected="true"] { border-color:var(--rls-black); border-left-color:var(--rls-red); }
+    .rb-cal__title { font-family:'Raleway',sans-serif; font-weight:700; font-size:1.05rem; margin-bottom:1rem; }
+    .rb-mhead { display:flex; align-items:center; justify-content:center; gap:1rem; margin-bottom:0.9rem; }
+    .rb-mhead h3 { font-family:'Raleway',sans-serif; font-weight:600; font-size:0.98rem; min-width:9rem; text-align:center; }
+    .rb-mnav { width:34px; height:34px; border-radius:50%; border:0; background:var(--rls-light-grey); color:var(--rls-red); font-size:1rem; cursor:pointer; }
+    .rb-mnav:hover:not([disabled]) { background:rgba(234,0,42,0.12); }
+    .rb-mnav[disabled] { opacity:0.35; cursor:not-allowed; }
+    .rb-dow, .rb-days { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; text-align:center; }
+    .rb-dow span { font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--rls-taupe); padding-bottom:0.4rem; }
+    .rb-day { aspect-ratio:1; max-width:46px; width:100%; margin:0 auto; border-radius:50%; border:0; background:transparent; color:var(--rls-taupe); font-family:'Roboto',sans-serif; font-size:0.9rem; cursor:default; }
+    .rb-day:not([disabled]) { background:rgba(234,0,42,0.08); color:var(--rls-red); font-weight:500; cursor:pointer; }
+    .rb-day:not([disabled]):hover { background:rgba(234,0,42,0.18); }
+    .rb-day--today { box-shadow:inset 0 0 0 1px var(--rls-taupe); }
+    .rb-day[aria-pressed="true"] { background:var(--rls-red) !important; color:var(--rls-white) !important; }
+    .rb-tz { margin-top:1.25rem; font-size:0.78rem; font-weight:300; color:var(--rls-warm-grey); }
+    .rb-times { max-height:min(60vh,440px); overflow-y:auto; overscroll-behavior:contain; padding-right:2px; }
+    .rb-time-btn { display:block; width:100%; text-align:center; font-family:'Raleway',sans-serif; font-weight:600; font-size:0.88rem; padding:0.7rem 0.5rem; margin-bottom:0.5rem; border:1px solid var(--rls-red); background:var(--rls-white); color:var(--rls-red); cursor:pointer; transition:background 0.15s, color 0.15s; }
+    .rb-time-btn:hover, .rb-time-btn:focus-visible { background:var(--rls-red); color:var(--rls-white); outline:none; }
 
     .rb-msg { padding:2.5rem 1rem; text-align:center; font-size:0.9rem; font-weight:300; color:var(--rls-warm-grey); }
     .rb-msg--err { color:var(--rls-red); }
@@ -161,7 +161,10 @@
       .rb-row2 { grid-template-columns:1fr; }
       .rb-overlay { align-items:flex-end; padding:0; }
       .rb-modal { max-width:none; max-height:94vh; }
-      .rb-daybar__label { flex-basis:100%; }
+      .rb-cal { grid-template-columns:1fr; }
+      .rb-cal__info { border-right:0; border-bottom:1px solid var(--rls-stone); }
+      .rb-cal__times { border-left:0; border-top:1px solid var(--rls-stone); }
+      .rb-times { max-height:none; }
     }
   </style>
 </head>
@@ -180,7 +183,7 @@
     <p class="rb-hero__eyebrow">Royal LePage Solutions®</p>
     <h1 class="rb-hero__title">Room <span class="rb-accent">Booking</span></h1>
     <div class="rb-hero__rule"><span></span><span></span></div>
-    <p class="rb-hero__sub">Reserve a boardroom, classroom or closing room at any of our offices. Pick an office and a day, click an open time, and you're booked.</p>
+    <p class="rb-hero__sub">Reserve a boardroom, classroom or closing room at any of our offices. Pick an office, a room and a date, choose an open time, and you're booked.</p>
   </section>
 
   <div class="rb-main">
@@ -191,28 +194,30 @@
 
     <div class="rb-tabs" id="rbTabs" role="tablist" aria-label="Office"></div>
 
-    <div class="rb-daybar">
-      <div class="rb-daybar__label" id="rbDayLabel">&nbsp;</div>
-      <button class="rb-btn rb-btn--icon" id="rbPrev" aria-label="Previous day">&larr;</button>
-      <button class="rb-btn" id="rbToday">Today</button>
-      <input class="rb-date" type="date" id="rbDate" aria-label="Choose a date">
-      <button class="rb-btn rb-btn--icon" id="rbNext" aria-label="Next day">&rarr;</button>
+    <div class="rb-cal" id="rbCal">
+      <aside class="rb-cal__info" id="rbInfo"></aside>
+      <section class="rb-cal__month" aria-label="Choose a date">
+        <p class="rb-cal__title">Select a date &amp; time</p>
+        <div class="rb-mhead">
+          <button type="button" class="rb-mnav" id="rbMPrev" aria-label="Previous month">&lsaquo;</button>
+          <h3 id="rbMonthLabel">&nbsp;</h3>
+          <button type="button" class="rb-mnav" id="rbMNext" aria-label="Next month">&rsaquo;</button>
+        </div>
+        <div class="rb-dow" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+        <div class="rb-days" id="rbDays"></div>
+        <p class="rb-tz">Times are shown in Calgary time.</p>
+      </section>
+      <section class="rb-cal__times" id="rbTimesWrap" aria-label="Open times">
+        <p class="rb-cal__title" id="rbDayLabel">&nbsp;</p>
+        <div id="rbGrid"><p class="rb-msg">Loading availability…</p></div>
+      </section>
     </div>
-
-    <div class="rb-legend" aria-hidden="true">
-      <span><i class="rb-swatch"></i> Available</span>
-      <span><i class="rb-swatch rb-swatch--busy"></i> Booked</span>
-      <span><i class="rb-swatch rb-swatch--pending"></i> Awaiting approval</span>
-      <span><i class="rb-swatch rb-swatch--off"></i> Not bookable</span>
-    </div>
-
-    <div class="rb-gridwrap"><div id="rbGrid"><p class="rb-msg">Loading availability…</p></div></div>
     <p class="rb-joincal" id="rbJoinWrap" hidden>
       <a class="rb-btn" id="rbJoinCal" target="_blank" rel="noopener">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="vertical-align:-2px;margin-right:0.4rem"><rect x="2" y="3" width="12" height="11" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Add to Google Calendar</a>
       <span>See every room booking in your own calendar.</span>
     </p>
-    <p class="rb-hint">Back-to-back bookings are fine where a room has no turnaround buffer. Times are Calgary time. The grid refreshes automatically.</p>
+    <p class="rb-hint">Only open times are listed. Where a room has a turnaround buffer, the time after another booking is held. Open times refresh automatically.</p>
 
     <section class="rb-mine">
       <h2 class="rb-section-title">My Bookings</h2>
@@ -270,7 +275,8 @@
   function recall(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
   function configured() { return /^https:\/\/script\.google\.com\//.test(API_URL); }
 
-  var state = { date: ymd(new Date()), data: null, fetchedAt: 0, office: recall('rb_office') };
+  var state = { date: ymd(new Date()), month: '', data: null, fetchedAt: 0, office: recall('rb_office'), roomId: '' };
+  state.month = state.date.slice(0, 8) + '01';
 
   // ── API ────────────────────────────────────────────────────────────────
   function apiGet(params) {
@@ -317,7 +323,7 @@
     return '<div class="rb-modal__head"><p class="rb-modal__eyebrow">' + esc(eyebrow) + '</p><h3 class="rb-modal__title" id="rbModalTitle">' + esc(title) + '</h3></div>';
   }
 
-  // ── Grid ───────────────────────────────────────────────────────────────
+  // ── Availability ───────────────────────────────────────────────────────
   function nowMs() { return state.data.nowMs + (Date.now() - state.fetchedAt); }
   function slotMsFor(min) { return state.data.openMs + (min - toMin(state.data.settings.open)) * 60000; }
 
@@ -339,6 +345,12 @@
   function officeRooms() {
     return state.data.rooms.filter(function (r) { return r.office === state.office; });
   }
+  function currentRoom() {
+    var rs = officeRooms();
+    for (var i = 0; i < rs.length; i++) if (rs[i].id === state.roomId) return rs[i];
+    state.roomId = rs[0] ? rs[0].id : '';
+    return rs[0] || null;
+  }
 
   function renderTabs() {
     var offices = state.data.offices || [];
@@ -350,50 +362,60 @@
     }).join('');
   }
 
-  function renderGrid() {
-    var d = state.data, st = d.settings, rooms = officeRooms();
-    var openMin = toMin(st.open), closeMin = toMin(st.close), step = st.slotMin;
-    if (!rooms.length) { $('rbGrid').innerHTML = '<p class="rb-msg">No rooms are set up for this office yet.</p>'; return; }
-
-    var h = '<div class="rb-grid" style="grid-template-columns:76px repeat(' + rooms.length + ',minmax(132px,1fr))">';
-    h += '<div class="rb-hcell rb-corner"></div>';
-    rooms.forEach(function (r) {
-      h += '<div class="rb-hcell"><span class="rb-room-name">' + esc(r.name) + '</span>' +
-           (r.needsApproval ? '<span class="rb-room-meta"><b>Approval needed</b></span>' : '') + '</div>';
-    });
-
-    for (var min = openMin; min < closeMin; min += step) {
-      var hour = min % 60 === 0;
-      h += '<div class="rb-time' + (hour ? ' rb-time--hour' : '') + '">' + fmt12(min) + '</div>';
-      var slotMs = slotMsFor(min);
-      rooms.forEach(function (r) {
-        var c = cellState(r, slotMs, step);
-        var cls = 'rb-cell' + (hour ? ' rb-cell--hour' : '');
-        if (c.s === 'open') {
-          h += '<button type="button" class="' + cls + ' rb-cell--open" data-room="' + esc(r.id) + '" data-min="' + min + '" aria-label="Book ' + esc(r.name) + ' at ' + fmt12(min) + '"></button>';
-        } else if (c.s === 'busy') {
-          var b = c.b, first = (b.startMs >= slotMs && b.startMs < slotMs + step * 60000) || min === openMin;
-          var kindCls = b.kind === 'block' ? ' rb-cell--block' : (b.status === 'Pending' ? ' rb-cell--pending' : '');
-          var label = b.label + (b.status === 'Pending' ? ' (pending)' : '');
-          h += '<div class="' + cls + ' rb-cell--busy' + kindCls + '" title="' + esc(label) + '">' + (first ? esc(label) : '') + '</div>';
-        } else {
-          h += '<div class="' + cls + ' rb-cell--off" title="' + esc(c.why || '') + '"></div>';
-        }
-      });
+  function renderInfo() {
+    var box = $('rbInfo'), room = state.data ? currentRoom() : null;
+    if (!room) { box.innerHTML = ''; return; }
+    var rooms = officeRooms();
+    var h = '<p class="rb-cal__eyebrow">' + esc(room.office) + '</p><h3 class="rb-cal__room">' + esc(room.name) + '</h3><ul class="rb-cal__meta">' +
+      '<li>Up to ' + room.maxHours + ' hour' + (room.maxHours === 1 ? '' : 's') + ' per booking</li>' +
+      (room.needsApproval ? '<li><b>Approval needed</b></li>' : '') +
+      '</ul>';
+    if (rooms.length > 1) {
+      h += '<div class="rb-cal__pick"><p class="rb-cal__eyebrow">Choose a room</p>' + rooms.map(function (r) {
+        return '<button type="button" class="rb-roombtn" data-pick="' + esc(r.id) + '" aria-selected="' + (r.id === room.id) + '">' + esc(r.name) + '</button>';
+      }).join('') + '</div>';
     }
-    h += '</div>';
-    $('rbGrid').innerHTML = h;
+    box.innerHTML = h;
+  }
+
+  function renderMonth() {
+    var m = parseYmd(state.month), t = new Date(), today = ymd(t);
+    var room = state.data ? currentRoom() : null;
+    var last = addDays(today, room ? room.maxAdvanceDays : 60);
+    var y = m.getFullYear(), mo = m.getMonth();
+    var first = new Date(y, mo, 1), lead = (first.getDay() + 6) % 7, n = new Date(y, mo + 1, 0).getDate();
+    var h = '', i;
+    for (i = 0; i < lead; i++) h += '<span></span>';
+    for (i = 1; i <= n; i++) {
+      var s = ymd(new Date(y, mo, i)), dis = s < today || s > last;
+      h += '<button type="button" class="rb-day' + (s === today ? ' rb-day--today' : '') + '" data-date="' + s + '" aria-pressed="' + (s === state.date) + '"' + (dis ? ' disabled' : '') + '>' + i + '</button>';
+    }
+    $('rbDays').innerHTML = h;
+    $('rbMonthLabel').textContent = first.toLocaleDateString('en-CA', { month: 'long', year: 'numeric' });
+    $('rbMPrev').disabled = ymd(first) <= ymd(new Date(t.getFullYear(), t.getMonth(), 1));
+    $('rbMNext').disabled = ymd(new Date(y, mo + 1, 1)) > last;
+  }
+
+  function renderGrid() {
+    var d = state.data;
+    if (!d) return;
+    var room = currentRoom();
+    if (!room) { $('rbGrid').innerHTML = '<p class="rb-msg">No rooms are set up for this office yet.</p>'; return; }
+    var st = d.settings, step = st.slotMin, openMin = toMin(st.open), closeMin = toMin(st.close), h = '', count = 0;
+    for (var min = openMin; min < closeMin; min += step) {
+      var c = cellState(room, slotMsFor(min), step);
+      if (c.s === 'open' && endLimit(room, min) >= min + step) {
+        h += '<button type="button" class="rb-time-btn" data-room="' + esc(room.id) + '" data-min="' + min + '">' + fmt12(min) + '</button>';
+        count++;
+      }
+    }
+    $('rbGrid').innerHTML = count ? '<div class="rb-times">' + h + '</div>' : '<p class="rb-msg">No open times on this day.</p>';
   }
 
   function updateDayBar() {
     $('rbDayLabel').textContent = longDate(state.date);
-    $('rbDate').value = state.date;
-    var today = ymd(new Date());
-    $('rbDate').min = today;
-    $('rbPrev').disabled = state.date <= today;
-    var maxAdv = state.data ? Math.max.apply(null, state.data.rooms.map(function (r) { return r.maxAdvanceDays; }).concat([1])) : 60;
-    $('rbDate').max = addDays(today, maxAdv);
-    $('rbNext').disabled = state.date >= addDays(today, maxAdv);
+    renderInfo();
+    renderMonth();
   }
 
   function loadDay(quiet) {
@@ -407,8 +429,8 @@
       if (date !== state.date) return;
       if (!res.ok) throw new Error(res.error || 'Could not load availability.');
       state.data = res; state.fetchedAt = Date.now();
-      updateDayBar();
       renderTabs();
+      updateDayBar();
       var jw = $('rbJoinWrap');
       if (res.calendarUrl) { $('rbJoinCal').href = res.calendarUrl; jw.hidden = false; } else { jw.hidden = true; }
       if (!modalOpen() || !quiet) renderGrid();
@@ -421,6 +443,8 @@
     var today = ymd(new Date());
     if (s < today) s = today;
     state.date = s;
+    var d = parseYmd(s);
+    state.month = ymd(new Date(d.getFullYear(), d.getMonth(), 1));
     updateDayBar();
     loadDay(false);
   }
@@ -581,9 +605,25 @@
     var tab = e.target.closest('[data-office]');
     if (!tab || !state.data) return;
     state.office = tab.getAttribute('data-office');
+    state.roomId = '';
     store('rb_office', state.office);
-    renderTabs(); renderGrid();
+    renderTabs(); updateDayBar(); renderGrid();
   });
+  $('rbInfo').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-pick]');
+    if (!b || !state.data) return;
+    state.roomId = b.getAttribute('data-pick');
+    updateDayBar(); renderGrid();
+  });
+  $('rbDays').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-date]');
+    if (!b || b.disabled) return;
+    setDate(b.getAttribute('data-date'));
+    if (window.innerWidth <= 768) { try { $('rbTimesWrap').scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (x) {} }
+  });
+  function shiftMonth(n) { var m = parseYmd(state.month); state.month = ymd(new Date(m.getFullYear(), m.getMonth() + n, 1)); renderMonth(); }
+  $('rbMPrev').addEventListener('click', function () { shiftMonth(-1); });
+  $('rbMNext').addEventListener('click', function () { shiftMonth(1); });
   $('rbMineList').addEventListener('click', function (e) {
     var btn = e.target.closest('[data-cancel]');
     if (!btn) return;
@@ -596,10 +636,6 @@
     var em = $('rbMineEmail').value.trim();
     if (em) { store('rb_email', em); loadMine(em); }
   });
-  $('rbPrev').addEventListener('click', function () { setDate(addDays(state.date, -1)); });
-  $('rbNext').addEventListener('click', function () { setDate(addDays(state.date, 1)); });
-  $('rbToday').addEventListener('click', function () { setDate(ymd(new Date())); });
-  $('rbDate').addEventListener('change', function () { if (this.value) setDate(this.value); });
   $('rbModalClose').addEventListener('click', closeModal);
   $('rbOverlay').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modalOpen()) closeModal(); });
