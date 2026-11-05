@@ -96,8 +96,12 @@
     .rb-mnav { width:34px; height:34px; border-radius:50%; border:0; background:var(--rls-light-grey); color:var(--rls-red); font-size:1rem; cursor:pointer; }
     .rb-mnav:hover:not([disabled]) { background:rgba(234,0,42,0.12); }
     .rb-mnav[disabled] { opacity:0.35; cursor:not-allowed; }
-    .rb-dow, .rb-days { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; text-align:center; }
-    .rb-dow span { font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--rls-taupe); padding-bottom:0.4rem; }
+    .rb-dow, .rb-days { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); text-align:center; }
+    .rb-dow { border-top:1px solid var(--rls-stone); border-left:1px solid var(--rls-stone); }
+    .rb-days { border-left:1px solid var(--rls-stone); }
+    .rb-dow span { font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--rls-warm-grey); font-weight:500; padding:0.55rem 0; background:var(--rls-light-grey); border-right:1px solid var(--rls-stone); border-bottom:1px solid var(--rls-stone); }
+    .rb-dcell { border-right:1px solid var(--rls-stone); border-bottom:1px solid var(--rls-stone); display:flex; align-items:center; justify-content:center; padding:8px 4px; min-height:72px; }
+    .rb-dcell--empty { background:var(--rls-light-grey); }
     .rb-day { aspect-ratio:1; max-width:58px; width:100%; margin:0 auto; border:0; background:transparent; color:var(--rls-taupe); font-family:'Roboto',sans-serif; font-size:0.9rem; cursor:default; padding-top:16%; }
     .rb-day:not([disabled]) { background:#4A4A4A; color:var(--rls-white); font-weight:500; cursor:pointer; clip-path:polygon(50% 0, 100% 30%, 100% 100%, 0 100%, 0 30%); transition:background 0.15s; }
     .rb-day:not([disabled]):hover, .rb-day:not([disabled]):focus-visible { background:var(--rls-black); outline:none; }
@@ -389,11 +393,12 @@
     var y = m.getFullYear(), mo = m.getMonth();
     var first = new Date(y, mo, 1), lead = (first.getDay() + 6) % 7, n = new Date(y, mo + 1, 0).getDate();
     var h = '', i;
-    for (i = 0; i < lead; i++) h += '<span></span>';
+    for (i = 0; i < lead; i++) h += '<div class="rb-dcell rb-dcell--empty"></div>';
     for (i = 1; i <= n; i++) {
       var s = ymd(new Date(y, mo, i)), dis = s < today || s > last;
-      h += '<button type="button" class="rb-day' + (s === today ? ' rb-day--today' : '') + '" data-date="' + s + '" aria-pressed="' + (s === state.date) + '"' + (dis ? ' disabled' : '') + '>' + i + '</button>';
+      h += '<div class="rb-dcell"><button type="button" class="rb-day' + (s === today ? ' rb-day--today' : '') + '" data-date="' + s + '" aria-pressed="' + (s === state.date) + '"' + (dis ? ' disabled' : '') + '>' + i + '</button></div>';
     }
+    for (i = (lead + n) % 7; i && i < 7; i++) h += '<div class="rb-dcell rb-dcell--empty"></div>';
     $('rbDays').innerHTML = h;
     $('rbMonthLabel').textContent = first.toLocaleDateString('en-CA', { month: 'long', year: 'numeric' });
     $('rbMPrev').disabled = ymd(first) <= ymd(new Date(t.getFullYear(), t.getMonth(), 1));
