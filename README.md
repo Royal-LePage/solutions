@@ -29,3 +29,4 @@ This site follows the Royal LePage 2024 Brand Guidelines:
 - No italics
 - ® symbol on first occurrence per page
 .
+.
