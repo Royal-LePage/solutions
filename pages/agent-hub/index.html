@@ -107,250 +107,96 @@
       --rls-taupe:      #A89E92;
       --rls-stone:      #D6D1C8;
       --rls-light-grey: #EFEFEF;
+      --rls-dark-grey:  #4A4A4A;
 
-      --hub-max:        1400px;
-      --hub-gap:        2rem;
+      --hub-max:        1200px;
     }
 
     /* ── Reset / Base ───────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: var(--rls-white);
-      color: var(--rls-black);
-    }
-
+    body { font-family: 'Roboto', sans-serif; background: var(--rls-light-grey); color: var(--rls-black); }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--rls-red); outline-offset: 2px; }
 
     /* ── Logout button ──────────────────────────── */
     .rls-logout {
-      position: absolute;
-      top: 1.25rem;
-      right: 1.5rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: 'Roboto', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 400;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      padding: 0.4rem 0.9rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: color 0.2s, background 0.2s, border-color 0.2s;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'Roboto', sans-serif; font-size: 0.72rem; font-weight: 400;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--rls-dark-grey); background: var(--rls-white);
+      border: 1px solid var(--rls-stone); padding: 0.55rem 0.9rem; min-height: 44px;
+      cursor: pointer; transition: color 0.2s, border-color 0.2s;
     }
-    .rls-logout:hover {
-      color: var(--rls-white);
-      background: rgba(255,255,255,0.12);
-      border-color: rgba(255,255,255,0.25);
-    }
+    .rls-logout:hover { color: var(--rls-black); border-color: var(--rls-black); }
 
-    /* ── Hero ───────────────────────────────────── */
-    .hub-hero { position: relative !important; position: relative !important;
-      background: var(--rls-black);
-      color: var(--rls-white);
-      padding: 5rem 2rem 4rem;
-      text-align: center;
-    }
+    /* ── Title strip ────────────────────────────── */
+    .hub-top { background: var(--rls-white); border-bottom: 1px solid var(--rls-stone); }
+    .hub-top__in { max-width: var(--hub-max); margin: 0 auto; padding: 1.75rem 1.5rem; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1.25rem; }
+    .hub-eyebrow { font-weight: 500; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--rls-dark-grey); margin-bottom: 0.3rem; }
+    .hub-title { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 2.4rem; line-height: 1.1; letter-spacing: -0.01em; }
+    .hub-title span { color: var(--rls-red); }
+    .hub-top__tools { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.75rem; flex: 1 1 380px; justify-content: flex-end; }
+    .hub-search { flex: 1 1 280px; max-width: 460px; display: flex; flex-direction: column; gap: 0.3rem; }
+    .hub-search label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rls-dark-grey); }
+    .hub-search input { font-family: inherit; font-size: 0.95rem; padding: 0.7rem 0.9rem; min-height: 44px; border: 1px solid var(--rls-taupe); background: var(--rls-white); width: 100%; border-radius: 0; }
 
-    .hub-hero__eyebrow {
-      font-family: 'Roboto', sans-serif;
-      font-weight: 300;
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--rls-taupe);
-      margin-bottom: 1rem;
-    }
+    /* ── Layout ─────────────────────────────────── */
+    .hub-main { max-width: var(--hub-max); margin: 0 auto; padding: 1.75rem 1.5rem 3rem; display: flex; flex-direction: column; gap: 1.75rem; }
+    .hub-h2 { font-family: 'Raleway', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rls-dark-grey); margin-bottom: 0.75rem; }
 
-    .hub-hero__title {
-      font-family: 'Raleway', sans-serif !important;
-      font-weight: 700 !important;
-      font-size: clamp(2.2rem, 5vw, 3.5rem) !important;
-      letter-spacing: -0.01em !important;
-      line-height: 1.1 !important;
-      margin-bottom: 0.5rem !important;
-      color: var(--rls-white) !important;
-    }
+    /* ── Gala banner ────────────────────────────── */
+    .hub-banner { background: var(--rls-black); color: var(--rls-white); display: flex; flex-wrap: wrap; }
+    .hub-banner__text { flex: 2 1 420px; padding: 1.5rem 1.75rem; border-left: 6px solid var(--rls-red); }
+    .hub-banner__tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rls-taupe); }
+    .hub-banner__title { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.5rem; line-height: 1.25; margin: 0.4rem 0; }
+    .hub-banner__sub { font-weight: 300; font-size: 0.95rem; color: var(--rls-stone); }
+    .hub-banner__cta { flex: 1 1 240px; padding: 1.5rem 1.75rem; display: flex; align-items: center; }
+    .hub-btn { display: inline-block; background: var(--rls-red); color: var(--rls-white); font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.95rem 1.5rem; transition: background 0.2s; }
+    .hub-btn:hover { background: #c20024; }
 
-    .hub-hero__title .hub-title-accent {
-      color: var(--rls-red) !important;
-      display: inline !important;
-    }
+    /* ── Everyday tools ─────────────────────────── */
+    .hub-tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+    .hub-card { display: flex; flex-direction: column; gap: 0.6rem; background: var(--rls-white); border-top: 4px solid var(--rls-red); padding: 1.4rem; min-height: 170px; transition: box-shadow 0.2s, transform 0.2s; }
+    .hub-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.10); transform: translateY(-2px); }
+    .hub-card svg { flex: none; }
+    .hub-card__title { font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 1.2rem; }
+    .hub-card__desc { font-weight: 300; font-size: 0.9rem; line-height: 1.55; color: var(--rls-dark-grey); }
+    .hub-card__cta { margin-top: auto; font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rls-black); }
+    .hub-card__cta::after { content: ' \2192'; color: var(--rls-red); }
 
-    .hub-hero__sub {
-      font-family: 'Roboto', sans-serif;
-      font-weight: 300;
-      font-size: 1rem;
-      color: var(--rls-stone);
-      margin-top: 1rem;
-      max-width: 520px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.6;
-    }
-
-    /* ── Rule accent ────────────────────────────── */
-    .hub-rule {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      justify-content: center;
-      margin: 1.5rem auto 0;
-      width: fit-content;
-    }
-
-    .hub-rule__line {
-      width: 40px;
-      height: 2px;
-      background: var(--rls-red);
-    }
-
-    /* ── Grid ───────────────────────────────────── */
-    .hub-grid-section {
-      padding: 4rem 2rem 5rem;
-      max-width: var(--hub-max);
-      margin: 0 auto;
-    }
-
-    .hub-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--hub-gap);
-    }
-
-    @media (min-width: 1100px) {
-      .hub-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1.5rem;
-      }
-      .hub-card__icon { padding: 1.75rem 1.5rem 0; }
-      .hub-card__body { padding: 1.1rem 1.5rem 1.75rem; }
-    }
-
-    @media (max-width: 640px) {
-      .hub-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* ── Cards ──────────────────────────────────── */
-    .hub-card {
-      display: flex;
-      flex-direction: column;
-      background: var(--rls-white);
-      border: 1px solid var(--rls-stone);
-      text-decoration: none;
-      color: var(--rls-black);
-      transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hub-card::before {
-      content: '';
-      display: block;
-      height: 4px;
-      background: var(--rls-red);
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.25s ease;
-    }
-
-    .hub-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .hub-card:hover {
-      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
-      border-color: var(--rls-taupe);
-      transform: translateY(-2px);
-    }
-
-    .hub-card__icon {
-      padding: 2rem 2rem 0;
-      font-size: 2rem;
-      line-height: 1;
-      color: var(--rls-red);
-    }
-
-    .hub-card__body {
-      padding: 1.25rem 2rem 2rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .hub-card__label {
-      font-family: 'Roboto', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--rls-taupe);
-      margin-bottom: 0.4rem;
-    }
-
-    .hub-card__title {
-      font-family: 'Raleway', sans-serif;
-      font-weight: 700;
-      font-size: 1.35rem;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.75rem;
-      line-height: 1.2;
-    }
-
-    .hub-card__desc {
-      font-family: 'Roboto', sans-serif;
-      font-weight: 300;
-      font-size: 0.9rem;
-      line-height: 1.65;
-      color: #444;
-      flex: 1;
-    }
-
-    .hub-card__cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      margin-top: 1.5rem;
-      font-family: 'Raleway', sans-serif;
-      font-weight: 600;
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--rls-red);
-    }
-
-    .hub-card__cta svg {
-      transition: transform 0.2s ease;
-    }
-
-    .hub-card:hover .hub-card__cta svg {
-      transform: translateX(4px);
-    }
+    /* ── Groups + aside ─────────────────────────── */
+    .hub-cols { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start; }
+    .hub-groups { flex: 999 1 540px; min-width: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+    .hub-aside { flex: 1 1 300px; display: flex; flex-direction: column; gap: 1rem; }
+    .hub-panel { background: var(--rls-white); padding: 1.4rem; }
+    .hub-link { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.8rem 0; min-height: 44px; border-bottom: 1px solid var(--rls-light-grey); font-weight: 500; font-size: 0.95rem; }
+    .hub-panel .hub-link:last-child { border-bottom: 0; }
+    .hub-link:hover { color: var(--rls-red); }
+    .hub-link::after { content: '\2192'; color: var(--rls-red); }
+    .hub-link--note::after { content: none; }
+    .hub-note { font-size: 0.75rem; font-weight: 500; color: var(--rls-dark-grey); letter-spacing: 0.04em; }
+    .hub-date { display: flex; gap: 0.9rem; align-items: flex-start; padding: 0.55rem 0; }
+    .hub-date__box { flex: none; width: 52px; text-align: center; padding: 0.4rem 0; background: var(--rls-black); color: var(--rls-white); }
+    .hub-date__box--red { background: var(--rls-red); }
+    .hub-date__m { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; }
+    .hub-date__d { font-family: 'Raleway', sans-serif; font-size: 1.15rem; font-weight: 800; }
+    .hub-date__t { font-weight: 600; font-size: 0.95rem; }
+    .hub-date__s { font-size: 0.82rem; color: var(--rls-dark-grey); }
+    .hub-who { display: flex; justify-content: space-between; gap: 0.75rem; font-size: 0.88rem; padding: 0.4rem 0; }
+    .hub-who b { font-weight: 600; }
+    .hub-who span { color: var(--rls-dark-grey); text-align: right; }
+    .hub-who a { text-decoration: underline; }
+    .hub-request { border: 1px dashed var(--rls-taupe); padding: 1rem 1.25rem; font-weight: 600; font-size: 0.9rem; display: flex; justify-content: space-between; }
+    .hub-request::after { content: '\2192'; color: var(--rls-red); }
+    .hub-empty { display: none; background: var(--rls-white); padding: 1.5rem; font-size: 0.95rem; color: var(--rls-dark-grey); }
 
     /* ── Footer note ─────────────────────────────── */
-    .hub-footer-note {
-      text-align: center;
-      padding: 0 2rem 3rem;
-      font-family: 'Roboto', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 300;
-      color: var(--rls-taupe);
-    }
+    .hub-footer-note { text-align: center; padding: 0 1.5rem 3rem; font-size: 0.78rem; font-weight: 300; color: var(--rls-dark-grey); }
+    .hub-footer-note a { text-decoration: underline; }
 
-    .hub-footer-note a {
-      color: var(--rls-taupe);
-      text-decoration: underline;
+    @media (max-width: 640px) {
+      .hub-title { font-size: 2rem; }
+      .hub-top__tools { justify-content: stretch; }
     }
   </style>
 </head>
@@ -358,198 +204,105 @@
 
   <main>
 
-    <!-- Hero -->
-    <section class="hub-hero">
-      <button class="rls-logout" onclick="rlsLogout()">
-        <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M5 2H2v10h3M9 10l3-3-3-3M6 7h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Logout
-      </button>
-      <p class="hub-hero__eyebrow">Royal LePage Solutions®</p>
-      <h1 class="hub-hero__title">Agent <span class="hub-title-accent">Hub</span></h1>
-      <div class="hub-rule">
-        <div class="hub-rule__line"></div>
-        <div class="hub-rule__line"></div>
-      </div>
-      <p class="hub-hero__sub">Everything you need to market yourself and your listings — in one place.</p>
-    </section>
-
-    <!-- Hub Cards -->
-    <section class="hub-grid-section">
-      <div class="hub-grid">
-
-        <!-- Brand Assets -->
-        <a class="hub-card" href="https://info.royallepagesolutions.com/pages/agent-hub/brand-assets/">
-          <div class="hub-card__icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="6" width="20" height="14" rx="1" stroke="#EA002A" stroke-width="2"/>
-              <path d="M6 20v4h20V10h-2" stroke="#EA002A" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="9" cy="12" r="2" stroke="#EA002A" stroke-width="1.5"/>
-              <path d="M2 18l5-4 4 3 4-5 7 7" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+    <!-- Title strip -->
+    <section class="hub-top">
+      <div class="hub-top__in">
+        <div>
+          <h1 class="hub-title">Agent <span>Hub</span></h1>
+        </div>
+        <div class="hub-top__tools">
+          <div class="hub-search">
+            <label for="hub-search">Search the hub</label>
+            <input id="hub-search" type="search" placeholder="Logos, suppliers, room booking, daytimers…" autocomplete="off">
           </div>
-          <div class="hub-card__body">
-            <p class="hub-card__label">Section 01</p>
-            <h2 class="hub-card__title">Brand Assets</h2>
-            <p class="hub-card__desc">Download approved Royal LePage Solutions logos, brand colours, fonts, and guidelines for use in your marketing materials.</p>
-            <span class="hub-card__cta">
-              Browse Assets
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </a>
-
-        <!-- Print & Supplies -->
-        <a class="hub-card" href="https://info.royallepagesolutions.com/pages/agent-hub/print-supplies/">
-          <div class="hub-card__icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="8" y="2" width="16" height="20" rx="1" stroke="#EA002A" stroke-width="2"/>
-              <path d="M4 10h4M4 22h4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round"/>
-              <rect x="4" y="10" width="24" height="14" rx="1" stroke="#EA002A" stroke-width="2"/>
-              <path d="M8 28h16" stroke="#EA002A" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="22" cy="17" r="2" fill="#EA002A"/>
-            </svg>
-          </div>
-          <div class="hub-card__body">
-            <p class="hub-card__label">Section 02</p>
-            <h2 class="hub-card__title">Print &amp; Supplies</h2>
-            <p class="hub-card__desc">Order paper, presentation folders, signs, CREB supplies, and other in-house items. Charges are added to your monthly account.</p>
-            <span class="hub-card__cta">
-              View Catalogue
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </a>
-
-        <!-- Preferred Suppliers -->
-        <a class="hub-card" href="https://info.royallepagesolutions.com/pages/agent-hub/preferred-suppliers/">
-          <div class="hub-card__icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="16" cy="10" r="4" stroke="#EA002A" stroke-width="2"/>
-              <circle cx="6" cy="22" r="3" stroke="#EA002A" stroke-width="2"/>
-              <circle cx="26" cy="22" r="3" stroke="#EA002A" stroke-width="2"/>
-              <path d="M9 21c1-4 4-6 7-6s6 2 7 6" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="hub-card__body">
-            <p class="hub-card__label">Section 03</p>
-            <h2 class="hub-card__title">Preferred Suppliers</h2>
-            <p class="hub-card__desc">Trusted vendors recommended by Royal LePage Solutions — photographers, home stagers, lawyers, mortgage partners, and more.</p>
-            <span class="hub-card__cta">
-              View Directory
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </a>
-
-        <!-- Tools & Resources -->
-        <a class="hub-card" href="https://info.royallepagesolutions.com/pages/agent-hub/tools-resources/">
-          <div class="hub-card__icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="5" width="26" height="18" rx="2" stroke="#EA002A" stroke-width="2"/>
-              <path d="M3 9h26" stroke="#EA002A" stroke-width="1.5"/>
-              <circle cx="7" cy="7" r="1" fill="#EA002A"/>
-              <circle cx="11" cy="7" r="1" fill="#EA002A"/>
-              <path d="M8 15l4 4 8-6" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M13 23v4M9 27h14" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="hub-card__body">
-            <p class="hub-card__label">Section 04</p>
-            <h2 class="hub-card__title">Tools &amp; Resources</h2>
-            <p class="hub-card__desc">Quick links to the platforms and tools you use every day — Canva, Matrix, Smart Leads, RLP Connect, and more.</p>
-            <span class="hub-card__cta">
-              Open Tools
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </a>
-
-        <!-- 2027 Daytimers -->
-        <a class="hub-card" href="https://info.royallepagesolutions.com/pages/agent-hub/daytimers/">
-          <div class="hub-card__icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="4" y="6" width="24" height="22" rx="1" stroke="#EA002A" stroke-width="2"/>
-              <path d="M4 12h24" stroke="#EA002A" stroke-width="2"/>
-              <path d="M10 3v6M22 3v6" stroke="#EA002A" stroke-width="2" stroke-linecap="round"/>
-              <path d="M9 17h4M14 17h4M19 17h4M9 22h4M14 22h4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="hub-card__body">
-            <p class="hub-card__label">Section 05</p>
-            <h2 class="hub-card__title">2027 Daytimers</h2>
-            <p class="hub-card__desc">Choose your cover and order your personalized 2027 day planners. Order by October 2 — charges are added to your office account.</p>
-            <span class="hub-card__cta">
-              Order Daytimers
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </a>
-
-        <!-- Business Plan Builder -->
-        <a class="hub-card" href="https://info.royallepagesolutions.com/pages/agent-hub/business-plan/">
-          <div class="hub-card__icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 27h22" stroke="#EA002A" stroke-width="2" stroke-linecap="round"/>
-              <rect x="7" y="17" width="4" height="7" stroke="#EA002A" stroke-width="2"/>
-              <rect x="14" y="12" width="4" height="12" stroke="#EA002A" stroke-width="2"/>
-              <rect x="21" y="7" width="4" height="17" stroke="#EA002A" stroke-width="2"/>
-              <path d="M6 12l7-6 5 3 8-5" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="hub-card__body">
-            <p class="hub-card__label">Section 06</p>
-            <h2 class="hub-card__title">Business Plan Builder</h2>
-            <p class="hub-card__desc">Turn your income goal into daily activity targets, a marketing budget, a 12-month touch calendar and a quarterly scorecard. Print a one-page summary when you're done.</p>
-            <span class="hub-card__cta">
-              Build My Plan
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </a>
-
-        <!-- Room Booking -->
-        <a class="hub-card" href="https://info.royallepagesolutions.com/pages/agent-hub/room-booking/">
-          <div class="hub-card__icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="4" y="6" width="24" height="22" rx="1" stroke="#EA002A" stroke-width="2"/>
-              <path d="M4 12h24" stroke="#EA002A" stroke-width="2"/>
-              <path d="M10 3v6M22 3v6" stroke="#EA002A" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="16" cy="20" r="4.5" stroke="#EA002A" stroke-width="1.5"/>
-              <path d="M16 17.5V20l1.8 1.2" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="hub-card__body">
-            <p class="hub-card__label">Section 07</p>
-            <h2 class="hub-card__title">Room Booking</h2>
-            <p class="hub-card__desc">Reserve a boardroom, classroom or closing room at Calgary South, Calgary North, Okotoks or Canmore. Pick a date, choose an open time, and you're booked.</p>
-            <span class="hub-card__cta">
-              Book a Room
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </a>
-
-        <!-- Winter Gala -->
-        <a class="hub-card" href="https://info.royallepagesolutions.com/holiday-party/">
-          <div class="hub-card__icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 3v26M5 9.5l22 13M27 9.5l-22 13" stroke="#EA002A" stroke-width="2" stroke-linecap="round"/>
-              <path d="M12.5 5.5L16 8.5l3.5-3M12.5 26.5L16 23.5l3.5 3" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="hub-card__body">
-            <p class="hub-card__label">Section 08</p>
-            <h2 class="hub-card__title">Winter Gala</h2>
-            <p class="hub-card__desc">Register for our Winter Gala.</p>
-            <span class="hub-card__cta">
-              Register Now
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#EA002A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </a>
-
+          <button class="rls-logout" onclick="rlsLogout()">
+            <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M5 2H2v10h3M9 10l3-3-3-3M6 7h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Logout
+          </button>
+        </div>
       </div>
     </section>
+
+    <div class="hub-main">
+
+      <!-- Winter Gala banner -->
+      <section class="hub-banner hub-item" data-kw="winter gala party christmas holiday register rsvp event" aria-label="Winter Gala">
+        <div class="hub-banner__text">
+          <p class="hub-banner__tag">This month · Winter Gala</p>
+          <h2 class="hub-banner__title">Winter Gala — Friday, December 11 at Thomson’s Social Hub</h2>
+          <p class="hub-banner__sub">Cocktails 6:00 PM · Dinner 7:00 PM · WestJet Pack presale until November 27</p>
+        </div>
+        <div class="hub-banner__cta">
+          <a class="hub-btn" href="https://info.royallepagesolutions.com/holiday-party/">Register Now</a>
+        </div>
+      </section>
+
+      <!-- Everyday tools -->
+      <section aria-labelledby="h-daily" data-section>
+        <h2 class="hub-h2" id="h-daily">Everyday tools</h2>
+        <div class="hub-tools">
+        <a class="hub-card hub-item" data-kw="room booking boardroom classroom closing room calendar office" href="https://info.royallepagesolutions.com/pages/agent-hub/room-booking/">
+          <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EA002A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          <span class="hub-card__title">Room Booking</span>
+          <span class="hub-card__desc">Boardrooms, classrooms and closing rooms at all four offices.</span>
+          <span class="hub-card__cta">Book a room</span>
+        </a>
+        <a class="hub-card hub-item" data-kw="tools resources canva matrix smart leads rlp connect logins" href="https://info.royallepagesolutions.com/pages/agent-hub/tools-resources/">
+          <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EA002A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="1"/><path d="M8 21h8M12 17v4"/></svg>
+          <span class="hub-card__title">Tools &amp; Resources</span>
+          <span class="hub-card__desc">Canva, Matrix, Smart Leads, RLP Connect and more.</span>
+          <span class="hub-card__cta">Open tools</span>
+        </a>
+        <a class="hub-card hub-item" data-kw="business plan builder goals budget scorecard income" href="https://info.royallepagesolutions.com/pages/agent-hub/business-plan/">
+          <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EA002A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+          <span class="hub-card__title">Business Plan Builder</span>
+          <span class="hub-card__desc">Income goal to daily targets, budget, touch calendar and scorecard.</span>
+          <span class="hub-card__cta">Build my plan</span>
+        </a>
+        </div>
+      </section>
+
+      <div class="hub-cols">
+
+        <div class="hub-groups">
+          <section class="hub-panel" aria-labelledby="h-mkt" data-section>
+            <h2 class="hub-h2" id="h-mkt">Marketing</h2>
+            <a class="hub-link hub-item" data-kw="brand assets logos colours fonts guidelines" href="https://info.royallepagesolutions.com/pages/agent-hub/brand-assets/">Brand Assets</a>
+            <a class="hub-link hub-item" data-kw="print supplies paper folders signs creb catalogue order" href="https://info.royallepagesolutions.com/pages/agent-hub/print-supplies/">Print &amp; Supplies</a>
+            <a class="hub-link hub-item" data-kw="preferred suppliers photographers stagers lawyers mortgage directory vendors" href="https://info.royallepagesolutions.com/pages/agent-hub/preferred-suppliers/">Preferred Suppliers</a>
+          </section>
+          <section class="hub-panel" aria-labelledby="h-office" data-section>
+            <h2 class="hub-h2" id="h-office">Office &amp; events</h2>
+            <a class="hub-link hub-item" data-kw="daytimers day planners 2027 order" href="https://info.royallepagesolutions.com/pages/agent-hub/daytimers/">2027 Daytimers <span class="hub-note">Orders closed</span></a>
+            <a class="hub-link hub-item" data-kw="winter gala party christmas holiday register rsvp event" href="https://info.royallepagesolutions.com/holiday-party/">Winter Gala</a>
+          </section>
+        </div>
+
+        <aside class="hub-aside" aria-label="Dates and contacts">
+          <section class="hub-panel hub-item" data-kw="upcoming dates calendar gala westjet" aria-labelledby="h-dates">
+            <h2 class="hub-h2" id="h-dates">Upcoming dates</h2>
+            <div id="hub-dates">
+            <div class="hub-date">
+              <div class="hub-date__box"><div class="hub-date__m">NOV</div><div class="hub-date__d">27</div></div>
+              <div><div class="hub-date__t">WestJet Pack presale ends</div><div class="hub-date__s">Winter Gala raffle tickets</div></div>
+            </div>
+            <div class="hub-date">
+              <div class="hub-date__box hub-date__box--red"><div class="hub-date__m">DEC</div><div class="hub-date__d">11</div></div>
+              <div><div class="hub-date__t">Winter Gala</div><div class="hub-date__s">Cocktails 6:00 PM · Thomson’s Social Hub</div></div>
+            </div>
+            </div>
+          </section>
+          <section class="hub-panel hub-item" data-kw="who to contact help support phone front desk tech rlpsphere kyle" aria-labelledby="h-who">
+            <h2 class="hub-h2" id="h-who">Who to contact</h2>
+            <div class="hub-who"><b>Tech &amp; rlpSPHERE</b><span><a href="mailto:kyleduiker@royallepage.ca">Kyle Duiker</a></span></div>
+            <div class="hub-who"><b>Front desk</b><span><a href="tel:+14032525900">403.252.5900</a></span></div>
+          </section>
+          <a class="hub-request hub-item" data-kw="request tool resource suggestion idea" href="mailto:kyleduiker@royallepage.ca?subject=Agent%20Hub%20request">Request a tool or resource</a>
+        </aside>
+      </div>
+
+      <p class="hub-empty" id="hub-empty" role="status">Nothing matches that search. Try a different word, or call the front desk at 403.252.5900.</p>
+    </div>
 
     <!-- Footer note -->
     <p class="hub-footer-note">
@@ -645,6 +398,50 @@
   })();
   </script>
 
+
+  <script>
+  // Upcoming dates: pulls the Office Events calendar; keeps the built-in dates if it can't load.
+  (function () {
+    var box = document.getElementById('hub-dates');
+    if (!box) return;
+    function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+    fetch('https://script.google.com/macros/s/AKfycby48ff-dcsJxo2lhDSMXaPDJt8lN2lYft24yaP5SF5dAo8hcpF0ZFF6qcbuNOSRMMh7yg/exec?action=events')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok || !d.events || !d.events.length) return;
+        box.innerHTML = d.events.map(function (e) {
+          var sub = [e.time, e.where].filter(Boolean).join(' \u00b7 ');
+          return '<div class="hub-date"><div class="hub-date__box' + (e.featured ? ' hub-date__box--red' : '') + '"><div class="hub-date__m">' + esc(e.month) + '</div><div class="hub-date__d">' + esc(e.day) + '</div></div><div><div class="hub-date__t">' + esc(e.title) + '</div>' + (sub ? '<div class="hub-date__s">' + esc(sub) + '</div>' : '') + '</div></div>';
+        }).join('');
+      })
+      .catch(function () {});
+  })();
+  </script>
+
+  <script>
+  // Search: filters the hub's links by what's on the page (no data leaves the browser).
+  (function () {
+    var input = document.getElementById('hub-search');
+    var empty = document.getElementById('hub-empty');
+    if (!input) return;
+    var items = [].slice.call(document.querySelectorAll('.hub-item'));
+    function run() {
+      var q = input.value.trim().toLowerCase(), shown = 0;
+      items.forEach(function (el) {
+        var hay = ((el.getAttribute('data-kw') || '') + ' ' + el.textContent).toLowerCase();
+        var ok = !q || q.split(/\s+/).every(function (w) { return hay.indexOf(w) > -1; });
+        el.style.display = ok ? '' : 'none';
+        if (ok) shown++;
+      });
+      [].forEach.call(document.querySelectorAll('[data-section]'), function (sec) {
+        var any = [].some.call(sec.querySelectorAll('.hub-item'), function (e) { return e.style.display !== 'none'; });
+        sec.style.display = any || !q ? '' : 'none';
+      });
+      empty.style.display = q && !shown ? 'block' : 'none';
+    }
+    input.addEventListener('input', run);
+  })();
+  </script>
 
   <script>
   function rlsLogout() {
