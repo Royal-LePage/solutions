@@ -109,7 +109,7 @@
       --rls-stone:      #D6D1C8;
       --rls-light-grey: #EFEFEF;
       --rls-dark-grey:  #4A4A4A;
-      --hub-max:        1200px;
+      --hub-max:        none;
       --hub-sticky-top: 92px;
     }
 
@@ -180,13 +180,6 @@
     .hub-qbtn:hover { border-color: var(--rls-black); box-shadow: 0 4px 14px rgba(0,0,0,.08); }
     .hub-qbtn--accent { border-color: var(--rls-red); }
 
-    /* ── New this week ──────────────────────────── */
-    .hub-news__list { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.6rem; }
-    .hub-news__item { display: flex; gap: 0.8rem; align-items: flex-start; background: var(--rls-white); border-left: 4px solid var(--rls-red); padding: 0.8rem 1rem; font-size: 0.92rem; line-height: 1.45; color: var(--rls-black); height: 100%; }
-    a.hub-news__item:hover { box-shadow: 0 4px 14px rgba(0,0,0,.08); }
-    .hub-tag { flex: none; background: var(--rls-black); color: var(--rls-white); font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.5rem; white-space: nowrap; }
-    .hub-news__go { color: var(--rls-red); margin-left: auto; padding-left: .4rem; }
-
     /* ── Everyday tools ─────────────────────────── */
     .hub-tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
     .hub-card { display: flex; flex-direction: column; gap: 0.5rem; background: var(--rls-white); border-top: 4px solid var(--rls-red); padding: 1.25rem; min-height: 150px; transition: box-shadow 0.2s, transform 0.2s; }
@@ -203,6 +196,13 @@
     @media (min-width: 700px) {
       .hub-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .hub-groups > .hub-panel:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    }
+    @media (min-width: 1500px) {
+      .hub-groups { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .hub-groups > .hub-panel:last-child:nth-child(odd) { grid-column: auto; }
+    }
+    @media (min-width: 1100px) {
+      .hub-top__in, .hub-main { padding-left: 2.5rem; padding-right: 2.5rem; }
     }
     .hub-aside { flex: 1 1 300px; display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
     @media (min-width: 1000px) {
@@ -311,12 +311,6 @@
       <section aria-labelledby="h-quick" data-section>
         <h2 class="hub-h2" id="h-quick">Quick links</h2>
         <div class="hub-quick__row" id="hub-quick-row"></div>
-      </section>
-
-      <!-- New this week (filled from HUB_CONFIG.announcements; hidden when empty) -->
-      <section id="hub-news" aria-labelledby="h-news" data-section hidden>
-        <h2 class="hub-h2" id="h-news">New this week</h2>
-        <ul class="hub-news__list" id="hub-news-list"></ul>
       </section>
 
       <!-- Everyday tools -->
@@ -455,20 +449,12 @@
     // Where the "Request a tool or resource" form emails to.
     requestEmail: 'kyleduiker@royallepage.ca',
 
-    // "New this week" strip. 2–4 items. Leave the array empty ([]) to hide the strip.
-    // { date: 'Nov 8', text: 'Short sentence.', url: 'https://… (optional)' }
-    announcements: [
-      { date: 'Nov 8',  text: 'Room booking is live at all four offices.', url: 'https://info.royallepagesolutions.com/pages/agent-hub/room-booking/' },
-      { date: 'Nov 8',  text: 'Winter Gala: WestJet Pack presale ends November 27.', url: 'https://info.royallepagesolutions.com/holiday-party/' },
-      { date: 'Nov 8',  text: 'Upcoming dates now update automatically from the office calendar.', url: '' }
-    ],
-
     // Quick Links come from the "Quick Link" column on the Agent Hub sheet (see Code.gs). This list is
     // only used if the sheet can't be reached.
     toolsUrl: 'https://script.google.com/macros/s/AKfycby48ff-dcsJxo2lhDSMXaPDJt8lN2lYft24yaP5SF5dAo8hcpF0ZFF6qcbuNOSRMMh7yg/exec?action=tools',
     allToolsUrl: 'https://info.royallepagesolutions.com/pages/agent-hub/tools-resources/',
     fallbackQuick: [
-      { name: 'Matrix / MLS', url: 'https://matrix.creb.com', category: 'Essential Platforms' },
+      { name: 'Pillar 9', url: 'https://pillarnine.com/', category: 'Essential Platforms' },
       { name: 'Deal Manager', url: 'https://web.enviromint.com/Login?ReturnUrl=%2f', category: 'Transaction Tools' },
       { name: 'NexOne', url: 'https://agent.nexone.ca/Account/LogOn?ReturnUrl=%2f', category: 'Transaction Tools' },
       { name: 'ReallyTrusted', url: 'https://app.reallytrusted.com/', category: 'Business Tools' },
@@ -493,18 +479,6 @@
 
     /* ── Daytimers flag ─────────────────────────── */
     if (HUB_CONFIG.daytimersOpen && $('hub-office')) $('hub-office').hidden = false;
-
-    /* ── New this week ──────────────────────────── */
-    (function () {
-      var list = HUB_CONFIG.announcements || [], ul = $('hub-news-list'), sec = $('hub-news');
-      if (!ul || !sec || !list.length) return;
-      ul.innerHTML = list.slice(0, 4).map(function (a) {
-        var inner = '<span class="hub-tag">' + esc(a.date) + '</span><span>' + esc(a.text) + '</span>';
-        if (a.url) return '<li><a class="hub-news__item hub-item" href="' + esc(a.url) + '">' + inner + '<span class="hub-news__go" aria-hidden="true">\u2192</span></a></li>';
-        return '<li><div class="hub-news__item hub-item">' + inner + '</div></li>';
-      }).join('');
-      sec.hidden = false;
-    })();
 
     /* ── Upcoming dates + Add to calendar (.ics) ── */
     var events = [];
