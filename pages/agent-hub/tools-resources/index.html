@@ -485,7 +485,8 @@
             thumb:    (r[idx.thumb]   ||'').trim(),
             video:    (r[idx.video]   ||'').trim(),
           };
-        }).filter(t => t.name);
+        // Skip rows that are only a name with nothing to open or read (e.g. hub-only placeholders waiting for a URL).
+        }).filter(t => t.name && (t.url || t.appstore || t.gplay || t.video || t.desc));
         render();
       })
       .catch(err => {
