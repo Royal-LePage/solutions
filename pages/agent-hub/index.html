@@ -307,12 +307,6 @@
         </div>
       </section>
 
-      <!-- Quick links -->
-      <section aria-labelledby="h-quick" data-section>
-        <h2 class="hub-h2" id="h-quick">Quick links</h2>
-        <div class="hub-quick__row" id="hub-quick-row"></div>
-      </section>
-
       <!-- Everyday tools -->
       <section aria-labelledby="h-daily" data-section>
         <h2 class="hub-h2" id="h-daily">Everyday tools</h2>
@@ -348,7 +342,7 @@
             <a class="hub-link hub-item" data-kw="preferred suppliers photographers stagers lawyers mortgage directory vendors" href="https://info.royallepagesolutions.com/pages/agent-hub/preferred-suppliers/">Preferred Suppliers</a>
           </section>
           <section class="hub-panel" data-dyn aria-labelledby="h-deals" data-section>
-            <h2 class="hub-h2" id="h-deals">Deals &amp; Paperwork</h2>
+            <h2 class="hub-h2" id="h-deals">Tools &amp; Platforms</h2>
             <a class="hub-link hub-item" data-kw="deal submission submit deal paperwork transaction" href="https://REPLACE-ME.invalid/deal-submission">Deal Submission</a>
             <a class="hub-link hub-item" data-kw="conveyancing checklist closing lawyer" href="https://REPLACE-ME.invalid/conveyancing-checklist">Conveyancing Checklist</a>
             <a class="hub-link hub-item" data-kw="coverage commission agreement vacation associate" href="https://REPLACE-ME.invalid/coverage-commission-agreement">Coverage &amp; Commission Agreement</a>
@@ -452,21 +446,10 @@
     // Web app URL of the script in the Agent Hub sheet (see AgentHub.gs). Paste the new URL here.
     apiUrl: 'https://script.google.com/macros/s/AKfycbx2_YUaV-Q2ZwjzGAqrgpzEUBRA1Qh729k1VWMW42URxzHYalB-bEUxJoT0szRaTDAB/exec',
 
-    // Quick Links come from the "Quick Link" column on the Agent Hub sheet (see Code.gs). This list is
-    // only used if the sheet can't be reached.
     allToolsUrl: 'https://info.royallepagesolutions.com/pages/agent-hub/tools-resources/',
-    fallbackQuick: [
-      { name: 'Pillar 9', url: 'https://pillarnine.com/', category: 'Essential Platforms' },
-      { name: 'Deal Manager', url: 'https://web.enviromint.com/Login?ReturnUrl=%2f', category: 'Transaction Tools' },
-      { name: 'NexOne', url: 'https://agent.nexone.ca/Account/LogOn?ReturnUrl=%2f', category: 'Transaction Tools' },
-      { name: 'ReallyTrusted', url: 'https://app.reallytrusted.com/', category: 'Business Tools' },
-      { name: 'ShowingTime', url: 'https://showingtime.com/', category: 'Business Tools' },
-      { name: 'SPIN2', url: 'https://alta.registries.gov.ab.ca/spinii/logon.aspx', category: 'Essential Platforms' },
-      { name: 'Trust Deposit Instructions', url: 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust', category: 'Transaction Tools' }
-    ],
 
-    // Category cards come from the "Hub Section" column on the Tools and Resources tab of the sheet.
-    // A sheet section replaces the built-in card with the same name; built-in cards that still hold
+    // Cards come from the ticked rows of the Tools and Resources tab (grouped by Category).
+    // A sheet category replaces the built-in card with the same name; built-in cards that still hold
     // unfinished links are hidden once the sheet loads. Built-in cards are the fallback if it can't be reached.
 
     // Office calendar feed (Apps Script). Shown if it can't be reached.
@@ -476,7 +459,6 @@
     ]
   };
 
-  HUB_CONFIG.toolsUrl = HUB_CONFIG.apiUrl + '?action=tools';
   HUB_CONFIG.linksUrl = HUB_CONFIG.apiUrl + '?action=links';
   HUB_CONFIG.eventsUrl = HUB_CONFIG.apiUrl + '?action=events';
 
@@ -540,39 +522,7 @@
       if (d && d.ok && d.events && d.events.length) renderDates(d.events);
     }).catch(function () {});
 
-    /* ── Quick links (from the Agent Hub sheet) ─── */
-    var QICON = {
-      grid: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',
-      doc: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
-      card: '<rect x="3" y="6" width="18" height="12" rx="1"/><path d="M3 10h18M7 15h4"/>',
-      book: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M9 7h6"/>',
-      brush: '<path d="M12 3a9 9 0 1 0 0 18c1.1 0 2-.9 2-2 0-.6-.3-1-.6-1.4-.3-.4-.4-.8-.4-1.2 0-1.1.9-2 2-2h2.3A3.7 3.7 0 0 0 21 11 9 9 0 0 0 12 3z"/>',
-      tool: '<rect x="3" y="7" width="18" height="13" rx="1"/><path d="M9 7V4h6v3M3 13h18"/>'
-    };
-    function iconFor(t) {
-      var c = (t.category || '').toLowerCase(), n = (t.name || '').toLowerCase();
-      if (/deposit|payment/.test(n)) return QICON.card;
-      if (/essential/.test(c)) return QICON.grid;
-      if (/transaction|contract|form/.test(c)) return QICON.doc;
-      if (/training|support/.test(c)) return QICON.book;
-      if (/marketing/.test(c)) return QICON.brush;
-      return QICON.tool;
-    }
-    function renderQuick(list) {
-      var row = $('hub-quick-row'); if (!row) return;
-      var html = list.filter(function (t) { return t && t.name && /^https?:\/\//i.test(t.url || ''); }).map(function (t) {
-        var accent = /deposit/i.test(t.name) ? ' hub-qbtn--accent' : '';
-        return '<a class="hub-qbtn hub-item' + accent + '" data-kw="' + esc((t.name + ' ' + (t.category || '')).toLowerCase()) + '" href="' + esc(t.url) + '" target="_blank" rel="noopener" aria-label="' + esc(t.name + ' (opens in a new tab)') + '"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EA002A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + iconFor(t) + '</svg><span>' + esc(t.name) + '</span></a>';
-      }).join('');
-      html += '<a class="hub-qbtn hub-item" data-kw="all tools resources apps logins" href="' + esc(HUB_CONFIG.allToolsUrl) + '"><span>All tools \u2192</span></a>';
-      row.innerHTML = html;
-    }
-    renderQuick(HUB_CONFIG.fallbackQuick);
-    fetch(HUB_CONFIG.toolsUrl).then(function (r) { return r.json(); }).then(function (d) {
-      if (d && d.ok && d.tools && d.tools.length) { renderQuick(d.tools); if (input && input.value) runSearch(); }
-    }).catch(function () {});
-
-    /* ── Category cards (from the "Hub Section" column) ─ */
+    /* ── Category cards (ticked rows, grouped by Category) ─ */
     function renderLinks(links) {
       var groups = document.querySelector('.hub-groups'); if (!groups) return;
       var order = [], by = {};
