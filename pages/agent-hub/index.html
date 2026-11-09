@@ -341,27 +341,27 @@
       <div class="hub-cols">
 
         <div class="hub-groups">
-          <section class="hub-panel" aria-labelledby="h-mkt" data-section>
+          <section class="hub-panel" data-dyn aria-labelledby="h-mkt" data-section>
             <h2 class="hub-h2" id="h-mkt">Marketing</h2>
             <a class="hub-link hub-item" data-kw="brand assets logos colours fonts guidelines" href="https://info.royallepagesolutions.com/pages/agent-hub/brand-assets/">Brand Assets</a>
             <a class="hub-link hub-item" data-kw="print supplies paper folders signs creb catalogue order" href="https://info.royallepagesolutions.com/pages/agent-hub/print-supplies/">Print &amp; Supplies</a>
             <a class="hub-link hub-item" data-kw="preferred suppliers photographers stagers lawyers mortgage directory vendors" href="https://info.royallepagesolutions.com/pages/agent-hub/preferred-suppliers/">Preferred Suppliers</a>
           </section>
-          <section class="hub-panel" aria-labelledby="h-deals" data-section>
+          <section class="hub-panel" data-dyn aria-labelledby="h-deals" data-section>
             <h2 class="hub-h2" id="h-deals">Deals &amp; Paperwork</h2>
             <a class="hub-link hub-item" data-kw="deal submission submit deal paperwork transaction" href="https://REPLACE-ME.invalid/deal-submission">Deal Submission</a>
             <a class="hub-link hub-item" data-kw="conveyancing checklist closing lawyer" href="https://REPLACE-ME.invalid/conveyancing-checklist">Conveyancing Checklist</a>
             <a class="hub-link hub-item" data-kw="coverage commission agreement vacation associate" href="https://REPLACE-ME.invalid/coverage-commission-agreement">Coverage &amp; Commission Agreement</a>
             <a class="hub-link hub-item" data-kw="forms templates documents reca creb" href="https://REPLACE-ME.invalid/forms-templates">Forms &amp; Templates</a>
           </section>
-          <section class="hub-panel" aria-labelledby="h-train" data-section>
+          <section class="hub-panel" data-dyn aria-labelledby="h-train" data-section>
             <h2 class="hub-h2" id="h-train">Training</h2>
             <a class="hub-link hub-item" data-kw="rlpsphere boldtrail how to tutorials crm training" href="https://REPLACE-ME.invalid/rlpsphere-how-tos">rlpSPHERE / BoldTrail How-Tos</a>
             <a class="hub-link hub-item" data-kw="monday meeting recordings video replay" href="https://REPLACE-ME.invalid/monday-meeting-recordings">Monday Meeting Recordings</a>
             <a class="hub-link hub-item" data-kw="buffini pathway resources coaching" href="https://REPLACE-ME.invalid/buffini-pathway">Buffini Pathway Resources</a>
             <a class="hub-link hub-item" data-kw="new agent onboarding getting started checklist" href="https://REPLACE-ME.invalid/new-agent-onboarding">New Agent Onboarding</a>
           </section>
-          <section class="hub-panel" aria-labelledby="h-pol" data-section>
+          <section class="hub-panel" data-dyn aria-labelledby="h-pol" data-section>
             <h2 class="hub-h2" id="h-pol">Policies</h2>
             <a class="hub-link hub-item" data-kw="policy manual rules procedures" href="https://REPLACE-ME.invalid/policy-manual">Policy Manual</a>
             <a class="hub-link hub-item" data-kw="brokerage notices announcements memos" href="https://REPLACE-ME.invalid/brokerage-notices">Brokerage Notices</a>
@@ -463,6 +463,11 @@
       { name: 'Trust Deposit Instructions', url: 'https://keybox.payload.com/royal-lepage-solutions/payment/royal-lepage-solutions-trust', category: 'Transaction Tools' }
     ],
 
+    // Category cards come from the "Hub Section" column on the Tools and Resources tab of the sheet.
+    // A sheet section replaces the built-in card with the same name; built-in cards that still hold
+    // unfinished links are hidden once the sheet loads. Built-in cards are the fallback if it can't be reached.
+    linksUrl: 'https://script.google.com/macros/s/AKfycby48ff-dcsJxo2lhDSMXaPDJt8lN2lYft24yaP5SF5dAo8hcpF0ZFF6qcbuNOSRMMh7yg/exec?action=links',
+
     // Office calendar feed (Apps Script). Shown if it can't be reached.
     eventsUrl: 'https://script.google.com/macros/s/AKfycby48ff-dcsJxo2lhDSMXaPDJt8lN2lYft24yaP5SF5dAo8hcpF0ZFF6qcbuNOSRMMh7yg/exec?action=events',
     fallbackEvents: [
@@ -561,6 +566,32 @@
     renderQuick(HUB_CONFIG.fallbackQuick);
     fetch(HUB_CONFIG.toolsUrl).then(function (r) { return r.json(); }).then(function (d) {
       if (d && d.ok && d.tools && d.tools.length) { renderQuick(d.tools); if (input && input.value) runSearch(); }
+    }).catch(function () {});
+
+    /* ── Category cards (from the "Hub Section" column) ─ */
+    function renderLinks(links) {
+      var groups = document.querySelector('.hub-groups'); if (!groups) return;
+      var order = [], by = {};
+      links.forEach(function (l) { var k = l.section.toLowerCase(); if (!by[k]) { by[k] = { title: l.section, items: [] }; order.push(k); } by[k].items.push(l); });
+      var builtin = {};
+      [].forEach.call(groups.querySelectorAll('[data-dyn]'), function (n) {
+        var k = n.querySelector('h2').textContent.trim().toLowerCase();
+        var unfinished = [].some.call(n.querySelectorAll('a'), function (a) { return isPlaceholder(a.getAttribute('href')); });
+        if (by[k]) builtin[k] = n; else if (unfinished) n.parentNode.removeChild(n);
+      });
+      var anchor = $('hub-office');
+      order.forEach(function (k, i) {
+        var g = by[k], el = document.createElement('section');
+        el.className = 'hub-panel'; el.setAttribute('data-dyn', ''); el.setAttribute('data-section', ''); el.setAttribute('aria-labelledby', 'h-dyn-' + i);
+        el.innerHTML = '<h2 class="hub-h2" id="h-dyn-' + i + '">' + esc(g.title) + '</h2>' + g.items.map(function (l) {
+          var ext = false; try { ext = !/(^|\.)royallepagesolutions\.com$/.test(new URL(l.url).hostname); } catch (e) {}
+          return '<a class="hub-link hub-item" data-kw="' + esc((l.label + ' ' + g.title).toLowerCase()) + '" href="' + esc(l.url) + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '>' + esc(l.label) + '</a>';
+        }).join('');
+        if (builtin[k]) builtin[k].parentNode.replaceChild(el, builtin[k]); else groups.insertBefore(el, anchor);
+      });
+    }
+    fetch(HUB_CONFIG.linksUrl).then(function (r) { return r.json(); }).then(function (d) {
+      if (d && d.ok && d.links && d.links.length) { renderLinks(d.links); if (input && input.value) runSearch(); }
     }).catch(function () {});
 
     /* ── Placeholder links ──────────────────────── */
