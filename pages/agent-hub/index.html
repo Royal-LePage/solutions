@@ -449,9 +449,11 @@
     // Where the "Request a tool or resource" form emails to.
     requestEmail: 'kyleduiker@royallepage.ca',
 
+    // Web app URL of the script in the Agent Hub sheet (see AgentHub.gs). Paste the new URL here.
+    apiUrl: 'https://script.google.com/macros/s/AKfycbx2_YUaV-Q2ZwjzGAqrgpzEUBRA1Qh729k1VWMW42URxzHYalB-bEUxJoT0szRaTDAB/exec',
+
     // Quick Links come from the "Quick Link" column on the Agent Hub sheet (see Code.gs). This list is
     // only used if the sheet can't be reached.
-    toolsUrl: 'https://script.google.com/macros/s/AKfycby48ff-dcsJxo2lhDSMXaPDJt8lN2lYft24yaP5SF5dAo8hcpF0ZFF6qcbuNOSRMMh7yg/exec?action=tools',
     allToolsUrl: 'https://info.royallepagesolutions.com/pages/agent-hub/tools-resources/',
     fallbackQuick: [
       { name: 'Pillar 9', url: 'https://pillarnine.com/', category: 'Essential Platforms' },
@@ -466,15 +468,17 @@
     // Category cards come from the "Hub Section" column on the Tools and Resources tab of the sheet.
     // A sheet section replaces the built-in card with the same name; built-in cards that still hold
     // unfinished links are hidden once the sheet loads. Built-in cards are the fallback if it can't be reached.
-    linksUrl: 'https://script.google.com/macros/s/AKfycby48ff-dcsJxo2lhDSMXaPDJt8lN2lYft24yaP5SF5dAo8hcpF0ZFF6qcbuNOSRMMh7yg/exec?action=links',
 
     // Office calendar feed (Apps Script). Shown if it can't be reached.
-    eventsUrl: 'https://script.google.com/macros/s/AKfycby48ff-dcsJxo2lhDSMXaPDJt8lN2lYft24yaP5SF5dAo8hcpF0ZFF6qcbuNOSRMMh7yg/exec?action=events',
     fallbackEvents: [
       { title: 'WestJet Pack presale ends', month: 'NOV', day: '27', time: '', where: 'Winter Gala raffle tickets', featured: false, allDay: true, start: '2026-11-27', end: '2026-11-28', url: '' },
       { title: 'Winter Gala', month: 'DEC', day: '11', time: '6:00 PM', where: 'Thomson\u2019s Social Hub', featured: true, allDay: false, start: '2026-12-11T18:00:00-07:00', end: '2026-12-11T23:00:00-07:00', url: 'https://info.royallepagesolutions.com/holiday-party/' }
     ]
   };
+
+  HUB_CONFIG.toolsUrl = HUB_CONFIG.apiUrl + '?action=tools';
+  HUB_CONFIG.linksUrl = HUB_CONFIG.apiUrl + '?action=links';
+  HUB_CONFIG.eventsUrl = HUB_CONFIG.apiUrl + '?action=events';
 
   (function () {
     'use strict';
