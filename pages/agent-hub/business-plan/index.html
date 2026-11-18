@@ -650,12 +650,12 @@ const BOARD_2026={year:1953.95,month:91.88}; /* CREB® */
    Alberta West (AWRA): from the "Annual REALTOR Expenses in Alberta — AWRA 2026" planning estimate (Oct 26, 2026). */
 const BOARDS={creb:{name:'CREB®',year:1953.95,month:91.88},awra:{name:'Alberta West',year:1440.50,month:105.53}};
 const BIZ_Y=[['board','Board, association & RECA fees',''],['gli','General liability insurance','']];
-const BIZ=[['desk','Brokerage and RLP fees'],['office','Office rent'],['mls','Board &amp; MLS® system fees'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other business costs']];
-const BIZ_NN=['desk','office','mls','tech','vehicle','prof','other'], BIZ_GROW=[['coaching','Coaching & education'],['assistant','Assistant / admin support']];
+const BIZ=[['desk','Brokerage fees'],['corp','Royal LePage Canada Corporate Fees'],['office','Office rent'],['mls','Board &amp; MLS® system fees'],['tech','Technology, CRM & phone'],['vehicle','Vehicle & travel'],['coaching','Coaching & education'],['assistant','Assistant / admin support'],['prof','Accounting & legal'],['other','Other business costs']];
+const BIZ_NN=['desk','corp','office','mls','tech','vehicle','prof','other'], BIZ_GROW=[['coaching','Coaching & education'],['assistant','Assistant / admin support']];
 const PERS_NN=['housing','transport','groceries','utilities','insurance','family','debt','other'], PERS_LIFE=[['lifestyle','Dining, entertainment & travel'],['giving','Giving & charity']];
 const MKTG_PCT=0.10;
 const PERS=[['housing','Housing (mortgage/rent, tax, insurance)'],['transport','Personal transportation'],['groceries','Groceries & household'],['utilities','Utilities & internet'],['insurance','Life, health & other insurance'],['family','Childcare & family'],['debt','Personal debt payments'],['lifestyle','Lifestyle, dining & travel'],['giving','Giving & charity'],['other','Other personal costs']];
-const MKTG=[['paid','Paid social & online ads'],['print','Print & mailers'],['events','Client events & appreciation'],['popby','Pop-bys & client gifts'],['email','Email, newsletter & CRM add-ons'],['signage','Signage, photos & listing marketing'],['other','Other marketing']];
+const MKTG=[['paid','Paid social & online ads'],['print','Print & mailers'],['events','Client events & appreciation'],['popby','Pop-bys & client gifts'],['email','Email, newsletter & CRM add-ons'],['signage','Signage, photos & listing marketing']];
 const BRAND=[['google','My first three Google results are professional and accurate'],['gbp','Google Business Profile is claimed and has reviews from the last 90 days'],['photo','The same current headshot is used on every platform'],['bio','My Royal LePage bio page and website are current'],['linkedin','LinkedIn headline and profile are up to date'],['social','Every social profile links back to my website or bio page']];
 const WEEK_TYPES=[['prospect','Prospecting'],['appt','Appointments'],['client','Client service'],['admin','Admin'],['mktg','Marketing'],['learn','Learning'],['personal','Family / personal'],['off','Off']];
 const WEEK_DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
@@ -732,13 +732,14 @@ function DEFAULT(){
   sources:SOURCES.map(nm=>({name:nm,pri:'',last:'',goal:'',why:'',who:'',strat:'',res:'',result:''})),
   content:{personal:'',professional:'',and:'',andTopic:'',platforms:'',themes:'',process:''},
   mktg:{paid:'',print:'',events:'',popby:'',email:'',signage:'',other:''},
+  mktgX:[{name:'',amt:''}],
   brand:{},
   cal:MONTHS.map(()=>({call:'',text:'',popby:'',video:'',event:''})),
   tech:{crm:'',tm:'',forms:'',acct:'',social:'',other:''},
   tasks:DEFAULT_TASKS.map(t=>({task:t,owner:'Me',action:'',tool:''})),
   inits:[{what:'',date:'',priority:'High'},{what:'',date:'',priority:'Medium'},{what:'',date:'',priority:'Medium'}],
   bizY:{board:'',gli:200},
-  biz:{desk:264,office:'',mls:'',board:'',license:'',tech:'',vehicle:'',coaching:'',assistant:'',prof:'',other:''},
+  biz:{desk:264,corp:'',office:'',mls:'',board:'',license:'',tech:'',vehicle:'',coaching:'',assistant:'',prof:'',other:''},
   pers:{housing:'',transport:'',groceries:'',utilities:'',insurance:'',family:'',debt:'',lifestyle:'',giving:'',other:''},
   save:{extraM:'',rrsp:'',postTax:'',rrspM:'',postTaxM:'',rrspP:'',postTaxP:'',resMonths:'',resAdd:false,rrspWhen:'first',postTaxWhen:'first',debtWhen:'first',resWhen:'first',debt:'',reserves:''},
   alloc:{biz:'',tax:'',pers:''},
@@ -772,8 +773,13 @@ const BLANK=DEFAULT();
 function normalize(){
  /* Licence & E&O is now part of desk fees: fold any saved amount into desk so the total doesn't change. */
  if(S.biz&&S.biz.license!==''&&S.biz.license!=null&&n(S.biz.license)){ S.biz.desk=String(n(S.biz.desk)+n(S.biz.license)); S.biz.license=''; }
- /* Brokerage and RLP fees are prefilled at $264/month; a blank saved value picks up the prefill (enter 0 for none). */
- if(S.biz&&(S.biz.desk===''||S.biz.desk==null)) S.biz.desk=264;
+ /* Brokerage and RLP fees were one $264/month line. They are now Brokerage fees ($120) + Royal LePage Canada Corporate Fees ($144).
+    Split the old line once so each plan's total stays the same; after that, blank lines pick up the prefills (enter 0 for none). */
+ if(S.biz&&!S.meta.corpV){ if(S.biz.desk===''||S.biz.desk==null) S.biz.desk=264;
+  if(S.biz.corp===''||S.biz.corp==null){ const d=n(S.biz.desk); if(d>=144){ S.biz.desk=Math.round((d-144)*100)/100; S.biz.corp=144; } else S.biz.corp=0; }
+  S.meta.corpV=1; }
+ if(S.biz&&(S.biz.desk===''||S.biz.desk==null)) S.biz.desk=120;
+ if(S.biz&&(S.biz.corp===''||S.biz.corp==null)) S.biz.corp=144;
  if(S.bizY&&(S.bizY.gli===''||S.bizY.gli==null)) S.bizY.gli=200; /* general liability insurance prefilled at $200/yr */
  if(!S.sources||S.sources.length!==SOURCES.length||S.sources.some((x,i)=>x.name!==SOURCES[i])) S.sources=DEFAULT().sources;
  if(S.season.curve!=='p9'){
@@ -790,6 +796,8 @@ function normalize(){
  S.score.rygP=[0,1,2,3,4].map(i=>{ const r=(S.score.rygP||[])[i]; return Array.isArray(r)?{q:r.slice(0,4)}:(r&&Array.isArray(r.q)?r:{q:[0,0,0,0]}); });
  S.week.d=WEEK_DAYS.map((d,i)=>{ const r=(S.week.d||[])[i]; const a=Array.isArray(r)?r:(r&&Array.isArray(r.s)?r.s:[]); return {s:WEEK_SLOTS.map((x,j)=>a[j]||'')}; });
  if(S.db&&S.db.ap===undefined) S.db.ap='';
+ if(!Array.isArray(S.mktgX)||!S.mktgX.length) S.mktgX=[{name:'',amt:''}];
+ if(S.mktg&&S.mktg.other!==''&&S.mktg.other!=null){ const o=S.mktg.other; S.mktgX=S.mktgX.filter(x=>x.name||x.amt!==''); S.mktgX.unshift({name:'Other marketing',amt:o}); S.mktg.other=''; }
  if(S.biz&&S.biz.board!==''&&S.biz.board!=null&&(S.bizY.board===''||S.bizY.board==null)){ S.bizY.board=Math.round(n(S.biz.board)*12*100)/100; } if(S.biz) S.biz.board='';
  if(!Array.isArray(S.pri.items)||!S.pri.items.length) S.pri.items=DEFAULT().pri.items;
  S.pri.items.forEach(x=>{ if(!Array.isArray(x.q)||x.q.length!==4) x.q=['','','','']; });
@@ -1021,7 +1029,6 @@ const SECTIONS=[
   <div class="row">${T('','pri.notFocus',{rows:3,aria:'What I will not focus on this year'}).replace('<span></span>','')}</div>
  `},
  {id:'budget',t:'Your Budget',d:'Your non-negotiables — your brokerage costs and the bills that get paid whether you close 5 deals or 25 — set your minimum. Then plan the marketing, growth and lifestyle spending you’d like your goal to fund.',html:()=>`
-  ${intro('Two categories, business and personal. In each, the first table is what you pay no matter how many deals you close — it <b>sets your minimum</b> GCI. The <b>after your goal</b> spending comes out of what your goal leaves you. Monthly amounts unless noted; rough numbers are fine, and your plan is private.')}
   <h3 class="cat-h">Business expenses</h3>
   <div class="row c2" style="align-items:start">
    <div><h4 class="sp-h">Business costs <small>sets your minimum</small></h4><table class="brk"><tbody>
@@ -1038,12 +1045,12 @@ const SECTIONS=[
     <tr class="sub-h"><td colspan="2">Annual fees <small style="color:#888">— enter the yearly amount</small></td></tr>
     ${BIZ_Y.map(([k,l,h])=>`<tr><td>${l}${h?` <small style="color:#888">(${h})</small>`:''}</td><td style="width:150px">${F('','bizY.'+k,{type:'money',aria:l+' per year'})}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Business non-negotiables / yr</td><td class="num" data-o="bizNN"></td></tr></tfoot></table>
-    ${deeper('What’s in the 2026 board fees',`<h4 class="sp-h" style="margin-top:0">CREB®</h4><table class="brk"><tbody>
+    ${deeper('What’s in the 2026 board fees',`<div class="tip" style="margin:0 0 14px"><b>When the annual fees are due:</b> CREB® / AREA in <b>February</b>, CREA in <b>March</b> and RECA in <b>September</b>. Set money aside so these don’t land all at once.</div><h4 class="sp-h" style="margin-top:0">CREB®</h4><table class="brk"><tbody>
      <tr class="sub-h"><td colspan="2">Once a year</td></tr>
-     <tr><td>CREB® dues<small class="bud-hint">dues, training fee, charitable foundation, CIBS + GST</small></td><td class="num">$603.45</td></tr>
-     <tr><td>CREA fees<small class="bud-hint">+ GST</small></td><td class="num">$325.50</td></tr>
-     <tr><td>AREA dues</td><td class="num">$275.00</td></tr>
-     <tr><td>RECA registration renewal<small class="bud-hint">associate</small></td><td class="num">$750.00</td></tr>
+     <tr><td>CREB® dues<small class="bud-hint">dues, training fee, charitable foundation, CIBS + GST · <b>due in February</b></small></td><td class="num">$603.45</td></tr>
+     <tr><td>CREA fees<small class="bud-hint">+ GST · <b>due in March</b></small></td><td class="num">$325.50</td></tr>
+     <tr><td>AREA dues<small class="bud-hint"><b>due in February</b></small></td><td class="num">$275.00</td></tr>
+     <tr><td>RECA registration renewal<small class="bud-hint">associate · <b>due in September</b></small></td><td class="num">$750.00</td></tr>
      <tr class="sub-h"><td>Total per year</td><td class="num">$1,953.95</td></tr>
      <tr class="sub-h"><td colspan="2">Every month</td></tr>
      <tr><td>Pillar 9 system fee<small class="bud-hint">+ GST</small></td><td class="num">$28.88</td></tr>
@@ -1053,9 +1060,9 @@ const SECTIONS=[
      <p class="fine" style="margin:8px 0 0">About $3,057 a year in all.</p>
      <h4 class="sp-h" style="margin-top:16px">Alberta West (AWRA)</h4><table class="brk"><tbody>
      <tr class="sub-h"><td colspan="2">Once a year</td></tr>
-     <tr><td>RECA licence renewal<small class="bud-hint">includes REIX and Assurance Fund</small></td><td class="num">$750.00</td></tr>
-     <tr><td>AREA annual membership</td><td class="num">$275.00</td></tr>
-     <tr><td>CREA annual membership<small class="bud-hint">$310 + GST</small></td><td class="num">$325.50</td></tr>
+     <tr><td>RECA licence renewal<small class="bud-hint">includes REIX and Assurance Fund · <b>due in September</b></small></td><td class="num">$750.00</td></tr>
+     <tr><td>AREA annual membership<small class="bud-hint"><b>due in February</b></small></td><td class="num">$275.00</td></tr>
+     <tr><td>CREA annual membership<small class="bud-hint">$310 + GST · <b>due in March</b></small></td><td class="num">$325.50</td></tr>
      <tr><td>Critical Illness Benefit Society<small class="bud-hint">not yet confirmed for AWRA</small></td><td class="num">$45.00</td></tr>
      <tr><td>Charitable Foundation<small class="bud-hint">not yet confirmed for AWRA</small></td><td class="num">$45.00</td></tr>
      <tr class="sub-h"><td>Total per year</td><td class="num">$1,440.50</td></tr>
@@ -1074,6 +1081,8 @@ const SECTIONS=[
    <table class="brk"><tbody>
     <tr class="sub-h"><td colspan="2">Marketing <small style="color:#888">— yearly amount · <span data-o="mktgSug"></span></small></td></tr>
     ${MKTG.map(([k,l])=>`<tr><td>${l}</td><td>${F('','mktg.'+k,{type:'money',aria:l+' per year'})}</td></tr>`).join('')}
+    </tbody><tbody id="mktgx-rows"></tbody><tbody>
+    <tr class="no-print"><td colspan="2"><button class="btn btn-line btn-sm" id="mktgx-add" type="button">+ Add another marketing item</button></td></tr>
     <tr class="sub-h"><td colspan="2">Growth <small style="color:#888">— monthly</small></td></tr>
     ${BIZ_GROW.map(([k,l])=>`<tr><td>${l}</td><td>${F('','biz.'+k,{type:'money',aria:l+' per month'})}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Total marketing / yr <small class="muted" data-o="mktgPctGci"></small></td><td class="num" data-o="mktgTotal"></td></tr></tfoot></table>
@@ -1128,7 +1137,7 @@ const SECTIONS=[
   <div class="seg" id="method-seg"><button data-m="gci" type="button">GCI goal</button><button data-m="budget" type="button">Work back from my budget</button><button data-m="units" type="button">Number of deals</button></div>
   <div id="m-bud" class="bud-calc"></div>
   <div class="row c4" style="margin-top:16px" id="m-set">
-   <div id="m-gci" style="display:contents">${F('GCI goal','goals.gciGoal',{type:'money',hint:'before split, cap & expenses',ph:'e.g. 200,000'})}</div><div id="m-gcin" class="f" style="display:none"><span>GCI needed <small>to cover your budget</small></span><div class="netbox" data-o="gciNeedBox">–</div></div><div class="f"><span>Net income <small>after deductions &amp; business expenses</small></span><div class="netbox" data-o="netGoalBox">–</div></div>
+   <div id="m-gci" style="display:contents">${F('GCI goal','goals.gciGoal',{type:'money',hint:'before split, cap & expenses',ph:'e.g. 200,000'})}</div><div id="m-gcin" class="f" style="display:none"><span>GCI needed <small>to cover your budget</small></span><div class="netbox" data-o="gciNeedBox">–</div></div>
    ${F('Sellers you want to work with','goals.listShare',{type:'pct',hint:'% of your deals',ph:'e.g. 50'})}<div class="f"><span>Buyers <small>the rest of your deals</small></span><div class="netbox" data-o="buyShareBox">–</div></div>
    </div>
   <p id="gci-note" style="margin:-4px 0 0;font-size:13px;color:var(--bp-dark-grey)"></p>
@@ -1267,7 +1276,7 @@ function renderShell(){
    ${s.html()}
    <div class="sec-foot">${footHTML(i)}</div>
  </section>`).join('');
- renderSources();renderSrcCards();renderTasks();renderInits();renderCal();renderPri();renderScore();renderSeason();renderVBank();renderWeek();renderAct();bindMkt();
+ renderSources();renderSrcCards();renderMktgX();renderTasks();renderInits();renderCal();renderPri();renderScore();renderSeason();renderVBank();renderWeek();renderAct();bindMkt();
  applyView(); show(current,false);
 }
 /* "Essentials only" view: the ★ steps plus Start Here and the One-Page Summary. Prev/next skip hidden steps. */
@@ -1316,6 +1325,9 @@ function renderSrcCards(){
   :'<p class="muted">Mark a source as <b>Primary</b> in the table above to plan it here.</p>';
  fillAll(el);
 }
+/* Other marketing: agents name their own items and add as many as they need. */
+function renderMktgX(){ const el=document.getElementById('mktgx-rows'); if(!el) return;
+ el.innerHTML=S.mktgX.map((x,i)=>`<tr><td><div style="display:flex;gap:4px;align-items:center"><input data-k="mktgX.${i}.name" placeholder="Other marketing — what is it?" aria-label="Other marketing item ${i+1}">${S.mktgX.length>1?`<button class="btn-x no-print" data-del-mx="${i}" title="Remove" type="button">×</button>`:''}</div></td><td>${F('','mktgX.'+i+'.amt',{type:'money',aria:'Other marketing item '+(i+1)+' per year'})}</td></tr>`).join(''); }
 function renderTasks(){
  document.getElementById('task-body').innerHTML=S.tasks.map((t,i)=>`<tr>
   <td><input data-k="tasks.${i}.task" aria-label="Task ${i+1}: area"></td><td><input data-k="tasks.${i}.owner" aria-label="Task ${i+1}: owner"></td>
@@ -1450,11 +1462,13 @@ document.addEventListener('click',e=>{ const mo=document.getElementById('more');
   if(i>=0) ws[i]=''; else { const e=ws.findIndex(x=>!String(x||'').trim()); if(e<0){ toast('All 15 spots are full — clear one first'); return; } ws[e]=w; }
   fillAll(document.getElementById('s-values')); renderVBank(); recompute(); queueSave(); return; }
  if(t.dataset.delAct!==undefined){ S.act.splice(+t.dataset.delAct,1); renderAct(); queueSave(); return; }
+ if(t.dataset.delMx!==undefined){ S.mktgX.splice(+t.dataset.delMx,1); if(!S.mktgX.length) S.mktgX=[{name:'',amt:''}]; renderMktgX(); fillAll(document.getElementById('mktgx-rows')); recompute(); queueSave(); return; }
  if(t.dataset.delTask!==undefined){ S.tasks.splice(+t.dataset.delTask,1); renderTasks(); fillAll(document.getElementById('task-body')); queueSave(); return; }
  if(t.dataset.delPri!==undefined){ S.pri.items.splice(+t.dataset.delPri,1); renderPri(); recompute(); queueSave(); return; }
  if(t.dataset.delInit!==undefined){ S.inits.splice(+t.dataset.delInit,1); renderInits(); fillAll(document.getElementById('init-body')); recompute(); queueSave(); return; }
  switch(t.id){
   case 'pri-add': if(S.pri.items.length<5){ S.pri.items.push({goal:'',priority:'',why:'',strategy:'',measure:'',target:'',q:['','','','']}); renderPri(); queueSave(); } break;
+  case 'mktgx-add': S.mktgX.push({name:'',amt:''}); renderMktgX(); fillAll(document.getElementById('mktgx-rows')); { const r=document.querySelectorAll('#mktgx-rows input[data-k$=".name"]'); if(r.length) r[r.length-1].focus(); } queueSave(); break;
   case 'task-add': S.tasks.push({task:'',owner:'',action:'',tool:''}); renderTasks(); fillAll(document.getElementById('task-body')); queueSave(); break;
   case 'act-add': S.act.push({what:'',pri:'',owner:'Me',due:'',done:false}); renderAct(); queueSave(); break;
   case 'week-fill': { const k=fillWeekTemplate(); renderWeek(); recompute(); queueSave(); toast(k?'Starting week added — change any block':'Every block is already set'); break; }
@@ -1463,6 +1477,7 @@ document.addEventListener('click',e=>{ const mo=document.getElementById('more');
   case 'board-fill': case 'board-fill-aw': { const B=BOARDS[t.id==='board-fill'?'creb':'awra'], f=[];
    /* fill a line if it's blank or still holds another board's 2026 amount (so agents can switch boards); never overwrite their own numbers */
    const free=(v,key)=>v===''||v==null||Object.values(BOARDS).some(x=>Math.abs(n(v)-x[key])<0.005);
+   if(S.biz.corp===''||S.biz.corp==null){ S.biz.corp=144; f.push('corporate fees'); }
    if(free(S.biz.mls,'month')){ S.biz.mls=B.month; f.push('monthly fees'); } if(free(S.bizY.board,'year')){ S.bizY.board=B.year; f.push('annual dues & licence'); }
    fillAll(document.getElementById('s-budget')); recompute(); queueSave(); toast(f.length?`Filled in 2026 ${B.name} ${f.join(' and ')} — change them if yours are different`:`Those lines already have your own amounts — clear them first to use the 2026 ${B.name} fees`); break; }
   case 'season-reset': S.season.w=mktW().slice(); S.season.lag=30; fillAll(document.getElementById('s-season')); recompute(); queueSave(); break;
@@ -1592,7 +1607,7 @@ function calc(){
  const gciSide=gciGross*(1-rr);
  const split=Math.min(Math.max(n(g.split),0),100)/100, t=Math.min(Math.max(n(g.tax),0),95)/100;
  const ci=capInfo();
- const mktgTotal=sumObj(S.mktg);
+ const mktgTotal=sumObj(S.mktg)+(S.mktgX||[]).reduce((a,x)=>a+n(x.amt),0);
  const pick=(o,ks)=>ks.reduce((a,k)=>a+n(o[k]),0);
  const bizYear=sumObj(S.bizY), bizNN=pick(S.biz,BIZ_NN)*12+bizYear, bizGrow=pick(S.biz,BIZ_GROW.map(x=>x[0]))*12, bizAnnual=bizNN+bizGrow+mktgTotal;
  const persNN=pick(S.pers,PERS_NN)*12, persLife=pick(S.pers,PERS_LIFE.map(x=>x[0]))*12, persAnnual=persNN+persLife;
@@ -1926,7 +1941,7 @@ function recompute(){
  { const rv=document.getElementById('res-verdict'); if(rv){ const fix=(c.verdict==='min'||c.verdict==='mktg'||c.verdict==='over')&&c.fullGci>0;
    rv.innerHTML=!c.gci?'':c.verdict==='none'?`<div class="tip">Your GCI goal is <b>${money(c.gci)}</b>. Add your non-negotiables on <b>Your Budget</b> to see whether it covers your year.</div>`
     :`<div class="tip"><b>Your GCI goal: ${money(c.gci)}.</b>${verdictHTML(c)}${fix?`<div style="margin-top:10px"><button type="button" class="btn btn-line btn-sm" data-setgoal="${c.fullGci}">Set my goal to ${money(c.fullGci)} — covers everything</button></div>`:''}</div>`; } }
- if(gn) gn.innerHTML=S.goals.method!=='budget'&&S.goals.method!=='units'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side${c.rr>0?` (blended — ${money(c.gciGross)} less referral fees on ${pct1(c.refSh)} of deals)`:''} — plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b> (rounded up). After your split, cap, RLP royalty, deal fees, donations and expenses your net is <b>${money(c.profit)}</b>, about <b>${money(c.takeHome)}</b> take-home after your income tax holdback${c.rrsp?' and RRSP':''}.${verdictHTML(c)}`:'';
+ if(gn) gn.innerHTML=S.goals.method!=='budget'&&S.goals.method!=='units'&&n(S.goals.gciGoal)>0&&c.gciSide>0?`${money(c.gci)} GCI ÷ ${money(c.gciSide)} per side${c.rr>0?` (blended — ${money(c.gciGross)} less referral fees on ${pct1(c.refSh)} of deals)`:''} — plan on <b>${int(c.sides)} closed ${c.sides===1?'side':'sides'}</b> (rounded up). You’ll see your net income on <b>Your Numbers</b> once Your Budget is filled in.`:'';
  if(gn&&!(c.gciSide>0)&&n(S.goals.gciGoal)>0&&S.goals.method==='gci') gn.innerHTML='Add your average sale and commission above to see how many sides that takes.';
 
 
@@ -2202,7 +2217,7 @@ const SAMPLE={meta:{year:0},vision:{name:'Sample Agent (Jordan Lee)',one:'Close 
  values:{words:['Integrity','Family','Growth','Service','Communication'].concat(Array(10).fill('')),core:[{v:'Integrity',means:'Tell the truth',practice:'Honest pricing advice'},{v:'Service',means:'Client first',practice:'Same-day replies'},{v:'Growth',means:'Keep learning',practice:'Monthly coaching'},{v:'',means:'',practice:''},{v:'',means:'',practice:''}]},
  last:{listings:7,buyers:8,avgPrice:620000,gci:168000},reflect:{worked:'Sphere calls and open houses',didnt:'Paid online leads',stop:'Buying cold leads',start:'Monthly client events',cont:'Pop-bys'},
  pos:{ideal:'Move-up families in Mahogany, Auburn Bay and Seton',ps:{client:'move-up families in the SE lake communities',value:'knows every lake community street by street',proof:'I live here and have sold 100+ homes nearby',outcome:'buy the right home and sell for top dollar'}},
- pers:{housing:2800,transport:600,groceries:1100,utilities:350,insurance:300,family:400,debt:250,lifestyle:700,giving:100},biz:{desk:420,tech:180,vehicle:450,prof:100,coaching:250},bizY:{board:1400,gli:200},
+ pers:{housing:2800,transport:600,groceries:1100,utilities:350,insurance:300,family:400,debt:250,lifestyle:700,giving:100},biz:{desk:276,corp:144,tech:180,vehicle:450,prof:100,coaching:250},bizY:{board:1400,gli:200},
  goals:{method:'gci',gciGoal:210000,avgPrice:650000,commModel:'tier',t1:3.5,t2:1.5,split:20,cap:12000,capDate:'2027-06-01',dealFee:250,feeMode:'cap',tax:30,gstHold:5,listShare:50,buyShare:50},
  save:{rrspM:300,postTaxP:5,reserves:8000,resMonths:'3'},mktg:{paid:3000,print:4000,events:3500,popby:2000,email:1000,signage:1500},
  sources:[{goal:9,last:7,pri:'Primary',why:'Most of my business already comes from people who know me',who:'250 A and B contacts in my database',strat:'Monthly call or text to every A and B, a pop-by each quarter and two client events a year',res:'1 hour a day, about $4,000 a year for gifts and events',result:'9 sides, about half my year'},{goal:4,last:3,pri:'Primary',why:'Past clients refer and come back when they move again',who:'The 60 families I’ve helped buy or sell',strat:'Home-anniversary call, annual equity update and an invite to every client event',res:'2 hours a week, newsletter in rlpSPHERE',result:'4 sides from repeat and referred past clients'},{goal:0,last:0},{goal:2,last:2,pri:'Primary',why:'Meets buyers and neighbours in my farm area face to face',who:'Move-up buyers and future sellers in Mahogany, Auburn Bay and Seton',strat:'Two open houses a month on my own or other agents’ listings, with door-knocking the day before',res:'6 hours a month, signs and a sign-in tablet',result:'2 sides plus new A and B contacts'},{goal:2,last:2,pri:'Secondary'},{goal:0,last:1},{goal:1,last:0}],
