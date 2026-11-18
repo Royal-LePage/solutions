@@ -379,6 +379,8 @@ h4.sp-h{margin:16px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:upp
 /* Checklist */
 .chk{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--bp-warm-grey);border-radius:4px;margin-bottom:8px;cursor:pointer;font-weight:500}
 .chk input{width:18px;height:18px;accent-color:var(--bp-red);flex:0 0 18px}
+.fy-chk{margin-bottom:18px}
+body.bp-first .c-last{display:none}
 
 /* SWOT */
 .swot{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -718,7 +720,7 @@ function DEFAULT(){
   sys:{consistent:'',onlyMe:'',systemize:'',delegate:''},
   pri:{items:[0,1,2].map(()=>({goal:'',priority:'',why:'',strategy:'',measure:'',target:'',unit:'year',dir:'up',q:['','','','']})),notFocus:''},
   obj:{primary:'',sec1:'',sec2:''},
-  last:{listings:'',buyers:'',avgPrice:'',gci:''},
+  last:{listings:'',buyers:'',avgPrice:'',gci:'',first:false},
   reflect:{worked:'',didnt:'',best:'',worst:'',stop:'',start:'',cont:'',waste:''},
   db:{ap:'',a:'',b:'',c:'',d:'',o:'',add:''},
   week:{d:WEEK_DAYS.map(()=>({s:WEEK_SLOTS.map(()=>'')}))},
@@ -867,13 +869,16 @@ const SECTIONS=[
     <li><b>Rough numbers are fine.</b> If you don’t know a number yet, leave it blank and come back.</li>
     <li><b>Everything saves as you type.</b> Your plan is private to you, and you can pick up where you left off on any device.</li>
     <li><b>Print your one-page summary</b> at the end and bring it to your quarterly check-ins.</li></ul></div>
-   <div class="st-have"><h4>Have these handy</h4><ul><li>Last year’s closed sides and GCI</li><li>Your commission plan — split, cap, your cap anniversary and how much cap you’ll have paid by Dec 31</li><li>A rough monthly budget, personal and business</li><li>How many people are in your database</li></ul></div>
+   <div class="st-have"><h4>Have these handy</h4><ul><li>Last year’s closed sides and GCI <small class="muted">(skip if it’s your first year)</small></li><li>Your commission plan — split, cap, your cap anniversary and how much cap you’ll have paid by Dec 31</li><li>A rough monthly budget, personal and business</li><li>How many people are in your database</li></ul></div>
   </div>
   <h3>The seven chapters</h3>
   <div class="st-ch">${PHASES.filter(([ph])=>ph!=='Start').map(([ph,ids],k)=>`<button type="button" class="st-c" data-go="${ids[0]}"><span class="st-k">${k+1}</span><b>${ph}</b><small>${ids.map(id=>(SECTIONS.find(x=>x.id===id)||{}).t).filter(Boolean).join(' · ')}</small><em>${{'Look back':'Where you are today','Foundation':'Where you’re going and why','Positioning':'Who you serve and why they choose you','Numbers':'What your life and your goal really take','Strategy':'Where you’ll focus to win','The plan':'What you’ll do, week by week','Execution':'How you’ll stay on track'}[ph]||''}</em></button>`).join('')}</div>
  `},
  {id:'lookback',t:'Look Back',d:'A good plan starts with an honest look at the year behind you — what you produced, what worked, and what to leave behind.',html:()=>`
-  <h3 style="margin-top:0">Your last 12 months <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— rough numbers are fine</small></h3>
+  <label class="chk fy-chk"><input type="checkbox" data-k="last.first"><span><b>This is my first year</b> — I don’t have a past year to look back on</span></label>
+  <div id="fy-msg" hidden><div class="tip"><b>No problem — you can skip this step.</b> Your plan works from your goal and your budget, so you don’t need last year’s numbers. This year becomes the baseline you’ll look back on next year.</div><button class="btn btn-red" type="button" id="fy-next">Skip to the next step →</button></div>
+  <div id="lb-body">
+  <h3>Your last 12 months <small style="font-weight:500;text-transform:none;letter-spacing:0;color:#888">— rough numbers are fine</small></h3>
   <div class="row c4">${F('Listing sides closed','last.listings',{type:'num'})}${F('Buyer sides closed','last.buyers',{type:'num'})}${F('Average sale price','last.avgPrice',{type:'money'})}${F('Gross commission (GCI)','last.gci',{type:'money'})}</div>
   ${intro('You’ll record <b>where your deals came from</b> by lead source on the Lead Generation step.')}
   <h3>Reflection</h3>
@@ -881,6 +886,7 @@ const SECTIONS=[
   <div class="row c2">${T('Best deal — and why it went well','reflect.best',{rows:3})}${T('Hardest deal — and what you learned','reflect.worst',{rows:3})}</div>
   <div class="row c3">${T('Stop doing','reflect.stop',{rows:3})}${T('Start doing','reflect.start',{rows:3})}${T('Keep doing','reflect.cont',{rows:3})}</div>
   <div class="row">${T('Biggest time-wasters','reflect.waste',{rows:2,hint:'what ate your week without producing business?'})}</div>
+  </div>
  `},
  {id:'vision',t:'Vision & Goals',d:'Where are you going, and why does it matter? Everything else in this plan should point back to this page.',html:()=>`
   <div class="vb">
@@ -949,11 +955,11 @@ const SECTIONS=[
  `},
  {id:'sources',t:'Lead Generation',d:'Strategy is the choice of how you will win; tactics are the specific actions you take. Where will my best clients come from?',html:()=>`
   <h3>Lead source portfolio</h3>
-  ${intro('Mark <b>3–5 primary channels</b> — this keeps you from trying to do everything. Add how many deals came from each last year and your goal for this year.')}
+  ${intro('Mark <b>3–5 primary channels</b> — this keeps you from trying to do everything. Add <span class="c-last">how many deals came from each last year and </span>your goal for this year.')}
   <div class="tbl-wrap"><table>
-   <thead><tr><th>Source</th><th style="width:150px">Priority</th><th class="num">Last year (ends)</th><th class="num">%</th><th class="num">Goal (ends)</th><th class="num">%</th></tr></thead>
+   <thead><tr><th>Source</th><th style="width:150px">Priority</th><th class="num c-last">Last year (ends)</th><th class="num c-last">%</th><th class="num">Goal (ends)</th><th class="num">%</th></tr></thead>
    <tbody id="src-body"></tbody>
-   <tfoot><tr><td>Total</td><td id="src-pri"></td><td class="num" data-o="srcLast"></td><td></td><td class="num" data-o="srcGoal"></td><td></td></tr><tr><td colspan="6" id="src-flag" style="border:0;font-weight:500"></td></tr><tr><td colspan="6" id="src-last-chk" style="border:0;font-weight:500;padding-top:0"></td></tr></tfoot>
+   <tfoot><tr><td>Total</td><td id="src-pri"></td><td class="num c-last" data-o="srcLast"></td><td class="c-last"></td><td class="num" data-o="srcGoal"></td><td></td></tr><tr><td colspan="6" id="src-flag" style="border:0;font-weight:500"></td></tr><tr><td colspan="6" id="src-last-chk" style="border:0;font-weight:500;padding-top:0"></td></tr></tfoot>
   </table></div>
   <h3>My primary channels</h3>
   <div id="src-cards"></div>
@@ -1289,7 +1295,7 @@ function show(id,scroll){
  if(id==='summary') renderSummary();
  if(id==='score'){ renderPM(); renderRyg(); }
  if(id==='action90') renderAct();
- if(id==='numbers'&&S.goals.avgPrice===''&&n(S.last.avgPrice)>0){ S.goals.avgPrice=n(S.last.avgPrice); fillAll(document.getElementById('s-numbers')); queueSave(); setTimeout(()=>toast('Average sale price filled in from Look Back — change it if this year will be different'),50); }
+ if(id==='numbers'&&S.goals.avgPrice===''&&!S.last.first&&n(S.last.avgPrice)>0){ S.goals.avgPrice=n(S.last.avgPrice); fillAll(document.getElementById('s-numbers')); queueSave(); setTimeout(()=>toast('Average sale price filled in from Look Back — change it if this year will be different'),50); }
  if(C) recompute();
  if(scroll){ const hh=(document.querySelector('.app-bar')||{offsetHeight:0}).offsetHeight; const top=document.querySelector('.bp-grid').getBoundingClientRect().top+window.scrollY-hh-16; if(window.scrollY>top) window.scrollTo({top,behavior:'smooth'}); }
 }
@@ -1298,7 +1304,7 @@ function renderSources(){
  document.getElementById('src-body').innerHTML=S.sources.map((s,i)=>`<tr>
   <td>${esc(s.name)}</td>
   <td><select data-k="sources.${i}.pri" aria-label="${esc(s.name)} priority"><option value="">—</option><option>Primary</option><option>Secondary</option></select></td>
-  <td style="width:110px"><input type="number" inputmode="decimal" min="0" data-k="sources.${i}.last" aria-label="${esc(s.name)} last year"></td><td class="num" data-o="srcL${i}"></td>
+  <td style="width:110px" class="c-last"><input type="number" inputmode="decimal" min="0" data-k="sources.${i}.last" aria-label="${esc(s.name)} last year"></td><td class="num c-last" data-o="srcL${i}"></td>
   <td style="width:110px"><input type="number" inputmode="decimal" min="0" data-k="sources.${i}.goal" aria-label="${esc(s.name)} goal"></td><td class="num" data-o="srcG${i}"></td></tr>`).join('');
 }
 function renderSrcCards(){
@@ -1433,6 +1439,7 @@ document.addEventListener('change',e=>{ const t=e.target; if(!t.dataset||t.datas
 
 document.addEventListener('click',e=>{ const mo=document.getElementById('more'); if(mo&&mo.open&&!e.target.closest('#more')) mo.open=false; if(e.target.closest('.more-menu button')&&mo) mo.open=false;
  const t=e.target.closest('button'); if(!t) return;
+ if(t.id==='fy-next'){ const nx=document.querySelector('#s-lookback .sec-foot .btn-red[data-go]'); if(nx) show(nx.dataset.go,true); return; }
  if(t.dataset.go){ show(t.dataset.go,true); return; }
  if(t.dataset.view){ S.meta.view=t.dataset.view==='ess'?'ess':''; applyView(); queueSave(); return; }
  if(t.dataset.setgoal){ S.goals.method='gci'; S.goals.gciGoal=+t.dataset.setgoal; fillAll(); toggleVis(); recompute(); queueSave(); toast('Goal updated to '+money(+t.dataset.setgoal)); return; }
@@ -1786,6 +1793,10 @@ function blankZeros(c){
 }
 function recompute(){
  C=calc(); const c=C;
+ { /* First year: no Look Back numbers — hide them and the Last year column on Lead Generation */
+  const fy=!!S.last.first; document.body.classList.toggle('bp-first',fy);
+  const lb=document.getElementById('lb-body'), m=document.getElementById('fy-msg');
+  if(lb) lb.hidden=fy; if(m) m.hidden=!fy; }
  const perW=v=>v/c.weeks, perD=v=>v/c.days;
  out('gciSide',money(c.gciSide)); out('netSide',money(c.netSide));
  out('splitPaid',money(c.splitPaid)); out('rlpPaid',money(c.rlpPaid)); out('feesPaid',money(c.feesPaid)); out('donPaid',money(c.otherPaid));
@@ -1876,7 +1887,7 @@ function recompute(){
  const sl=S.sources.reduce((a,s)=>a+n(s.last),0), sg=S.sources.reduce((a,s)=>a+n(s.goal),0);
  S.sources.forEach((s,i)=>{out('srcL'+i,sl&&s.last!==''?pct(n(s.last)/sl):'–');out('srcG'+i,sg&&s.goal!==''?pct(n(s.goal)/sg):'–');});
  out('srcLast',int(sl)); out('srcGoal',int(sg));
- { const ls=n(S.last.listings)+n(S.last.buyers), el=document.getElementById('src-last-chk'); if(el) el.innerHTML=ls&&sl&&Math.round(sl)!==Math.round(ls)?`<span class="flag warn">Your Look Back shows ${int(ls)} sides last year; this column adds up to ${int(sl)}</span>`:ls&&!sl?`<span class="muted">Look Back shows ${int(ls)} sides last year — split them by source in the Last year column.</span>`:''; }
+ { const ls=S.last.first?0:n(S.last.listings)+n(S.last.buyers), el=document.getElementById('src-last-chk'); if(el) el.innerHTML=ls&&sl&&Math.round(sl)!==Math.round(ls)?`<span class="flag warn">Your Look Back shows ${int(ls)} sides last year; this column adds up to ${int(sl)}</span>`:ls&&!sl?`<span class="muted">Look Back shows ${int(ls)} sides last year — split them by source in the Last year column.</span>`:''; }
  const sf=document.getElementById('src-flag');
  if(sf) sf.innerHTML=!sg?'<span class="flag warn">Add your goal by source</span>':Math.round(sg)===c.sides?`<span class="flag ok">Matches your goal of ${c.sides} sides</span>`:`<span class="flag ${sg<c.sides?'bad':'warn'}">${sg<c.sides?'Short by '+int(c.sides-sg):'Over by '+int(sg-c.sides)} vs. your goal of ${c.sides}</span>`;
  // marketing
@@ -1980,8 +1991,8 @@ function recompute(){
       :`<div class="tip"><span class="flag ok">You stay positive all year</span> Your lowest balance is <b>${fm(low)}</b> in ${MONTHS_FULL[lowM]}.</div>`);
    } }
  // vs last year
- const vl=document.getElementById('vs-last'), ls=n(S.last.listings)+n(S.last.buyers);
- if(vl) vl.innerHTML=ls&&c.sides>0?`<div class="tip">Last year you closed <b>${int(ls)}</b> sides${n(S.last.gci)?` for <b>${money(n(S.last.gci))}</b> GCI`:''}. This plan calls for <b>${int(c.sides)}</b> — ${c.sides>=ls?`<b>${pct((c.sides-ls)/ls)}</b> more`:`<b>${pct((ls-c.sides)/ls)}</b> fewer`}.</div>`:'';
+ const vl=document.getElementById('vs-last'), ls=S.last.first?0:n(S.last.listings)+n(S.last.buyers);
+ if(vl) vl.innerHTML=ls&&c.sides>0?`<div class="tip">Last year you closed <b>${int(ls)}</b> sides${n(S.last.gci)?` for <b>${money(n(S.last.gci))}</b> GCI`:''}. This plan calls for <b>${int(c.sides)}</b> — ${c.sides>=ls?`<b>${pct((c.sides-ls)/ls)}</b> more`:`<b>${pct((ls-c.sides)/ls)}</b> fewer`}.</div>`:S.last.first&&c.sides>0?`<div class="tip">This is your first year, so this plan is your <b>baseline</b>. Next year you’ll look back and compare against it.</div>`:'';
  // scorecard
  c.qs.forEach((q,i)=>{
   const tg=q*c.gciSide; out('tq'+i,int(q)); out('tg'+i,money(tg));
