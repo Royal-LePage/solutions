@@ -1028,12 +1028,12 @@ const SECTIONS=[
   ${intro('Strategy isn’t just deciding what you’re going to do. It’s also deciding what you’re <b>not</b> going to do.')}
   <div class="row">${T('','pri.notFocus',{rows:3,aria:'What I will not focus on this year'}).replace('<span></span>','')}</div>
  `},
- {id:'budget',t:'Your Budget',d:'Your non-negotiables — your brokerage costs and the bills that get paid whether you close 5 deals or 25 — set your minimum. Then plan the marketing, growth and lifestyle spending you’d like your goal to fund.',html:()=>`
+ {id:'budget',t:'Your Budget',d:'',html:()=>`
   <h3 class="cat-h">Business expenses</h3>
   <div class="row c2" style="align-items:start">
    <div><h4 class="sp-h">Business costs <small>sets your minimum</small></h4><table class="brk"><tbody>
     <tr class="sub-h"><td colspan="2">Brokerage split &amp; cap</td></tr>
-    <tr><td colspan="2"><span class="bud-hint" style="margin:0;font-size:12.5px">Example: an 80/20 split to a $20,000 cap, plus a $250 deal fee on every deal.</span></td></tr>
+    <tr><td colspan="2"><span class="bud-hint" style="margin:0;font-size:12.5px">Example: an 80/20 split to a $15,000 cap, plus a $250 deal fee on every deal.</span></td></tr>
     <tr><td>Brokerage split<small class="bud-hint">until you cap</small></td><td><select id="split-sel" name="brokerage-split" aria-label="Brokerage split"><option value="">Choose…</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="custom">Custom…</option></select><div id="split-custom" style="margin-top:6px">${F('','goals.split',{type:'pct',aria:'Custom brokerage split',ph:'e.g. 25'})}</div></td></tr>
     <tr><td>Annual cap<small class="bud-hint">blank = no cap</small></td><td>${F('','goals.cap',{type:'money',aria:'Annual cap'})}</td></tr>
     <tr id="cap-anniv-row"><td>Cap anniversary<small class="bud-hint">the month your cap resets</small></td><td><select id="capm-sel" name="cap-anniversary-month" aria-label="Cap anniversary month"><option value="">Choose… (blank = January)</option>${MONTHS_FULL.map((m,i)=>`<option value="${i}">${m}</option>`).join('')}</select></td></tr>
@@ -1271,7 +1271,7 @@ function renderShell(){
   return head+`<button type="button" data-go="${s.id}" id="nav-${s.id}"${inEss(s.id)?'':' class="not-ess"'}><span class="n">${s.id==="start"?"▸":NUM[s.id]}</span><span class="t">${s.t}</span>${ESSENTIAL.includes(s.id)?'<span class="ess" title="Essential">★</span>':''}</button>`; }).join('')
   +'<div class="nav-key"><span class="ess">★</span> Essential — start here<br><span class="nk-done">✓</span> Started</div>';
  main.innerHTML=SECTIONS.map((s,i)=>`<section class="sec" id="s-${s.id}">
-   <div class="sec-h"><div><div class="sec-num">${s.id==="start"?"Welcome":`${PHASE_OF[s.id]} · Step ${NUM[s.id]} of ${NSTEPS}`}${ESSENTIAL.includes(s.id)?' · <span class="ess-t">★ Essential</span>':''}</div><h2>${s.t}</h2><p>${s.d}</p></div></div>
+   <div class="sec-h"><div><div class="sec-num">${s.id==="start"?"Welcome":`${PHASE_OF[s.id]} · Step ${NUM[s.id]} of ${NSTEPS}`}${ESSENTIAL.includes(s.id)?' · <span class="ess-t">★ Essential</span>':''}</div><h2>${s.t}</h2>${s.d?`<p>${s.d}</p>`:''}</div></div>
    <div class="need" id="need-${s.id}" hidden></div>
    ${s.html()}
    <div class="sec-foot">${footHTML(i)}</div>
