@@ -107,6 +107,7 @@ function normalizeLead_(d) {
     timeline: clean(d.timeline),          // e.g. 0-3 months
     address: clean(d.address),
     community: clean(d.community),
+    city: clean(d.city),
     postal: postal,
     propertyType: clean(d.property_type || d.propertyType),
     offer: clean(d.offer),                // e.g. home-value, buyer-guide
@@ -147,7 +148,7 @@ function isDuplicate_(lead) {
 /* ------------------------------------------------------------------ */
 
 function buildPayload_(lead) {
-  const tags = [lead.source, lead.offer, lead.intent, lead.community, lead.campaign]
+  const tags = [lead.source, lead.offer, lead.intent, lead.community, lead.city, lead.campaign]
     .concat(lead.extraTags ? lead.extraTags.split(',') : [])
     .map(t => String(t).trim())
     .filter(String);
@@ -163,8 +164,13 @@ function buildPayload_(lead) {
   if (lead.pageUrl && /^https?:\/\//i.test(lead.pageUrl)) payload.url = lead.pageUrl;
 
   // Location for Bluebird's geo routing.
+  // e.g. "123 Main St, Chestermere, AB, Canada"; defaults to Calgary when no city is given.
   const where = lead.address || lead.community;
-  if (where) payload.geolocation_address = where + ', ' + CONFIG.DEFAULT_CITY;
+  if (where) {
+    payload.geolocation_address = lead.city
+      ? where + ', ' + lead.city + ', AB, Canada'
+      : where + ', ' + CONFIG.DEFAULT_CITY;
+  }
   if (/^[A-Z]\d[A-Z]/.test(lead.postal)) payload.fsa = lead.postal.slice(0, 3);
 
   if (lead.identifiedAgent) payload.identified_agent = lead.identifiedAgent;
@@ -177,6 +183,7 @@ function buildMessage_(lead) {
     ['Timeline', lead.timeline],
     ['Property address', lead.address],
     ['Community', lead.community],
+    ['City', lead.city],
     ['Property type', lead.propertyType],
     ['Requested', lead.offer],
     ['Source', [lead.source, lead.medium, lead.campaign].filter(String).join(' / ')],

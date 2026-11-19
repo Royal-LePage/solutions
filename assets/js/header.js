@@ -1,5 +1,10 @@
 /* =========================================================
    Royal LePage Solutions - Header Injection & Behavior
+   v1017 - FOUC guard fix: also sets an inline
+           `visibility: visible` on <html>. Some BoldTrail apps
+           (e.g. /seller/valuation/) overwrite <html class>,
+           which removed `rls-ready` and left the page black.
+           An inline style survives that overwrite.
    v1016 - FOUC guard: adds `rls-ready` class to <html>
            after header is injected, revealing the page.
            Works in tandem with `html { visibility: hidden }`
@@ -27,9 +32,9 @@
            (GitHub URL until the info.royallepagesolutions.com
            CNAME propagates).
    ========================================================= */
-console.log('RLS HEADER JS LOADED v1016');
+console.log('RLS HEADER JS LOADED v1017');
 (function () {
-  const VERSION = '1016';
+  const VERSION = '1017';
   const ASSET_BASE = 'https://royal-lepage.github.io/solutions';
   const BOLDTRAIL_BASE = 'https://www.royallepagesolutions.com';
   const SITE_BASE = (location.hostname === 'info.royallepagesolutions.com')
@@ -171,8 +176,11 @@ console.log('RLS HEADER JS LOADED v1016');
     bindHeaderBehavior(header, menu, overlay);
     requestAnimationFrame(() => {
       document.body.classList.add('rls-header-ready');
-      // FOUC guard: reveal the page now that the header is in place
+      // FOUC guard: reveal the page now that the header is in place.
+      // The inline style keeps the page visible even if another script
+      // later replaces <html class> (BoldTrail's valuation app does).
       document.documentElement.classList.add('rls-ready');
+      document.documentElement.style.visibility = 'visible';
     });
     console.log('[RLS Header] Injected + bound OK - v' + VERSION);
   }

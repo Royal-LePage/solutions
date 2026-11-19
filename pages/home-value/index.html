@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What's Your Home Worth? — Royal LePage&reg; Solutions</title>
+  <meta name="description" content="Find out what your Calgary-area home is worth. A local Royal LePage Solutions REALTOR® prepares a free, no-obligation home value report based on recent sales near you.">
+  <link rel="canonical" href="https://info.royallepagesolutions.com/pages/home-value/">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Site CSS + header -->
+  <link rel="stylesheet" href="../../assets/css/header.css?v=1010">
+  <link rel="stylesheet" href="../../assets/css/styles.css?v=1001">
+  <script defer src="../../assets/js/header.js?v=1017"></script>
+  <!-- Shared lead form handler (Apps Script → Sheet log → Bluebird) -->
+  <script defer src="../../assets/js/rls-lead-form.js?v=1001"></script>
+
+  <style>
+    :root {
+      --hv-body: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      --hv-line: rgba(255, 255, 255, 0.14);
+    }
+    body { font-family: var(--hv-body); color: var(--rls-black); background: var(--rls-white); margin: 0; }
+    .hv-wrap { max-width: var(--rls-max-width, 1200px); margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ─── Hero with form ─── */
+    .hv-hero {
+      position: relative;
+      background: var(--rls-black);
+      color: var(--rls-white);
+      padding: 5rem 0 5rem;
+      overflow: hidden;
+    }
+    .hv-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 15% 0%, rgba(234, 0, 42, 0.18), transparent 55%),
+        linear-gradient(180deg, var(--rls-black), var(--rls-dark-grey));
+    }
+    .hv-hero-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .hv-eyebrow {
+      font-family: var(--rls-sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--rls-red);
+      margin: 0 0 1.25rem;
+    }
+    .hv-hero h1 {
+      font-family: var(--rls-sans);
+      font-weight: 200;
+      font-size: clamp(2.4rem, 4.6vw, 3.8rem);
+      line-height: 1.08;
+      margin: 0 0 1.5rem;
+      color: var(--rls-white);
+    }
+    .hv-hero h1 strong { font-weight: 700; font-style: italic; }
+    .hv-lead { font-size: 1.1rem; line-height: 1.65; color: rgba(255, 255, 255, 0.82); max-width: 34rem; margin: 0 0 2rem; }
+    .hv-points { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
+    .hv-points li { display: flex; gap: 0.75rem; align-items: flex-start; color: rgba(255, 255, 255, 0.9); line-height: 1.5; }
+    .hv-points svg { flex: 0 0 20px; width: 20px; height: 20px; color: var(--rls-red); margin-top: 2px; }
+
+    /* ─── Form card ─── */
+    .hv-card {
+      background: var(--rls-white);
+      color: var(--rls-black);
+      padding: 2.25rem 2rem 2rem;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    }
+    .hv-progress { display: flex; gap: 0.4rem; margin-bottom: 1.5rem; }
+    .hv-progress span { flex: 1; height: 3px; background: var(--rls-light-grey); transition: background 0.3s; }
+    .hv-progress span.is-on { background: var(--rls-red); }
+    .hv-step-label {
+      font-family: var(--rls-sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--rls-warm-grey);
+      margin: 0 0 0.5rem;
+    }
+    .hv-card h2 {
+      font-family: var(--rls-sans);
+      font-weight: 300;
+      font-size: 1.6rem;
+      line-height: 1.25;
+      margin: 0 0 1.5rem;
+    }
+    .hv-step { display: none; }
+    .hv-step.is-active { display: block; animation: hvIn 0.35s ease; }
+    @keyframes hvIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    .hv-field { margin-bottom: 1.1rem; }
+    .hv-field label, .hv-legend {
+      display: block;
+      font-family: var(--rls-sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.45rem;
+    }
+    .hv-field input, .hv-field select {
+      width: 100%;
+      box-sizing: border-box;
+      font: inherit;
+      font-size: 1rem;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid #CFCAC2;
+      background: var(--rls-white);
+      border-radius: 0;
+      color: var(--rls-black);
+    }
+    .hv-field input:focus, .hv-field select:focus { outline: 2px solid var(--rls-red); outline-offset: 0; border-color: var(--rls-red); }
+    .hv-field.is-invalid input, .hv-field.is-invalid select { border-color: var(--rls-red); }
+    .hv-err { display: none; color: var(--rls-red); font-size: 0.82rem; margin-top: 0.35rem; }
+    .hv-field.is-invalid .hv-err { display: block; }
+    .hv-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+
+    .hv-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.1rem; border: 0; padding: 0; }
+    .hv-choices label {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 3rem;
+      padding: 0.6rem 0.9rem;
+      border: 1px solid #CFCAC2;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .hv-choices input { position: absolute; opacity: 0; pointer-events: none; }
+    .hv-choices label:has(input:checked) { border-color: var(--rls-red); background: rgba(234, 0, 42, 0.05); font-weight: 500; }
+    .hv-choices label:has(input:focus-visible) { outline: 2px solid var(--rls-red); }
+
+    .hv-consent { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.82rem; line-height: 1.5; color: var(--rls-warm-grey); margin: 0.5rem 0 1.25rem; }
+    .hv-consent input { margin-top: 3px; accent-color: var(--rls-red); }
+
+    .hv-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .hv-btn {
+      flex: 1;
+      font-family: var(--rls-sans);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 1rem 1.25rem;
+      border: 0;
+      background: var(--rls-red);
+      color: var(--rls-white);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .hv-btn:hover { background: var(--rls-red-dk); }
+    .hv-btn:disabled { opacity: 0.6; cursor: wait; }
+    .hv-back {
+      font-family: var(--rls-sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: none;
+      border: 0;
+      color: var(--rls-warm-grey);
+      cursor: pointer;
+      padding: 1rem 0.5rem;
+    }
+    .hv-back:hover { color: var(--rls-black); }
+    [data-rls-status] { font-size: 0.9rem; margin: 1rem 0 0; min-height: 1.2em; }
+    [data-rls-status].is-error { color: var(--rls-red); }
+    .hv-fine { font-size: 0.75rem; color: var(--rls-warm-grey); line-height: 1.5; margin: 1rem 0 0; }
+    .hv-fine a { color: inherit; }
+    .hv-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+    .hv-thanks { display: none; text-align: center; padding: 1.5rem 0.5rem; }
+    .hv-thanks.is-active { display: block; animation: hvIn 0.35s ease; }
+    .hv-thanks svg { width: 56px; height: 56px; color: var(--rls-red); margin-bottom: 1rem; }
+    .hv-thanks h2 { margin-bottom: 0.75rem; }
+    .hv-thanks p { color: var(--rls-warm-grey); line-height: 1.6; margin: 0 0 1.25rem; }
+    .hv-thanks a { color: var(--rls-red); font-weight: 500; }
+
+    /* ─── How it works ─── */
+    .hv-section { padding: 6rem 0; }
+    .hv-section-head { max-width: 40rem; margin-bottom: 3rem; }
+    .hv-section-head h2 {
+      font-family: var(--rls-sans);
+      font-weight: 200;
+      font-size: clamp(2rem, 3.4vw, 2.75rem);
+      line-height: 1.15;
+      margin: 0;
+    }
+    .hv-section-head h2 strong { font-weight: 700; font-style: italic; }
+    .hv-steps { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--rls-light-grey); }
+    .hv-steps article { padding: 2.25rem 2rem 0 0; }
+    .hv-steps article + article { padding-left: 2rem; border-left: 1px solid var(--rls-light-grey); }
+    .hv-num { font-family: var(--rls-sans); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2em; color: var(--rls-red); margin: 0 0 1.25rem; }
+    .hv-steps h3 { font-family: var(--rls-sans); font-weight: 500; font-size: 1.3rem; margin: 0 0 0.75rem; }
+    .hv-steps p { color: var(--rls-warm-grey); line-height: 1.65; margin: 0; }
+
+    /* ─── Why a REALTOR ─── */
+    .hv-compare { background: var(--rls-light-grey); }
+    .hv-compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .hv-compare-col { background: var(--rls-white); padding: 2rem; }
+    .hv-compare-col.is-us { border-top: 3px solid var(--rls-red); }
+    .hv-compare-col h3 { font-family: var(--rls-sans); font-weight: 600; font-size: 1.1rem; margin: 0 0 1.25rem; }
+    .hv-compare-col ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.7rem; line-height: 1.55; color: var(--rls-warm-grey); }
+    .hv-compare-col.is-us ul { color: var(--rls-black); }
+
+    /* ─── Bottom CTA ─── */
+    .hv-cta { background: var(--rls-red); color: var(--rls-white); text-align: center; padding: 4.5rem 0; }
+    .hv-cta h2 { font-family: var(--rls-sans); font-weight: 300; font-size: clamp(1.8rem, 3vw, 2.4rem); margin: 0 0 1.75rem; color: var(--rls-white); }
+    .hv-cta a {
+      display: inline-block;
+      background: var(--rls-white);
+      color: var(--rls-black);
+      font-family: var(--rls-sans);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 1rem 1.75rem;
+      text-decoration: none;
+    }
+
+    /* ─── Disclaimer ─── */
+    .hv-disclaimer { background: var(--rls-black); color: rgba(255, 255, 255, 0.6); padding: 2.5rem 0; font-size: 0.78rem; line-height: 1.6; }
+    .hv-disclaimer p { margin: 0 0 0.75rem; }
+    .hv-disclaimer a { color: rgba(255, 255, 255, 0.85); }
+
+    @media (max-width: 960px) {
+      .hv-hero { padding: 3rem 0 3.5rem; }
+      .hv-hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hv-steps { grid-template-columns: 1fr; }
+      .hv-steps article, .hv-steps article + article { padding: 1.75rem 0; border-left: 0; border-bottom: 1px solid var(--rls-light-grey); }
+      .hv-compare-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      .hv-card { padding: 1.75rem 1.25rem; }
+      .hv-row, .hv-choices { grid-template-columns: 1fr; }
+      .hv-section { padding: 4rem 0; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+
+    <!-- ===================== HERO + FORM ===================== -->
+    <section class="hv-hero rls-hero">
+      <div class="hv-wrap hv-hero-grid">
+
+        <div class="hv-intro">
+          <p class="hv-eyebrow">Free Home Value Report</p>
+          <h1>What's your home <strong>really worth?</strong></h1>
+          <p class="hv-lead">Online estimates can't see your renovations, your view or your street. A local Royal LePage&reg; Solutions REALTOR&reg; will prepare a value range based on what homes like yours have actually sold for nearby.</p>
+          <ul class="hv-points">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Recent sales and active listings in your community</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>A realistic price range, not a computer guess</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Free, confidential and no obligation to list</span></li>
+          </ul>
+        </div>
+
+        <div class="hv-card">
+          <div class="hv-progress" aria-hidden="true"><span class="is-on"></span><span></span><span></span></div>
+
+          <form id="hv-form" data-rls-lead data-source="website" data-offer="home-value" novalidate>
+            <input type="hidden" name="intent" value="sell">
+
+            <!-- Step 1: address -->
+            <div class="hv-step is-active" data-step="1">
+              <p class="hv-step-label">Step 1 of 3</p>
+              <h2>Where is the home?</h2>
+              <div class="hv-field">
+                <label for="hv-address">Street address</label>
+                <input id="hv-address" name="address" type="text" autocomplete="street-address" placeholder="e.g. 123 Mahogany Blvd SE" required>
+                <p class="hv-err">Please enter the property address.</p>
+              </div>
+              <div class="hv-row">
+                <div class="hv-field">
+                  <label for="hv-city">City or town</label>
+                  <select id="hv-city" name="city">
+                    <option value="Calgary">Calgary</option>
+                    <option value="Chestermere">Chestermere</option>
+                    <option value="Airdrie">Airdrie</option>
+                    <option value="Okotoks">Okotoks</option>
+                    <option value="Cochrane">Cochrane</option>
+                    <option value="Canmore">Canmore</option>
+                    <option value="Banff">Banff</option>
+                    <option value="High River">High River</option>
+                    <option value="Strathmore">Strathmore</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="hv-field">
+                  <label for="hv-postal">Postal code <span style="font-weight:400;color:var(--rls-warm-grey)">(optional)</span></label>
+                  <input id="hv-postal" name="postal_code" type="text" autocomplete="postal-code" maxlength="7" placeholder="T3M 0A1">
+                </div>
+              </div>
+              <div class="hv-actions">
+                <button type="button" class="hv-btn" data-next>Continue</button>
+              </div>
+            </div>
+
+            <!-- Step 2: property -->
+            <div class="hv-step" data-step="2">
+              <p class="hv-step-label">Step 2 of 3</p>
+              <h2>Tell us a little about it</h2>
+              <p class="hv-legend" id="hv-type-label">Property type</p>
+              <fieldset class="hv-choices" aria-labelledby="hv-type-label" data-required>
+                <label><input type="radio" name="property_type" value="Detached">Detached</label>
+                <label><input type="radio" name="property_type" value="Semi-detached">Semi-detached</label>
+                <label><input type="radio" name="property_type" value="Townhouse">Townhouse</label>
+                <label><input type="radio" name="property_type" value="Condo / apartment">Condo / apartment</label>
+                <label><input type="radio" name="property_type" value="Acreage">Acreage</label>
+                <label><input type="radio" name="property_type" value="Other">Other</label>
+              </fieldset>
+              <p class="hv-legend" id="hv-time-label">When might you sell?</p>
+              <fieldset class="hv-choices" aria-labelledby="hv-time-label" data-required>
+                <label><input type="radio" name="timeline" value="0-3 months">Within 3 months</label>
+                <label><input type="radio" name="timeline" value="3-6 months">3 to 6 months</label>
+                <label><input type="radio" name="timeline" value="6-12 months">6 to 12 months</label>
+                <label><input type="radio" name="timeline" value="Just curious">Just curious</label>
+              </fieldset>
+              <p class="hv-err" data-choice-err style="margin-top:-0.5rem;margin-bottom:1rem">Please choose an option for each question.</p>
+              <div class="hv-actions">
+                <button type="button" class="hv-back" data-back>Back</button>
+                <button type="button" class="hv-btn" data-next>Continue</button>
+              </div>
+            </div>
+
+            <!-- Step 3: contact -->
+            <div class="hv-step" data-step="3">
+              <p class="hv-step-label">Step 3 of 3</p>
+              <h2>Where should we send your report?</h2>
+              <div class="hv-row">
+                <div class="hv-field">
+                  <label for="hv-first">First name</label>
+                  <input id="hv-first" name="first_name" type="text" autocomplete="given-name" required>
+                  <p class="hv-err">Required.</p>
+                </div>
+                <div class="hv-field">
+                  <label for="hv-last">Last name</label>
+                  <input id="hv-last" name="last_name" type="text" autocomplete="family-name" required>
+                  <p class="hv-err">Required.</p>
+                </div>
+              </div>
+              <div class="hv-field">
+                <label for="hv-email">Email</label>
+                <input id="hv-email" name="email" type="email" autocomplete="email" required>
+                <p class="hv-err">Please enter a valid email.</p>
+              </div>
+              <div class="hv-field">
+                <label for="hv-phone">Phone</label>
+                <input id="hv-phone" name="phone" type="tel" autocomplete="tel" required>
+                <p class="hv-err">Please enter your phone number.</p>
+              </div>
+
+              <div class="hv-hp" aria-hidden="true">
+                <label for="hv-website">Website</label>
+                <input id="hv-website" name="website" type="text" tabindex="-1" autocomplete="off">
+              </div>
+
+              <label class="hv-consent">
+                <input type="checkbox" name="consent" value="yes">
+                <span>Yes, Royal LePage Solutions may also email me local market updates. I can unsubscribe at any time.</span>
+              </label>
+
+              <div class="hv-actions">
+                <button type="button" class="hv-back" data-back>Back</button>
+                <button type="submit" class="hv-btn">Get my home value</button>
+              </div>
+              <p data-rls-status role="status" aria-live="polite"></p>
+              <p class="hv-fine">We'll only use your details to prepare your report and follow up about it. This is a market value opinion, not an appraisal. <a href="https://www.royallepagesolutions.com/privacy.php" target="_blank" rel="noopener">Privacy policy</a></p>
+            </div>
+          </form>
+
+          <!-- Thank you -->
+          <div class="hv-thanks" id="hv-thanks" tabindex="-1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+            <h2>Thank you! We're on it.</h2>
+            <p>A Royal LePage Solutions REALTOR&reg; will contact you shortly to confirm a few details and prepare your home value report.</p>
+            <p>Questions in the meantime? Call <a href="tel:4032525900">403.252.5900</a>.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== HOW IT WORKS ===================== -->
+    <section class="hv-section">
+      <div class="hv-wrap">
+        <div class="hv-section-head">
+          <p class="hv-eyebrow">How It Works</p>
+          <h2>Three steps to <strong>your number.</strong></h2>
+        </div>
+        <div class="hv-steps">
+          <article>
+            <p class="hv-num">01</p>
+            <h3>Tell us about your home</h3>
+            <p>Share the address and a few basics. It takes about a minute.</p>
+          </article>
+          <article>
+            <p class="hv-num">02</p>
+            <h3>We study your market</h3>
+            <p>A local REALTOR&reg; reviews recent sales, active competition and current conditions in your community.</p>
+          </article>
+          <article>
+            <p class="hv-num">03</p>
+            <h3>Get your value range</h3>
+            <p>You receive a realistic price range and can ask questions. There's no pressure and no obligation to list.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ONLINE ESTIMATE VS REALTOR ===================== -->
+    <section class="hv-section hv-compare">
+      <div class="hv-wrap">
+        <div class="hv-section-head">
+          <p class="hv-eyebrow">Why It Matters</p>
+          <h2>An algorithm can't walk <strong>through your door.</strong></h2>
+        </div>
+        <div class="hv-compare-grid">
+          <div class="hv-compare-col">
+            <h3>Instant online estimates</h3>
+            <ul>
+              <li>Based on public data and averages</li>
+              <li>Can't see upgrades, condition or layout</li>
+              <li>Miss what's happening on your street right now</li>
+            </ul>
+          </div>
+          <div class="hv-compare-col is-us">
+            <h3>A Royal LePage Solutions REALTOR&reg;</h3>
+            <ul>
+              <li>Compares your home to recent sales nearby</li>
+              <li>Accounts for upgrades, lot and location</li>
+              <li>Explains what buyers in your area are paying for</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CTA ===================== -->
+    <section class="hv-cta">
+      <div class="hv-wrap">
+        <h2>Curious what your home could sell for?</h2>
+        <a href="#hv-form" data-scroll-form>Start my free report</a>
+      </div>
+    </section>
+
+    <!-- ===================== DISCLAIMER ===================== -->
+    <section class="hv-disclaimer">
+      <div class="hv-wrap">
+        <p>The home value range provided is a market opinion prepared by a licensed REALTOR&reg; and is not an appraisal. Royal LePage&reg;, Royal LePage Solutions, and related marks are trademarks owned by Royal Bank of Canada and used under licence. Each Royal LePage&reg; office is independently owned and operated. Not intended to solicit properties currently listed for sale or buyers under contract. View important disclosures and notices about Royal LePage trademarks at <a href="https://www.rlp.ca/notices" target="_blank" rel="noopener">rlp.ca/notices</a>.</p>
+        <p>Royal LePage Solutions &middot; Solution One Real Estate Ltd. &middot; 205-264 Midpark Way SE, Calgary, AB T2X 1J6 &middot; 403.252.5900</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Multi-step behaviour (submission itself is handled by rls-lead-form.js) -->
+  <script>
+    (function () {
+      'use strict';
+      var form = document.getElementById('hv-form');
+      var steps = form.querySelectorAll('.hv-step');
+      var bars = document.querySelectorAll('.hv-progress span');
+      var thanks = document.getElementById('hv-thanks');
+      var current = 1;
+
+      function show(n) {
+        current = n;
+        steps.forEach(function (s) { s.classList.toggle('is-active', Number(s.getAttribute('data-step')) === n); });
+        bars.forEach(function (b, i) { b.classList.toggle('is-on', i < n); });
+        var first = form.querySelector('.hv-step.is-active input:not([type=hidden]):not([type=radio]), .hv-step.is-active input[type=radio]');
+        if (first && window.matchMedia('(min-width: 961px)').matches) first.focus({ preventScroll: true });
+      }
+
+      function fieldValid(input) {
+        var v = input.value.trim();
+        if (input.required && !v) return false;
+        if (input.type === 'email' && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return false;
+        if (input.type === 'tel' && v && v.replace(/\D/g, '').length < 10) return false;
+        return true;
+      }
+
+      function validate(stepEl) {
+        var ok = true;
+        stepEl.querySelectorAll('.hv-field input[required], .hv-field input[type=email], .hv-field input[type=tel]').forEach(function (input) {
+          var good = fieldValid(input);
+          input.closest('.hv-field').classList.toggle('is-invalid', !good);
+          if (!good) ok = false;
+        });
+        var groups = stepEl.querySelectorAll('fieldset[data-required]');
+        var groupsOk = true;
+        groups.forEach(function (g) { if (!g.querySelector('input:checked')) groupsOk = false; });
+        var choiceErr = stepEl.querySelector('[data-choice-err]');
+        if (choiceErr) choiceErr.style.display = groupsOk ? 'none' : 'block';
+        return ok && groupsOk;
+      }
+
+      form.addEventListener('click', function (e) {
+        if (e.target.closest('[data-next]')) {
+          var stepEl = form.querySelector('.hv-step.is-active');
+          if (validate(stepEl)) show(current + 1);
+        }
+        if (e.target.closest('[data-back]')) show(current - 1);
+      });
+
+      // Enter key moves forward instead of submitting early.
+      form.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && current < 3 && e.target.tagName === 'INPUT') {
+          e.preventDefault();
+          var next = form.querySelector('.hv-step.is-active [data-next]');
+          if (next) next.click();
+        }
+      });
+
+      // Final step: block the shared handler if fields are invalid.
+      form.addEventListener('submit', function (e) {
+        if (!validate(form.querySelector('.hv-step[data-step="3"]'))) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      }, true);
+
+      // When the shared handler reports success, swap in the thank-you panel.
+      var status = form.querySelector('[data-rls-status]');
+      new MutationObserver(function () {
+        if (status.classList.contains('is-success')) {
+          form.style.display = 'none';
+          document.querySelector('.hv-progress').style.display = 'none';
+          thanks.classList.add('is-active');
+          thanks.focus();
+        }
+      }).observe(status, { attributes: true, attributeFilter: ['class'] });
+
+      document.querySelectorAll('[data-scroll-form]').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector('.hv-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      });
+
+      // Prefill the address from ?address= (handy for ads and the homepage).
+      try {
+        var pre = new URLSearchParams(location.search).get('address');
+        if (pre) document.getElementById('hv-address').value = pre;
+      } catch (err) {}
+    })();
+  </script>
+</body>
+</html>
