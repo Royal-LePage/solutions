@@ -318,7 +318,7 @@
 
         <!-- Right: Lead form -->
         <div>
-          <form id="rls-lead-form" class="rls-lead-form" novalidate>
+          <form id="rls-lead-form" class="rls-lead-form" data-rls-lead data-source="brokerage-website" data-offer="find-an-agent" data-success="Thanks — we've received your inquiry and a Royal LePage Solutions REALTOR® will be in touch shortly." novalidate>
 
             <div class="rls-row-2">
               <div class="rls-field">
@@ -439,7 +439,7 @@
 
             <div class="rls-form-submit-row">
               <button type="submit">Send Inquiry</button>
-              <p class="rls-form-status" role="status" aria-live="polite"></p>
+              <p class="rls-form-status" data-rls-status role="status" aria-live="polite"></p>
             </div>
 
           </form>
@@ -449,83 +449,8 @@
     </div>
   </section>
 
-  <!-- Form submission script -->
-  <script>
-    (function () {
-      const WORKER_URL = 'https://bluebird-lead-proxy.kyleduiker-d45.workers.dev';
-      const form = document.getElementById('rls-lead-form');
-      const status = form.querySelector('.rls-form-status');
-      const button = form.querySelector('button[type="submit"]');
-
-      function setStatus(message, type) {
-        status.textContent = message;
-        status.classList.remove('is-success', 'is-error');
-        if (type) status.classList.add('is-' + type);
-      }
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        setStatus('Sending…', null);
-        button.disabled = true;
-
-        const fd = new FormData(form);
-
-        // Build tags array for Bluebird routing
-        const tags = ['Brokerage Website'];
-        const intent = fd.get('intent');
-        const community = fd.get('community');
-        const propertyType = fd.get('property_type');
-        const budget = fd.get('budget');
-        const timeline = fd.get('timeline');
-        if (intent) tags.push(intent);
-        if (community) tags.push(community);
-        if (propertyType) tags.push(propertyType);
-
-        // Compose the message body sent to Bluebird
-        const messageLines = [];
-        if (propertyType) messageLines.push('Property type: ' + propertyType);
-        if (budget) messageLines.push('Budget: ' + budget);
-        if (timeline) messageLines.push('Timeline: ' + timeline);
-        const userMessage = (fd.get('message') || '').toString().trim();
-        if (userMessage) {
-          if (messageLines.length) messageLines.push('');
-          messageLines.push(userMessage);
-        }
-
-        const firstName = (fd.get('first_name') || '').toString().trim();
-        const lastName = (fd.get('last_name') || '').toString().trim();
-        const fullName = (firstName + ' ' + lastName).trim();
-
-        const payload = {
-          name: fullName,
-          email: (fd.get('email') || '').toString().trim(),
-          phone: (fd.get('phone') || '').toString().trim(),
-          message: messageLines.join('\n'),
-          community: community || '',
-          intent: intent || '',
-          tags: tags,
-          website: (fd.get('website') || '').toString(), // honeypot
-          page_url: window.location.href
-        };
-
-        try {
-          const r = await fetch(WORKER_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          if (!r.ok) throw new Error('Submit failed');
-          setStatus("Thanks — we've received your inquiry and will be in touch shortly.", 'success');
-          form.reset();
-        } catch (err) {
-          setStatus('Something went wrong. Please call us at 403.252.5900 or email info@rlpsolutions.ca.', 'error');
-          console.error(err);
-        } finally {
-          button.disabled = false;
-        }
-      });
-    })();
-  </script>
+  <!-- Form submission: shared lead pipeline (Apps Script → Sheet log → Bluebird) -->
+  <script src="../../assets/js/rls-lead-form.js?v=1001" defer></script>
 
 </body>
 </html>
