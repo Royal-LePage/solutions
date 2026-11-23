@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /holiday-party/
+Disallow: /tools/
+Disallow: /pages/agent-hub/
+Disallow: /pages/lead/
+
+Sitemap: https://info.royallepagesolutions.com/sitemap.xml
