@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listing — Royal LePage&reg; Solutions</title>
+  <meta name="description" content="Home for sale listed by Royal LePage Solutions. Contact an agent who fits the way you like to work.">
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../assets/css/header.css?v=1010">
+  <link rel="stylesheet" href="../../assets/css/styles.css?v=1001">
+  <script defer src="../../assets/js/header.js?v=1017"></script>
+
+  <style>
+    :root { --am-body: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; --am-line: #E8E6E3; }
+    [hidden] { display: none !important; }
+    body { font-family: var(--am-body); color: var(--rls-black); background: #fff; margin: 0; }
+    .am-wrap { max-width: var(--rls-max-width, 1200px); margin: 0 auto; padding: 0 1.5rem; }
+    .am-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .am-eyebrow { font-family: var(--rls-sans); font-size: .75rem; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--rls-red); margin: 0 0 .5rem; }
+
+    .ld { padding: 1.5rem 0 4rem; }
+    .ld-crumbs { font-size: .85rem; color: var(--rls-warm-grey); margin: 0 0 1rem; }
+    .ld-crumbs a { color: var(--rls-warm-grey); }
+    .ld-status { padding: 4rem 0; text-align: center; color: var(--rls-warm-grey); }
+
+    /* Gallery */
+    .ld-gallery { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: .5rem; height: 480px; border-radius: 8px; overflow: hidden; }
+    .ld-gallery button { border: none; padding: 0; margin: 0; cursor: pointer; background: var(--rls-light-grey); position: relative; overflow: hidden; }
+    .ld-gallery img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s; }
+    .ld-gallery button:hover img { transform: scale(1.02); }
+    .ld-g-main { grid-row: 1 / span 2; }
+    .ld-g-all { position: absolute; right: .75rem; bottom: .75rem; background: rgba(0,0,0,.7); color: #fff; font: 500 .85rem var(--am-body); padding: .45rem .8rem; border-radius: 4px; }
+    .ld-gallery.one { grid-template-columns: 1fr; }
+    .ld-gallery.one .ld-g-main { grid-row: auto; }
+
+    /* Layout */
+    .ld-layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 3rem; margin-top: 2rem; align-items: start; }
+    .ld-head h1 { font-family: var(--rls-sans); font-weight: 300; font-size: clamp(1.8rem, 3.4vw, 2.6rem); line-height: 1.15; margin: 0; }
+    .ld-loc { color: var(--rls-dark-grey); margin: .4rem 0 0; }
+    .ld-price { font-family: var(--rls-sans); font-weight: 700; font-size: 2rem; margin: 1rem 0 0; color: var(--rls-black); }
+    .ld-facts { display: flex; flex-wrap: wrap; gap: 0; margin: 1.5rem 0; border-top: 1px solid var(--am-line); border-bottom: 1px solid var(--am-line); }
+    .ld-fact { padding: 1rem 1.5rem 1rem 0; margin-right: 1.5rem; }
+    .ld-fact b { display: block; font: 700 1.3rem var(--rls-sans); }
+    .ld-fact span { font-size: .8rem; color: var(--rls-warm-grey); text-transform: uppercase; letter-spacing: .08em; }
+    .ld-sec { margin: 2.5rem 0 0; }
+    .ld-sec h2 { font-family: var(--rls-sans); font-weight: 600; font-size: 1.35rem; margin: 0 0 1rem; }
+    .ld-remarks { line-height: 1.75; color: var(--rls-dark-grey); white-space: pre-line; }
+    .ld-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 2rem; margin: 0; }
+    .ld-details div { display: grid; grid-template-columns: 11rem 1fr; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid var(--am-line); font-size: .92rem; }
+    .ld-details dt { color: var(--rls-warm-grey); }
+    .ld-details dd { margin: 0; }
+    .ld-rooms { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    .ld-rooms th, .ld-rooms td { text-align: left; padding: .65rem .5rem .65rem 0; border-bottom: 1px solid var(--am-line); }
+    .ld-rooms th { font-weight: 500; color: var(--rls-warm-grey); font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; }
+    .ld-map { width: 100%; height: 340px; border: 0; border-radius: 8px; background: var(--rls-light-grey); }
+    .ld-credit { font-size: .82rem; color: var(--rls-warm-grey); line-height: 1.6; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--am-line); }
+    .ld-credit a { color: var(--rls-black); }
+
+    /* Contact card */
+    .ld-card { position: sticky; top: calc(var(--rls-header-h, 160px) + 1rem); border: 1px solid var(--am-line); border-radius: 8px; padding: 1.75rem; box-shadow: 0 10px 30px rgba(0,0,0,.06); }
+    .ld-card h2 { font-family: var(--rls-sans); font-weight: 300; font-size: 1.5rem; line-height: 1.2; margin: 0 0 .5rem; }
+    .ld-card h2 strong { font-weight: 700; }
+    .ld-card p { color: var(--rls-warm-grey); line-height: 1.55; font-size: .95rem; margin: 0 0 1.25rem; }
+    .ld-card .am-stack { display: grid; gap: .75rem; }
+    .ld-card small { display: block; margin-top: 1rem; font-size: .78rem; color: var(--rls-warm-grey); line-height: 1.5; }
+    .ld-mobilebar { display: none; }
+
+    .am-btn { min-height: 52px; border-radius: 4px; border: none; background: var(--rls-red); color: #fff; font: 600 1rem var(--rls-sans); letter-spacing: .04em; cursor: pointer; padding: 0 1.5rem; }
+    .am-btn:hover { background: var(--rls-red-dk); }
+    .am-btn-ghost { background: transparent; color: var(--rls-black); border: 1px solid var(--rls-black); }
+    .am-btn-ghost:hover { background: var(--rls-light-grey); }
+
+    /* Lightbox */
+    .ld-lb { position: fixed; inset: 0; background: rgba(0,0,0,.94); display: flex; align-items: center; justify-content: center; z-index: 10000; }
+    .ld-lb img { max-width: 92vw; max-height: 84vh; }
+    .ld-lb button { position: absolute; background: none; border: 0; color: #fff; font-size: 2.6rem; cursor: pointer; width: 64px; height: 64px; }
+    .ld-lb-prev { left: .5rem; } .ld-lb-next { right: .5rem; } .ld-lb-close { top: .5rem; right: .5rem; }
+    .ld-lb-count { position: absolute; bottom: 1.25rem; color: #ccc; font-size: .9rem; }
+
+    dialog { border: none; padding: 0; border-radius: 8px; max-width: min(960px, calc(100vw - 2rem)); width: 100%; max-height: calc(100vh - 2rem); overflow: auto; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+    dialog::backdrop { background: rgba(0,0,0,.6); }
+    .am-x { position: absolute; top: .75rem; right: .75rem; width: 44px; height: 44px; border-radius: 22px; border: none; background: rgba(0,0,0,.6); color: #fff; font-size: 1.4rem; cursor: pointer; z-index: 2; }
+
+    /* Match flow */
+    #am-match { max-width: 460px; }
+    .am-step { display: none; padding: 2rem 1.75rem 1.75rem; }
+    .am-step[data-step=choose] h2, .am-step[data-step=listing] h2, .am-step[data-step=contact] h2 { padding-right: 2.5rem; }
+    .am-mini { margin-right: 2.5rem; }
+    .am-step.is-active { display: block; }
+    .am-step h2 { font-family: var(--rls-sans); font-weight: 300; font-size: 1.7rem; line-height: 1.2; margin: 0 0 .6rem; }
+    .am-step h2 strong { font-weight: 700; }
+    .am-step p.am-sub { color: var(--rls-warm-grey); line-height: 1.55; margin: 0 0 1.4rem; }
+    .am-stack { display: grid; gap: .75rem; }
+    .am-mini { display: flex; gap: .75rem; align-items: center; border: 1px solid var(--am-line); border-radius: 6px; padding: .6rem; margin-bottom: 1.25rem; }
+    .am-mini-photo { width: 64px; height: 48px; border-radius: 4px; background: var(--rls-light-grey) center / cover; flex: 0 0 64px; }
+    .am-mini small { display: block; color: var(--rls-warm-grey); font-size: .75rem; }
+    fieldset { border: none; padding: 0; margin: 0 0 1.1rem; }
+    legend { font-weight: 500; font-size: .9rem; margin-bottom: .5rem; }
+    .am-chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .am-chips label { position: relative; }
+    .am-chips input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+    .am-chips span { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1rem; border: 1px solid #BDB7AF; border-radius: 22px; font-size: .92rem; }
+    .am-chips input:checked + span { background: var(--rls-black); border-color: var(--rls-black); color: #fff; }
+    .am-chips input:focus-visible + span { outline: 3px solid var(--rls-red); outline-offset: 2px; }
+    .am-progress { display: grid; grid-template-columns: repeat(3, 1fr); gap: .35rem; margin: 0 3rem 1.25rem 0; }
+    .am-progress i { height: 4px; border-radius: 2px; background: var(--rls-light-grey); }
+    .am-progress i.on { background: var(--rls-red); }
+
+    .am-swipe-area { position: relative; height: 470px; touch-action: pan-y; }
+    .am-agent { position: absolute; inset: 0; border: 1px solid var(--am-line); border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 8px 24px rgba(0,0,0,.1); display: flex; flex-direction: column; user-select: none; transition: transform .25s ease, opacity .25s ease; }
+    .am-agent-top { height: 190px; background: var(--rls-dark-grey) center / cover; position: relative; display: flex; align-items: center; justify-content: center; }
+    .am-initials { width: 92px; height: 92px; border-radius: 46px; background: #444; color: #fff; display: flex; align-items: center; justify-content: center; font: 600 2rem var(--rls-sans); }
+    .am-pill { position: absolute; top: .75rem; left: .75rem; background: #fff; color: #000; font-weight: 500; font-size: .8rem; padding: .3rem .65rem; border-radius: 12px; }
+    .am-video { position: absolute; right: .75rem; bottom: .75rem; background: #fff; color: #000; text-decoration: none; font-weight: 500; font-size: .82rem; min-height: 40px; display: inline-flex; align-items: center; gap: .35rem; padding: 0 .85rem; border-radius: 20px; }
+    .am-agent-body { padding: 1rem 1.1rem; display: grid; gap: .5rem; overflow: auto; }
+    .am-agent-name { font: 700 1.35rem var(--rls-sans); }
+    .am-tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .am-tags span { background: #F2F0ED; font-size: .78rem; padding: .25rem .6rem; border-radius: 10px; }
+    .am-agent-row { font-size: .86rem; color: var(--rls-dark-grey); }
+    .am-swipe-btns { display: flex; justify-content: center; align-items: center; gap: 1.25rem; margin-top: 1rem; }
+    .am-round { width: 60px; height: 60px; border-radius: 30px; border: 1px solid #BDB7AF; background: #fff; cursor: pointer; font-size: 1.5rem; }
+    .am-round.am-yes { background: var(--rls-red); border-color: var(--rls-red); color: #fff; }
+    .am-swipe-count { text-align: center; font-size: .85rem; color: var(--rls-warm-grey); margin: 0 0 .75rem; }
+
+    .am-form { display: grid; gap: .8rem; }
+    .am-form label.am-field { display: grid; gap: .3rem; font-size: .88rem; font-weight: 500; }
+    .am-form input[type=text], .am-form input[type=email], .am-form input[type=tel], .am-form textarea { min-height: 46px; border: 1px solid #BDB7AF; border-radius: 4px; padding: .6rem .8rem; font: 400 1rem var(--am-body); }
+    .am-form textarea { min-height: 84px; resize: vertical; }
+    .am-consent { display: flex; gap: .6rem; align-items: flex-start; font-size: .8rem; line-height: 1.45; color: var(--rls-dark-grey); }
+    .am-consent input { width: 20px; height: 20px; margin-top: 2px; flex: 0 0 20px; }
+    .am-status { min-height: 1.2em; font-size: .9rem; margin: 0; }
+    .am-status.is-error { color: #A3001D; }
+    .am-done { text-align: center; }
+    .am-done .am-big { font: 700 2rem var(--rls-sans); margin: .5rem 0; }
+    .am-back { background: none; border: none; color: var(--rls-warm-grey); font: 500 .9rem var(--am-body); cursor: pointer; min-height: 44px; padding: 0; }
+    .am-fine { font-size: .75rem; color: var(--rls-warm-grey); line-height: 1.45; margin: 1rem 0 0; }
+
+
+    .am-footer { background: var(--rls-black); color: rgba(255,255,255,.7); font-size: .78rem; line-height: 1.6; padding: 2rem 0; }
+    .am-footer a { color: #fff; }
+
+    @media (max-width: 960px) {
+      .ld-layout { grid-template-columns: 1fr; gap: 0; }
+      .ld-aside { display: none; }
+      .ld-gallery { height: 300px; grid-template-columns: 1fr; grid-template-rows: 1fr; }
+      .ld-gallery .ld-g-side { display: none; }
+      .ld-gallery .ld-g-main { grid-row: auto; }
+      .ld-details { grid-template-columns: 1fr; }
+      .ld-details div { grid-template-columns: 9rem 1fr; }
+      .ld-mobilebar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; gap: .5rem; padding: .75rem 1rem; background: #fff; box-shadow: 0 -6px 20px rgba(0,0,0,.12); }
+      .ld-mobilebar .am-btn { flex: 1; }
+      .ld { padding-bottom: 6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="ld">
+    <div class="am-wrap">
+      <p class="ld-crumbs"><a href="./">&#8249; All listings</a></p>
+      <div class="ld-status" id="ld-status">Loading listing…</div>
+
+      <div id="ld-body" hidden>
+        <section class="ld-gallery" id="ld-gallery" aria-label="Photos"></section>
+
+        <div class="ld-layout">
+          <article>
+            <header class="ld-head">
+              <p class="am-eyebrow" id="ld-type"></p>
+              <h1 id="ld-addr"></h1>
+              <p class="ld-loc" id="ld-loc"></p>
+              <p class="ld-price" id="ld-price"></p>
+            </header>
+            <div class="ld-facts" id="ld-facts"></div>
+
+            <section class="ld-sec" id="ld-about-sec"><h2>About this home</h2><div class="ld-remarks" id="ld-remarks"></div></section>
+            <section class="ld-sec" id="ld-details-sec"><h2>Property details</h2><dl class="ld-details" id="ld-details"></dl></section>
+            <section class="ld-sec" id="ld-rooms-sec"><h2>Rooms</h2>
+              <table class="ld-rooms"><thead><tr><th scope="col">Room</th><th scope="col">Level</th><th scope="col">Size</th></tr></thead><tbody id="ld-rooms"></tbody></table>
+            </section>
+            <section class="ld-sec" id="ld-map-sec"><h2>Location</h2><iframe class="ld-map" id="ld-map" title="Map of the property location" loading="lazy"></iframe></section>
+
+            <p class="ld-credit" id="ld-credit"></p>
+          </article>
+
+          <aside class="ld-aside">
+            <div class="ld-card">
+              <p class="am-eyebrow">Interested in this home?</p>
+              <h2>Contact an agent <strong>who fits you.</strong></h2>
+              <p>Answer three quick questions and pick the Royal LePage Solutions REALTOR&reg; you'd like to work with. It takes about a minute.</p>
+              <div class="am-stack">
+                <button class="am-btn" type="button" data-contact>Contact an agent</button>
+                <button class="am-btn am-btn-ghost" type="button" data-ask-listing>Ask the listing agent</button>
+              </div>
+              <small>Free, no obligation. Call us any time at 403.252.5900.</small>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="ld-mobilebar" id="ld-mobilebar" hidden>
+    <button class="am-btn" type="button" data-contact>Contact an agent</button>
+  </div>
+
+  <div class="ld-lb" id="ld-lb" hidden role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <img id="ld-lb-img" alt="">
+    <button class="ld-lb-prev" type="button" id="ld-lb-prev" aria-label="Previous photo">&#8249;</button>
+    <button class="ld-lb-next" type="button" id="ld-lb-next" aria-label="Next photo">&#8250;</button>
+    <button class="ld-lb-close" type="button" id="ld-lb-close" aria-label="Close photos">&times;</button>
+    <span class="ld-lb-count" id="ld-lb-count"></span>
+  </div>
+
+  <!-- Agent Match -->
+  <dialog id="am-match" aria-labelledby="am-m-title">
+    <button class="am-x" type="button" data-close aria-label="Close">&times;</button>
+
+    <!-- 0: choose path -->
+    <section class="am-step is-active" data-step="choose">
+      <div class="am-mini"><div class="am-mini-photo" data-mini-photo></div><div><small>You picked</small><strong data-mini-addr></strong></div></div>
+      <h2 id="am-m-title">You've picked the property. <strong>Now let's pick the right agent.</strong></h2>
+      <p class="am-sub">Answer three quick questions and swipe through REALTORS&reg; who fit how you like to work. It takes about a minute.</p>
+      <div class="am-stack">
+        <button class="am-btn" type="button" data-go="questions">Find my agent</button>
+        <button class="am-btn am-btn-ghost" type="button" data-go="listing">Just send my question to the listing agent</button>
+      </div>
+    </section>
+
+    <!-- 1: quick questions -->
+    <section class="am-step" data-step="questions">
+      <div class="am-progress" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+      <h2>A few quick questions</h2>
+      <form id="am-qform">
+        <fieldset><legend>Are you looking to</legend><div class="am-chips">
+          <label><input type="radio" name="intent" value="Buy" checked><span>Buy</span></label>
+          <label><input type="radio" name="intent" value="Buy and sell" ><span>Buy and sell</span></label>
+          <label><input type="radio" name="intent" value="Just looking"><span>Just looking</span></label>
+        </div></fieldset>
+        <fieldset><legend>When?</legend><div class="am-chips">
+          <label><input type="radio" name="timeline" value="0-3 months" checked><span>0–3 months</span></label>
+          <label><input type="radio" name="timeline" value="3-6 months"><span>3–6 months</span></label>
+          <label><input type="radio" name="timeline" value="6+ months"><span>6+ months</span></label>
+        </div></fieldset>
+        <fieldset><legend>Best way to reach you</legend><div class="am-chips">
+          <label><input type="radio" name="contactPref" value="text" checked><span>Text</span></label>
+          <label><input type="radio" name="contactPref" value="phone"><span>Call</span></label>
+          <label><input type="radio" name="contactPref" value="email"><span>Email</span></label>
+        </div></fieldset>
+        <fieldset><legend>How do you like to work?</legend><div class="am-chips">
+          <label><input type="radio" name="pace" value="guided" checked><span>Guide me step by step</span></label>
+          <label><input type="radio" name="pace" value="independent"><span>Just send me listings</span></label>
+        </div></fieldset>
+        <div class="am-stack">
+          <button class="am-btn" type="submit">See my matches</button>
+          <button class="am-back" type="button" data-go="choose">&#8249; Back</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 2: swipe -->
+    <section class="am-step" data-step="swipe">
+      <div class="am-progress" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></div>
+      <p class="am-swipe-count" id="am-s-count" aria-live="polite"></p>
+      <div class="am-swipe-area" id="am-s-area"></div>
+      <div class="am-swipe-btns" id="am-s-btns">
+        <button class="am-round" type="button" id="am-s-pass" aria-label="Pass, show the next agent">&#10005;</button>
+        <button class="am-round am-yes" type="button" id="am-s-pick" aria-label="Pick this agent">&#10084;</button>
+      </div>
+      <div id="am-s-empty" hidden class="am-stack" style="margin-top:1rem">
+        <p class="am-sub" style="margin:0">You've seen everyone who fits. Want another look?</p>
+        <button class="am-btn" type="button" id="am-s-restart">Start over</button>
+        <button class="am-btn am-btn-ghost" type="button" data-go="listing">Send my question to the listing agent</button>
+      </div>
+      <button class="am-back" type="button" data-go="questions">&#8249; Change my answers</button>
+    </section>
+
+    <!-- 3: contact for matched agent -->
+    <section class="am-step" data-step="contact">
+      <div class="am-progress" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i></div>
+      <h2>Send your request to <strong data-agent-name></strong></h2>
+      <p class="am-sub">They'll reach out the way you asked, usually within <span data-agent-reply>15</span> minutes during business hours.</p>
+      <form class="am-form" id="am-cform" novalidate>
+        <label class="am-field">Name<input type="text" name="name" autocomplete="name" required></label>
+        <label class="am-field">Email<input type="email" name="email" autocomplete="email"></label>
+        <label class="am-field">Phone<input type="tel" name="phone" autocomplete="tel"></label>
+        <label class="am-field">Message<textarea name="message"></textarea></label>
+        <div style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+        <label class="am-consent"><input type="checkbox" name="consent"> I agree to be contacted by this Royal LePage Solutions REALTOR&reg; by phone, text or email about real estate. I can opt out at any time.</label>
+        <button class="am-btn" type="submit">Send to my agent</button>
+        <p class="am-status" data-status role="status" aria-live="polite"></p>
+        <button class="am-back" type="button" data-go="swipe">&#8249; Back to matches</button>
+      </form>
+      <p class="am-fine">This free matching service connects you with a REALTOR&reg; at Royal LePage Solutions, the brokerage that listed this home.</p>
+    </section>
+
+    <!-- L: listing agent -->
+    <section class="am-step" data-step="listing">
+      <h2>Ask the <strong>listing agent</strong></h2>
+      <p class="am-sub">Your question goes straight to the REALTOR&reg; who listed this home.</p>
+      <form class="am-form" id="am-lform" novalidate>
+        <label class="am-field">Name<input type="text" name="name" autocomplete="name" required></label>
+        <label class="am-field">Email<input type="email" name="email" autocomplete="email" required></label>
+        <label class="am-field">Phone (optional)<input type="tel" name="phone" autocomplete="tel"></label>
+        <label class="am-field">Message<textarea name="message" maxlength="500"></textarea></label>
+        <div style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+        <label class="am-consent"><input type="checkbox" name="consent"> I agree to be contacted about this property by the listing REALTOR&reg;.</label>
+        <button class="am-btn" type="submit">Send my question</button>
+        <p class="am-status" data-status role="status" aria-live="polite"></p>
+        <button class="am-back" type="button" data-go="choose">&#8249; Back</button>
+      </form>
+    </section>
+
+    <!-- Done -->
+    <section class="am-step am-done" data-step="done" tabindex="-1">
+      <p class="am-eyebrow" style="margin-top:1rem">Sent</p>
+      <p class="am-big" data-done-title>It's a match</p>
+      <p class="am-sub" data-done-text></p>
+      <button class="am-btn" type="button" data-close>Keep browsing</button>
+    </section>
+  </dialog>
+
+  <footer class="am-footer">
+    <div class="am-wrap">
+      <p>Listing data is provided through CREA's DDF&reg; and is deemed reliable but not guaranteed. Each listing shows its listing brokerage. Powered by REALTOR.ca.</p>
+      <p>The trademarks REALTOR&reg;, REALTORS&reg;, and the REALTOR&reg; logo are controlled by The Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA. The trademarks MLS&reg;, Multiple Listing Service&reg; and the associated logos are owned by CREA and identify the quality of services provided by real estate professionals who are members of CREA.</p>
+      <p>Royal LePage Solutions, Unit 205, 264 Midpark Way SE, Calgary, AB · 403.252.5900</p>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    var WORKER = 'https://rls-agent-match.rls-solutions.workers.dev';
+
+    var current = null, agents = [], ranked = [], idx = 0, chosen = null, answers = {}, lbIdx = 0;
+    var preview = false;
+
+    var $ = function (s, r) { return (r || document).querySelector(s); };
+    var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+    var money = function (n) { return n == null ? 'Price on request' : '$' + Math.round(n).toLocaleString('en-CA'); };
+    var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; };
+    var initials = function (n) { return (n || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase(); };
+    var title = function (s) { return String(s || '').toLowerCase().replace(/\b\w/g, function (c) { return c.toUpperCase(); }); };
+
+    function getJSON(path) { return fetch(WORKER + path).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
+    function postJSON(path, body) {
+      return fetch(WORKER + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(function (r) { return r.json(); });
+    }
+
+    /* ── Listing ── */
+    function render(l) {
+      current = l;
+      var place = [l.community, l.city].filter(Boolean).join(', ');
+      document.title = (l.address || 'Listing') + (l.city ? ', ' + l.city : '') + ' — Royal LePage® Solutions';
+      $('#ld-type').textContent = [l.type, l.mls && 'MLS® ' + l.mls].filter(Boolean).join(' · ');
+      $('#ld-addr').textContent = l.address;
+      $('#ld-loc').textContent = [place, l.province].filter(Boolean).join(', ');
+      $('#ld-price').textContent = money(l.price);
+
+      var facts = [
+        l.beds != null && [l.beds, 'Beds'], l.baths != null && [l.baths, 'Baths'],
+        l.area && [Math.round(l.area).toLocaleString('en-CA'), /met/i.test(l.areaUnits) ? 'm²' : 'Sq ft'],
+        l.yearBuilt && [l.yearBuilt, 'Built']
+      ].filter(Boolean);
+      $('#ld-facts').innerHTML = facts.map(function (f) { return '<div class="ld-fact"><b>' + esc(f[0]) + '</b><span>' + esc(f[1]) + '</span></div>'; }).join('');
+      $('#ld-facts').hidden = !facts.length;
+
+      $('#ld-remarks').textContent = l.remarks || '';
+      $('#ld-about-sec').hidden = !l.remarks;
+
+      var det = l.details || [];
+      $('#ld-details').innerHTML = det.map(function (d) { return '<div><dt>' + esc(d.label) + '</dt><dd>' + esc(d.value) + '</dd></div>'; }).join('');
+      $('#ld-details-sec').hidden = !det.length;
+
+      var rooms = l.rooms || [];
+      $('#ld-rooms').innerHTML = rooms.map(function (r) { return '<tr><td>' + esc(r.type) + '</td><td>' + esc(r.level) + '</td><td>' + esc(r.dims) + '</td></tr>'; }).join('');
+      $('#ld-rooms-sec').hidden = !rooms.length;
+
+      if (l.lat != null && l.lng != null) {
+        var d = 0.006;
+        $('#ld-map').src = 'https://www.openstreetmap.org/export/embed.html?bbox=' + (l.lng - d) + ',' + (l.lat - d * 0.6) + ',' + (l.lng + d) + ',' + (l.lat + d * 0.6) + '&layer=mapnik&marker=' + l.lat + ',' + l.lng;
+      } else $('#ld-map-sec').hidden = true;
+
+      $('#ld-credit').innerHTML = 'Listed by <strong>' + esc(l.listOfficeName || 'the listing brokerage') + '</strong>' +
+        (l.listAgentName ? ' · ' + esc(title(l.listAgentName)) : '') + (l.mls ? ' · MLS® ' + esc(l.mls) : '') +
+        (l.listingUrl ? '<br><a href="' + encodeURI(l.listingUrl) + '" target="_blank" rel="noopener">View on REALTOR.ca</a>' : '');
+
+      renderGallery(l.photos || []);
+      $('#ld-status').hidden = true; $('#ld-body').hidden = false; $('#ld-mobilebar').hidden = false;
+    }
+
+    function renderGallery(photos) {
+      var g = $('#ld-gallery');
+      if (!photos.length) { g.hidden = true; return; }
+      g.classList.toggle('one', photos.length < 3);
+      var alt = function (i) { return esc(current.address) + ', photo ' + (i + 1) + ' of ' + photos.length; };
+      var html = '<button class="ld-g-main" type="button" data-photo="0"><img src="' + encodeURI(photos[0]) + '" alt="' + alt(0) + '" fetchpriority="high"></button>';
+      if (photos.length >= 3) {
+        html += '<button class="ld-g-side" type="button" data-photo="1"><img src="' + encodeURI(photos[1]) + '" alt="' + alt(1) + '" loading="lazy"></button>' +
+          '<button class="ld-g-side" type="button" data-photo="2"><img src="' + encodeURI(photos[2]) + '" alt="' + alt(2) + '" loading="lazy"><span class="ld-g-all">View all ' + photos.length + ' photos</span></button>';
+      }
+      g.innerHTML = html;
+    }
+
+    function showLB(i) {
+      var p = current.photos; lbIdx = (i + p.length) % p.length;
+      $('#ld-lb-img').src = p[lbIdx]; $('#ld-lb-img').alt = 'Photo ' + (lbIdx + 1) + ' of ' + p.length;
+      $('#ld-lb-count').textContent = (lbIdx + 1) + ' / ' + p.length;
+      $('#ld-lb').hidden = false; $('#ld-lb-close').focus();
+    }
+
+    /* ── Match flow ── */
+    function go(step) {
+      $$('#am-match .am-step').forEach(function (s) { s.classList.toggle('is-active', s.getAttribute('data-step') === step); });
+      var active = $('#am-match .am-step.is-active');
+      var focusable = active.querySelector('h2, [tabindex="-1"]');
+      if (focusable) { if (!focusable.hasAttribute('tabindex')) focusable.setAttribute('tabindex', '-1'); focusable.focus(); }
+      if (step === 'swipe') renderAgent();
+    }
+
+    function openMatch(step) {
+      var photo = current.photos && current.photos[0];
+      $('[data-mini-photo]').style.backgroundImage = photo ? 'url("' + encodeURI(photo) + '")' : '';
+      $('[data-mini-addr]').textContent = current.address;
+      $('#am-cform textarea[name=message]').value = "I'm interested in " + current.address + (current.mls ? ' (MLS® ' + current.mls + ')' : '') + '.';
+      $('#am-lform textarea[name=message]').value = "I'd like more information about " + current.address + '.';
+      $$('#am-match [data-status]').forEach(function (s) { s.textContent = ''; s.className = 'am-status'; });
+      $('#am-match').showModal();
+      go(step || 'choose');
+    }
+
+    function score(a) {
+      var s = 60;
+      if (a.contact && a.contact === answers.contactPref) s += 10;
+      if (a.pace && a.pace === answers.pace) s += 10;
+      var place = ((current.address || '') + ' ' + (current.community || '') + ' ' + (current.city || '')).toLowerCase();
+      if ((a.communities || []).some(function (c) { return place.indexOf(c.toLowerCase()) > -1; })) s += 12;
+      if (a.replyMinutes) s += Math.max(0, 8 - Math.floor(a.replyMinutes / 5));
+      return Math.min(s, 98);
+    }
+
+    function rank() {
+      ranked = agents.map(function (a) { return { a: a, s: score(a) }; })
+        .sort(function (x, y) { return y.s - x.s; });
+      idx = 0;
+    }
+
+    function renderAgent() {
+      var area = $('#am-s-area');
+      var done = idx >= ranked.length;
+      $('#am-s-empty').hidden = !done;
+      $('#am-s-btns').hidden = done;
+      area.hidden = done;
+      $('#am-s-count').textContent = done ? '' : 'Match ' + (idx + 1) + ' of ' + ranked.length;
+      if (done) return;
+      var r = ranked[idx], a = r.a;
+      var top = a.photo ? ' style="background-image:url(\'' + encodeURI(a.photo) + '\')"' : '';
+      area.innerHTML = '<article class="am-agent" id="am-card" aria-label="' + esc(a.name) + '">' +
+        '<div class="am-agent-top"' + top + '>' + (a.photo ? '' : '<div class="am-initials" aria-hidden="true">' + esc(initials(a.name)) + '</div>') +
+        '<span class="am-pill">' + r.s + '% match</span>' +
+        (a.video ? '<a class="am-video" href="' + encodeURI(a.video) + '" target="_blank" rel="noopener">&#9658; Watch intro</a>' : '') + '</div>' +
+        '<div class="am-agent-body"><div class="am-agent-name">' + esc(a.name) + '</div>' +
+        '<div class="am-tags">' + (a.specialties || []).map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' +
+        (a.communities && a.communities.length ? '<div class="am-agent-row">Works in: ' + esc(a.communities.join(', ')) + '</div>' : '') +
+        '<div class="am-agent-row">Prefers: ' + esc([a.contact === 'phone' ? 'calls' : a.contact === 'text' ? 'texting' : a.contact, a.pace === 'guided' ? 'hands-on guidance' : a.pace === 'independent' ? 'sending you listings' : ''].filter(Boolean).join(', ')) + '</div>' +
+        (a.languages && a.languages.length ? '<div class="am-agent-row">Speaks: ' + esc(a.languages.join(', ')) + '</div>' : '') +
+        (a.replyMinutes ? '<div class="am-agent-row">Usually replies in under ' + a.replyMinutes + ' min</div>' : '') +
+        (a.bio ? '<div class="am-agent-row">' + esc(a.bio) + '</div>' : '') +
+        '</div></article>';
+      enableDrag($('#am-card'));
+    }
+
+    function next(liked) {
+      var card = $('#am-card');
+      if (card) { card.style.transform = 'translateX(' + (liked ? 120 : -120) + '%) rotate(' + (liked ? 12 : -12) + 'deg)'; card.style.opacity = '0'; }
+      setTimeout(function () {
+        if (liked) {
+          chosen = ranked[idx].a;
+          $('[data-agent-name]').textContent = chosen.name;
+          $('[data-agent-reply]').textContent = chosen.replyMinutes || 15;
+          go('contact');
+        } else { idx++; renderAgent(); }
+      }, card ? 220 : 0);
+    }
+
+    function enableDrag(card) {
+      var startX = null, dx = 0;
+      card.addEventListener('pointerdown', function (e) { if (e.target.closest('a')) return; startX = e.clientX; dx = 0; card.setPointerCapture(e.pointerId); card.style.transition = 'none'; });
+      card.addEventListener('pointermove', function (e) { if (startX === null) return; dx = e.clientX - startX; card.style.transform = 'translateX(' + dx + 'px) rotate(' + dx / 20 + 'deg)'; });
+      var end = function () {
+        if (startX === null) return;
+        startX = null; card.style.transition = '';
+        if (Math.abs(dx) > 100) next(dx > 0); else card.style.transform = '';
+      };
+      card.addEventListener('pointerup', end);
+      card.addEventListener('pointercancel', end);
+    }
+
+    function formData(form) {
+      var d = {};
+      new FormData(form).forEach(function (v, k) { d[k] = v; });
+      var c = form.querySelector('[name=consent]'); if (c) d.consent = c.checked;
+      return d;
+    }
+    function status(form, text, type) {
+      var s = form.querySelector('[data-status]');
+      s.textContent = text; s.className = 'am-status' + (type ? ' is-' + type : '');
+    }
+    function localCheck(d, needEmail) {
+      if (!d.name.trim()) return 'Please add your name.';
+      var phone = (d.phone || '').replace(/\D/g, '');
+      if (d.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)) return 'Please check your email address.';
+      if (needEmail && !d.email) return 'Please add your email address.';
+      if (!d.email && phone.length < 10) return 'Please add an email or phone number.';
+      if (!d.consent) return 'Please tick the consent box so we can contact you.';
+      return '';
+    }
+    function submit(form, path, body, needEmail, onOk) {
+      var d = formData(form);
+      var err = localCheck(d, needEmail);
+      if (err) { status(form, err, 'error'); return; }
+      var btn = form.querySelector('[type=submit]');
+      btn.disabled = true; status(form, 'Sending…');
+      var payload = Object.assign({}, d, body, { pageUrl: location.href.split('#')[0] });
+      var p = preview ? new Promise(function (res) { setTimeout(function () { res({ ok: true, preview: true }); }, 500); }) : postJSON(path, payload);
+      p.then(function (res) {
+        if (!res || !res.ok) throw new Error((res && res.error) || 'Something went wrong. Please call 403.252.5900.');
+        form.reset(); onOk(res);
+      }).catch(function (e) { status(form, e.message || 'Something went wrong. Please call 403.252.5900.', 'error'); })
+        .then(function () { btn.disabled = false; });
+    }
+
+
+
+    /* ── Wire up ── */
+    $('#ld-gallery').addEventListener('click', function (e) { var b = e.target.closest('[data-photo]'); if (b) showLB(+b.getAttribute('data-photo')); });
+    $('#ld-lb-prev').addEventListener('click', function () { showLB(lbIdx - 1); });
+    $('#ld-lb-next').addEventListener('click', function () { showLB(lbIdx + 1); });
+    $('#ld-lb-close').addEventListener('click', function () { $('#ld-lb').hidden = true; });
+    document.addEventListener('keydown', function (e) {
+      if ($('#ld-lb').hidden) return;
+      if (e.key === 'Escape') $('#ld-lb').hidden = true;
+      if (e.key === 'ArrowLeft') showLB(lbIdx - 1);
+      if (e.key === 'ArrowRight') showLB(lbIdx + 1);
+    });
+
+    $$('[data-contact]').forEach(function (b) { b.addEventListener('click', function () { openMatch('choose'); }); });
+    $$('[data-ask-listing]').forEach(function (b) { b.addEventListener('click', function () { openMatch('listing'); }); });
+    $$('[data-close]').forEach(function (b) { b.addEventListener('click', function () { b.closest('dialog').close(); }); });
+    $('#am-match').addEventListener('click', function (e) { if (e.target === e.currentTarget) e.currentTarget.close(); var g = e.target.closest('[data-go]'); if (g) go(g.getAttribute('data-go')); });
+
+    $('#am-qform').addEventListener('submit', function (e) { e.preventDefault(); answers = formData(e.currentTarget); rank(); go('swipe'); });
+    $('#am-s-pass').addEventListener('click', function () { next(false); });
+    $('#am-s-pick').addEventListener('click', function () { next(true); });
+    $('#am-s-restart').addEventListener('click', function () { idx = 0; renderAgent(); });
+
+    $('#am-cform').addEventListener('submit', function (e) {
+      e.preventDefault();
+      submit(e.currentTarget, '/match', {
+        agentId: chosen.id, listingKey: current.key, listingMls: current.mls, listingAddress: current.address,
+        intent: answers.intent, timeline: answers.timeline, contactPref: answers.contactPref, pace: answers.pace
+      }, false, function () {
+        $('[data-done-title]').textContent = "It's a match";
+        $('[data-done-text]').textContent = chosen.name + ' has your request and will reach out shortly.';
+        go('done');
+        if (window.gtag) window.gtag('event', 'generate_lead', { offer: 'agent-match' });
+      });
+    });
+    $('#am-lform').addEventListener('submit', function (e) {
+      e.preventDefault();
+      submit(e.currentTarget, '/listing-agent', { listingKey: current.key, contactPref: answers.contactPref || 'email' }, true, function () {
+        $('[data-done-title]').textContent = 'Question sent';
+        $('[data-done-text]').textContent = 'The listing REALTOR® has your question and will be in touch.';
+        go('done');
+      });
+    });
+
+    /* ── Start ── */
+    var id = new URLSearchParams(location.search).get('id') || '';
+    if (!/^[A-Za-z0-9_-]{1,40}$/.test(id)) {
+      $('#ld-status').innerHTML = 'That listing link looks incomplete. <a href="./">See all listings</a>.';
+      return;
+    }
+    getJSON('/listing/' + encodeURIComponent(id)).then(function (d) {
+      if (!d.ok || !d.listing) throw new Error('missing');
+      render(d.listing);
+    }).catch(function () {
+      $('#ld-status').innerHTML = "This listing isn't available. It may have sold or been taken off the market. <a href=\"./\">See all listings</a> or call 403.252.5900.";
+    });
+    getJSON('/agents').then(function (d) { agents = d.agents || []; }).catch(function () {});
+  })();
+  </script>
+</body>
+</html>
