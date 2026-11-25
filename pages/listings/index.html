@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Listing — Royal LePage&reg; Solutions</title>
-  <meta name="description" content="Home for sale in Alberta. Contact a Royal LePage Solutions REALTOR®.">
+  <title>Alberta Homes for Sale — Royal LePage&reg; Solutions</title>
+  <meta name="description" content="Search homes for sale across Alberta with Royal LePage Solutions.">
+  <link rel="canonical" href="https://info.royallepagesolutions.com/pages/listings/">
   <meta name="robots" content="noindex">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,179 +22,110 @@
     body { font-family: var(--am-body); color: var(--rls-black); background: #fff; margin: 0; }
     .am-wrap { max-width: var(--rls-max-width, 1200px); margin: 0 auto; padding: 0 1.5rem; }
     .am-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-    .am-eyebrow { font-family: var(--rls-sans); font-size: .75rem; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--rls-red); margin: 0 0 .5rem; }
+    .am-eyebrow { font-family: var(--rls-sans); font-size: .75rem; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--rls-red); margin: 0 0 1rem; }
 
-    .ld { padding: 1.5rem 0 4rem; }
-    .ld-crumbs { font-size: .85rem; color: var(--rls-warm-grey); margin: 0 0 1rem; }
-    .ld-crumbs a { color: var(--rls-warm-grey); }
-    .ld-status { padding: 4rem 0; text-align: center; color: var(--rls-warm-grey); }
+    .sr-hero { background: var(--rls-black); color: #fff; padding: 3.5rem 0 2.5rem; }
+    .sr-hero h1 { font-family: var(--rls-sans); font-weight: 200; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; margin: 0 0 1.75rem; color: #fff; }
+    .sr-hero h1 strong { font-weight: 700; }
 
-    /* Gallery */
-    .ld-gallery { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: .5rem; height: 480px; border-radius: 8px; overflow: hidden; }
-    .ld-gallery button { border: none; padding: 0; margin: 0; cursor: pointer; background: var(--rls-light-grey); position: relative; overflow: hidden; }
-    .ld-gallery img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s; }
-    .ld-gallery button:hover img { transform: scale(1.02); }
-    .ld-g-main { grid-row: 1 / span 2; }
-    .ld-g-all { position: absolute; right: .75rem; bottom: .75rem; background: rgba(0,0,0,.7); color: #fff; font: 500 .85rem var(--am-body); padding: .45rem .8rem; border-radius: 4px; }
-    .ld-gallery.one { grid-template-columns: 1fr; }
-    .ld-gallery.one .ld-g-main { grid-row: auto; }
-
-    /* Layout */
-    .ld-layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 3rem; margin-top: 2rem; align-items: start; }
-    .ld-head h1 { font-family: var(--rls-sans); font-weight: 300; font-size: clamp(1.8rem, 3.4vw, 2.6rem); line-height: 1.15; margin: 0; }
-    .ld-loc { color: var(--rls-dark-grey); margin: .4rem 0 0; }
-    .ld-price { font-family: var(--rls-sans); font-weight: 700; font-size: 2rem; margin: 1rem 0 0; color: var(--rls-black); }
-    .ld-facts { display: flex; flex-wrap: wrap; gap: 0; margin: 1.5rem 0; border-top: 1px solid var(--am-line); border-bottom: 1px solid var(--am-line); }
-    .ld-fact { padding: 1rem 1.5rem 1rem 0; margin-right: 1.5rem; }
-    .ld-fact b { display: block; font: 700 1.3rem var(--rls-sans); }
-    .ld-fact span { font-size: .8rem; color: var(--rls-warm-grey); text-transform: uppercase; letter-spacing: .08em; }
-    .ld-sec { margin: 2.5rem 0 0; }
-    .ld-sec h2 { font-family: var(--rls-sans); font-weight: 600; font-size: 1.35rem; margin: 0 0 1rem; }
-    .ld-remarks { line-height: 1.75; color: var(--rls-dark-grey); white-space: pre-line; }
-    .ld-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 2rem; margin: 0; }
-    .ld-details div { display: grid; grid-template-columns: 11rem 1fr; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid var(--am-line); font-size: .92rem; }
-    .ld-details dt { color: var(--rls-warm-grey); }
-    .ld-details dd { margin: 0; }
-    .ld-rooms { width: 100%; border-collapse: collapse; font-size: .92rem; }
-    .ld-rooms th, .ld-rooms td { text-align: left; padding: .65rem .5rem .65rem 0; border-bottom: 1px solid var(--am-line); }
-    .ld-rooms th { font-weight: 500; color: var(--rls-warm-grey); font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; }
-    .ld-map { width: 100%; height: 340px; border: 0; border-radius: 8px; background: var(--rls-light-grey); }
-    .ld-credit { font-size: .82rem; color: var(--rls-warm-grey); line-height: 1.6; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--am-line); }
-    .ld-credit a { color: var(--rls-black); }
-
-    /* Contact card */
-    .ld-card { position: sticky; top: calc(var(--rls-header-h, 160px) + 1rem); border: 1px solid var(--am-line); border-radius: 8px; padding: 1.75rem; box-shadow: 0 10px 30px rgba(0,0,0,.06); }
-    .ld-card h2 { font-family: var(--rls-sans); font-weight: 300; font-size: 1.5rem; line-height: 1.2; margin: 0 0 .5rem; }
-    .ld-card h2 strong { font-weight: 700; }
-    .ld-card p { color: var(--rls-warm-grey); line-height: 1.55; font-size: .95rem; margin: 0 0 1.25rem; }
-    .ld-card .am-stack { display: grid; gap: .75rem; }
-    .ld-card small { display: block; margin-top: 1rem; font-size: .78rem; color: var(--rls-warm-grey); line-height: 1.5; }
-    .ld-mobilebar { display: none; }
-
-    .am-btn { min-height: 52px; border-radius: 4px; border: none; background: var(--rls-red); color: #fff; font: 600 1rem var(--rls-sans); letter-spacing: .04em; cursor: pointer; padding: 0 1.5rem; }
+    .sr-form { background: #fff; color: var(--rls-black); border-radius: 8px; padding: 1rem; display: grid; gap: .75rem; }
+    .sr-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: .75rem; }
+    .sr-more { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .75rem; }
+    .sr-form label { display: grid; gap: .3rem; font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--rls-warm-grey); }
+    .sr-form input, .sr-form select { min-height: 48px; border: 1px solid #CFCAC3; border-radius: 4px; padding: 0 .85rem; font: 400 1rem var(--am-body); color: var(--rls-black); background: #fff; text-transform: none; letter-spacing: 0; }
+    .sr-form input:focus, .sr-form select:focus { outline: 2px solid var(--rls-red); outline-offset: 1px; }
+    .sr-q input { font-size: 1.05rem; }
+    .sr-check { display: flex !important; align-items: center; gap: .5rem; min-height: 48px; text-transform: none !important; letter-spacing: 0 !important; font-size: .9rem !important; color: var(--rls-black) !important; }
+    .sr-check input { min-height: 0; width: 20px; height: 20px; }
+    .am-btn { min-height: 48px; border-radius: 4px; border: none; background: var(--rls-red); color: #fff; font: 600 1rem var(--rls-sans); letter-spacing: .04em; cursor: pointer; padding: 0 1.75rem; }
     .am-btn:hover { background: var(--rls-red-dk); }
-    .am-btn-ghost { background: transparent; color: var(--rls-black); border: 1px solid var(--rls-black); }
+    .am-btn-ghost { background: transparent; color: var(--rls-black); border: 1px solid #CFCAC3; }
     .am-btn-ghost:hover { background: var(--rls-light-grey); }
+    .sr-toggle { display: none; }
 
-    /* Lightbox */
-    .ld-lb { position: fixed; inset: 0; background: rgba(0,0,0,.94); display: flex; align-items: center; justify-content: center; z-index: 10000; }
-    .ld-lb img { max-width: 92vw; max-height: 84vh; }
-    .ld-lb button { position: absolute; background: none; border: 0; color: #fff; font-size: 2.6rem; cursor: pointer; width: 64px; height: 64px; }
-    .ld-lb-prev { left: .5rem; } .ld-lb-next { right: .5rem; } .ld-lb-close { top: .5rem; right: .5rem; }
-    .ld-lb-count { position: absolute; bottom: 1.25rem; color: #ccc; font-size: .9rem; }
+    .am-grid-sec { padding: 2rem 0 4rem; }
+    .sr-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; margin: 0 0 1.25rem; }
+    .am-count { color: var(--rls-dark-grey); font-size: .95rem; margin: 0; }
+    .sr-bar select { min-height: 44px; border: 1px solid #CFCAC3; border-radius: 4px; padding: 0 .75rem; font: 400 .95rem var(--am-body); }
+    .am-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+    .am-card { text-decoration: none; background: #fff; border: 1px solid var(--am-line); border-radius: 6px; overflow: hidden; color: inherit; display: flex; flex-direction: column; transition: box-shadow .2s, transform .2s; }
+    .am-card:hover, .am-card:focus-visible { box-shadow: 0 10px 30px rgba(0,0,0,.12); transform: translateY(-2px); }
+    .am-card:focus-visible { outline: 3px solid var(--rls-red); outline-offset: 2px; }
+    .am-photo { aspect-ratio: 4 / 3; background: var(--rls-light-grey) center / cover no-repeat; position: relative; }
+    .am-tag { position: absolute; left: .6rem; top: .6rem; background: var(--rls-red); color: #fff; font: 600 .7rem var(--rls-sans); letter-spacing: .08em; text-transform: uppercase; padding: .3rem .55rem; border-radius: 3px; }
+    .am-card-body { padding: 1rem 1.1rem 1.2rem; display: grid; gap: .35rem; }
+    .am-price { font-family: var(--rls-sans); font-weight: 700; font-size: 1.35rem; }
+    .am-addr { font-size: .95rem; color: var(--rls-dark-grey); }
+    .am-facts { font-size: .85rem; color: var(--rls-warm-grey); }
+    .am-credit { font-size: .75rem; color: var(--rls-warm-grey); margin-top: .25rem; }
+    .sr-pager { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 2.5rem; }
+    .sr-pager span { color: var(--rls-warm-grey); font-size: .9rem; }
+    .sr-empty { text-align: center; padding: 3rem 1rem; color: var(--rls-dark-grey); }
 
-    dialog { border: none; padding: 0; border-radius: 8px; max-width: min(960px, calc(100vw - 2rem)); width: 100%; max-height: calc(100vh - 2rem); overflow: auto; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
-    dialog::backdrop { background: rgba(0,0,0,.6); }
-    .am-x { position: absolute; top: .75rem; right: .75rem; width: 44px; height: 44px; border-radius: 22px; border: none; background: rgba(0,0,0,.6); color: #fff; font-size: 1.4rem; cursor: pointer; z-index: 2; }
-
-    .lf { display: grid; gap: .75rem; }
-    .lf-kind { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
-    .lf-kind label { position: relative; }
-    .lf-kind input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
-    .lf-kind span { display: flex; align-items: center; justify-content: center; min-height: 44px; border: 1px solid #BDB7AF; border-radius: 4px; font-size: .9rem; }
-    .lf-kind input:checked + span { background: var(--rls-black); border-color: var(--rls-black); color: #fff; }
-    .lf-kind input:focus-visible + span { outline: 3px solid var(--rls-red); outline-offset: 2px; }
-    .lf-f { display: grid; gap: .3rem; font-size: .85rem; font-weight: 500; }
-    .lf-f input, .lf-f textarea { min-height: 44px; border: 1px solid #BDB7AF; border-radius: 4px; padding: .55rem .75rem; font: 400 1rem var(--am-body); }
-    .lf-f textarea { min-height: 80px; resize: vertical; }
-    .lf-consent { display: flex; gap: .6rem; align-items: flex-start; font-size: .78rem; line-height: 1.45; color: var(--rls-dark-grey); }
-    .lf-consent input { width: 20px; height: 20px; margin-top: 1px; flex: 0 0 20px; }
-    .lf-status { min-height: 1.2em; font-size: .9rem; margin: 0; }
-    .lf-status.is-error { color: #A3001D; }
-    .ld-badge { display: inline-flex; align-items: center; gap: .4rem; margin-top: .6rem; font: 600 .8rem var(--rls-sans); color: var(--rls-black); text-decoration: none; border: 1px solid var(--am-line); border-radius: 4px; padding: .4rem .7rem; }
     .am-footer { background: var(--rls-black); color: rgba(255,255,255,.7); font-size: .78rem; line-height: 1.6; padding: 2rem 0; }
     .am-footer a { color: #fff; }
 
-    @media (max-width: 960px) {
-      .ld-layout { grid-template-columns: 1fr; gap: 0; }
-      .ld-aside { margin-top: 2.5rem; }
-      .ld-card { position: static; }
-      .ld-gallery { height: 300px; grid-template-columns: 1fr; grid-template-rows: 1fr; }
-      .ld-gallery .ld-g-side { display: none; }
-      .ld-gallery .ld-g-main { grid-row: auto; }
-      .ld-details { grid-template-columns: 1fr; }
-      .ld-details div { grid-template-columns: 9rem 1fr; }
-      .ld-mobilebar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; gap: .5rem; padding: .75rem 1rem; background: #fff; box-shadow: 0 -6px 20px rgba(0,0,0,.12); }
-      .ld-mobilebar .am-btn { flex: 1; }
-      .ld { padding-bottom: 6rem; }
+    @media (max-width: 900px) {
+      .sr-row { grid-template-columns: 1fr; }
+      .sr-more { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .sr-toggle { display: inline-flex; align-items: center; justify-content: center; }
+      .sr-form:not(.open) .sr-more { display: none; }
     }
+    @media (prefers-reduced-motion: reduce) { .am-card { transition: none; } }
   </style>
 </head>
 <body>
 
-  <main class="ld">
+  <section class="sr-hero">
     <div class="am-wrap">
-      <p class="ld-crumbs"><a href="./" id="ld-back">&#8249; Back to search</a></p>
-      <div class="ld-status" id="ld-status">Loading listing…</div>
+      <p class="am-eyebrow">Royal LePage&reg; Solutions</p>
+      <h1>Find your next home <strong>anywhere in Alberta.</strong></h1>
 
-      <div id="ld-body" hidden>
-        <section class="ld-gallery" id="ld-gallery" aria-label="Photos"></section>
-
-        <div class="ld-layout">
-          <article>
-            <header class="ld-head">
-              <p class="am-eyebrow" id="ld-type"></p>
-              <h1 id="ld-addr"></h1>
-              <p class="ld-loc" id="ld-loc"></p>
-              <p class="ld-price" id="ld-price"></p>
-            </header>
-            <div class="ld-facts" id="ld-facts"></div>
-
-            <section class="ld-sec" id="ld-about-sec"><h2>About this home</h2><div class="ld-remarks" id="ld-remarks"></div></section>
-            <section class="ld-sec" id="ld-details-sec"><h2>Property details</h2><dl class="ld-details" id="ld-details"></dl></section>
-            <section class="ld-sec" id="ld-rooms-sec"><h2>Rooms</h2>
-              <table class="ld-rooms"><thead><tr><th scope="col">Room</th><th scope="col">Level</th><th scope="col">Size</th></tr></thead><tbody id="ld-rooms"></tbody></table>
-            </section>
-            <section class="ld-sec" id="ld-map-sec"><h2>Location</h2><iframe class="ld-map" id="ld-map" title="Map of the property location" loading="lazy"></iframe></section>
-
-            <p class="ld-credit" id="ld-credit"></p>
-          </article>
-
-          <aside class="ld-aside" id="contact">
-            <div class="ld-card">
-              <p class="am-eyebrow">Interested in this home?</p>
-              <h2 id="lf-title">Contact <strong>an agent</strong></h2>
-              <p id="lf-who"></p>
-              <form class="lf" id="lf" novalidate>
-                <div class="lf-kind" role="radiogroup" aria-label="What would you like?">
-                  <label><input type="radio" name="kind" value="info" checked><span>Request info</span></label>
-                  <label><input type="radio" name="kind" value="showing"><span>Book a showing</span></label>
-                </div>
-                <label class="lf-f">Name<input type="text" name="name" autocomplete="name" required></label>
-                <label class="lf-f">Email<input type="email" name="email" autocomplete="email"></label>
-                <label class="lf-f">Phone<input type="tel" name="phone" autocomplete="tel"></label>
-                <label class="lf-f" id="lf-when" hidden>Preferred day and time<input type="text" name="when" placeholder="e.g. Saturday afternoon"></label>
-                <label class="lf-f">Message<textarea name="message" maxlength="500"></textarea></label>
-                <div style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
-                <label class="lf-consent"><input type="checkbox" name="consent"> <span id="lf-consent-text"></span></label>
-                <button class="am-btn" type="submit">Send</button>
-                <p class="lf-status" id="lf-status" role="status" aria-live="polite"></p>
-              </form>
-              <div class="lf-done" id="lf-done" hidden tabindex="-1">
-                <p class="am-eyebrow">Sent</p>
-                <h2>Thanks, <strong>we've got it.</strong></h2>
-                <p id="lf-done-text"></p>
-              </div>
-            </div>
-          </aside>
+      <form class="sr-form" id="sr-form" role="search" aria-label="Search listings">
+        <div class="sr-row">
+          <label class="sr-q">City, community, address or MLS&reg; #
+            <input name="q" type="search" placeholder="e.g. Mahogany, Okotoks, A2358894" autocomplete="off">
+          </label>
+          <button class="am-btn am-btn-ghost sr-toggle" type="button" id="sr-toggle" aria-expanded="false">Filters</button>
+          <button class="am-btn" type="submit" style="align-self:end">Search</button>
         </div>
+        <div class="sr-more">
+          <label>Min price<select name="minPrice"><option value="">No min</option></select></label>
+          <label>Max price<select name="maxPrice"><option value="">No max</option></select></label>
+          <label>Beds<select name="beds"><option value="">Any</option><option value="1">1+</option><option value="2">2+</option><option value="3">3+</option><option value="4">4+</option><option value="5">5+</option></select></label>
+          <label>Baths<select name="baths"><option value="">Any</option><option value="1">1+</option><option value="2">2+</option><option value="3">3+</option><option value="4">4+</option></select></label>
+          <label>Property type<select name="type">
+            <option value="">All types</option><option>Single Family</option><option>Multi-family</option><option>Vacant Land</option><option>Agriculture</option><option>Recreational</option>
+            <option>Business</option><option>Retail</option><option>Office</option><option>Industrial</option>
+          </select></label>
+          <label class="sr-check"><input type="checkbox" name="ours" value="1"> Royal LePage Solutions listings only</label>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <main class="am-grid-sec">
+    <div class="am-wrap">
+      <div class="sr-bar">
+        <p class="am-count" id="am-count" aria-live="polite">Loading listings…</p>
+        <label>
+          <span class="am-sr">Sort</span>
+          <select id="sr-sort" form="sr-form" name="sort">
+            <option value="new">Newest updates</option>
+            <option value="low">Price: low to high</option>
+            <option value="high">Price: high to low</option>
+          </select>
+        </label>
       </div>
+      <div class="am-grid" id="am-grid"></div>
+      <div class="sr-empty" id="sr-empty" hidden>No homes match that search. Try a wider price range or fewer filters.</div>
+      <nav class="sr-pager" id="sr-pager" aria-label="Pages" hidden>
+        <button class="am-btn am-btn-ghost" type="button" id="sr-prev">&#8249; Previous</button>
+        <span id="sr-page"></span>
+        <button class="am-btn am-btn-ghost" type="button" id="sr-next">Next &#8250;</button>
+      </nav>
     </div>
   </main>
-
-  <div class="ld-mobilebar" id="ld-mobilebar" hidden>
-    <a class="am-btn" href="#contact" style="display:flex;align-items:center;justify-content:center;text-decoration:none">Contact an agent</a>
-  </div>
-
-  <div class="ld-lb" id="ld-lb" hidden role="dialog" aria-modal="true" aria-label="Photo viewer">
-    <img id="ld-lb-img" alt="">
-    <button class="ld-lb-prev" type="button" id="ld-lb-prev" aria-label="Previous photo">&#8249;</button>
-    <button class="ld-lb-next" type="button" id="ld-lb-next" aria-label="Next photo">&#8250;</button>
-    <button class="ld-lb-close" type="button" id="ld-lb-close" aria-label="Close photos">&times;</button>
-    <span class="ld-lb-count" id="ld-lb-count"></span>
-  </div>
-
-
 
   <footer class="am-footer">
     <div class="am-wrap">
@@ -206,157 +138,87 @@
   <script>
   (function () {
     'use strict';
-
     var WORKER = 'https://rls-agent-match.rls-solutions.workers.dev';
-
-    var current = null, agents = [], ranked = [], idx = 0, chosen = null, answers = {}, lbIdx = 0;
-    var preview = false;
-
+    var PER = 24;
     var $ = function (s, r) { return (r || document).querySelector(s); };
-    var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-    var money = function (n) { return n == null ? 'Price on request' : '$' + Math.round(n).toLocaleString('en-CA'); };
     var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; };
-    var initials = function (n) { return (n || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase(); };
+    var money = function (n) { return n == null ? 'Price on request' : '$' + Math.round(n).toLocaleString('en-CA'); };
     var title = function (s) { return String(s || '').toLowerCase().replace(/\b\w/g, function (c) { return c.toUpperCase(); }); };
+    var form = $('#sr-form');
+    var FIELDS = ['q', 'minPrice', 'maxPrice', 'beds', 'baths', 'type', 'ours', 'sort'];
 
-    function getJSON(path) { return fetch(WORKER + path).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
-    function postJSON(path, body) {
-      return fetch(WORKER + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(function (r) { return r.json(); });
+    // Price options
+    var prices = [100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1250000, 1500000, 2000000, 3000000, 5000000];
+    ['minPrice', 'maxPrice'].forEach(function (n) {
+      form.elements[n].insertAdjacentHTML('beforeend', prices.map(function (p) {
+        return '<option value="' + p + '">' + (p >= 1000000 ? '$' + (p / 1000000) + 'M' : '$' + (p / 1000) + 'K') + '</option>';
+      }).join(''));
+    });
+
+    function readURL() {
+      var u = new URLSearchParams(location.search);
+      FIELDS.forEach(function (k) {
+        var el = form.elements[k] || $('#sr-sort'); if (!el) return;
+        if (k === 'ours') el.checked = u.get('ours') === '1'; else if (u.has(k)) el.value = u.get(k);
+      });
+      return Math.max(1, parseInt(u.get('page') || '1', 10) || 1);
+    }
+    function params(page) {
+      var u = new URLSearchParams();
+      FIELDS.forEach(function (k) {
+        var el = k === 'sort' ? $('#sr-sort') : form.elements[k];
+        if (k === 'ours') { if (el.checked) u.set('ours', '1'); return; }
+        var v = (el.value || '').trim(); if (v && !(k === 'sort' && v === 'new')) u.set(k, v);
+      });
+      if (page > 1) u.set('page', page);
+      return u;
     }
 
-    /* ── Listing ── */
-    function render(l) {
-      current = l;
+    function card(l) {
+      var photo = l.photos && l.photos[0];
+      var facts = [l.beds != null && l.beds + ' bed', l.baths != null && l.baths + ' bath', l.area && Math.round(l.area).toLocaleString('en-CA') + (/met/i.test(l.areaUnits) ? ' m²' : ' sq ft'), l.type].filter(Boolean).join(' · ');
       var place = [l.community, l.city].filter(Boolean).join(', ');
-      document.title = (l.address || 'Listing') + (l.city ? ', ' + l.city : '') + ' — Royal LePage® Solutions';
-      $('#ld-type').textContent = [l.type, l.mls && 'MLS® ' + l.mls].filter(Boolean).join(' · ');
-      $('#ld-addr').textContent = l.address;
-      $('#ld-loc').textContent = [place, l.province].filter(Boolean).join(', ');
-      $('#ld-price').textContent = money(l.price);
-
-      var facts = [
-        l.beds != null && [l.beds, 'Beds'], l.baths != null && [l.baths, 'Baths'],
-        l.area && [Math.round(l.area).toLocaleString('en-CA'), /met/i.test(l.areaUnits) ? 'm²' : 'Sq ft'],
-        l.yearBuilt && [l.yearBuilt, 'Built']
-      ].filter(Boolean);
-      $('#ld-facts').innerHTML = facts.map(function (f) { return '<div class="ld-fact"><b>' + esc(f[0]) + '</b><span>' + esc(f[1]) + '</span></div>'; }).join('');
-      $('#ld-facts').hidden = !facts.length;
-
-      $('#ld-remarks').textContent = l.remarks || '';
-      $('#ld-about-sec').hidden = !l.remarks;
-
-      var det = l.details || [];
-      $('#ld-details').innerHTML = det.map(function (d) { return '<div><dt>' + esc(d.label) + '</dt><dd>' + esc(d.value) + '</dd></div>'; }).join('');
-      $('#ld-details-sec').hidden = !det.length;
-
-      var rooms = l.rooms || [];
-      $('#ld-rooms').innerHTML = rooms.map(function (r) { return '<tr><td>' + esc(r.type) + '</td><td>' + esc(r.level) + '</td><td>' + esc(r.dims) + '</td></tr>'; }).join('');
-      $('#ld-rooms-sec').hidden = !rooms.length;
-
-      if (l.lat != null && l.lng != null) {
-        var d = 0.006;
-        $('#ld-map').src = 'https://www.openstreetmap.org/export/embed.html?bbox=' + (l.lng - d) + ',' + (l.lat - d * 0.6) + ',' + (l.lng + d) + ',' + (l.lat + d * 0.6) + '&layer=mapnik&marker=' + l.lat + ',' + l.lng;
-      } else $('#ld-map-sec').hidden = true;
-
-      $('#ld-credit').innerHTML = 'Listed by <strong>' + esc(l.listOfficeName || 'the listing brokerage') + '</strong>' +
-        (l.listAgentName ? ' · ' + esc(title(l.listAgentName)) : '') + (l.mls ? ' · MLS® ' + esc(l.mls) : '') +
-        '<br>This REALTOR.ca listing content is owned and licensed by REALTOR® members of The Canadian Real Estate Association.' +
-        (l.listingUrl ? '<br><a class="ld-badge" href="' + encodeURI(l.listingUrl) + '" target="_blank" rel="noopener">Powered by REALTOR.ca</a>' : '');
-      setupForm(l);
-
-      renderGallery(l.photos || []);
-      $('#ld-status').hidden = true; $('#ld-body').hidden = false; $('#ld-mobilebar').hidden = false;
+      return '<a class="am-card" href="listing.html?id=' + encodeURIComponent(l.key) + '">' +
+        '<div class="am-photo"' + (photo ? ' style="background-image:url(\'' + encodeURI(photo) + '\')"' : '') + '>' + (l.ours ? '<span class="am-tag">Our listing</span>' : '') + '</div>' +
+        '<div class="am-card-body"><div class="am-price">' + money(l.price) + '</div>' +
+        '<div class="am-addr">' + esc(l.address) + (place ? ', ' + esc(place) : '') + '</div>' +
+        '<div class="am-facts">' + esc(facts) + '</div>' +
+        '<div class="am-credit">Listed by ' + esc(l.listOfficeName || 'the listing brokerage') + (l.listAgentName ? ' · ' + esc(title(l.listAgentName)) : '') + (l.mls ? ' · MLS® ' + esc(l.mls) : '') + '</div></div></a>';
     }
 
-    function renderGallery(photos) {
-      var g = $('#ld-gallery');
-      if (!photos.length) { g.hidden = true; return; }
-      g.classList.toggle('one', photos.length < 3);
-      var alt = function (i) { return esc(current.address) + ', photo ' + (i + 1) + ' of ' + photos.length; };
-      var html = '<button class="ld-g-main" type="button" data-photo="0"><img src="' + encodeURI(photos[0]) + '" alt="' + alt(0) + '" fetchpriority="high"></button>';
-      if (photos.length >= 3) {
-        html += '<button class="ld-g-side" type="button" data-photo="1"><img src="' + encodeURI(photos[1]) + '" alt="' + alt(1) + '" loading="lazy"></button>' +
-          '<button class="ld-g-side" type="button" data-photo="2"><img src="' + encodeURI(photos[2]) + '" alt="' + alt(2) + '" loading="lazy"><span class="ld-g-all">View all ' + photos.length + ' photos</span></button>';
-      }
-      g.innerHTML = html;
+    var page = 1, req = 0;
+    function search(p, push) {
+      page = p;
+      var u = params(page);
+      if (push) history.pushState(null, '', '?' + u.toString());
+      var api = new URLSearchParams(u); api.delete('page'); api.set('top', PER); api.set('skip', (page - 1) * PER);
+      var mine = ++req;
+      $('#am-count').textContent = 'Searching…';
+      fetch(WORKER + '/listings?' + api.toString()).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
+        if (mine !== req) return;
+        var list = d.listings || [], total = d.total || 0;
+        $('#am-grid').innerHTML = list.map(card).join('');
+        $('#sr-empty').hidden = list.length > 0;
+        $('#am-count').textContent = total.toLocaleString('en-CA') + (total === 1 ? ' home' : ' homes') + ' for sale';
+        var pages = Math.ceil(total / PER);
+        $('#sr-pager').hidden = pages < 2;
+        $('#sr-page').textContent = 'Page ' + page + ' of ' + pages.toLocaleString('en-CA');
+        $('#sr-prev').disabled = page <= 1; $('#sr-next').disabled = page >= pages;
+      }).catch(function () {
+        if (mine !== req) return;
+        $('#am-count').textContent = "We couldn't load listings just now. Please try again, or call 403.252.5900.";
+      });
     }
 
-    function showLB(i) {
-      var p = current.photos; lbIdx = (i + p.length) % p.length;
-      $('#ld-lb-img').src = p[lbIdx]; $('#ld-lb-img').alt = 'Photo ' + (lbIdx + 1) + ' of ' + p.length;
-      $('#ld-lb-count').textContent = (lbIdx + 1) + ' / ' + p.length;
-      $('#ld-lb').hidden = false; $('#ld-lb-close').focus();
-    }
+    form.addEventListener('submit', function (e) { e.preventDefault(); search(1, true); });
+    ['minPrice', 'maxPrice', 'beds', 'baths', 'type', 'ours'].forEach(function (k) { form.elements[k].addEventListener('change', function () { search(1, true); }); });
+    $('#sr-sort').addEventListener('change', function () { search(1, true); });
+    $('#sr-prev').addEventListener('click', function () { search(page - 1, true); window.scrollTo({ top: 0 }); });
+    $('#sr-next').addEventListener('click', function () { search(page + 1, true); window.scrollTo({ top: 0 }); });
+    $('#sr-toggle').addEventListener('click', function () { var o = form.classList.toggle('open'); this.setAttribute('aria-expanded', o); });
+    window.addEventListener('popstate', function () { search(readURL(), false); });
 
-    /* ── Contact form ── */
-    function setupForm(l) {
-      var agent = title(l.listAgentName);
-      if (l.ours) {
-        $('#lf-title').innerHTML = 'Contact <strong>' + esc(agent || 'the listing agent') + '</strong>';
-        $('#lf-who').textContent = 'This is a Royal LePage Solutions listing. Your message goes straight to ' + (agent || 'the listing agent') + '.';
-        $('#lf-consent-text').textContent = 'I agree to be contacted about this property by the listing REALTOR® by phone, text or email.';
-      } else {
-        $('#lf-title').innerHTML = 'Contact <strong>an agent</strong>';
-        $('#lf-who').textContent = 'A Royal LePage Solutions REALTOR® will help you with this home and can book a showing. They are not the listing agent.';
-        $('#lf-consent-text').textContent = 'I agree to be contacted by a Royal LePage Solutions REALTOR® by phone, text or email about real estate. I can opt out at any time.';
-      }
-      $('#lf [name=message]').value = "I'm interested in " + l.address + (l.mls ? ' (MLS® ' + l.mls + ')' : '') + '.';
-    }
-    function status(t, err) { var s = $('#lf-status'); s.textContent = t; s.className = 'lf-status' + (err ? ' is-error' : ''); }
-
-    /* ── Wire up ── */
-    $('#ld-gallery').addEventListener('click', function (e) { var b = e.target.closest('[data-photo]'); if (b) showLB(+b.getAttribute('data-photo')); });
-    $('#ld-lb-prev').addEventListener('click', function () { showLB(lbIdx - 1); });
-    $('#ld-lb-next').addEventListener('click', function () { showLB(lbIdx + 1); });
-    $('#ld-lb-close').addEventListener('click', function () { $('#ld-lb').hidden = true; });
-    document.addEventListener('keydown', function (e) {
-      if ($('#ld-lb').hidden) return;
-      if (e.key === 'Escape') $('#ld-lb').hidden = true;
-      if (e.key === 'ArrowLeft') showLB(lbIdx - 1);
-      if (e.key === 'ArrowRight') showLB(lbIdx + 1);
-    });
-
-    $('#lf').addEventListener('change', function (e) {
-      if (e.target.name === 'kind') $('#lf-when').hidden = e.target.value !== 'showing';
-    });
-    $('#lf').addEventListener('submit', function (e) {
-      e.preventDefault();
-      var f = e.currentTarget, d = {};
-      new FormData(f).forEach(function (v, k) { d[k] = String(v).trim(); });
-      d.consent = f.querySelector('[name=consent]').checked;
-      var phone = (d.phone || '').replace(/\D/g, '');
-      if (!d.name) return status('Please add your name.', true);
-      if (d.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)) return status('Please check your email address.', true);
-      if (current.ours && !d.email) return status('Please add your email so the listing agent can reply.', true);
-      if (!d.email && phone.length < 10) return status('Please add an email or phone number.', true);
-      if (!d.consent) return status('Please tick the consent box so we can contact you.', true);
-      var btn = f.querySelector('[type=submit]'); btn.disabled = true; status('Sending…');
-      d.listingKey = current.key; d.pageUrl = location.href.split('#')[0];
-      postJSON('/inquire', d).then(function (res) {
-        if (!res || !res.ok) throw new Error((res && res.error) || 'Something went wrong. Please call 403.252.5900.');
-        f.hidden = true; $('#lf-who').hidden = true; $('#lf-title').hidden = true;
-        $('#lf-done-text').textContent = res.routed === 'listing-agent'
-          ? (title(current.listAgentName) || 'The listing agent') + ' has your message and will be in touch.'
-          : 'A Royal LePage Solutions REALTOR® will be in touch shortly.';
-        $('#lf-done').hidden = false; $('#lf-done').focus();
-        if (window.gtag) window.gtag('event', 'generate_lead', { offer: res.routed });
-      }).catch(function (err) { status(err.message, true); }).then(function () { btn.disabled = false; });
-    });
-
-    if (document.referrer.indexOf('/pages/listings/') > -1 && document.referrer.indexOf('listing.html') === -1) $('#ld-back').href = document.referrer;
-
-    /* ── Start ── */
-    var id = new URLSearchParams(location.search).get('id') || '';
-    if (!/^[A-Za-z0-9_-]{1,40}$/.test(id)) {
-      $('#ld-status').innerHTML = 'That listing link looks incomplete. <a href="./">See all listings</a>.';
-      return;
-    }
-    getJSON('/listing/' + encodeURIComponent(id)).then(function (d) {
-      if (!d.ok || !d.listing) throw new Error('missing');
-      render(d.listing);
-    }).catch(function () {
-      $('#ld-status').innerHTML = "This listing isn't available. It may have sold or been taken off the market. <a href=\"./\">See all listings</a> or call 403.252.5900.";
-    });
+    search(readURL(), false);
   })();
   </script>
 </body>
