@@ -34,7 +34,17 @@
     .sr-form label { display: grid; gap: .3rem; font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--rls-warm-grey); }
     .sr-form input, .sr-form select { min-height: 48px; border: 1px solid #CFCAC3; border-radius: 4px; padding: 0 .85rem; font: 400 1rem var(--am-body); color: var(--rls-black); background: #fff; text-transform: none; letter-spacing: 0; }
     .sr-form input:focus, .sr-form select:focus { outline: 2px solid var(--rls-red); outline-offset: 1px; }
-    .sr-q input { font-size: 1.05rem; }
+    .sr-q { display: grid; gap: .3rem; }
+    .sr-q > label { font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--rls-warm-grey); }
+    .sr-combo { position: relative; }
+    .sr-combo input { width: 100%; box-sizing: border-box; font-size: 1.05rem; min-height: 48px; border: 1px solid #CFCAC3; border-radius: 4px; padding: 0 .85rem; font-family: var(--am-body); }
+    .sr-suggest { position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 30; list-style: none; margin: 0; padding: .35rem 0; background: #fff; border: 1px solid #CFCAC3; border-radius: 6px; box-shadow: 0 12px 30px rgba(0,0,0,.15); max-height: 360px; overflow: auto; }
+    .sr-suggest li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .65rem .9rem; cursor: pointer; font-size: .95rem; color: var(--rls-black); }
+    .sr-suggest li[aria-selected="true"], .sr-suggest li:hover { background: #F4F2EF; }
+    .sr-suggest li small { color: var(--rls-warm-grey); font-size: .78rem; white-space: nowrap; }
+    .sr-suggest .sr-head { cursor: default; font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--rls-warm-grey); padding: .5rem .9rem .25rem; }
+    .sr-suggest .sr-head:hover { background: none; }
+    .sr-suggest mark { background: none; font-weight: 700; color: inherit; }
     .sr-check { display: flex !important; align-items: center; gap: .5rem; min-height: 48px; text-transform: none !important; letter-spacing: 0 !important; font-size: .9rem !important; color: var(--rls-black) !important; }
     .sr-check input { min-height: 0; width: 20px; height: 20px; }
     .am-btn { min-height: 48px; border-radius: 4px; border: none; background: var(--rls-red); color: #fff; font: 600 1rem var(--rls-sans); letter-spacing: .04em; cursor: pointer; padding: 0 1.75rem; }
@@ -83,9 +93,14 @@
 
       <form class="sr-form" id="sr-form" role="search" aria-label="Search listings">
         <div class="sr-row">
-          <label class="sr-q">City, community, address or MLS&reg; #
-            <input name="q" type="search" placeholder="e.g. Mahogany, Okotoks, A2358894" autocomplete="off">
-          </label>
+          <div class="sr-q">
+            <label for="sr-q-input">City, community, address or MLS&reg; #</label>
+            <div class="sr-combo">
+              <input id="sr-q-input" name="q" type="search" placeholder="Start typing, e.g. Mahogany or Okotoks" autocomplete="off"
+                role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sr-suggest">
+              <ul class="sr-suggest" id="sr-suggest" role="listbox" aria-label="Suggestions" hidden></ul>
+            </div>
+          </div>
           <button class="am-btn am-btn-ghost sr-toggle" type="button" id="sr-toggle" aria-expanded="false">Filters</button>
           <button class="am-btn" type="submit" style="align-self:end">Search</button>
         </div>
@@ -217,6 +232,70 @@
     $('#sr-next').addEventListener('click', function () { search(page + 1, true); window.scrollTo({ top: 0 }); });
     $('#sr-toggle').addEventListener('click', function () { var o = form.classList.toggle('open'); this.setAttribute('aria-expanded', o); });
     window.addEventListener('popstate', function () { search(readURL(), false); });
+
+    /* ── Type-ahead ── */
+    var CITIES = ['Calgary', 'Edmonton', 'Red Deer', 'Lethbridge', 'Airdrie', 'Chestermere', 'Cochrane', 'Okotoks', 'Canmore', 'Banff', 'High River', 'Strathmore', 'Black Diamond', 'Turner Valley', 'Didsbury', 'Olds', 'Sylvan Lake', 'Medicine Hat', 'Grande Prairie', 'Fort McMurray', 'St. Albert', 'Sherwood Park', 'Spruce Grove', 'Leduc', 'Beaumont', 'Camrose', 'Lacombe', 'Brooks', 'Crossfield', 'Carstairs', 'Rocky View County', 'Foothills County', 'Priddis', 'Bragg Creek', 'Langdon', 'Canmore', 'Nanton', 'Claresholm'];
+    var input = $('#sr-q-input'), box = $('#sr-suggest'), items = [], active = -1, sugReq = 0, sugTimer = null;
+    var mark = function (label, term) {
+      var i = label.toLowerCase().indexOf(term.toLowerCase());
+      return i < 0 ? esc(label) : esc(label.slice(0, i)) + '<mark>' + esc(label.slice(i, i + term.length)) + '</mark>' + esc(label.slice(i + term.length));
+    };
+    function closeSug() { box.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; }
+    function showSug(term, places, homes) {
+      items = [];
+      var html = '';
+      if (places.length) {
+        html += '<li class="sr-head" role="presentation">Places</li>';
+        places.forEach(function (p) { items.push({ q: p.label }); html += '<li role="option" id="sr-opt-' + (items.length - 1) + '" data-i="' + (items.length - 1) + '"><span>' + mark(p.label, term) + '</span><small>' + esc(p.kind === 'Community' && p.city ? 'Community · ' + p.city : p.kind) + '</small></li>'; });
+      }
+      if (homes.length) {
+        html += '<li class="sr-head" role="presentation">Homes</li>';
+        homes.forEach(function (h) { items.push({ key: h.key }); html += '<li role="option" id="sr-opt-' + (items.length - 1) + '" data-i="' + (items.length - 1) + '"><span>' + mark(h.label, term) + '</span><small>' + esc(h.city || '') + '</small></li>'; });
+      }
+      if (!items.length) return closeSug();
+      box.innerHTML = html; box.hidden = false; input.setAttribute('aria-expanded', 'true'); active = -1;
+    }
+    function localPlaces(term) {
+      var t = term.toLowerCase(), seen = {};
+      return CITIES.filter(function (c) { var k = c.toLowerCase(); if (seen[k] || k.indexOf(t) < 0) return false; seen[k] = 1; return true; })
+        .sort(function (a, b) { return (a.toLowerCase().indexOf(t) === 0 ? 0 : 1) - (b.toLowerCase().indexOf(t) === 0 ? 0 : 1); })
+        .slice(0, 4).map(function (c) { return { label: c, kind: 'City' }; });
+    }
+    function pick(i) {
+      var it = items[i]; if (!it) return;
+      closeSug();
+      if (it.key) { location.href = 'listing.html?id=' + encodeURIComponent(it.key); return; }
+      input.value = it.q; search(1, true);
+    }
+    function move(d) {
+      var opts = box.querySelectorAll('[role=option]'); if (!opts.length) return;
+      active = (active + d + opts.length) % opts.length;
+      opts.forEach(function (o, i) { o.setAttribute('aria-selected', i === active ? 'true' : 'false'); });
+      input.setAttribute('aria-activedescendant', opts[active].id); opts[active].scrollIntoView({ block: 'nearest' });
+    }
+    input.addEventListener('input', function () {
+      var term = input.value.trim(); clearTimeout(sugTimer);
+      if (term.length < 2) return closeSug();
+      var local = localPlaces(term); showSug(term, local, []);
+      sugTimer = setTimeout(function () {
+        var mine = ++sugReq;
+        fetch(WORKER + '/suggest?q=' + encodeURIComponent(term)).then(function (r) { return r.json(); }).then(function (d) {
+          if (mine !== sugReq || input.value.trim() !== term) return;
+          var seen = {}, places = local.concat(d.places || []).filter(function (p) { var k = p.label.toLowerCase() + '|' + p.kind; if (seen[k]) return false; seen[k] = 1; return true; }).slice(0, 6);
+          showSug(term, places, d.homes || []);
+        }).catch(function () {});
+      }, 250);
+    });
+    input.addEventListener('keydown', function (e) {
+      if (box.hidden) return;
+      if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+      else if (e.key === 'Enter' && active > -1) { e.preventDefault(); pick(+box.querySelectorAll('[role=option]')[active].getAttribute('data-i')); }
+      else if (e.key === 'Escape') closeSug();
+    });
+    box.addEventListener('mousedown', function (e) { var li = e.target.closest('[role=option]'); if (li) { e.preventDefault(); pick(+li.getAttribute('data-i')); } });
+    input.addEventListener('blur', function () { setTimeout(closeSug, 120); });
+    form.addEventListener('submit', closeSug);
 
     search(readURL(), false);
   })();
