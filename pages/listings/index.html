@@ -102,6 +102,9 @@
 
     .am-footer { background: var(--rls-black); color: rgba(255,255,255,.7); font-size: .78rem; line-height: 1.6; padding: 2rem 0; }
     .am-footer a { color: #fff; }
+    .am-operator { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin: 1.25rem 0 .5rem; }
+    .am-operator img { height: 48px; width: auto; }
+    .am-operator p { margin: 0; }
 
     @media (max-width: 900px) {
       .sr-row { grid-template-columns: 1fr; }
@@ -174,7 +177,12 @@
     <div class="am-wrap">
       <p>Listing data is provided through CREA's DDF&reg; and is deemed reliable but not guaranteed. Each listing shows its listing brokerage. This REALTOR.ca listing content is owned and licensed by REALTOR® members of The Canadian Real Estate Association. Powered by REALTOR.ca.</p>
       <p>The trademarks REALTOR&reg;, REALTORS&reg;, and the REALTOR&reg; logo are controlled by The Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA. The trademarks MLS&reg;, Multiple Listing Service&reg; and the associated logos are owned by CREA and identify the quality of services provided by real estate professionals who are members of CREA.</p>
-      <p>Royal LePage Solutions, Unit 205, 264 Midpark Way SE, Calgary, AB · 403.252.5900</p>
+      <div class="am-operator">
+        <img src="../../assets/images/Solutions%20Logo%20Script_White%20+%20Red.png" alt="Royal LePage Solutions" width="180" height="60" loading="lazy">
+        <p>This website is operated by <strong>Royal LePage Solutions</strong>, a real estate brokerage. Independently owned and operated.<br>
+        Unit 205, 264 Midpark Way SE, Calgary, AB T2X 1J6 · 403.252.5900</p>
+      </div>
+      <p><a href="../terms-of-use/">Terms of Use</a> · By using this website you agree to its Terms of Use.</p>
     </div>
   </footer>
 
