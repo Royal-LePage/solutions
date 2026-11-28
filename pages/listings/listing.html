@@ -443,7 +443,7 @@
         (l.listAgentName ? ' · ' + esc(title(l.listAgentName)) : '') + (l.mls ? ' · MLS® ' + esc(l.mls) : '') +
         '<br>This REALTOR.ca listing content is owned and licensed by REALTOR® members of The Canadian Real Estate Association.' +
         (l.listingUrl ? '<br><a class="ld-badge" href="' + encodeURI(l.listingUrl) + '" target="_blank" rel="noopener" aria-label="Powered by REALTOR.ca: view this listing on REALTOR.ca">' +
-          '<img src="../../assets/images/powered-by-realtor-ca.png" alt="Powered by REALTOR.ca" height="40" onerror="this.remove()"><span>Powered by REALTOR.ca</span></a>' : '');
+          '<img src="../../assets/images/powered-by-realtor-ca.png" alt="Powered by REALTOR.ca" width="90" height="90" onerror="this.remove()"><span>Powered by REALTOR.ca</span></a>' : '');
       setupForm(l);
       if (!l.ours) $('#ld-mobilebar a').textContent = 'Find my agent';
 
