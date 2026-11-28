@@ -131,8 +131,9 @@
     .lf-consent input { width: 20px; height: 20px; margin-top: 1px; flex: 0 0 20px; }
     .lf-status { min-height: 1.2em; font-size: .9rem; margin: 0; }
     .lf-status.is-error { color: #A3001D; }
-    .ld-badge img { width: 90px; height: 90px; display: block; }
-    .ld-badge img + span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .ld-badge img { width: 180px; height: auto; display: block; }
+    .ld-badge span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .ld-badge { position: relative; padding: 0 !important; border: 0 !important; }
     .ld-badge { display: inline-flex; align-items: center; gap: .4rem; margin-top: .6rem; font: 600 .8rem var(--rls-sans); color: var(--rls-black); text-decoration: none; border: 1px solid var(--am-line); border-radius: 4px; padding: .4rem .7rem; }
     /* Match flow */
     #am-match { max-width: 460px; }
@@ -190,6 +191,8 @@
 
     .am-footer { background: var(--rls-black); color: rgba(255,255,255,.7); font-size: .78rem; line-height: 1.6; padding: 2rem 0; }
     .am-footer a { color: #fff; }
+    .am-marks { display: flex; align-items: center; gap: 1.5rem; margin: 1rem 0; }
+    .am-marks img { height: 48px; width: auto; }
     .am-operator { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin: 1.25rem 0 .5rem; }
     .am-operator img { height: 48px; width: auto; }
     .am-operator p { margin: 0; }
@@ -373,6 +376,10 @@
   <footer class="am-footer">
     <div class="am-wrap">
       <p>Listing data is provided through CREA's DDF&reg; and is deemed reliable but not guaranteed. Each listing shows its listing brokerage. This REALTOR.ca listing content is owned and licensed by REALTOR® members of The Canadian Real Estate Association. Powered by REALTOR.ca.</p>
+      <div class="am-marks">
+        <img src="../../assets/images/realtor-ca-logo.png" alt="REALTOR.ca" width="150" height="53" loading="lazy">
+        <img src="../../assets/images/mls-logo-white.png" alt="MLS® Multiple Listing Service®" width="110" height="55" loading="lazy">
+      </div>
       <p>The trademarks REALTOR&reg;, REALTORS&reg;, and the REALTOR&reg; logo are controlled by The Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA. The trademarks MLS&reg;, Multiple Listing Service&reg; and the associated logos are owned by CREA and identify the quality of services provided by real estate professionals who are members of CREA.</p>
       <div class="am-operator">
         <img src="../../assets/images/Solutions%20Logo%20Script_White%20+%20Red.png" alt="Royal LePage Solutions" width="180" height="60" loading="lazy">
@@ -443,7 +450,7 @@
         (l.listAgentName ? ' · ' + esc(title(l.listAgentName)) : '') + (l.mls ? ' · MLS® ' + esc(l.mls) : '') +
         '<br>This REALTOR.ca listing content is owned and licensed by REALTOR® members of The Canadian Real Estate Association.' +
         (l.listingUrl ? '<br><a class="ld-badge" href="' + encodeURI(l.listingUrl) + '" target="_blank" rel="noopener" aria-label="Powered by REALTOR.ca: view this listing on REALTOR.ca">' +
-          '<img src="../../assets/images/powered-by-realtor-ca.png" alt="Powered by REALTOR.ca" width="90" height="90" onerror="this.remove()"><span>Powered by REALTOR.ca</span></a>' : '');
+          '<img src="../../assets/images/realtor-ca-logo.png" alt="Powered by REALTOR.ca" width="180" height="63" ><span>Powered by REALTOR.ca</span></a>' : '');
       setupForm(l);
       if (!l.ours) $('#ld-mobilebar a').textContent = 'Find my agent';
 
