@@ -4,8 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Listing — Royal LePage&reg; Solutions</title>
-  <meta name="description" content="Home for sale in Alberta. Contact a Royal LePage Solutions REALTOR®.">
-  <meta name="robots" content="noindex">
+  <meta name="description" id="meta-desc" content="Home for sale in Alberta. Contact a Royal LePage Solutions REALTOR®.">
+  <link rel="canonical" id="meta-canonical" href="https://info.royallepagesolutions.com/pages/listings/listing.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Royal LePage Solutions">
+  <meta property="og:title" id="og-title" content="Home for sale — Royal LePage® Solutions">
+  <meta property="og:description" id="og-desc" content="Home for sale in Alberta. Contact a Royal LePage Solutions REALTOR®.">
+  <meta property="og:url" id="og-url" content="https://info.royallepagesolutions.com/pages/listings/listing.html">
+  <meta property="og:image" id="og-image" content="">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" id="tw-title" content="Home for sale — Royal LePage® Solutions">
+  <meta name="twitter:description" id="tw-desc" content="Home for sale in Alberta.">
+  <meta name="twitter:image" id="tw-image" content="">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    "@id": "https://info.royallepagesolutions.com/#brokerage",
+    "name": "Royal LePage Solutions",
+    "url": "https://info.royallepagesolutions.com/",
+    "telephone": "+1-403-252-5900",
+    "areaServed": ["Calgary", "Okotoks", "Canmore", "Banff", "Alberta"],
+    "address": { "@type": "PostalAddress", "streetAddress": "205-264 Midpark Way SE", "addressLocality": "Calgary", "addressRegion": "AB", "postalCode": "T2X 1J6", "addressCountry": "CA" },
+    "department": [
+      { "@type": "RealEstateAgent", "name": "Royal LePage Solutions — Calgary South Office", "address": { "@type": "PostalAddress", "streetAddress": "205-264 Midpark Way SE", "addressLocality": "Calgary", "addressRegion": "AB", "postalCode": "T2X 1J6", "addressCountry": "CA" } },
+      { "@type": "RealEstateAgent", "name": "Royal LePage Solutions — Calgary North Office", "address": { "@type": "PostalAddress", "streetAddress": "1509 19 Street NW", "addressLocality": "Calgary", "addressRegion": "AB", "postalCode": "T2N 2K2", "addressCountry": "CA" } },
+      { "@type": "RealEstateAgent", "name": "Royal LePage Solutions — Canmore & Banff Office", "address": { "@type": "PostalAddress", "streetAddress": "201-710 10th Street", "addressLocality": "Canmore", "addressRegion": "AB", "postalCode": "T1W 0G7", "addressCountry": "CA" } },
+      { "@type": "RealEstateAgent", "name": "Royal LePage Solutions — Okotoks Office", "address": { "@type": "PostalAddress", "streetAddress": "106-52 McRae Street", "addressLocality": "Okotoks", "addressRegion": "AB", "postalCode": "T1S 2H4", "addressCountry": "CA" } }
+    ]
+  }
+  </script>
+  <!-- Indexing: noindex removed for the SEO test. CONFIRM with the broker of record / CREA that the DDF
+       National Shared Pool terms permit search-engine indexing of other brokerages' listings. -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -101,6 +131,9 @@
     .lf-consent input { width: 20px; height: 20px; margin-top: 1px; flex: 0 0 20px; }
     .lf-status { min-height: 1.2em; font-size: .9rem; margin: 0; }
     .lf-status.is-error { color: #A3001D; }
+    .ld-badge img { width: 180px; height: auto; display: block; }
+    .ld-badge span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .ld-badge { position: relative; padding: 0 !important; border: 0 !important; }
     .ld-badge { display: inline-flex; align-items: center; gap: .4rem; margin-top: .6rem; font: 600 .8rem var(--rls-sans); color: var(--rls-black); text-decoration: none; border: 1px solid var(--am-line); border-radius: 4px; padding: .4rem .7rem; }
     /* Match flow */
     #am-match { max-width: 460px; }
@@ -158,6 +191,11 @@
 
     .am-footer { background: var(--rls-black); color: rgba(255,255,255,.7); font-size: .78rem; line-height: 1.6; padding: 2rem 0; }
     .am-footer a { color: #fff; }
+    .am-marks { display: flex; align-items: center; gap: 1.5rem; margin: 1rem 0; }
+    .am-marks img { height: 48px; width: auto; }
+    .am-operator { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin: 1.25rem 0 .5rem; }
+    .am-operator img { height: 48px; width: auto; }
+    .am-operator p { margin: 0; }
 
     @media (max-width: 960px) {
       .ld-layout { grid-template-columns: 1fr; gap: 0; }
@@ -338,8 +376,17 @@
   <footer class="am-footer">
     <div class="am-wrap">
       <p>Listing data is provided through CREA's DDF&reg; and is deemed reliable but not guaranteed. Each listing shows its listing brokerage. This REALTOR.ca listing content is owned and licensed by REALTOR® members of The Canadian Real Estate Association. Powered by REALTOR.ca.</p>
+      <div class="am-marks">
+        <img src="../../assets/images/realtor-ca-logo.png" alt="REALTOR.ca" width="150" height="53" loading="lazy">
+        <img src="../../assets/images/mls-logo-white.png" alt="MLS® Multiple Listing Service®" width="110" height="55" loading="lazy">
+      </div>
       <p>The trademarks REALTOR&reg;, REALTORS&reg;, and the REALTOR&reg; logo are controlled by The Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA. The trademarks MLS&reg;, Multiple Listing Service&reg; and the associated logos are owned by CREA and identify the quality of services provided by real estate professionals who are members of CREA.</p>
-      <p>Royal LePage Solutions, Unit 205, 264 Midpark Way SE, Calgary, AB · 403.252.5900</p>
+      <div class="am-operator">
+        <img src="../../assets/images/Solutions%20Logo%20Script_White%20+%20Red.png" alt="Royal LePage Solutions" width="180" height="60" loading="lazy">
+        <p>This website is operated by <strong>Royal LePage Solutions</strong>, a real estate brokerage. Independently owned and operated.<br>
+        Unit 205, 264 Midpark Way SE, Calgary, AB T2X 1J6 · 403.252.5900</p>
+      </div>
+      <p><a href="../terms-of-use/">Terms of Use</a> · By using this website you agree to its Terms of Use.</p>
     </div>
   </footer>
 
@@ -369,6 +416,7 @@
       current = l;
       var place = [l.community, l.city].filter(Boolean).join(', ');
       document.title = (l.address || 'Listing') + (l.city ? ', ' + l.city : '') + ' — Royal LePage® Solutions';
+      setMeta(l, place);
       $('#ld-type').textContent = [l.type, l.mls && 'MLS® ' + l.mls].filter(Boolean).join(' · ');
       $('#ld-addr').textContent = l.address;
       $('#ld-loc').textContent = [place, l.province].filter(Boolean).join(', ');
@@ -401,7 +449,8 @@
       $('#ld-credit').innerHTML = 'Listed by <strong>' + esc(l.listOfficeName || 'the listing brokerage') + '</strong>' +
         (l.listAgentName ? ' · ' + esc(title(l.listAgentName)) : '') + (l.mls ? ' · MLS® ' + esc(l.mls) : '') +
         '<br>This REALTOR.ca listing content is owned and licensed by REALTOR® members of The Canadian Real Estate Association.' +
-        (l.listingUrl ? '<br><a class="ld-badge" href="' + encodeURI(l.listingUrl) + '" target="_blank" rel="noopener">Powered by REALTOR.ca</a>' : '');
+        (l.listingUrl ? '<br><a class="ld-badge" href="' + encodeURI(l.listingUrl) + '" target="_blank" rel="noopener" aria-label="Powered by REALTOR.ca: view this listing on REALTOR.ca">' +
+          '<img src="../../assets/images/realtor-ca-logo.png" alt="Powered by REALTOR.ca" width="180" height="63" ><span>Powered by REALTOR.ca</span></a>' : '');
       setupForm(l);
       if (!l.ours) $('#ld-mobilebar a').textContent = 'Find my agent';
 
@@ -409,15 +458,44 @@
       $('#ld-status').hidden = true; $('#ld-body').hidden = false; $('#ld-mobilebar').hidden = false;
     }
 
+    // Unique title, description, canonical, social tags and listing schema per home.
+    function homeLabel(l) {
+      return [l.beds != null && l.beds + '-bed', (l.type && !/single family/i.test(l.type) ? l.type.toLowerCase() : 'home')].filter(Boolean).join(' ');
+    }
+    function setMeta(l, place) {
+      var set = function (id, attr, v) { var el = document.getElementById(id); if (el) el.setAttribute(attr, v || ''); };
+      var url = 'https://info.royallepagesolutions.com/pages/listings/listing.html?id=' + encodeURIComponent(l.key);
+      var head = homeLabel(l) + ' for sale at ' + l.address + (place ? ', ' + place : '');
+      var desc = (head.charAt(0).toUpperCase() + head.slice(1) + '. ' + money(l.price) +
+        (l.area ? ', ' + Math.round(l.area).toLocaleString('en-CA') + (/met/i.test(l.areaUnits) ? ' m²' : ' sq ft') : '') +
+        (l.mls ? '. MLS® ' + l.mls : '') + '. Listed by ' + (l.listOfficeName || 'the listing brokerage') + '.').slice(0, 300);
+      var img = (l.photos && l.photos[0]) || '';
+      set('meta-desc', 'content', desc); set('meta-canonical', 'href', url);
+      set('og-title', 'content', document.title); set('og-desc', 'content', desc); set('og-url', 'content', url); set('og-image', 'content', img);
+      set('tw-title', 'content', document.title); set('tw-desc', 'content', desc); set('tw-image', 'content', img);
+      var ld = {
+        '@context': 'https://schema.org', '@type': 'RealEstateListing', name: l.address + (place ? ', ' + place : ''), url: url,
+        description: (l.remarks || desc).slice(0, 500), image: (l.photos || []).slice(0, 6),
+        offers: l.price != null ? { '@type': 'Offer', price: Math.round(l.price), priceCurrency: 'CAD', availability: 'https://schema.org/InStock' } : undefined,
+        about: { '@type': 'Accommodation',
+          address: { '@type': 'PostalAddress', streetAddress: l.address, addressLocality: l.city, addressRegion: 'AB', postalCode: l.postal || undefined, addressCountry: 'CA' },
+          numberOfRooms: l.beds != null ? l.beds : undefined,
+          floorSize: l.area ? { '@type': 'QuantitativeValue', value: Math.round(l.area), unitCode: /met/i.test(l.areaUnits) ? 'MTK' : 'FTK' } : undefined,
+          geo: l.lat != null ? { '@type': 'GeoCoordinates', latitude: l.lat, longitude: l.lng } : undefined }
+      };
+      var tag = document.getElementById('ld-listing-schema') || document.head.appendChild(Object.assign(document.createElement('script'), { type: 'application/ld+json', id: 'ld-listing-schema' }));
+      tag.textContent = JSON.stringify(ld);
+    }
+
     function renderGallery(photos) {
       var g = $('#ld-gallery');
       if (!photos.length) { g.hidden = true; return; }
       g.classList.toggle('one', photos.length < 3);
-      var alt = function (i) { return esc(current.address) + ', photo ' + (i + 1) + ' of ' + photos.length; };
-      var html = '<button class="ld-g-main" type="button" data-photo="0"><img src="' + encodeURI(photos[0]) + '" alt="' + alt(0) + '" fetchpriority="high"></button>';
+      var alt = function (i) { return esc(homeLabel(current).replace(/^./, function (c) { return c.toUpperCase(); }) + ' at ' + current.address + (current.city ? ', ' + title(current.city) : '')) + ', photo ' + (i + 1) + ' of ' + photos.length; };
+      var html = '<button class="ld-g-main" type="button" data-photo="0"><img src="' + encodeURI(photos[0]) + '" alt="' + alt(0) + '" width="1200" height="800" fetchpriority="high"></button>';
       if (photos.length >= 3) {
-        html += '<button class="ld-g-side" type="button" data-photo="1"><img src="' + encodeURI(photos[1]) + '" alt="' + alt(1) + '" loading="lazy"></button>' +
-          '<button class="ld-g-side" type="button" data-photo="2"><img src="' + encodeURI(photos[2]) + '" alt="' + alt(2) + '" loading="lazy"><span class="ld-g-all">View all ' + photos.length + ' photos</span></button>';
+        html += '<button class="ld-g-side" type="button" data-photo="1"><img src="' + encodeURI(photos[1]) + '" alt="' + alt(1) + '" width="600" height="400" loading="lazy" decoding="async"></button>' +
+          '<button class="ld-g-side" type="button" data-photo="2"><img src="' + encodeURI(photos[2]) + '" alt="' + alt(2) + '" width="600" height="400" loading="lazy" decoding="async"><span class="ld-g-all">View all ' + photos.length + ' photos</span></button>';
       }
       g.innerHTML = html;
     }
