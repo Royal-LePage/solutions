@@ -4,9 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alberta Homes for Sale — Royal LePage&reg; Solutions</title>
-  <meta name="description" content="Search homes for sale across Alberta with Royal LePage Solutions.">
+  <meta name="description" content="Search homes for sale in Calgary, Okotoks, Canmore and across Alberta. Filter by price, beds and baths, and talk to a Royal LePage Solutions REALTOR®.">
   <link rel="canonical" href="https://info.royallepagesolutions.com/pages/listings/">
-  <meta name="robots" content="noindex">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Royal LePage Solutions">
+  <meta property="og:title" content="Alberta Homes for Sale — Royal LePage® Solutions">
+  <meta property="og:description" content="Search homes for sale in Calgary, Okotoks, Canmore and across Alberta.">
+  <meta property="og:url" content="https://info.royallepagesolutions.com/pages/listings/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Alberta Homes for Sale — Royal LePage® Solutions">
+  <meta name="twitter:description" content="Search homes for sale in Calgary, Okotoks, Canmore and across Alberta.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    "@id": "https://info.royallepagesolutions.com/#brokerage",
+    "name": "Royal LePage Solutions",
+    "url": "https://info.royallepagesolutions.com/",
+    "telephone": "+1-403-252-5900",
+    "areaServed": ["Calgary", "Okotoks", "Canmore", "Banff", "Alberta"],
+    "address": { "@type": "PostalAddress", "streetAddress": "205-264 Midpark Way SE", "addressLocality": "Calgary", "addressRegion": "AB", "postalCode": "T2X 1J6", "addressCountry": "CA" },
+    "department": [
+      { "@type": "RealEstateAgent", "name": "Royal LePage Solutions — Calgary South Office", "address": { "@type": "PostalAddress", "streetAddress": "205-264 Midpark Way SE", "addressLocality": "Calgary", "addressRegion": "AB", "postalCode": "T2X 1J6", "addressCountry": "CA" } },
+      { "@type": "RealEstateAgent", "name": "Royal LePage Solutions — Calgary North Office", "address": { "@type": "PostalAddress", "streetAddress": "1509 19 Street NW", "addressLocality": "Calgary", "addressRegion": "AB", "postalCode": "T2N 2K2", "addressCountry": "CA" } },
+      { "@type": "RealEstateAgent", "name": "Royal LePage Solutions — Canmore & Banff Office", "address": { "@type": "PostalAddress", "streetAddress": "201-710 10th Street", "addressLocality": "Canmore", "addressRegion": "AB", "postalCode": "T1W 0G7", "addressCountry": "CA" } },
+      { "@type": "RealEstateAgent", "name": "Royal LePage Solutions — Okotoks Office", "address": { "@type": "PostalAddress", "streetAddress": "106-52 McRae Street", "addressLocality": "Okotoks", "addressRegion": "AB", "postalCode": "T1S 2H4", "addressCountry": "CA" } }
+    ]
+  }
+  </script>
+  <!-- Indexing: noindex removed for the SEO test. CONFIRM with the broker of record / CREA that the DDF
+       National Shared Pool terms permit search-engine indexing of other brokerages' listings. -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,6 +89,7 @@
     .am-card:hover, .am-card:focus-visible { box-shadow: 0 10px 30px rgba(0,0,0,.12); transform: translateY(-2px); }
     .am-card:focus-visible { outline: 3px solid var(--rls-red); outline-offset: 2px; }
     .am-photo { aspect-ratio: 4 / 3; background: var(--rls-light-grey) center / cover no-repeat; position: relative; }
+    .am-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
     .am-tag { position: absolute; left: .6rem; top: .6rem; background: var(--rls-red); color: #fff; font: 600 .7rem var(--rls-sans); letter-spacing: .08em; text-transform: uppercase; padding: .3rem .55rem; border-radius: 3px; }
     .am-card-body { padding: 1rem 1.1rem 1.2rem; display: grid; gap: .35rem; }
     .am-price { font-family: var(--rls-sans); font-weight: 700; font-size: 1.35rem; }
@@ -189,12 +217,15 @@
       return u;
     }
 
-    function card(l) {
+    function card(l, i) {
       var photo = l.photos && l.photos[0];
       var facts = [l.beds != null && l.beds + ' bed', l.baths != null && l.baths + ' bath', l.area && Math.round(l.area).toLocaleString('en-CA') + (/met/i.test(l.areaUnits) ? ' m²' : ' sq ft'), l.type].filter(Boolean).join(' · ');
       var place = [l.community, l.city].filter(Boolean).join(', ');
+      var alt = [l.beds != null && l.beds + '-bed', (l.type && !/single family/i.test(l.type) ? l.type.toLowerCase() : 'home')].filter(Boolean).join(' ') +
+        ' at ' + (l.address || 'this address') + (l.city ? ', ' + title(l.city) : '');
+      var eager = i < 4;
       return '<a class="am-card" href="listing.html?id=' + encodeURIComponent(l.key) + '">' +
-        '<div class="am-photo"' + (photo ? ' style="background-image:url(\'' + encodeURI(photo) + '\')"' : '') + '>' + (l.ours ? '<span class="am-tag">Our listing</span>' : '') + '</div>' +
+        '<div class="am-photo">' + (photo ? '<img src="' + encodeURI(photo) + '" alt="' + esc(alt) + '" width="640" height="480"' + (eager ? '' : ' loading="lazy"') + ' decoding="async">' : '') + (l.ours ? '<span class="am-tag">Our listing</span>' : '') + '</div>' +
         '<div class="am-card-body"><div class="am-price">' + money(l.price) + '</div>' +
         '<div class="am-addr">' + esc(l.address) + (place ? ', ' + esc(place) : '') + '</div>' +
         '<div class="am-facts">' + esc(facts) + '</div>' +
